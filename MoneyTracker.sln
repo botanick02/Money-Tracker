@@ -5,6 +5,10 @@ VisualStudioVersion = 17.5.33502.453
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyTracker.Api", "MoneyTracker.Server\MoneyTracker.Api.csproj", "{73EF14FC-C9D4-4600-AE4A-47FE779B42ED}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyTracker.DAL", "MoneyTracker.DAL\MoneyTracker.DAL.csproj", "{5676C2F8-5DEA-404E-8DD4-9D5D7208BD85}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyTracker.BLL", "MoneyTracker.BLL\MoneyTracker.BLL.csproj", "{6E0E67A5-7C86-45CF-889E-5627819465C5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{73EF14FC-C9D4-4600-AE4A-47FE779B42ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{73EF14FC-C9D4-4600-AE4A-47FE779B42ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{73EF14FC-C9D4-4600-AE4A-47FE779B42ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5676C2F8-5DEA-404E-8DD4-9D5D7208BD85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5676C2F8-5DEA-404E-8DD4-9D5D7208BD85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5676C2F8-5DEA-404E-8DD4-9D5D7208BD85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5676C2F8-5DEA-404E-8DD4-9D5D7208BD85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E0E67A5-7C86-45CF-889E-5627819465C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E0E67A5-7C86-45CF-889E-5627819465C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E0E67A5-7C86-45CF-889E-5627819465C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E0E67A5-7C86-45CF-889E-5627819465C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
