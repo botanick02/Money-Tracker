@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33502.453
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyTracker.Api", "MoneyTracker.Server\MoneyTracker.Api.csproj", "{73EF14FC-C9D4-4600-AE4A-47FE779B42ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyTracker.API", "MoneyTracker.API\MoneyTracker.Api.csproj", "{73EF14FC-C9D4-4600-AE4A-47FE779B42ED}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyTracker.DAL", "MoneyTracker.DAL\MoneyTracker.DAL.csproj", "{5676C2F8-5DEA-404E-8DD4-9D5D7208BD85}"
 EndProject
