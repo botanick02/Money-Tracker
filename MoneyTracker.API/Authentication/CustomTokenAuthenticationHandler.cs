@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;
 using MoneyTracker.BLL.Services.IServices;
-using System.Security.Claims;
 using System.Text.Encodings.Web;
 
 namespace MoneyTracker.API.Authentication

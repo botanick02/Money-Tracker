@@ -1,7 +1,9 @@
-﻿using MoneyTracker.BLL.DTO_s;
+﻿using Microsoft.AspNetCore.Http;
+using MoneyTracker.BLL.DTO_s;
 using MoneyTracker.BLL.Services.IServices;
 using MoneyTracker.DAL.Entities;
 using MoneyTracker.DAL.Repositories.IRepositories;
+using System.Security.Claims;
 
 namespace MoneyTracker.BLL.Services
 {
@@ -9,12 +11,14 @@ namespace MoneyTracker.BLL.Services
     {
         private readonly IUserRepository userRepository;
         private readonly ITokenService tokenService;
-        public AuthService(IUserRepository userRepository, ITokenService tokenService)
+        private readonly ICookieService cookieService;
+        public AuthService(IUserRepository userRepository, ITokenService tokenService, ICookieService cookieService)
         {
             this.userRepository = userRepository;
             this.tokenService = tokenService;
+            this.cookieService = cookieService;
         }
-        public LoginResponseDto AuthenticateUser(string email, string password)
+        public LoginResponseDto AuthenticateUser(string email, string password, HttpContext context)
         {
             var user = userRepository.GetUserByEmail(email);
 
@@ -23,12 +27,13 @@ namespace MoneyTracker.BLL.Services
                 return new LoginResponseDto
                 {
                     AccessToken = string.Empty,
-                    RefreshToken = string.Empty
                 };
             }
 
-            string accessToken = tokenService.GenerateAccessToken(user);
-            string refreshToken = tokenService.GenerateRefreshToken(user);
+            var accessToken = tokenService.GenerateAccessToken(user);
+            var refreshToken = tokenService.GenerateRefreshToken(user);
+
+            cookieService.SetRefrshTokenCookie(refreshToken, context);
 
             user.RefreshToken = refreshToken;
             userRepository.UpdateUser(user);
@@ -36,7 +41,37 @@ namespace MoneyTracker.BLL.Services
             return new LoginResponseDto
             {
                 AccessToken = accessToken,
-                RefreshToken = refreshToken
+            };
+        }
+
+        public LoginResponseDto RefreshAccessToken(HttpContext context)
+        {
+            var oldRefreshToken = cookieService.GetRefreshTokenCookie(context);
+
+            if (!tokenService.ValidateRefreshToken(oldRefreshToken))
+            {
+                return new LoginResponseDto
+                {
+                    AccessToken = string.Empty
+                };
+            }
+
+            var claimPrincipal = tokenService.GetPrincipalFromToken(oldRefreshToken);
+
+            var user = userRepository.GetUserById(int.Parse(claimPrincipal.FindFirst(ClaimTypes.NameIdentifier)!.Value));
+            
+
+            var accessToken = tokenService.GenerateAccessToken(user);
+            var refreshToken = tokenService.GenerateRefreshToken(user);
+
+            cookieService.SetRefrshTokenCookie(refreshToken, context);
+
+            user.RefreshToken = refreshToken;
+            userRepository.UpdateUser(user);
+
+            return new LoginResponseDto
+            {
+                AccessToken = accessToken,
             };
         }
 

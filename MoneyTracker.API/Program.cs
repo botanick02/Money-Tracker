@@ -11,6 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.RegisterBLLDependencies();
 
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddAuthentication("CustomTokenScheme")
         .AddScheme<AuthenticationSchemeOptions, CustomTokenAuthenticationHandler>("CustomTokenScheme", options => { });
 

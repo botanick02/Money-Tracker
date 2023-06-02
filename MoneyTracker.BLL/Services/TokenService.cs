@@ -1,13 +1,9 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using MoneyTracker.BLL.Services.IServices;
 using MoneyTracker.DAL.Entities;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace MoneyTracker.BLL.Services
 {
@@ -36,7 +32,6 @@ namespace MoneyTracker.BLL.Services
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                     new Claim(ClaimTypes.Email, user.Email)
                 }),
-                Issuer = "f",
                 Expires = DateTime.UtcNow.AddMinutes(accessTokenExpirationMinutes),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
