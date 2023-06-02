@@ -107,5 +107,22 @@ namespace MoneyTracker.BLL.Services
                 return false;
             }
         }
+
+        public ClaimsPrincipal GetPrincipalFromToken(string token)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(accessTokenSecret);
+
+            var validationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = false,
+                ValidateAudience = false
+            };
+
+            var principal = tokenHandler.ValidateToken(token, validationParameters, out var securityToken);
+            return principal;
+        }
     }
 }

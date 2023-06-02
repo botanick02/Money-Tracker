@@ -9,7 +9,6 @@ namespace MoneyTracker.API.GraphQl
         {
             Field<AuthMutation>("Auth")
                     .Resolve(_ => new { });
-
         }
     }
 }

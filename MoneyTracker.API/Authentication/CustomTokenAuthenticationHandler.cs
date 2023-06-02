@@ -24,21 +24,16 @@ namespace MoneyTracker.API.Authentication
 
             string token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
 
-            if (!tokenService.ValidateAccessToken(token))
+
+            var claimsPrincipal = tokenService.GetPrincipalFromToken(token);
+
+            if (claimsPrincipal == null)
             {
-                return AuthenticateResult.Fail("Invalid token");
+                return AuthenticateResult.Fail("Token validation failed");
             }
 
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Role, "Authorized")
-            };
-
-            var identity = new ClaimsIdentity(claims, Scheme.Name);
-            var principal = new ClaimsPrincipal(identity);
-            var ticket = new AuthenticationTicket(principal, Scheme.Name);
-
-            return AuthenticateResult.Success(ticket);
+            var authenticationTicket = new AuthenticationTicket(claimsPrincipal, Scheme.Name);
+            return AuthenticateResult.Success(authenticationTicket);
         }
     }
 }

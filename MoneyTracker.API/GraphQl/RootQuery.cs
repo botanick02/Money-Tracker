@@ -1,5 +1,7 @@
 ﻿using GraphQL;
 using GraphQL.Types;
+using MoneyTracker.API.GraphQl.Auth;
+using MoneyTracker.API.GraphQl.User;
 
 namespace MoneyTracker.API.GraphQl
 {
@@ -7,11 +9,8 @@ namespace MoneyTracker.API.GraphQl
     {
         public RootQuery()
         {
-            Field<StringGraphType>("Hello").Resolve(ctx => 
-            { 
-
-                return "hello";  
-            }).Authorize();
+            Field<UserQuery>("User")
+                     .Resolve(_ => new { });
         }
     }
 }

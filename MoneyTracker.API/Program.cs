@@ -16,7 +16,6 @@ builder.Services.AddAuthentication("CustomTokenScheme")
 
 builder.Services.AddAuthorization();
 
-
 builder.Services.AddGraphQL(b => b
     .AddSchema<MoneyTrackerSchema>()
     .AddGraphTypes(typeof(MoneyTrackerSchema).Assembly)
