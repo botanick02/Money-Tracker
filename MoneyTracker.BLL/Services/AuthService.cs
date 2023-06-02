@@ -16,7 +16,7 @@ namespace MoneyTracker.BLL.Services
         }
         public LoginResponseDto AuthenticateUser(string email, string password)
         {
-            User user = userRepository.GetUserByEmail(email);
+            var user = userRepository.GetUserByEmail(email);
 
             if (user == null || !VerifyPassword(password, user.Password))
             {
@@ -29,6 +29,9 @@ namespace MoneyTracker.BLL.Services
 
             string accessToken = tokenService.GenerateAccessToken(user);
             string refreshToken = tokenService.GenerateRefreshToken(user);
+
+            user.RefreshToken = refreshToken;
+            userRepository.UpdateUser(user);
 
             return new LoginResponseDto
             {
