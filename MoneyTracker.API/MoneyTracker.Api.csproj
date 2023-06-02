@@ -11,4 +11,8 @@
     <PackageReference Include="GraphQL.Server.Ui.Altair" Version="7.4.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MoneyTracker.BLL\MoneyTracker.BLL.csproj" />
+  </ItemGroup>
+
 </Project>
