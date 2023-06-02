@@ -1,4 +1,5 @@
-﻿using GraphQL.Types;
+﻿using GraphQL;
+using GraphQL.Types;
 using MoneyTracker.API.GraphQl.User.Types;
 using MoneyTracker.BLL.Services.IServices;
 using System.Security.Claims;
@@ -16,7 +17,7 @@ namespace MoneyTracker.API.GraphQl.User
                     var user = userService.GetUserById(userId);
 
                     return user;
-                });
+                }).Authorize();
         }
     }
 }
