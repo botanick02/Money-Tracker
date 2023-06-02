@@ -1,6 +1,8 @@
 using GraphQL;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using MoneyTracker.API.Authentication;
 using MoneyTracker.API.GraphQl;
 using MoneyTracker.BLL;
 using System.Text;
@@ -9,20 +11,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.RegisterBLLDependencies();
 
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(options =>
-{
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuer = true,
-        ValidateAudience = false,
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("-J@NcRfUjXn2r5u8x/A?D(G+KbPdSgVk"))
-    };
-});
+builder.Services.AddAuthentication("CustomTokenScheme")
+        .AddScheme<AuthenticationSchemeOptions, CustomTokenAuthenticationHandler>("CustomTokenScheme", options => { });
+
 builder.Services.AddAuthorization();
 
 
