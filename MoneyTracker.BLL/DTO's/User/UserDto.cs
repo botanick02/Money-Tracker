@@ -1,6 +1,6 @@
-﻿namespace MoneyTracker.DAL.Entities
+﻿namespace MoneyTracker.BLL.DTO_s.User
 {
-    public class User
+    public class UserDto
     {
         public int Id { get; set; }
 

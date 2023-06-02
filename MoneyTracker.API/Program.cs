@@ -1,4 +1,19 @@
+using GraphQL;
+using MoneyTracker.API.GraphQl;
+using MoneyTracker.BLL;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.RegisterBLLDependencies();
+
+builder.Services.AddGraphQL(b => b
+    .AddSchema<MoneyTrackerSchema>()
+    .AddGraphTypes(typeof(MoneyTrackerSchema).Assembly)
+    .AddAutoClrMappings()
+    .AddSystemTextJson());
+
+builder.Services.AddAuthorization();
+
 var app = builder.Build();
 
 app.UseGraphQLAltair();
@@ -11,9 +26,8 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseAuthentication();
-
 app.UseAuthorization();
+
 
 app.MapGet("/", () => "Hello World!");
 
