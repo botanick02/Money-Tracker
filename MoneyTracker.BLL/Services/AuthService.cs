@@ -12,17 +12,19 @@ namespace MoneyTracker.BLL.Services
         private readonly IUserRepository userRepository;
         private readonly ITokenService tokenService;
         private readonly ICookieService cookieService;
-        public AuthService(IUserRepository userRepository, ITokenService tokenService, ICookieService cookieService)
+        private readonly IPasswordHashService passwordHashService;
+        public AuthService(IUserRepository userRepository, ITokenService tokenService, ICookieService cookieService, IPasswordHashService passwordHashService)
         {
             this.userRepository = userRepository;
             this.tokenService = tokenService;
             this.cookieService = cookieService;
+            this.passwordHashService = passwordHashService;
         }
         public LoginResponseDto AuthenticateUser(string email, string password, HttpContext context)
         {
             var user = userRepository.GetUserByEmail(email);
 
-            if (user == null || !VerifyPassword(password, user.Password))
+            if (user == null || !passwordHashService.VerifyPassword(password, user.PasswordHash, user.PasswordSalt))
             {
                 return new LoginResponseDto
                 {
@@ -73,11 +75,6 @@ namespace MoneyTracker.BLL.Services
             {
                 AccessToken = accessToken,
             };
-        }
-
-        private bool VerifyPassword(string password, string storedPassword)
-        {
-            return string.Equals(password, storedPassword);
         }
     }
 }
