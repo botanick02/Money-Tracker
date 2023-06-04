@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using MoneyTracker.BLL.DTO_s;
+using MoneyTracker.BLL.DTO_s.User;
 using MoneyTracker.BLL.Services.IServices;
 using MoneyTracker.DAL.Entities;
 using MoneyTracker.DAL.Repositories.IRepositories;
@@ -74,6 +75,32 @@ namespace MoneyTracker.BLL.Services
             return new LoginResponseDto
             {
                 AccessToken = accessToken,
+            };
+        }
+
+        public LoginResponseDto RegisterUser(UserCreateDto newUser, HttpContext context)
+        {
+            var user = new User();
+
+            user.Name = newUser.Name;
+            user.Email = newUser.Email;
+
+            user.PasswordHash = passwordHashService.HashPassword(newUser.Password, out string salt);
+            user.PasswordSalt = salt;
+            
+            var createdUser = userRepository.CreateUser(user);
+
+            var accessToken = tokenService.GenerateAccessToken(createdUser);
+            var refreshToken = tokenService.GenerateRefreshToken(createdUser);
+
+            cookieService.SetRefrshTokenCookie(refreshToken, context);
+            user.RefreshToken = refreshToken;
+
+            userRepository.UpdateUser(createdUser);
+
+            return new LoginResponseDto
+            {
+                AccessToken = accessToken
             };
         }
     }

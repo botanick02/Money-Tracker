@@ -15,6 +15,7 @@ namespace MoneyTracker.BLL
             services.AddSingleton<IUserService, UserService>();
             services.AddSingleton<ITokenService, TokenService>();
             services.AddSingleton<ICookieService, CookiesService>();
+            services.AddSingleton<IPasswordHashService, PasswordHashService>();
             services.RegisterDALDependencies();
         }
     }
