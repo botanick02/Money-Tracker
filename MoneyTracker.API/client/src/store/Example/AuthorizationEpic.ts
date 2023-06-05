@@ -129,6 +129,7 @@ export const SignOutEpic: Epic<any, any, any> = (action$: any) => {
         ofType(SIGN_OUT),
         map(() => {
           localStorage.clear();
+         
           return SIGN_OUT_SUCCESS();
         })
       );
