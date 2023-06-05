@@ -6,6 +6,18 @@ namespace MoneyTracker.DAL.Repositories
     public class UserRepository : IUserRepository
     {
         private readonly List<User> users = new List<User>();
+
+        public UserRepository()
+        {
+            users.Add(new User
+            {
+                Id = 1,
+                Name = "John",
+                Email = "john@example.com",
+                PasswordHash = "iRvIS1UHa2MZ7sExsJCL9uZrd+uEdWlr+Y/KUrnH1iI=",
+                PasswordSalt = "zjXh750tlEvmvRM1HAVj7g=="
+            });
+        }
         public User? GetUserById(int id)
         {
             var user = users.FirstOrDefault(u => u.Id == id);
