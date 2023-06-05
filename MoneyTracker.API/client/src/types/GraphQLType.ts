@@ -70,4 +70,9 @@ export interface IAuthResponse {
     errors: any[];
     user: IUserType;
   }
-  
+  export interface accessTokenType {
+    UserId: string;
+    nbf: number;
+    exp: number;
+    iat: number;
+}

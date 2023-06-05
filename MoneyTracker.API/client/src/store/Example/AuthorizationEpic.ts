@@ -83,17 +83,13 @@ export const GetAccessTokenEpic: Epic<any, any, any> = (action$) => {
     let actionPayload: any;
 
     const GetTokenQuery = `
-            mutation{
-              authorization{
-                refreshToken{
-                  statusCode
-                  token
-                  refreshToken
-                  errors
-                }
-              }
-            }
-        `;
+    mutation refresh{
+        auth{
+          refreshToken{
+            accessToken
+          }
+        }
+      }`;
 
     return action$.pipe(
         ofType(GET_ACCESS_TOKEN),
@@ -116,19 +112,9 @@ export const GetAccessTokenEpic: Epic<any, any, any> = (action$) => {
                 mergeMap((responce) =>
                     from(responce.json()).pipe(
                         map((data: any) => {
-                            let result = data.data.authorization.refreshToken;
-                            if (result.statusCode == 401) {
-                                localStorage.removeItem("accessToken");
-                                return GET_ACCESS_TOKEN_ERROR();
-                            } else {
-                                localStorage.setItem("accessToken", result.token);
-                                if (actionPayload != undefined) {
-                                    actionPayload.nextActions.forEach((action: AnyAction) => {
-                                        store.dispatch(action);
-                                    });
-                                }
+                            console.log(data)
+                            localStorage.setItem('accessToken', data.data.auth.refreshToken.accessToken);
                                 return GET_ACCESS_TOKEN_SUCCESS();
-                            }
                         })
                     )
                 )
