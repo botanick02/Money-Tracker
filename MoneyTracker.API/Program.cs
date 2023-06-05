@@ -8,7 +8,16 @@ using MoneyTracker.BLL;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("DefaultPolicy", builder =>
+    {
+        builder.AllowAnyHeader()
+               .WithMethods("POST", "OPTIONS")
+               .WithOrigins("http://localhost:3000")
+               .AllowCredentials();
+    });
+});
 builder.Services.RegisterBLLDependencies();
 
 builder.Services.AddHttpContextAccessor();
@@ -30,7 +39,7 @@ var app = builder.Build();
 app.UseAuthentication();
 app.UseAuthorization();
 
-
+app.UseCors("DefaultPolicy");
 app.UseGraphQLAltair();
 app.UseGraphQL("/graphql");
 

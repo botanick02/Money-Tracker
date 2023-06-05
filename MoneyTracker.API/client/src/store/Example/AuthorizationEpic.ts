@@ -24,20 +24,21 @@ const {
     SIGN_OUT_ERROR
   } = AuthorizationReducer.actions;
 export const AuthorizationEpic: Epic<any, any, any> = (action$: any) => {
-    let payload: { email: string; password: string };
-    const authQuery = (email: string, password: string) => {
+    let payload: { username: string; password: string };
+   
+    const authQuery = (username: string, password: string) => {
         return `
-        mutation auth{
+        mutation login{
             auth{
-            login(loginCredentials: { email: "${email}", password: "${password}"}){
-              statusCode
+            login(loginCredentials: { email: "john@example.com", password: "password1"}){
+              
               accessToken
             }
           }
         }
         `;
     };
-
+    
     return action$.pipe(
         ofType(SIGN_IN),
         map((item: any) => {
@@ -53,16 +54,17 @@ export const AuthorizationEpic: Epic<any, any, any> = (action$: any) => {
                         "Content-Type": "application/json",
                         Accept: "application/json",
                     },
-                    body: JSON.stringify({ query: authQuery(payload.email!, payload.password!) }),
+                    body: JSON.stringify({ query: authQuery(payload.username!, payload.password!) }),
                 })
             ).pipe(
                 mergeMap((response) =>
                     from(response.json()).pipe(
                         map((data: IUserQuery) => {
-                            if (data.data.authorization.login.statusCode == 200) {
-                                localStorage.setItem("accessToken", data.data.authorization.login.token);
+                            console.log(data)
+                            if (data.data.auth.login.accessToken !== '') {
+                                localStorage.setItem('accessToken', data.data.auth.login.accessToken);
                                 return SIGN_IN_SUCCESS();
-                            } else {
+                              }else {
                                 store.dispatch(SHOW_ERROR_MESSAGE("Incorrect username or password!"));
                                 return SIGN_IN_ERROR("Incorrect username or password!");
                             }
