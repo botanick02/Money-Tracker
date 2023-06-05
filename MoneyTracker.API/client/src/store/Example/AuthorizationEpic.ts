@@ -30,7 +30,7 @@ export const AuthorizationEpic: Epic<any, any, any> = (action$: any) => {
         return `
         mutation login{
             auth{
-            login(loginCredentials: { email: "john@example.com", password: "password1"}){
+            login(loginCredentials: { email: "${username}", password: "${password}"}){
               
               accessToken
             }
