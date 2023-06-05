@@ -1,22 +1,30 @@
 import {combineReducers, configureStore} from "@reduxjs/toolkit";
 import {combineEpics, createEpicMiddleware} from "redux-observable";
-import {exampleSlice} from "./Example/Example.slice";
-import {exampleEpics} from "./Example/Example.epic";
+
+import { AuthorizationEpic, GetAccessTokenEpic, SignOutEpic } from "./Example/AuthorizationEpic";
+import UserReducer from "./Example/Reducers/UserReducer";
+import NotificationReducer from "./Example/Reducers/NotificationReducer";
+import AuthorizationReducer from "./Example/Reducers/AuthorizationReducer";
+import RefreshTokenReducer from "./Example/Reducers/RefreshTokenReducer";
 
 const epicMiddleware = createEpicMiddleware()
 
 const rootEpic = combineEpics(
-    exampleEpics
+    AuthorizationEpic,
+    SignOutEpic,
+    GetAccessTokenEpic
 )
 
 const rootReducer = combineReducers({
-    example: exampleSlice.reducer
+    Authorization: AuthorizationReducer,
+    User: UserReducer,
+    Notifications: NotificationReducer,
+    RefreshToken: RefreshTokenReducer,
 })
 
 export const store = configureStore({
-    reducer: {
-        rootReducer
-    },
+    reducer: rootReducer
+    ,
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware({
             serializableCheck: false,
