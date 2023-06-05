@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { IUserType, UserLoginType } from '../../../types/IUserType';
-import '../../../styles/SignInForm.scss';
-import { AuthorizationReducer } from '../../../store/Example/Reducers/AuthorizationReducer';
-import { useAppDispatch, useAppSelector } from '../../../hooks/useAppDispatch';
+import { IUserType, UserLoginType } from '../../types/IUserType';
+import '../../styles/SignInForm.scss';
+import { AuthorizationReducer } from '../../store/Example/Reducers/AuthorizationReducer';
+import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
 import {useForm} from "react-hook-form";
 const {SIGN_IN, SIGN_IN_SUCCESS, SIGN_IN_ERROR} = AuthorizationReducer.actions;
 const SignInForm = () => {
@@ -25,7 +25,7 @@ const SignInForm = () => {
   return (
     <div className="sign-in-form">
          {IsSinging ? <div className="loading......"></div> : null}
-      <h2>Enter your Email and  Password </h2>
+   
       <form onSubmit={handleSubmit(SignIn)}>
           <div className="mb-3 px-5 mt-2">
             <label htmlFor="username" className="form-label">

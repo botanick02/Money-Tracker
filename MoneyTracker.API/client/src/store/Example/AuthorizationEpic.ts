@@ -138,47 +138,12 @@ export const GetAccessTokenEpic: Epic<any, any, any> = (action$) => {
 };
 
 export const SignOutEpic: Epic<any, any, any> = (action$: any) => {
-    const signOutQuery = `
-            mutation signOut{
-              authorization{
-                signOut{
-                  statusCode
-                  errors
-                }
-              }
-            }
-            `;
 
     return action$.pipe(
         ofType(SIGN_OUT),
-        mergeMap(() =>
-            from(
-                fetch(GraphQlEndpoint, {
-                    method: "POST",
-                    mode: "cors",
-                    credentials: "include",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Accept: "application/json",
-                        Authorization: "Bearer " + localStorage.getItem("accessToken"),
-                    },
-                    body: JSON.stringify({ query: signOutQuery }),
-                })
-            ).pipe(
-                mergeMap((response) =>
-                    from(response.json()).pipe(
-                        map((data) => {
-                            if (data.data.authorization.signOut.statusCode == 200) {
-                                localStorage.clear();
-                                return SIGN_OUT_SUCCESS();
-                            } else {
-                                store.dispatch(SHOW_ERROR_MESSAGE("Sign out error!"));
-                                return SIGN_OUT_ERROR("Sign out error, try again!");
-                            }
-                        })
-                    )
-                )
-            )
-        )
-    );
+        map(() => {
+          localStorage.clear();
+          return SIGN_OUT_SUCCESS();
+        })
+      );
 };
