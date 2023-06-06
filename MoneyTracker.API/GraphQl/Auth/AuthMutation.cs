@@ -2,6 +2,7 @@
 using GraphQL.Types;
 using MoneyTracker.API.GraphQl.Auth.Types;
 using MoneyTracker.API.GraphQl.Auth.Types.Inputs;
+using MoneyTracker.BLL.DTO_s.User;
 using MoneyTracker.BLL.Services.IServices;
 
 namespace MoneyTracker.API.GraphQl.Auth
@@ -18,10 +19,24 @@ namespace MoneyTracker.API.GraphQl.Auth
                     return authService.AuthenticateUser(loginCredentials.Email, loginCredentials.Password, httpContextAccessor.HttpContext!);
                 });
 
+            Field<bool>("LogOut")
+               .Resolve(context =>
+               {
+                   return authService.LogUserOut(httpContextAccessor.HttpContext!);
+               });
+
             Field<LoginResponseDtoType>("RefreshToken")
                 .Resolve(context =>
                 {
-                    return authService.RefreshAccessToken(httpContextAccessor.HttpContext);
+                    return authService.RefreshAccessToken(httpContextAccessor.HttpContext!);
+                });
+
+            Field<LoginResponseDtoType>("RegisterUser")
+                .Argument<RegisterUserInputType>("RegisterUser")
+                .Resolve(context =>
+                {
+                    var newUser = context.GetArgument<UserCreateDto>("RegisterUser");
+                    return authService.RegisterUser(newUser, httpContextAccessor.HttpContext!);
                 });
         }
     }

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using MoneyTracker.BLL.DTO_s;
+using MoneyTracker.BLL.DTO_s.User;
+using MoneyTracker.BLL.Exceptions;
 using MoneyTracker.BLL.Services.IServices;
 using MoneyTracker.DAL.Entities;
 using MoneyTracker.DAL.Repositories.IRepositories;
@@ -12,22 +14,25 @@ namespace MoneyTracker.BLL.Services
         private readonly IUserRepository userRepository;
         private readonly ITokenService tokenService;
         private readonly ICookieService cookieService;
-        public AuthService(IUserRepository userRepository, ITokenService tokenService, ICookieService cookieService)
+        private readonly IPasswordHashService passwordHashService;
+        public AuthService(IUserRepository userRepository, ITokenService tokenService, ICookieService cookieService, IPasswordHashService passwordHashService)
         {
             this.userRepository = userRepository;
             this.tokenService = tokenService;
             this.cookieService = cookieService;
+            this.passwordHashService = passwordHashService;
         }
         public LoginResponseDto AuthenticateUser(string email, string password, HttpContext context)
         {
             var user = userRepository.GetUserByEmail(email);
 
-            if (user == null || !VerifyPassword(password, user.Password))
+            if (user == null || !passwordHashService.VerifyPassword(password, user.PasswordHash, user.PasswordSalt))
             {
                 return new LoginResponseDto
                 {
-                    AccessToken = string.Empty,
+                    AccessToken = string.Empty
                 };
+                throw new LoginException("Invalid username or password.");
             }
 
             var accessToken = tokenService.GenerateAccessToken(user);
@@ -75,9 +80,43 @@ namespace MoneyTracker.BLL.Services
             };
         }
 
-        private bool VerifyPassword(string password, string storedPassword)
+        public LoginResponseDto RegisterUser(UserCreateDto newUser, HttpContext context)
         {
-            return string.Equals(password, storedPassword);
+            var user = new User();
+
+            user.Name = newUser.Name;
+            user.Email = newUser.Email;
+
+            user.PasswordHash = passwordHashService.HashPassword(newUser.Password, out string salt);
+            user.PasswordSalt = salt;
+            
+            var createdUser = userRepository.CreateUser(user);
+
+            var accessToken = tokenService.GenerateAccessToken(createdUser);
+            var refreshToken = tokenService.GenerateRefreshToken(createdUser);
+
+            cookieService.SetRefrshTokenCookie(refreshToken, context);
+            user.RefreshToken = refreshToken;
+
+            userRepository.UpdateUser(createdUser);
+
+            return new LoginResponseDto
+            {
+                AccessToken = accessToken
+            };
+        }
+
+        public bool LogUserOut(HttpContext context)
+        {
+            var existingUser = userRepository.GetUserById(int.Parse(context.User.FindFirst(ClaimTypes.NameIdentifier)!.Value));
+
+            existingUser.RefreshToken = "";
+
+            userRepository.UpdateUser(existingUser);
+
+            cookieService.ClearRefreshTokenCookie(context);
+
+            return true;
         }
     }
 }

@@ -8,7 +8,7 @@ namespace MoneyTracker.DAL
     {
         public static void RegisterDALDependencies(this IServiceCollection services)
         {
-            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddSingleton<IUserRepository, UserRepository>();
         }
     }
 }

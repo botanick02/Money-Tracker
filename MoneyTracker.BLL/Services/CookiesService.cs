@@ -20,5 +20,9 @@ namespace MoneyTracker.BLL.Services
         {
             return context.Request.Cookies["refreshToken"];
         }
+        public void ClearRefreshTokenCookie(HttpContext context)
+        {
+            context.Response.Cookies.Delete("refreshToken");
+        }
     }
 }

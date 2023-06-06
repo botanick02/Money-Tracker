@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;
 using MoneyTracker.BLL.Services.IServices;
+using System.Security.Claims;
 using System.Text.Encodings.Web;
 
 namespace MoneyTracker.API.Authentication
@@ -23,16 +24,16 @@ namespace MoneyTracker.API.Authentication
 
             string token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
 
-
-            var claimsPrincipal = tokenService.GetPrincipalFromToken(token);
-
-            if (claimsPrincipal == null)
+            try
+            {
+                var claimsPrincipal = tokenService.GetPrincipalFromToken(token);
+                var authenticationTicket = new AuthenticationTicket(claimsPrincipal, Scheme.Name);
+                return AuthenticateResult.Success(authenticationTicket);
+            }
+            catch
             {
                 return AuthenticateResult.Fail("Token validation failed");
             }
-
-            var authenticationTicket = new AuthenticationTicket(claimsPrincipal, Scheme.Name);
-            return AuthenticateResult.Success(authenticationTicket);
         }
     }
 }

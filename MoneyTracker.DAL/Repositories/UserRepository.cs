@@ -7,14 +7,15 @@ namespace MoneyTracker.DAL.Repositories
     {
         private readonly List<User> users = new List<User>();
 
-        public UserRepository() 
+        public UserRepository()
         {
             users.Add(new User
             {
                 Id = 1,
                 Name = "John",
                 Email = "john@example.com",
-                Password = "password1"
+                PasswordHash = "iRvIS1UHa2MZ7sExsJCL9uZrd+uEdWlr+Y/KUrnH1iI=",
+                PasswordSalt = "zjXh750tlEvmvRM1HAVj7g=="
             });
         }
         public User? GetUserById(int id)

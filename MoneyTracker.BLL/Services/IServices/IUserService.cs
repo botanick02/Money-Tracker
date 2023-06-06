@@ -1,4 +1,5 @@
-﻿using MoneyTracker.BLL.DTO_s.User;
+﻿using Microsoft.AspNetCore.Http;
+using MoneyTracker.BLL.DTO_s.User;
 
 namespace MoneyTracker.BLL.Services.IServices
 {
