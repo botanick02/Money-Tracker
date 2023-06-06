@@ -15,4 +15,8 @@
     <ProjectReference Include="..\MoneyTracker.BLL\MoneyTracker.BLL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="client\" />
+  </ItemGroup>
+
 </Project>
