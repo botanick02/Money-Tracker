@@ -8,6 +8,8 @@ namespace MoneyTracker.BLL.Services.IServices
     {
         LoginResponseDto AuthenticateUser(string email, string password, HttpContext context);
 
+        bool LogUserOut(HttpContext context);
+
         LoginResponseDto RegisterUser(UserCreateDto newUser, HttpContext context);
 
         LoginResponseDto RefreshAccessToken(HttpContext context);

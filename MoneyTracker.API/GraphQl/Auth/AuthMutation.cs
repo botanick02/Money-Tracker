@@ -19,6 +19,12 @@ namespace MoneyTracker.API.GraphQl.Auth
                     return authService.AuthenticateUser(loginCredentials.Email, loginCredentials.Password, httpContextAccessor.HttpContext!);
                 });
 
+            Field<bool>("LogOut")
+               .Resolve(context =>
+               {
+                   return authService.LogUserOut(httpContextAccessor.HttpContext!);
+               });
+
             Field<LoginResponseDtoType>("RefreshToken")
                 .Resolve(context =>
                 {

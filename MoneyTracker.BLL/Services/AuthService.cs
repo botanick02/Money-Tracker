@@ -105,5 +105,18 @@ namespace MoneyTracker.BLL.Services
                 AccessToken = accessToken
             };
         }
+
+        public bool LogUserOut(HttpContext context)
+        {
+            var existingUser = userRepository.GetUserById(int.Parse(context.User.FindFirst(ClaimTypes.NameIdentifier)!.Value));
+
+            existingUser.RefreshToken = "";
+
+            userRepository.UpdateUser(existingUser);
+
+            cookieService.ClearRefreshTokenCookie(context);
+
+            return true;
+        }
     }
 }

@@ -7,5 +7,7 @@ namespace MoneyTracker.BLL.Services.IServices
         void SetRefrshTokenCookie(string token, HttpContext context);
 
         string? GetRefreshTokenCookie(HttpContext context);
+
+        public void ClearRefreshTokenCookie(HttpContext context);
     }
 }
