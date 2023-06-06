@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using MoneyTracker.BLL.DTO_s;
 using MoneyTracker.BLL.DTO_s.User;
+using MoneyTracker.BLL.Exceptions;
 using MoneyTracker.BLL.Services.IServices;
 using MoneyTracker.DAL.Entities;
 using MoneyTracker.DAL.Repositories.IRepositories;
@@ -29,8 +30,9 @@ namespace MoneyTracker.BLL.Services
             {
                 return new LoginResponseDto
                 {
-                    AccessToken = string.Empty,
+                    AccessToken = string.Empty
                 };
+                throw new LoginException("Invalid username or password.");
             }
 
             var accessToken = tokenService.GenerateAccessToken(user);
