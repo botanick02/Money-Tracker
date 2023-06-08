@@ -1,29 +1,22 @@
 import { Epic, ofType } from "redux-observable";
 import { filter, from, map, mergeMap } from "rxjs";
-
-
-
 import { store } from "../store";
-
-import { AnyAction } from "redux";
-
 import { IUserQuery } from "../../types/GraphQLType";
-import { AuthorizationReducer } from "./Reducers/AuthorizationReducer";
+
 import { UserReducer } from "./Reducers/UserReducer";
 import { NotificationReducer } from "./Reducers/NotificationReducer";
 import { RefreshTokenReducer } from "./Reducers/RefreshTokenReducer";
 import { GraphQlEndpoint } from "../../api/queries/tmp";
+import { RegistrationReducer } from "./Reducers/RegistrationReducer";
 const { GET_USER_INFO } = UserReducer.actions;
 const { SHOW_ERROR_MESSAGE } = NotificationReducer.actions;
 const {
-    SIGN_IN,
-    SIGN_IN_SUCCESS,
-    SIGN_IN_ERROR,
-    SIGN_OUT,
-    SIGN_OUT_SUCCESS,
-    SIGN_OUT_ERROR
-  } = AuthorizationReducer.actions;
-export const AuthorizationEpic: Epic<any, any, any> = (action$: any) => {
+    REGISTRATION,
+    REGISTRATION_SUCCESS,
+    REGISTRATION_ERROR,
+   
+  } = RegistrationReducer.actions;
+export const RegistrationEpic: Epic<any, any, any> = (action$: any) => {
     let payload: { username: string; password: string };
    
     const authQuery = (username: string, password: string) => {
@@ -40,7 +33,7 @@ export const AuthorizationEpic: Epic<any, any, any> = (action$: any) => {
     };
     
     return action$.pipe(
-        ofType(SIGN_IN),
+        ofType(REGISTRATION),
         map((item: any) => {
             payload = item.payload;
         }),
@@ -63,10 +56,10 @@ export const AuthorizationEpic: Epic<any, any, any> = (action$: any) => {
                             console.log(data)
                             if (data.data.auth.login.accessToken !== '') {
                                 localStorage.setItem('accessToken', data.data.auth.login.accessToken);
-                                return SIGN_IN_SUCCESS();
+                                return REGISTRATION_SUCCESS();
                               }else {
                                 store.dispatch(SHOW_ERROR_MESSAGE("Incorrect username or password!"));
-                                return SIGN_IN_ERROR("Incorrect username or password!");
+                                return REGISTRATION_ERROR("Incorrect username or password!");
                             }
                         })
                     )
@@ -76,61 +69,3 @@ export const AuthorizationEpic: Epic<any, any, any> = (action$: any) => {
     );
 };
 
-export const GetAccessTokenEpic: Epic<any, any, any> = (action$) => {
-    const { GET_ACCESS_TOKEN, GET_ACCESS_TOKEN_ERROR, GET_ACCESS_TOKEN_SUCCESS } = RefreshTokenReducer.actions;
-    const { SIGN_IN_ERROR, SIGN_IN_SUCCESS } = AuthorizationReducer.actions;
-
-    let actionPayload: any;
-
-    const GetTokenQuery = `
-    mutation refresh{
-        auth{
-          refreshToken{
-            accessToken
-          }
-        }
-      }`;
-
-    return action$.pipe(
-        ofType(GET_ACCESS_TOKEN),
-        map((action$) => {
-            actionPayload = action$.payload;
-        }),
-        mergeMap(() =>
-            from(
-                fetch(GraphQlEndpoint, {
-                    method: "POST",
-                    mode: "cors",
-                    credentials: "include",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Accept: "application/json",
-                    },
-                    body: JSON.stringify({ query: GetTokenQuery }),
-                })
-            ).pipe(
-                mergeMap((responce) =>
-                    from(responce.json()).pipe(
-                        map((data: any) => {
-                            console.log(data)
-                            localStorage.setItem('accessToken', data.data.auth.refreshToken.accessToken);
-                                return GET_ACCESS_TOKEN_SUCCESS();
-                        })
-                    )
-                )
-            )
-        )
-    );
-};
-
-export const SignOutEpic: Epic<any, any, any> = (action$: any) => {
-
-    return action$.pipe(
-        ofType(SIGN_OUT),
-        map(() => {
-          localStorage.clear();
-         
-          return SIGN_OUT_SUCCESS();
-        })
-      );
-};
