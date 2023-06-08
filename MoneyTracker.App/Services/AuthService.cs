@@ -3,6 +3,8 @@ using MoneyTracker.Business.Entities;
 using System.Security.Claims;
 using MoneyTracker.App.GraphQl.Auth.Types.Inputs;
 using MoneyTracker.App.GraphQl.Auth.Types;
+using AutoMapper;
+using System.ComponentModel.DataAnnotations;
 
 namespace MoneyTracker.Business.Services
 {
@@ -12,12 +14,14 @@ namespace MoneyTracker.Business.Services
         private readonly TokenService tokenService;
         private readonly CookiesService cookieService;
         private readonly PasswordHashService passwordHashService;
-        public AuthService(IUserRepository userRepository, TokenService tokenService, CookiesService cookieService, PasswordHashService passwordHashService)
+        private readonly IMapper mapper;
+        public AuthService(IUserRepository userRepository, TokenService tokenService, CookiesService cookieService, PasswordHashService passwordHashService, IMapper mapper)
         {
             this.userRepository = userRepository;
             this.tokenService = tokenService;
             this.cookieService = cookieService;
             this.passwordHashService = passwordHashService;
+            this.mapper = mapper;
         }
         public LoginResponse AuthenticateUser(string email, string password, HttpContext context)
         {
@@ -75,10 +79,13 @@ namespace MoneyTracker.Business.Services
 
         public LoginResponse RegisterUser(UserCreateInput newUser, HttpContext context)
         {
-            var user = new User();
+            var user = mapper.Map<User>(newUser);
 
-            user.Name = newUser.Name;
-            user.Email = newUser.Email;
+            if (userRepository.GetUserByEmail(user.Email) != null)
+            {
+                throw new UserAlreadyExistsException();
+            }
+
 
             user.PasswordHash = passwordHashService.HashPassword(newUser.Password, out string salt);
             user.PasswordSalt = salt;
@@ -110,6 +117,23 @@ namespace MoneyTracker.Business.Services
             cookieService.ClearRefreshTokenCookie(context);
 
             return true;
+        }
+    }
+
+    public class UserAlreadyExistsException : Exception
+    {
+        public UserAlreadyExistsException()
+        {
+        }
+
+        public UserAlreadyExistsException(string message)
+            : base(message)
+        {
+        }
+
+        public UserAlreadyExistsException(string message, Exception innerException)
+            : base(message, innerException)
+        {
         }
     }
 }
