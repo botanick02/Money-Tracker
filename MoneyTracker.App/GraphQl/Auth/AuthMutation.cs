@@ -41,7 +41,25 @@ namespace MoneyTracker.App.GraphQl.Auth
             Field<LoginResponseType>("RefreshToken")
                 .Resolve(context =>
                 {
-                    return authService.RefreshAccessToken(httpContextAccessor.HttpContext!);
+                    try
+                    {
+                        return authService.RefreshAccessToken(httpContextAccessor.HttpContext!);
+                    }
+                    catch (InvalidRefreshTokenException)
+                    {
+                        var exception = new ExecutionError($"Refresh token validation error");
+                        exception.Code = "INVALID_TOKEN";
+                        context.Errors.Add(exception);
+                        return null;
+                    }
+                    catch (Exception ex)
+                    {
+                        var exception = new ExecutionError($"Internal Server Error");
+                        exception.Code = "SERVER_ERROR";
+                        context.Errors.Add(exception);
+                        Debug.Write(ex);
+                        return null;
+                    }
                 });
 
             Field<LoginResponseType>("CreateUser")

@@ -49,12 +49,9 @@ namespace MoneyTracker.Business.Services
         {
             var oldRefreshToken = CookiesHelper.GetRefreshTokenCookie(context);
 
-            if (!tokenService.ValidateRefreshToken(oldRefreshToken))
+            if (oldRefreshToken == null || !tokenService.ValidateRefreshToken(oldRefreshToken))
             {
-                return new LoginResponse
-                {
-                    AccessToken = string.Empty
-                };
+                throw new InvalidRefreshTokenException();
             }
 
             var claimPrincipal = tokenService.GetPrincipalFromToken(oldRefreshToken);
@@ -124,14 +121,10 @@ namespace MoneyTracker.Business.Services
         public UserAlreadyExistsException()
         {
         }
-
-        public UserAlreadyExistsException(string message)
-            : base(message)
-        {
-        }
-
-        public UserAlreadyExistsException(string message, Exception innerException)
-            : base(message, innerException)
+    } 
+    public class InvalidRefreshTokenException : Exception
+    {
+        public InvalidRefreshTokenException()
         {
         }
     }
