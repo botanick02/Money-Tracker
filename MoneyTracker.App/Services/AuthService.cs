@@ -5,6 +5,7 @@ using MoneyTracker.App.GraphQl.Auth.Types.Inputs;
 using MoneyTracker.App.GraphQl.Auth.Types;
 using AutoMapper;
 using System.ComponentModel.DataAnnotations;
+using MoneyTracker.App.Helpers;
 
 namespace MoneyTracker.Business.Services
 {
@@ -12,14 +13,12 @@ namespace MoneyTracker.Business.Services
     {
         private readonly IUserRepository userRepository;
         private readonly TokenService tokenService;
-        private readonly CookiesService cookieService;
         private readonly PasswordHashService passwordHashService;
         private readonly IMapper mapper;
-        public AuthService(IUserRepository userRepository, TokenService tokenService, CookiesService cookieService, PasswordHashService passwordHashService, IMapper mapper)
+        public AuthService(IUserRepository userRepository, TokenService tokenService, PasswordHashService passwordHashService, IMapper mapper)
         {
             this.userRepository = userRepository;
             this.tokenService = tokenService;
-            this.cookieService = cookieService;
             this.passwordHashService = passwordHashService;
             this.mapper = mapper;
         }
@@ -35,7 +34,7 @@ namespace MoneyTracker.Business.Services
             var accessToken = tokenService.GenerateAccessToken(user);
             var refreshToken = tokenService.GenerateRefreshToken(user);
 
-            cookieService.SetRefrshTokenCookie(refreshToken, context);
+            CookiesHelper.SetRefrshTokenCookie(refreshToken, context);
 
             user.RefreshToken = refreshToken;
             userRepository.UpdateUser(user);
@@ -48,7 +47,7 @@ namespace MoneyTracker.Business.Services
 
         public LoginResponse RefreshAccessToken(HttpContext context)
         {
-            var oldRefreshToken = cookieService.GetRefreshTokenCookie(context);
+            var oldRefreshToken = CookiesHelper.GetRefreshTokenCookie(context);
 
             if (!tokenService.ValidateRefreshToken(oldRefreshToken))
             {
@@ -66,7 +65,7 @@ namespace MoneyTracker.Business.Services
             var accessToken = tokenService.GenerateAccessToken(user);
             var refreshToken = tokenService.GenerateRefreshToken(user);
 
-            cookieService.SetRefrshTokenCookie(refreshToken, context);
+            CookiesHelper.SetRefrshTokenCookie(refreshToken, context);
 
             user.RefreshToken = refreshToken;
             userRepository.UpdateUser(user);
@@ -95,7 +94,7 @@ namespace MoneyTracker.Business.Services
             var accessToken = tokenService.GenerateAccessToken(createdUser);
             var refreshToken = tokenService.GenerateRefreshToken(createdUser);
 
-            cookieService.SetRefrshTokenCookie(refreshToken, context);
+            CookiesHelper.SetRefrshTokenCookie(refreshToken, context);
             user.RefreshToken = refreshToken;
 
             userRepository.UpdateUser(createdUser);
@@ -114,7 +113,7 @@ namespace MoneyTracker.Business.Services
 
             userRepository.UpdateUser(existingUser);
 
-            cookieService.ClearRefreshTokenCookie(context);
+            CookiesHelper.ClearRefreshTokenCookie(context);
 
             return true;
         }

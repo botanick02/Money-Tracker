@@ -23,7 +23,6 @@ builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 builder.Services.AddTransient<AuthService>();
 builder.Services.AddTransient<TokenService>();
-builder.Services.AddTransient<CookiesService>();
 builder.Services.AddTransient<PasswordHashService>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 
