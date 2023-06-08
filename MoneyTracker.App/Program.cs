@@ -1,6 +1,7 @@
 using GraphQL;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using MoneyTracker.App.Authentication;
 using MoneyTracker.App.GraphQl;
 using MoneyTracker.App.Helpers;
@@ -44,6 +45,12 @@ builder.Services.AddGraphQL(b => b
     .AddSystemTextJson()
     .AddAuthorizationRule());
 
+builder.Services.AddSpaStaticFiles(configuration =>
+{
+    configuration.RootPath = "client/build";
+});
+
+
 var app = builder.Build();
 
 app.UseAuthentication();
@@ -60,6 +67,16 @@ if (!app.Environment.IsDevelopment())
 }
 
 
-app.MapGet("/", () => "Hello World!");
+app.UseSpa(spa =>
+{
+    spa.Options.SourcePath = "client";
+    if (app.Environment.IsDevelopment())
+    {
+        spa.UseReactDevelopmentServer(npmScript: "start");
+    }
+});
+
+
+//app.MapGet("/", () => "Hello World!");
 
 app.Run();
