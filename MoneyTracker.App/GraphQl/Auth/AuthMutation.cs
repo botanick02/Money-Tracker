@@ -15,14 +15,25 @@ namespace MoneyTracker.App.GraphQl.Auth
                 .Resolve(context =>
                 {
                     var loginCredentials = context.GetArgument<LoginInput>("LoginCredentials");
-                    return authService.AuthenticateUser(loginCredentials.Email, loginCredentials.Password, httpContextAccessor.HttpContext!);
+
+                    try
+                    {
+                        return authService.AuthenticateUser(loginCredentials.Email, loginCredentials.Password, httpContextAccessor.HttpContext!);
+                    }
+                    catch (Exception ex)
+                    {
+                        var exception = new ExecutionError(ex.Message);
+                        exception.Code = "UNAUTHORIZED";
+                        context.Errors.Add(exception);
+                        return null;
+                    }
                 });
 
             Field<bool>("LogOut")
                .Resolve(context =>
                {
                    return authService.LogUserOut(httpContextAccessor.HttpContext!);
-               });
+               }).Authorize();
 
             Field<LoginResponseType>("RefreshToken")
                 .Resolve(context =>
