@@ -1,4 +1,4 @@
-const baseURL = "https://localhost:7036/graphql"
+const baseURL = "https://localhost:7299/graphql"
 
 export const request = async (query?: string, variables?: any) => {
     if(!query)
