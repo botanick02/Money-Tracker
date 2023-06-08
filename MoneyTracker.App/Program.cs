@@ -1,13 +1,17 @@
 using GraphQL;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using MoneyTracker.App.Authentication;
 using MoneyTracker.App.GraphQl;
+using MoneyTracker.App.Helpers;
 using MoneyTracker.Business.IRepositories;
 using MoneyTracker.Business.Services;
+using MoneyTracker.Business.Utilities;
 using MoneyTracker.MsSQL.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("DefaultPolicy", builder =>
@@ -19,9 +23,11 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.Configure<AuthTokenSettings>(builder.Configuration.GetSection("AuthTokenSettings"));
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+
 builder.Services.AddTransient<AuthService>();
 builder.Services.AddTransient<TokenService>();
-builder.Services.AddTransient<CookiesService>();
 builder.Services.AddTransient<PasswordHashService>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 
