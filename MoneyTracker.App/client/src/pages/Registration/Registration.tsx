@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { IUserType, UserLoginType } from '../../types/IUserType';
-import '../../styles/SignInForm.scss';
+import '../../styles/Registration.scss';
 import { RegistrationReducer } from '../../store/Example/Reducers/RegistrationReducer';
 import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
 import {useForm} from "react-hook-form";
+import { useNavigate } from 'react-router';
 const {REGISTRATION, REGISTRATION_SUCCESS, REGISTRATION_ERROR} = RegistrationReducer.actions;
 const RegistrationForm = () => {
     const {
@@ -22,8 +23,13 @@ const RegistrationForm = () => {
         console.log(data)
         dispatch(REGISTRATION({username: data.username, password: data.password}));
     };
+
+    const navigate = useNavigate ();
+    const handleClick = () => {
+      navigate('/SignInForm');
+    };
   return (
-    <div className="registration-form">
+    <div className="registration">
     {IsSinging ? <div className="loading......"></div> : null}
     <form onSubmit={handleSubmit(Registration)}>
       <div className="mb-3 px-5 mt-2">
@@ -54,12 +60,12 @@ const RegistrationForm = () => {
       </div>
       <div className="px-5 mb-3 padding-bottom">
         <button type="submit" className="btn btn-secondary px-4">
-          Sign In
-        </button>
-        <button type="submit" className="btn btn-secondary px-4">
-          Sign In
-        </button>
+Registration        </button>
+      
       </div>
+        <button  className="btn btn-secondary px-4" onClick={handleClick}>
+        Sign In
+    </button>
     </form>
   </div>
   );

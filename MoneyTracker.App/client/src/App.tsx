@@ -35,17 +35,21 @@ function App() {
   console.log(isAuth);
   return (
     <BrowserRouter>
-      <Routes>
-        <Route
-          path={"/registration"}
-          element={isAuth ? <BalanceComponent /> : <Registration />}
-        />
-        <Route
-          path={"/"}
-          element={isAuth ? <BalanceComponent /> : <SignInForm />}
-        />
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route
+        path="/"
+        element={isAuth ? <BalanceComponent /> : <SignInForm />}
+      />
+      <Route
+        path="/registration"
+        element={isAuth ? <BalanceComponent /> : <Registration />}
+      />
+      <Route
+        path="/SignInForm"
+        element={isAuth ? <BalanceComponent /> : <SignInForm />}
+      />
+    </Routes>
+  </BrowserRouter>
   );
 }
 
