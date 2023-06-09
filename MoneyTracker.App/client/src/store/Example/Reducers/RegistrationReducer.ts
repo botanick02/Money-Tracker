@@ -20,7 +20,7 @@ export const RegistrationReducer = createSlice({
     name: "Registration",
     initialState: initialState,
     reducers: {
-        REGISTRATION(state, action: PayloadAction<{ username: string; password: string }>) {
+        REGISTRATION(state, action: PayloadAction<{ name: string;  email:string; password: string }>) {
             state.loading = true;
             state.error = null;
             state.isAuth = false;

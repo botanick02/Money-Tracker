@@ -49,19 +49,16 @@ export const AuthorizationEpic: Epic<any, any, any> = (action$: any) => {
           from(response.json()).pipe(
             map((data: IUserQuery) => {
               console.log(data);
-              if (data.data.auth.login.accessToken && data.data.auth.login.accessToken !== null) {
-                localStorage.setItem(
-                  "accessToken",
-                  data.data.auth.login.accessToken
-                );
-                return SIGN_IN_SUCCESS();
+              if (data.errors) {
+                store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message));
+                return SIGN_IN_ERROR(data.errors[0].message);
               } else {
-                store.dispatch(
-                  SHOW_ERROR_MESSAGE("Incorrect username or password!")
-                );
-                return SIGN_IN_ERROR("Incorrect username or password!");
+                if (data.data.auth.login && data.data.auth.login.accessToken !== '') {
+                  localStorage.setItem('accessToken', data.data.auth.login.accessToken);
+                  return SIGN_IN_SUCCESS();
+                }
               }
-            })
+        })
           )
         )
       )

@@ -17,16 +17,18 @@ const {
    
   } = RegistrationReducer.actions;
 export const RegistrationEpic: Epic<any, any, any> = (action$: any) => {
-    let payload: { username: string; password: string };
+    let payload: { username: string; password: string; email: string};
    
-    const authQuery = (username: string, password: string) => {
+    const registrationQuery = (username: string, password: string, email: string) => {
         return `
-        mutation login{
+        mutation register{
             auth{
-            login(loginCredentials: { email: "${username}", password: "${password}"}){
-              
-              accessToken
+            createUser(
+                createUser: { name: "Stepan", email: "${email}", password: "${password}"}
+            ){
+                accessToken
             }
+          
           }
         }
         `;
@@ -47,20 +49,23 @@ export const RegistrationEpic: Epic<any, any, any> = (action$: any) => {
                         "Content-Type": "application/json",
                         Accept: "application/json",
                     },
-                    body: JSON.stringify({ query: authQuery(payload.username!, payload.password!) }),
+                    body: JSON.stringify({ query: registrationQuery(payload.username!, payload.password!,payload.email!) }),
                 })
             ).pipe(
                 mergeMap((response) =>
                     from(response.json()).pipe(
-                        map((data: IUserQuery) => {
+                        map((data: any) => {
                             console.log(data)
-                            if (data.data.auth.login.accessToken !== '') {
-                                localStorage.setItem('accessToken', data.data.auth.login.accessToken);
-                                return REGISTRATION_SUCCESS();
-                              }else {
-                                store.dispatch(SHOW_ERROR_MESSAGE("Incorrect username or password!"));
-                                return REGISTRATION_ERROR("Incorrect username or password!");
-                            }
+                            if (data.errors) {
+                                store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message)); 
+                                return REGISTRATION_ERROR(data.errors[0].message);
+                              } else {
+                              
+if (data.data.auth.createUser.accessToken && data.data.auth.createUser.accessToken !== '') {
+    localStorage.setItem('accessToken', data.data.auth.createUser.accessToken);
+    return REGISTRATION_SUCCESS();
+    }
+                              }
                         })
                     )
                 )
