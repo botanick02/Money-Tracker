@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { IUserType, UserLoginType } from '../../types/IUserType';
 import '../../styles/SignInForm.scss';
-import { AuthorizationReducer } from '../../store/Example/Reducers/AuthorizationReducer';
+import { RegistrationReducer } from '../../store/Example/Reducers/RegistrationReducer';
 import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
 import {useForm} from "react-hook-form";
-
-const {SIGN_IN, SIGN_IN_SUCCESS, SIGN_IN_ERROR} = AuthorizationReducer.actions;
-const SignInForm = () => {
+const {REGISTRATION, REGISTRATION_SUCCESS, REGISTRATION_ERROR} = RegistrationReducer.actions;
+const RegistrationForm = () => {
     const {
         register,
         formState: {
@@ -15,18 +14,18 @@ const SignInForm = () => {
         handleSubmit,
 
     } = useForm()
-    const error = useAppSelector((state) => state.Authorization.error);
-    const IsSinging = useAppSelector((state) => state.Authorization.loading);
+    const error = useAppSelector((state) => state.Registration.error);
+    const IsSinging = useAppSelector((state) => state.Registration.loading);
     const dispatch = useAppDispatch();
 
-    const SignIn = (data: any) => {
+    const Registration = (data: any) => {
         console.log(data)
-        dispatch(SIGN_IN({username: data.username, password: data.password}));
+        dispatch(REGISTRATION({username: data.username, password: data.password}));
     };
   return (
-    <div className="sign-in-form">
+    <div className="registration-form">
     {IsSinging ? <div className="loading......"></div> : null}
-    <form onSubmit={handleSubmit(SignIn)}>
+    <form onSubmit={handleSubmit(Registration)}>
       <div className="mb-3 px-5 mt-2">
         <label htmlFor="username" className="form-label">
           Username
@@ -57,10 +56,8 @@ const SignInForm = () => {
         <button type="submit" className="btn btn-secondary px-4">
           Sign In
         </button>
-      </div>
-      <div className="px-1 mb-3 padding-bottom">
         <button type="submit" className="btn btn-secondary px-4">
-          Registration
+          Sign In
         </button>
       </div>
     </form>
@@ -68,4 +65,4 @@ const SignInForm = () => {
   );
 };
 
-export default SignInForm;
+export default RegistrationForm;

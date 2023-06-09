@@ -49,7 +49,7 @@ export const AuthorizationEpic: Epic<any, any, any> = (action$: any) => {
           from(response.json()).pipe(
             map((data: IUserQuery) => {
               console.log(data);
-              if (data.data.auth.login.accessToken !== "") {
+              if (data.data.auth.login.accessToken && data.data.auth.login.accessToken !== null) {
                 localStorage.setItem(
                   "accessToken",
                   data.data.auth.login.accessToken
