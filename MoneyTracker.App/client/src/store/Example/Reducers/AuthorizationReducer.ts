@@ -20,7 +20,7 @@ export const AuthorizationReducer = createSlice({
     name: "User",
     initialState: initialState,
     reducers: {
-        SIGN_IN(state, action: PayloadAction<{ username: string; password: string }>) {
+        SIGN_IN(state, action: PayloadAction<{ email: string; password: string }>) {
             state.loading = true;
             state.error = null;
             state.isAuth = false;

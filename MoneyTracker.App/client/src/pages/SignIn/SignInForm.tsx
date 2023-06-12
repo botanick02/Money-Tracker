@@ -22,7 +22,7 @@ const SignInForm = () => {
 
     const SignIn = (data: any) => {
         console.log(data)
-        dispatch(SIGN_IN({username: data.username, password: data.password}));
+        dispatch(SIGN_IN({email: data.email, password: data.password}));
     };
     const navigate = useNavigate ();
     const handleClick = () => {
@@ -34,14 +34,14 @@ const SignInForm = () => {
     {IsSinging ? <div className="loading......"></div> : null}
     <form onSubmit={handleSubmit(SignIn)}>
       <div className="mb-3 px-5 mt-2">
-        <label htmlFor="username" className="form-label">
-          Username
+        <label htmlFor="email" className="form-label">
+          Email
         </label>
         <input
           type="text"
           className="form-control"
-          placeholder={errors?.username ? "This field is required!" : "Your username"}
-          {...register("username", {
+          placeholder={errors?.email ? "This field is required!" : "Your email"}
+          {...register("email", {
             required: true,
           })}
         />

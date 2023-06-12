@@ -10,13 +10,13 @@ const { SHOW_ERROR_MESSAGE } = NotificationReducer.actions;
 const { SIGN_IN, SIGN_IN_SUCCESS, SIGN_IN_ERROR, SIGN_OUT, SIGN_OUT_SUCCESS,SIGN_OUT_ERROR } =
   AuthorizationReducer.actions;
 export const AuthorizationEpic: Epic<any, any, any> = (action$: any) => {
-  let payload: { username: string; password: string };
+  let payload: { email: string; password: string };
 
-  const authQuery = (username: string, password: string) => {
+  const authQuery = (email: string, password: string) => {
     return `
         mutation login{
             auth{
-            login(loginCredentials: { email: "${username}", password: "${password}"}){
+            login(loginCredentials: { email: "${email}", password: "${password}"}){
               
               accessToken
             }
@@ -41,7 +41,7 @@ export const AuthorizationEpic: Epic<any, any, any> = (action$: any) => {
             Accept: "application/json",
           },
           body: JSON.stringify({
-            query: authQuery(payload.username!, payload.password!),
+            query: authQuery(payload.email!, payload.password!),
           }),
         })
       ).pipe(
