@@ -5,36 +5,49 @@ import { RegistrationReducer } from "../../store/Example/Reducers/RegistrationRe
 import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
+import { validateEmail, validatePassword } from "../../tools/validator";
 
 
 const { REGISTRATION} =
   RegistrationReducer.actions;
-const RegistrationForm = () => {
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-  } = useForm();
-  const isAuth = useAppSelector((state) => state.Authorization.isAuth);
-  const error = useAppSelector((state) => state.Registration.error);
-  const IsSinging = useAppSelector((state) => state.Registration.loading);
-  const dispatch = useAppDispatch();
-
-  const Registration = (data: any) => {
-    console.log(data);
-    dispatch(
-      REGISTRATION({
-        name: data.name,
-        password: data.password,
-        email: data.email
-      })
-    );
-  };
-
-  const navigate = useNavigate();
-  const handleClick = () => {
-    navigate("/SignInForm");
-  };
+  const RegistrationForm = () => {
+    const {
+      register,
+      formState: { errors },
+      handleSubmit,
+      setError,
+    } = useForm();
+    const isAuth = useAppSelector((state) => state.Authorization.isAuth);
+    const error = useAppSelector((state) => state.Registration.error);
+    const IsSinging = useAppSelector((state) => state.Registration.loading);
+    const dispatch = useAppDispatch();
+  
+    const Registration = (data: any) => {
+      if (validatePassword(data.password)) {
+        setError("password", { message: validatePassword(data.password) });
+        return;
+      }
+  
+      if (validateEmail(data.email)) {
+        setError("email", { message: validateEmail(data.email) });
+        return;
+      }
+  
+      console.log(data);
+      dispatch(
+        REGISTRATION({
+          name: data.name,
+          password: data.password,
+          email: data.email,
+        })
+      );
+    };
+  
+    const navigate = useNavigate();
+    const handleClick = () => {
+      navigate("/SignInForm");
+    };
+  
  
 
   return (
@@ -48,9 +61,8 @@ const RegistrationForm = () => {
       <input
         type="text"
         className="form-control"
-        placeholder={
-          errors?.username ? "This field is required!" : "Your username"
-        }
+        placeholder={errors.username ? (errors.username.message as string) : "Your username"}
+
         {...register("username", {
           required: true,
         })}
@@ -63,9 +75,8 @@ const RegistrationForm = () => {
       <input
         type="email"
         className="form-control"
-        placeholder={
-          errors?.email ? "This field is required!" : "Your email"
-        }
+        placeholder={errors.email ? (errors.email.message as string) : "Your email"}
+
         {...register("email", {
           required: true,
         })}
@@ -78,9 +89,8 @@ const RegistrationForm = () => {
       <input
         type="password"
         className="form-control"
-        placeholder={
-          errors?.password ? "This field is required!" : "123456"
-        }
+        placeholder={errors.password ? (errors.password.message as string) : "123456"}
+
         {...register("password", {
           required: true,
         })}

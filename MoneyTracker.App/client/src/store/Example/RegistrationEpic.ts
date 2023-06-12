@@ -67,9 +67,9 @@ export const RegistrationEpic: Epic<any, any, any> = (action$: any) => {
 if (data.data.auth.createUser.accessToken && data.data.auth.createUser.accessToken !== '') {
     console.log("sdasdasd")
     localStorage.setItem('accessToken', data.data.auth.createUser.accessToken);
-    
+    store.dispatch(REGISTRATION_SUCCESS)
     store.dispatch(SIGN_IN_SUCCESS)
-    return REGISTRATION_SUCCESS();
+    return SIGN_IN_SUCCESS();
     }
   
                               }
