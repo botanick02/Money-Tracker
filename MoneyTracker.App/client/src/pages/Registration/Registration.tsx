@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IUserType, UserLoginType } from "../../types/IUserType";
 import "../../styles/Registration.scss";
 import { RegistrationReducer } from "../../store/Example/Reducers/RegistrationReducer";
 import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
+
+
 const { REGISTRATION} =
   RegistrationReducer.actions;
 const RegistrationForm = () => {
@@ -13,6 +15,7 @@ const RegistrationForm = () => {
     formState: { errors },
     handleSubmit,
   } = useForm();
+  const isAuth = useAppSelector((state) => state.Authorization.isAuth);
   const error = useAppSelector((state) => state.Registration.error);
   const IsSinging = useAppSelector((state) => state.Registration.loading);
   const dispatch = useAppDispatch();
@@ -32,6 +35,8 @@ const RegistrationForm = () => {
   const handleClick = () => {
     navigate("/SignInForm");
   };
+ 
+
   return (
     <div className="registration">
   {IsSinging ? <div className="loading......"></div> : null}

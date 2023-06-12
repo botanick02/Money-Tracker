@@ -8,7 +8,10 @@ import { NotificationReducer } from "./Reducers/NotificationReducer";
 import { RefreshTokenReducer } from "./Reducers/RefreshTokenReducer";
 import { GraphQlEndpoint } from "../../api/queries/tmp";
 import { RegistrationReducer } from "./Reducers/RegistrationReducer";
+import { AuthorizationReducer } from "./Reducers/AuthorizationReducer";
 const { GET_USER_INFO } = UserReducer.actions;
+const { SIGN_IN_SUCCESS} =
+  AuthorizationReducer.actions;
 const { SHOW_ERROR_MESSAGE } = NotificationReducer.actions;
 const {
     REGISTRATION,
@@ -62,9 +65,13 @@ export const RegistrationEpic: Epic<any, any, any> = (action$: any) => {
                               } else {
                               
 if (data.data.auth.createUser.accessToken && data.data.auth.createUser.accessToken !== '') {
+    console.log("sdasdasd")
     localStorage.setItem('accessToken', data.data.auth.createUser.accessToken);
+    
+    store.dispatch(SIGN_IN_SUCCESS)
     return REGISTRATION_SUCCESS();
     }
+  
                               }
                         })
                     )

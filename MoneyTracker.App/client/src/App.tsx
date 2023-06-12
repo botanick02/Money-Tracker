@@ -28,6 +28,7 @@ function App() {
   }, []);
 
   useEffect(() => {
+    
     if (isAuth) {
       dispatch(GET_USER_INFO());
     }
