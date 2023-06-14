@@ -9,16 +9,13 @@ namespace MoneyTracker.MsSQL.Repositories
 
         public UserRepository()
         {
-            users.Add(new User
+            users.Add(new User("ff5a686f-809f-45b4-8ec6-1749723c2738", "john@example.com", "John")
             {
-                Id = 1,
-                Name = "John",
-                Email = "john@example.com",
                 PasswordHash = "iRvIS1UHa2MZ7sExsJCL9uZrd+uEdWlr+Y/KUrnH1iI=",
                 PasswordSalt = "zjXh750tlEvmvRM1HAVj7g=="
             });
         }
-        public User? GetUserById(int id)
+        public User? GetUserById(string id)
         {
             var user = users.FirstOrDefault(u => u.Id == id);
             return user;
@@ -31,7 +28,6 @@ namespace MoneyTracker.MsSQL.Repositories
 
         public User? CreateUser(User user)
         {
-            user.Id = GetNextId();
             users.Add(user);
             return user;
         }
@@ -52,16 +48,6 @@ namespace MoneyTracker.MsSQL.Repositories
         {
             bool removed = users.Remove(user);
             return removed;
-        }
-
-        private int GetNextId()
-        {
-            if (users.Count > 0)
-            {
-                int maxId = users.Max(u => u.Id);
-                return maxId + 1;
-            }
-            return 1;
         }
     }
 }
