@@ -35,8 +35,6 @@ function App() {
     console.log(isAuth)
     return (
         <BrowserRouter>
-
-
             <Routes>
 
                 <Route path={"/"} element={isAuth ? <BalanceComponent/> : <SignInForm/>}/>
@@ -47,3 +45,7 @@ function App() {
 }
 
 export default App;
+
+// How to use Dropdown
+//<Dropdown selectHandler={()=>{}} options={Option[]}/>
+
