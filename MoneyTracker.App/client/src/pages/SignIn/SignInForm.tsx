@@ -65,7 +65,7 @@ const SignInForm = () => {
         </button>
       </div>
       <div className="px-1 mb-3 padding-bottom">
-      <button type="submit" className="btn btn-secondary px-4" onClick={handleClick}>
+      <button type="button" className="btn btn-secondary px-4" onClick={handleClick}>
       Registration
     </button>
       </div>
