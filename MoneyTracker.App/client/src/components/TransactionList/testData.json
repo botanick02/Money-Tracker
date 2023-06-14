@@ -1,0 +1,67 @@
+[
+  {
+    "id": 1,
+    "amount": 2000,
+    "category": {
+      "id": 2,
+      "name": "Salary",
+      "iconUrl": "https://picsum.photos/51",
+      "type": "income"
+    },
+    "dateTime": "2022-06-14 15:22:00",
+    "note": null,
+    "title": "Poluchiv ZP"
+  },
+  {
+    "id": 2,
+    "amount": -45,
+    "category": {
+      "id": 1,
+      "name": "Food and Drink",
+      "iconUrl": "https://picsum.photos/50",
+      "type": "expense"
+    },
+    "dateTime": "2022-06-14 16:10:00",
+    "note": null,
+    "title": "Kupiv piva"
+  },
+  {
+    "id": 3,
+    "amount": -9,
+    "category": {
+      "id": 1,
+      "name": "Food and Drink",
+      "iconUrl": "https://picsum.photos/50",
+      "type": "expense"
+    },
+    "dateTime": "2022-06-14 16:12:00",
+    "note": null,
+    "title": "Kupiv kvasa"
+  },
+  {
+    "id": 4,
+    "amount": -150,
+    "category": {
+      "id": 1,
+      "name": "Food and Drink",
+      "iconUrl": "https://picsum.photos/50",
+      "type": "expense"
+    },
+    "dateTime": "2022-06-14 16:18:00",
+    "note": null,
+    "title": "Kupiv pelmeniv"
+  },
+  {
+    "id": 5,
+    "amount": 150,
+    "category": {
+      "id": 1,
+      "name": "Salary",
+      "iconUrl": "https://picsum.photos/51",
+      "type": "income"
+    },
+    "dateTime": "2022-06-13 16:18:00",
+    "note": null,
+    "title": "Poluchiv ZP"
+  }
+]
