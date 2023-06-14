@@ -16,38 +16,27 @@ const initialState: UserState = {
   
 };
 
-export const AuthorizationReducer = createSlice({
-    name: "User",
+export const RegistrationReducer = createSlice({
+    name: "Registration",
     initialState: initialState,
     reducers: {
-        SIGN_IN(state, action: PayloadAction<{ email: string; password: string }>) {
+        REGISTRATION(state, action: PayloadAction<{ name: string;  email:string; password: string }>) {
             state.loading = true;
             state.error = null;
             state.isAuth = false;
         },
-        SIGN_IN_SUCCESS(state) {
+        REGISTRATION_SUCCESS(state) {
             state.isAuth = true;
             state.loading = false;
             state.error = null;
         },
-        SIGN_IN_ERROR(state, action: PayloadAction<string>) {
+        REGISTRATION_ERROR(state, action: PayloadAction<string>) {
             state.error = action.payload;
             state.isAuth = false;
             state.loading = false;
-        },
-        SIGN_OUT(state) {
-            state.loading = true;
-        },
-        SIGN_OUT_SUCCESS(state) {
-            state.loading = false;
-            state.isAuth = false;
-        },
-        SIGN_OUT_ERROR(state, action: PayloadAction<string>) {
-            state.loading = false;
-            state.error = action.payload;
-        },
+        }
 
     },
 });
 
-export default AuthorizationReducer.reducer;
+export default RegistrationReducer.reducer;
