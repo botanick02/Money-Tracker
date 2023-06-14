@@ -1,0 +1,45 @@
+@import "Variables";
+
+.transaction-list{
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  &__date{
+    width: 100%;
+    text-align: center;
+    margin-top: calc(40px - 14px);
+  }
+}
+
+.transaction{
+  display: flex;
+  align-items: center;
+  height: 50px;
+  width: 100%;
+  padding-right: 8px;
+  background: $background-light-color;
+
+  &__indicator{
+    width: 8px;
+    height: 100%;
+    &__expense{background: $secondary-color}
+    &__income{background: $primary-color}
+  }
+  &__category-icon{
+    width: 50px;
+    height: 100%;
+    margin-right: 1em;
+  }
+  &__amount{
+    margin-left: auto;
+    &__expense{color: $secondary-color}
+    &__income{color: $primary-color}
+  }
+  &__title{
+    font-size: 16px;
+  }
+  &__category-name{
+    font-size: 14px;
+    font-weight: 300;
+  }
+}

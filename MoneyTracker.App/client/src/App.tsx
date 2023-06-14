@@ -7,6 +7,7 @@ import BalanceComponent from "./pages/Balance/BalanceComponent";
 import { RefreshTokenReducer } from "./store/Example/Reducers/RefreshTokenReducer";
 import { UserReducer } from "./store/Example/Reducers/UserReducer";
 import { checkTokenExpire } from "./tools/checkTokenExpire";
+import TransactionList from "./components/TransactionList/TransactionList";
 
 const { GET_ACCESS_TOKEN } = RefreshTokenReducer.actions;
 const { GET_USER_INFO } = UserReducer.actions;
@@ -38,6 +39,7 @@ console.log(isAuth)
       <Routes>
        
         <Route path={"/"} element=  {isAuth ? <BalanceComponent /> : <SignInForm />} />
+          <Route path={"/home"} element={<TransactionList/>}/>
       </Routes>
     </BrowserRouter>
   );
