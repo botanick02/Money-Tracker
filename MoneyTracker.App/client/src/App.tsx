@@ -9,6 +9,7 @@ import {UserReducer} from "./store/Example/Reducers/UserReducer";
 import {checkTokenExpire} from "./tools/checkTokenExpire";
 import TransactionList from "./components/TransactionList/TransactionList";
 import Transactions from "./pages/Transactions/Transactions";
+import Layout from "./components/common/Layout";
 
 const {GET_ACCESS_TOKEN} = RefreshTokenReducer.actions;
 const {GET_USER_INFO} = UserReducer.actions;
@@ -35,12 +36,11 @@ function App() {
     console.log(isAuth)
     return (
         <BrowserRouter>
-
-
             <Routes>
-
-                <Route path={"/"} element={isAuth ? <BalanceComponent/> : <SignInForm/>}/>
-                <Route path={"/home"} element={<Transactions/>}/>
+                {/* <Route path={"/"} element={isAuth ? <BalanceComponent/> : <SignInForm/>}/> */}
+                <Route path={"/"} element={<Layout />}>
+                    <Route path={"/home"} element={<Transactions/>}/>
+                </Route>
             </Routes>
         </BrowserRouter>
     );
