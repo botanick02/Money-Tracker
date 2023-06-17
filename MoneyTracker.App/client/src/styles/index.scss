@@ -1,4 +1,6 @@
 @import "Variables";
+@import "ui";
+
 
 *{
   margin: 0;
@@ -22,6 +24,9 @@ img{
   object-fit: cover;
 }
 
+ul, ol{
+  list-style-type: none;
+}
 
-@import "ui";
+
 @import "Transactions";

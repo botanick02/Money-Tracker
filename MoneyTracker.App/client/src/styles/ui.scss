@@ -47,3 +47,34 @@
     }
   }
 }
+
+.input-field{
+  width: 100%;
+  padding: 3.5px 16px;
+  background: $primary-light-color;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  border-radius: 13px;
+  gap: 1em;
+  input{
+    min-height: 32px;
+    width: 100%;
+    flex-grow: 1;
+    outline: none;
+    border: none;
+  }
+}
+
+button{
+  outline: none;
+  border: none;
+  padding: 1em;
+  border-radius: 16px;
+  color: $primary-light-color;
+  background: $primary-color;
+  cursor: pointer;
+  &:hover{
+    opacity: .8;
+  }
+}
