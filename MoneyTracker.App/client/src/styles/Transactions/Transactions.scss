@@ -1,0 +1,39 @@
+@import "src/styles/Variables";
+
+.transaction-sums{
+  display: flex;
+  justify-content: space-between;
+  padding: 0 8px;
+  margin-top: 20px;
+
+  >div{
+    width: 116px;
+    height: 27px;
+    border-radius: 10px;
+    text-align: center;
+    padding: 5px;
+
+  }
+  &__income{
+    background: $primary-color;
+  }
+  &__expense{
+    background: $secondary-color;
+  }
+}
+
+.new-transaction{
+  position: fixed;
+  background: $primary-color;
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+  font-size: 35px;
+  font-weight: 300;
+  padding: 14px;
+  right: 20px;
+  bottom: 10px;
+}
+
+@import "TransactionList";
+@import "TransactionCreate";

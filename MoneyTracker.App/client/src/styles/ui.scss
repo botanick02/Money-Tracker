@@ -26,8 +26,12 @@
 
   .expanded{
     &:after{
-      transform: rotate(180deg);
+      transform: rotate(180deg) translateY(-50%);
     }
+  }
+
+  .title{
+    color: #8e8e8e;
   }
 
   ul {
@@ -57,7 +61,10 @@
   align-items: center;
   border-radius: 13px;
   gap: 1em;
+  font-size: 16px;
   input{
+    font-size: inherit;
+    background: none;
     min-height: 32px;
     width: 100%;
     flex-grow: 1;
@@ -66,7 +73,7 @@
   }
 }
 
-button{
+.button{
   outline: none;
   border: none;
   padding: 1em;
@@ -74,7 +81,10 @@ button{
   color: $primary-light-color;
   background: $primary-color;
   cursor: pointer;
+  font-weight: 600;
+  font-size: 18px;
+
   &:hover{
-    opacity: .8;
+    background: #2ca163;
   }
 }

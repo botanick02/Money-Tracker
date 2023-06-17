@@ -6,7 +6,8 @@ export interface Option {
 }
 
 interface SelectPropsType {
-    selectHandler(option: any): void,
+    selectHandler(option: Option): void,
+
     options: Option[]
     title?: string
 }
@@ -15,9 +16,11 @@ const Dropdown: FC<SelectPropsType> = ({selectHandler, options, title}) => {
     const [isOptionsOpen, setIsOptionsOpen] = useState(false)
     const [selectedOptionId, setSelectedOptionId] = useState(0)
 
+    options = title ? [{label: title, value: null}, ...options] : options
+
     const setSelectedThenCloseDropdown = (index: number) => {
         setSelectedOptionId(index)
-        selectHandler(options[index].value)
+        selectHandler(options[index])
         setIsOptionsOpen(false)
     }
 
@@ -38,7 +41,7 @@ const Dropdown: FC<SelectPropsType> = ({selectHandler, options, title}) => {
             <button
                 aria-haspopup={"listbox"}
                 aria-expanded={isOptionsOpen}
-                className={"select-button " + (isOptionsOpen ? "expanded" : "")}
+                className={`select-button ${isOptionsOpen ? "expanded" : ""} ${title == options[selectedOptionId].label ? "title" : ""}`}
                 onClick={() => setIsOptionsOpen(!isOptionsOpen)}>
                 {options[selectedOptionId].label}
             </button>
@@ -50,7 +53,7 @@ const Dropdown: FC<SelectPropsType> = ({selectHandler, options, title}) => {
                 tabIndex={-1}>
                 {
                     options.map((option, index) => (
-                        option != options[selectedOptionId] && title != option.label
+                        (option != options[selectedOptionId] && title != option.label)
                             ? <li
                                 key={index}
                                 id={option.label}

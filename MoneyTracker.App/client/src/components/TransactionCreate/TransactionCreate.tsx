@@ -1,7 +1,58 @@
-import React from 'react';
+import React, {useState} from 'react';
 import InputField from "../../elements/InputField";
+import Dropdown, {Option} from "../../elements/Dropdown/Dropdown";
 
 const TransactionCreate = () => {
+    const accountOptions: Option[] = [
+        {
+            label: "Privat",
+            value: 0
+        },
+        {
+            label: "Mono",
+            value: 1
+        },
+        {
+            label: "Cash",
+            value: 2
+        },
+        {
+            label: "Cash1",
+            value: 3
+        }
+    ]
+    const categoryOptions: Option[] = [
+        {
+            label: "Food and Drink",
+            value: 0
+        },
+        {
+            label: "Restaurant",
+            value: 1
+        },
+        {
+            label: "Games",
+            value: 2
+        },
+        {
+            label: "Health",
+            value: 3
+        }
+    ]
+
+    const [account, setAccount] = useState<Option>(accountOptions[0])
+
+    const handleAccountChange = (option: Option) => {
+        setAccount(option)
+    }
+
+    const [category, setCategory] = useState<Option>(accountOptions[0])
+
+    const handleCategoryChange = (option: Option) => {
+        setCategory(option)
+    }
+
+
     return (
         <div className={"transaction-create-bg"}>
             <div className={"transaction-create"}>
@@ -12,17 +63,17 @@ const TransactionCreate = () => {
                 </ul>
                 <div className={"transaction-create__fields"}>
                     <InputField type={"datetime-local"}/>
-                    <InputField type={"number"} placeholder={"Account"}/>
+                    <Dropdown selectHandler={handleAccountChange} options={accountOptions}/>
                     <InputField type={"number"} placeholder={"Amount"}/>
-                    <InputField type={"number"} placeholder={"Title"}/>
-                    <InputField type={"number"} placeholder={"Category"}/>
+                    <InputField placeholder={"Title"}/>
+                    <Dropdown title={"Category"} selectHandler={handleCategoryChange} options={categoryOptions}/>
                     <InputField type={"number"} placeholder={"Note"}/>
                 </div>
                 <div className={"transaction-create__buttons"}>
-                    <button>
+                    <button className={"button"}>
                         Safe
                     </button>
-                    <button>
+                    <button className={"button"}>
                         Cancel
                     </button>
                 </div>
