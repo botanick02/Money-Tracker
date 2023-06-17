@@ -50,6 +50,14 @@
       display: block;
     }
   }
+
+  .dropdown-icon{
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+    margin-right: 0.5em;
+    transform: translateY(15%) scale(1.5);
+  }
 }
 
 .input-field{

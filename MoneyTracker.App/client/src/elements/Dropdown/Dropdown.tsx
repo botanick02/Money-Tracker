@@ -2,6 +2,7 @@ import React, {FC, useEffect, useState} from 'react';
 
 export interface Option {
     label: string,
+    icon?: string
     value: any
 }
 
@@ -43,7 +44,14 @@ const Dropdown: FC<SelectPropsType> = ({selectHandler, options, title}) => {
                 aria-expanded={isOptionsOpen}
                 className={`select-button ${isOptionsOpen ? "expanded" : ""} ${title == options[selectedOptionId].label ? "title" : ""}`}
                 onClick={() => setIsOptionsOpen(!isOptionsOpen)}>
-                {options[selectedOptionId].label}
+                {
+                    !!options[selectedOptionId].icon
+                        ? <span>
+                    <div className={"dropdown-icon"}><img src={options[selectedOptionId].icon} alt=""/></div>
+                            {options[selectedOptionId].label}
+                    </span>
+                        : options[selectedOptionId].label
+                }
             </button>
 
             <ul
@@ -61,7 +69,14 @@ const Dropdown: FC<SelectPropsType> = ({selectHandler, options, title}) => {
                                 aria-selected={selectedOptionId == index}
                                 tabIndex={0}
                                 onClick={() => setSelectedThenCloseDropdown(index)}>
-                                {option.label}
+                                {
+                                    !!option.icon
+                                        ? <span>
+                                            <div className={"dropdown-icon"}><img src={option.icon} alt=""/></div>
+                                            {option.label}
+                                    </span>
+                                        : option.label
+                                }
                             </li>
                             : null
                     ))

@@ -1,7 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import TransactionList from "../../components/TransactionList/TransactionList";
-import {default as test} from "../../components/TransactionList/testData.json"
 import TransactionCreate from "../../components/TransactionCreate/TransactionCreate";
+
+
+import {default as test} from "../../components/TransactionList/testData.json"
 
 
 const tmpFunc = (filter: "income" | "expense") => {
@@ -13,16 +15,39 @@ const Transactions = () => {
     const expense = tmpFunc("expense")
     const income = tmpFunc("income")
 
+    const [defaultTransaction, setDefaultTransaction] = useState<"expense" | "income" | "transfer">("expense")
+
+    const [isCreatePopupOpen, setIsCreatePopupOpen] = useState<boolean>(false)
+    const handlePopupOpen = () => {
+        setIsCreatePopupOpen(prevState => !prevState)
+    }
+
 
     return (
         <main>
-            <TransactionCreate/>
+            {
+                isCreatePopupOpen &&
+                <TransactionCreate transactionDefaultType={defaultTransaction} openPopupHandle={handlePopupOpen}/>
+            }
             <div className={"transaction-sums"}>
-                <div className={"transaction-sums__income"}>+{income} $</div>
-                <div className={"transaction-sums__expense"}>{expense} $</div>
+                <div onClick={() => {
+                    handlePopupOpen()
+                    setDefaultTransaction("income")
+                }} className={"transaction-sums__income"}>+{income} $
+                </div>
+                <div onClick={() => {
+                    handlePopupOpen()
+                    setDefaultTransaction("expense")
+                }} className={"transaction-sums__expense"}>{expense} $
+                </div>
             </div>
             <TransactionList/>
-            <div className={"new-transaction"}> + </div>
+            {
+                !isCreatePopupOpen &&
+                <div onClick={() => {
+                    handlePopupOpen()
+                }} className={"new-transaction button"}> + </div>
+            }
         </main>
     );
 };

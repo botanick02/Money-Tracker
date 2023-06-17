@@ -30,3 +30,8 @@ ul, ol{
 
 
 @import "Transactions/Transactions";
+
+input::-webkit-date-and-time-value{
+  color: red;
+  background: blue;
+}

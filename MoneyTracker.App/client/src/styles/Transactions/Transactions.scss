@@ -12,6 +12,7 @@
     border-radius: 10px;
     text-align: center;
     padding: 5px;
+    cursor: pointer;
 
   }
   &__income{
@@ -24,7 +25,6 @@
 
 .new-transaction{
   position: fixed;
-  background: $primary-color;
   border-radius: 50%;
   height: 50px;
   width: 50px;
