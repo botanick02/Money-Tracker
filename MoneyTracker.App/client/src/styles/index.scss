@@ -1,4 +1,6 @@
 @import "Variables";
+@import "ui";
+
 
 *{
   margin: 0;
@@ -22,9 +24,17 @@ img{
   object-fit: cover;
 }
 
+ul, ol{
+  list-style-type: none;
+}
 
-@import "ui";
+
 @import "Layout";
-@import "Transactions";
 @import "TimeScopePanel";
 @import "AccountSelector";
+@import "Transactions/Transactions";
+
+input::-webkit-date-and-time-value{
+  color: red;
+  background: blue;
+}
