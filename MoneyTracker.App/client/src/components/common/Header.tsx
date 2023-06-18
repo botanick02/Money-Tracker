@@ -1,10 +1,10 @@
 import React from "react";
-import AccountPicker from "../AccountPicker/AccountPicker";
+import AccountSelector from "../AccountSelector/AccountSelector";
 
 const Header = () => {
   return (
     <div className={"header"}>
-      <AccountPicker/>
+      <AccountSelector />
     </div>
   );
 };

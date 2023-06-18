@@ -1,0 +1,26 @@
+[
+  {
+    "id": "645645646",
+    "name": "Total",
+    "balance": 1850,
+    "currency": "₴"
+  },
+  {
+    "id": "6345645646",
+    "name": "Bank account",
+    "balance": 850,
+    "currency": "₴"
+  },
+  {
+    "id": "63456446",
+    "name": "Bank account 2",
+    "balance": 150,
+    "currency": "₴"
+  },
+  {
+    "id": "6345456456446",
+    "name": "Cash",
+    "balance": 850,
+    "currency": "₴"
+  }
+]

@@ -1,6 +1,7 @@
 import React from 'react';
 import TransactionList from "../../components/TransactionList/TransactionList";
 import {default as test} from "../../components/TransactionList/testData.json"
+import TimeScopePanel from '../../components/TimeScopePanel/TimeScopePanel';
 
 
 const tmpFunc = (filter: "income" | "expense") => {
@@ -15,6 +16,7 @@ const Transactions = () => {
 
     return (
         <main>
+            <TimeScopePanel/>
             <div className={"transaction-sums"}>
                 <div className={"transaction-sums__income"}>+{income} $</div>
                 <div className={"transaction-sums__expense"}>{expense} $</div>

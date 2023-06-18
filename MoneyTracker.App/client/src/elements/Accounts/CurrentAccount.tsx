@@ -1,15 +1,14 @@
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 import { Account } from "../../types/Account";
 
-interface CurrentAccountProps {
-  account: Account;
-}
-
-const CurrentAccount = ({ account }: CurrentAccountProps) => {
+const CurrentAccount: FC<{ account: Account; onClick: () => void }> = ({
+  account,
+  onClick,
+}) => {
   return (
-    <div className={"header__account"}>
-      <div className={"header__account__name"}>{account.name} ▼</div>
-      <div className={"header__account__balance"}>
+    <div className={"account-current"} onClick={onClick}>
+      <div className={"account-current__name"}>{account.name} ▼</div>
+      <div className={"account-current__balance"}>
         {account.balance} {account.currency}
       </div>
     </div>

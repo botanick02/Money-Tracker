@@ -1,0 +1,37 @@
+.account-selector{
+    width: 100%;
+    position: relative;
+    
+    .account-current{
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        padding: 0 23px;
+
+        &__balance{
+            color: $primary-color;
+        }
+    }
+
+    &__list{
+        position: absolute;
+        background-color: rgba(0, 0, 0, 0.85);
+        width: 100%;
+        padding: 12px 23px;
+        font-size: 14px;
+        z-index: 1;
+        top: 38px;
+
+        .account-item{
+            margin: 15px 0;
+            display: flex;
+            justify-content: space-between;
+
+            &__balance{
+                color: $primary-color;
+            }
+        }
+    }
+
+
+}
