@@ -17,15 +17,11 @@ const BalanceComponent = () => {
  
     <div>
     <Transactions />
-
     <button className="button " onClick={() =>
         {
       dispatch(SIGN_OUT())
       navigate('/')
       }}>
-
-    <button className="button danger" onClick={() => dispatch(SIGN_OUT())}>
-
         Sign Out
       </button>
   </div>
