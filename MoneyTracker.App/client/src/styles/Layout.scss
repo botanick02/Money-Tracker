@@ -1,0 +1,9 @@
+@import "Variables";
+
+.header {
+    height: 58px;
+    width: 100%;
+    background-color: $primary-dark-color;
+    display: flex;
+    align-items: center;
+}

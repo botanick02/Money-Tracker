@@ -9,6 +9,7 @@ import { UserReducer } from "./store/Example/Reducers/UserReducer";
 import { checkTokenExpire } from "./tools/checkTokenExpire";
 import Registration from "./pages/Registration/Registration";
 import Transactions from "./pages/Transactions/Transactions";
+import Layout from "./components/common/Layout";
 
 const {GET_ACCESS_TOKEN} = RefreshTokenReducer.actions;
 const {GET_USER_INFO} = UserReducer.actions;
@@ -51,7 +52,10 @@ function App() {
         element={isAuth ? <BalanceComponent /> : <SignInForm />}
       />
       
-      <Route path={"/home"} element={<Transactions/>}/>
+      <Route path={"/home"} element={<Layout />}>
+            <Route index element={<Transactions/>}/>
+       </Route>
+
     </Routes>
   </BrowserRouter>
   );

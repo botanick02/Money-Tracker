@@ -1,0 +1,67 @@
+@import "Variables";
+
+.time-scope-panel{
+    width: 100%;
+    height: 38px;
+    background-color: rgba(0, 0, 0, 0.21);
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+
+    &__date-picker{
+
+        input {
+            appearance: none;
+            background-color: transparent;
+            border: none;
+            padding: 0;
+            font-family: inherit;
+            font-size: inherit;
+            color: $primary-light-color;
+          }
+          
+          input[type="month"]::-webkit-calendar-picker-indicator {
+            color: $primary-light-color;
+          }
+          
+          input[type="month"]::-webkit-inner-spin-button,
+          input[type="month"]::-webkit-clear-button {
+            display: none;
+          }
+    }
+
+    &__scope-picker {
+        width: 30%;
+        max-width: 80px;
+        display: flex;
+        justify-content: flex-start;
+      
+        div,
+        ul {
+          width: 80px;
+          min-width: fit-content;
+          padding: 7px 10px;
+        }
+      
+        div {
+          border-radius: 10px;
+          transition: 0.1s;
+          &:hover {
+            background-color: $background-fade-color;
+          }
+        }
+      
+        ul {
+          background-color: $background-fade-color;
+          border-radius: 0 0 10px 10px;
+          transition: 0.1s;
+          text-align: left;
+
+          li{
+            margin: 5px 0 0;
+          }
+        }
+    }
+}

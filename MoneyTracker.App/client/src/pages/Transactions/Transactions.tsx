@@ -4,6 +4,7 @@ import TransactionCreate from "../../components/TransactionCreate/TransactionCre
 
 
 import {default as test} from "../../components/TransactionList/testData.json"
+import TimeScopePanel from '../../components/TimeScopePanel/TimeScopePanel';
 
 
 const tmpFunc = (filter: "income" | "expense") => {
@@ -25,6 +26,7 @@ const Transactions = () => {
 
     return (
         <main>
+            <TimeScopePanel/>
             {
                 isCreatePopupOpen &&
                 <TransactionCreate transactionDefaultType={defaultTransaction} openPopupHandle={handlePopupOpen}/>

@@ -13,11 +13,13 @@
     background: none;
     border: none;
     font-weight: inherit;
+    margin-right: 12px;
 
     &:after {
       position: absolute;
       content: $symbol-caret-down;
-      right: 0;
+      right: -12px;
+      top: -2px;
       font-weight: bold;
       font-size: 10px;
       transform: translateY(50%);
