@@ -28,13 +28,13 @@ ul, ol{
   list-style-type: none;
 }
 
+a{
+  color: inherit;
+  text-decoration: none;
+}
+
 
 @import "Layout";
 @import "TimeScopePanel";
 @import "AccountSelector";
 @import "Transactions/Transactions";
-
-input::-webkit-date-and-time-value{
-  color: red;
-  background: blue;
-}

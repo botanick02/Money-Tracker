@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import { IUserType, UserLoginType } from '../../types/IUserType';
+import React, {useState} from 'react';
+import {IUserType, UserLoginType} from '../../types/IUserType';
 import '../../styles/Registration.scss';
-import { AuthorizationReducer } from '../../store/Example/Reducers/AuthorizationReducer';
-import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
+import {AuthorizationReducer} from '../../store/Example/Reducers/AuthorizationReducer';
+import {useAppDispatch, useAppSelector} from '../../hooks/useAppDispatch';
 import {useForm} from "react-hook-form";
-import { useNavigate  } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
+import InputWrapper from "../../elements/InputWrapper";
 
 const {SIGN_IN, SIGN_IN_SUCCESS, SIGN_IN_ERROR} = AuthorizationReducer.actions;
 const SignInForm = () => {
@@ -16,6 +17,7 @@ const SignInForm = () => {
         handleSubmit,
 
     } = useForm()
+
     const error = useAppSelector((state) => state.Authorization.error);
     const IsSinging = useAppSelector((state) => state.Authorization.loading);
     const dispatch = useAppDispatch();
@@ -24,58 +26,55 @@ const SignInForm = () => {
         console.log(data)
         dispatch(SIGN_IN({email: data.email, password: data.password}));
     };
-    const navigate = useNavigate ();
-    const handleClick = () => {
-      navigate('/registration');
-    };
 
-  return (
-    <div className="sign-up-mobile">
-    {IsSinging ? <div className="loading......"></div> : null}
-    
-    <form onSubmit={handleSubmit(SignIn)} className="sign-up-mobile form-container">
-    <p className="signup">Login</p>
-       
-        <input
-  type="email"
-  className="form-control"
-  placeholder="Email"
-  {...register("email", {
-    required: "Email is required",
-  })}
-/>
-{errors.email && (
-  <p className="error-message error">{errors.email.message?.toString()}</p>
-)}
+    return (
+        <div className="sign-up-mobile">
+            {IsSinging ? <div className="loading......"/> : null}
+            <h3>Login</h3>
 
-<input
-  type="password"
-  className="form-control"
-  placeholder="Password"
-  {...register("password", {
-    required: "Password is required",
-  })}
-/>
-{errors.password && (
-  <p className="error-message error">{errors.password.message?.toString()}</p>
-)}
+            <form onSubmit={handleSubmit(SignIn)} className="sign-up-mobile form-container">
+                <InputWrapper>
+                    <input
+                        type="email"
+                        placeholder="Email"
+                        {...register("email", {
+                            required: "Email is required",
+                        })}
+                    />
+                </InputWrapper>
+                {errors.email && (
+                    <p className="error-message">{errors.email.message?.toString()}</p>
+                )}
+
+                <InputWrapper>
+                    <input
+                        type="password"
+                        placeholder="Password"
+                        {...register("password", {
+                            required: "Password is required",
+                        })}
+                    />
+                </InputWrapper>
+                {errors.password && (
+                    <p className="error-message">{errors.password.message?.toString()}</p>
+                )}
 
 
-{errors.confirmPassword && (
-  <p className="error-message error">
-    {errors.confirmPassword.message?.toString()}
-  </p>
-)}
+                {errors.confirmPassword && (
+                    <p className="error-message">
+                        {errors.confirmPassword.message?.toString()}
+                    </p>
+                )}
 
-<button className="btn btn-secondary">Login</button>
+                <button className="button">Login</button>
 
-<p className="login-text">
-Don’t have an account yet? <span onClick={handleClick}> Sign Up</span>
-</p>
-   
-    </form>
-  </div>
-  );
+                <p className="login-text">
+                    Don’t have an account yet? <a href={"/registration"}> Sign Up</a>
+                </p>
+
+            </form>
+        </div>
+    );
 };
 
 export default SignInForm;
