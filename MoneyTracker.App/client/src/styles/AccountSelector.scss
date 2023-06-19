@@ -7,25 +7,34 @@
         width: 100%;
         justify-content: space-between;
         padding: 0 23px;
+        cursor: pointer;   
 
         &__balance{
             color: $primary-color;
         }
     }
 
-    &__list{
+    &__list-bg{
         position: absolute;
+        z-index: 1;
+        top: 38px;
+        height: 100vh;
+        width: 100vh;
+    }
+
+    &__list{
         background-color: rgba(0, 0, 0, 0.85);
+        position: absolute;
         width: 100%;
         padding: 12px 23px;
         font-size: 14px;
-        z-index: 1;
-        top: 38px;
+        z-index: 2;
 
         .account-item{
             margin: 15px 0;
             display: flex;
             justify-content: space-between;
+            cursor: pointer;   
 
             &__balance{
                 color: $primary-color;

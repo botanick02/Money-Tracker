@@ -21,17 +21,20 @@ const AccountSelector = () => {
         account={accounts.find((a) => a.id === currentAccountId)!}
         onClick={switchListState}
       />
+
       {isListOpen && (
-        <div className={"account-selector__list"}>
-          {accounts
-            .filter((a) => a.id !== currentAccountId)
-            .map((account) => (
-              <AccountListItem
-                account={account}
-                key={account.id}
-                onSelected={setCurrentAccountId}
-              />
-            ))}
+        <div className={"account-selector__list-bg"} onClick={() => setIsListOpen(false)}>
+          <div className={"account-selector__list"}>
+            {accounts
+              .filter((a) => a.id !== currentAccountId)
+              .map((account) => (
+                <AccountListItem
+                  account={account}
+                  key={account.id}
+                  onSelected={setCurrentAccountId}
+                />
+              ))}
+          </div>
         </div>
       )}
     </div>
