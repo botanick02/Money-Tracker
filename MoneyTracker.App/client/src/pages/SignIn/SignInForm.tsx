@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { IUserType, UserLoginType } from '../../types/IUserType';
-import '../../styles/SignInForm.scss';
+import '../../styles/Registration.scss';
 import { AuthorizationReducer } from '../../store/Example/Reducers/AuthorizationReducer';
 import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
 import {useForm} from "react-hook-form";
@@ -30,45 +30,49 @@ const SignInForm = () => {
     };
 
   return (
-    <div className="sign-in-form">
+    <div className="sign-up-mobile">
     {IsSinging ? <div className="loading......"></div> : null}
-    <form onSubmit={handleSubmit(SignIn)}>
-      <div className="mb-3 px-5 mt-2">
-        <label htmlFor="email" className="form-label">
-          Email
-        </label>
+    
+    <form onSubmit={handleSubmit(SignIn)} className="sign-up-mobile form-container">
+    <p className="signup">Login</p>
+       
         <input
-          type="text"
-          className="form-control"
-          placeholder={errors?.email ? "This field is required!" : "Your email"}
-          {...register("email", {
-            required: true,
-          })}
-        />
-      </div>
-      <div className="mb-3 px-5">
-        <label htmlFor="password" className="form-label">
-          Password
-        </label>
-        <input
-          type="password"
-          className="form-control"
-          placeholder={errors?.password ? "This field is required!" : "123456"}
-          {...register("password", {
-            required: true,
-          })}
-        />
-      </div>
-      <div className="px-5 mb-3 padding-bottom">
-        <button type="submit" className="btn btn-secondary px-4">
-          Sign In
-        </button>
-      </div>
-      <div className="px-1 mb-3 padding-bottom">
-      <button type="button" className="btn btn-secondary px-4" onClick={handleClick}>
-      Registration
-    </button>
-      </div>
+  type="email"
+  className="form-control"
+  placeholder="Email"
+  {...register("email", {
+    required: "Email is required",
+  })}
+/>
+{errors.email && (
+  <p className="error-message error">{errors.email.message?.toString()}</p>
+)}
+
+<input
+  type="password"
+  className="form-control"
+  placeholder="Password"
+  {...register("password", {
+    required: "Password is required",
+  })}
+/>
+{errors.password && (
+  <p className="error-message error">{errors.password.message?.toString()}</p>
+)}
+
+
+{errors.confirmPassword && (
+  <p className="error-message error">
+    {errors.confirmPassword.message?.toString()}
+  </p>
+)}
+
+<button className="btn btn-secondary">Login</button>
+
+<p className="login-text">
+Don’t have an account yet? <span onClick={handleClick}> Sign Up</span>
+</p>
+   
     </form>
   </div>
   );

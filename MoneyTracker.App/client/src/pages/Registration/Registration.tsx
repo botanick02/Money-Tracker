@@ -46,64 +46,77 @@ const RegistrationForm = () => {
     navigate("/SignInForm");
   };
   return (
-    <div className="registration">
-      {IsSinging ? <div className="loading......"></div> : null}
-      <form onSubmit={handleSubmit(Registration)}>
-        <div className="mb-3 px-5 mt-2">
-          <label htmlFor="username" className="form-label">
-            Username
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            {...register("username", {
-              required: "Username is required",
-            })}
-          />
-          {errors.username && (
-            <p className="error-message">{errors.username.message?.toString()}</p>
-          )}
-        </div>
-        <div className="mb-3 px-5">
-          <label htmlFor="email" className="form-label">
-            Email
-          </label>
-          <input
-            type="email"
-            className="form-control"
-            {...register("email", {
-              required: "Email is required",
-            })}
-          />
-          {errors.email && (
-            <p className="error-message">{errors.email.message?.toString()}</p>
-          )}
-        </div>
-        <div className="mb-3 px-5">
-          <label htmlFor="password" className="form-label">
-            Password
-          </label>
-          <input
-            type="password"
-            className="form-control"
-            {...register("password", {
-              required: "Password is required",
-            })}
-          />
-          {errors.password && (
-            <p className="error-message">{errors.password.message?.toString()}</p>
-          )}
-        </div>
-        <div className="px-5 mb-3 padding-bottom">
-          <button type="submit" className="btn btn-secondary px-4">
-            Registration{" "}
-          </button>
-        </div>
-        <button className="btn btn-secondary px-4" onClick={handleClick}>
-          Sign In
-        </button>
-      </form>
+    <div className="sign-up-mobile">
+    {IsSinging ? <div className="loading"></div> : null}
+    <form onSubmit={handleSubmit(Registration)} className="sign-up-mobile form-container">
+      <div className="form-header">
+        <p className="signup">Sign Up</p>
+      </div>
+      <input
+        type="text"
+        className="form-control"
+        placeholder="Username"
+        {...register("username", {
+          required: "Username is required",
+        })}
+      />
+      {errors.username && (
+        <p className="error-message error">{errors.username.message?.toString()}</p>
+      )}
+
+    <input
+      type="email"
+      className="form-control"
+      placeholder="Email"
+      {...register("email", {
+        required: "Email is required",
+      })}
+    />
+    {errors.email && (
+      <p className="error-message error">{errors.email.message?.toString()}</p>
+    )}
+
+    <input
+      type="password"
+      className="form-control"
+      placeholder="Password"
+      {...register("password", {
+        required: "Password is required",
+      })}
+    />
+    {errors.password && (
+      <p className="error-message error">{errors.password.message?.toString()}</p>
+    )}
+
+    <input
+      type="password"
+      className="form-control"
+      placeholder="Confirm Password"
+      {...register("confirmPassword", {
+        required: "Confirm Password is required",
+      })}
+    />
+    {errors.confirmPassword && (
+      <p className="error-message error">
+        {errors.confirmPassword.message?.toString()}
+      </p>
+    )}
+
+    <div className="checkbox-container">
+      <input type="checkbox" className="checkbox" />
+      <p className="terms-text">
+        By signing up, you agree to the <span className="highlighted-text">Terms of Service</span> and <span className="highlighted-text">Privacy Policy</span>
+      </p>
     </div>
+
+    <button className="btn btn-secondary">Sign Up</button>
+
+    <p className="login-text">
+      Have an account? <span onClick={handleClick}>Log In</span>
+    </p>
+
+  </form>
+</div>
   );
 };
 
