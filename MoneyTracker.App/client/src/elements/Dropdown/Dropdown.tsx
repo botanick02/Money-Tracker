@@ -2,11 +2,13 @@ import React, {FC, useEffect, useState} from 'react';
 
 export interface Option {
     label: string,
+    icon?: string
     value: any
 }
 
 interface SelectPropsType {
-    selectHandler(option: any): void,
+    selectHandler(option: Option): void,
+
     options: Option[]
     title?: string
 }
@@ -15,9 +17,11 @@ const Dropdown: FC<SelectPropsType> = ({selectHandler, options, title}) => {
     const [isOptionsOpen, setIsOptionsOpen] = useState(false)
     const [selectedOptionId, setSelectedOptionId] = useState(0)
 
+    options = title ? [{label: title, value: null}, ...options] : options
+
     const setSelectedThenCloseDropdown = (index: number) => {
         setSelectedOptionId(index)
-        selectHandler(options[index].value)
+        selectHandler(options[index])
         setIsOptionsOpen(false)
     }
 
@@ -38,9 +42,16 @@ const Dropdown: FC<SelectPropsType> = ({selectHandler, options, title}) => {
             <button
                 aria-haspopup={"listbox"}
                 aria-expanded={isOptionsOpen}
-                className={"select-button " + (isOptionsOpen ? "expanded" : "")}
+                className={`select-button ${isOptionsOpen ? "expanded" : ""} ${title == options[selectedOptionId].label ? "title" : ""}`}
                 onClick={() => setIsOptionsOpen(!isOptionsOpen)}>
-                {options[selectedOptionId].label}
+                {
+                    !!options[selectedOptionId].icon
+                        ? <span>
+                    <div className={"dropdown-icon"}><img src={options[selectedOptionId].icon} alt=""/></div>
+                            {options[selectedOptionId].label}
+                    </span>
+                        : options[selectedOptionId].label
+                }
             </button>
 
             <ul
@@ -50,7 +61,7 @@ const Dropdown: FC<SelectPropsType> = ({selectHandler, options, title}) => {
                 tabIndex={-1}>
                 {
                     options.map((option, index) => (
-                        option != options[selectedOptionId] && title != option.label
+                        (option != options[selectedOptionId] && title != option.label)
                             ? <li
                                 key={index}
                                 id={option.label}
@@ -58,7 +69,14 @@ const Dropdown: FC<SelectPropsType> = ({selectHandler, options, title}) => {
                                 aria-selected={selectedOptionId == index}
                                 tabIndex={0}
                                 onClick={() => setSelectedThenCloseDropdown(index)}>
-                                {option.label}
+                                {
+                                    !!option.icon
+                                        ? <span>
+                                            <div className={"dropdown-icon"}><img src={option.icon} alt=""/></div>
+                                            {option.label}
+                                    </span>
+                                        : option.label
+                                }
                             </li>
                             : null
                     ))

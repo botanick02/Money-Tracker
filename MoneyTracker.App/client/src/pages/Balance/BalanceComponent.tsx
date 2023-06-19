@@ -3,6 +3,9 @@ import { AuthorizationReducer } from "../../store/Example/Reducers/Authorization
 import "../../styles/BalanceComponent.scss";
 import Transactions from "../Transactions/Transactions";
 import { useNavigate } from "react-router";
+
+
+
 const BalanceComponent = () => {
 
   const { SIGN_OUT } = AuthorizationReducer.actions;
@@ -14,11 +17,15 @@ const BalanceComponent = () => {
  
     <div>
     <Transactions />
+
     <button className="button " onClick={() =>
         {
       dispatch(SIGN_OUT())
       navigate('/')
       }}>
+
+    <button className="button danger" onClick={() => dispatch(SIGN_OUT())}>
+
         Sign Out
       </button>
   </div>
