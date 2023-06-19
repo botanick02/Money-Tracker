@@ -32,9 +32,9 @@ const SignInForm = () => {
   return (
     <div className="sign-up-mobile">
     {IsSinging ? <div className="loading......"></div> : null}
-    <p className="signup">Login</p>
+    
     <form onSubmit={handleSubmit(SignIn)} className="sign-up-mobile form-container">
- 
+    <p className="signup">Login</p>
        
         <input
   type="email"
