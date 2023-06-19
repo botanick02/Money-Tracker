@@ -47,20 +47,22 @@ const RegistrationForm = () => {
   };
   return (
     <div className="sign-up-mobile">
-  {IsSinging ? <div className="loading"></div> : null}
-  <p className="signup">Sign Up</p>
-  <form onSubmit={handleSubmit(Registration)} className="sign-up-mobile form-container">
-  <input
-      type="text"
-      className="form-control"
-      placeholder="Username"
-      {...register("username", {
-        required: "Username is required",
-      })}
-    />
-    {errors.username && (
-      <p className="error-message error">{errors.username.message?.toString()}</p>
-    )}
+    {IsSinging ? <div className="loading"></div> : null}
+    <form onSubmit={handleSubmit(Registration)} className="sign-up-mobile form-container">
+      <div className="form-header">
+        <p className="signup">Sign Up</p>
+      </div>
+      <input
+        type="text"
+        className="form-control"
+        placeholder="Username"
+        {...register("username", {
+          required: "Username is required",
+        })}
+      />
+      {errors.username && (
+        <p className="error-message error">{errors.username.message?.toString()}</p>
+      )}
 
     <input
       type="email"

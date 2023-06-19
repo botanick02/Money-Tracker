@@ -67,7 +67,7 @@ const SignInForm = () => {
   </p>
 )}
 
-<button className="btn btn-secondary">Sign Up</button>
+<button className="btn btn-secondary">Login</button>
 
 <p className="login-text">
 Don’t have an account yet? <span onClick={handleClick}> Sign Up</span>

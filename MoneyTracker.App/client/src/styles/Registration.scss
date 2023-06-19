@@ -5,16 +5,18 @@
 }
 
 .sign-up-mobile .form-container {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
   padding: 8px 16px;
   gap: 10px;
-  width: 285px;
+  width: 100%;
   height: auto;
-  margin: 0 auto; /* Центрируем форму */
-  margin-top: 40px; /* Добавляем отступ сверху */
+  margin: 0 auto; 
+  margin-top: 40px;
+  align-items: center;
 }
 
 .sign-up-mobile .form-label {
@@ -27,6 +29,7 @@
   border-radius: 16px;
   padding: 12px 16px;
   gap: 10px;
+  width: 100%;
 }
 
 .sign-up-mobile .form-control.error {
@@ -48,7 +51,7 @@
   border-radius: 16px;
   padding: 12px 16px;
   gap: 10px;
-  width: 75%;
+  width: 100%;
 }
 
 .sign-up-mobile .btn.btn-secondary.px-4 {
@@ -90,16 +93,18 @@
 }
 
 .sign-up-mobile .signup {
+  margin: 0;
   position: absolute;
   width: 67px;
   height: 22px;
-  left: 50%; /* Центрируем надпись по горизонтали */
-  transform: translateX(-50%); /* Центрируем надпись по горизонтали */
-  top: -30px; /* Поднимаем надпись над формой */
+  left: 50%;
+  transform: translateX(-50%);
+  top: -30px; 
   font-family: 'Inter';
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
   line-height: 22px;
   color: #FFFFFF;
+  text-align: center;
 }
