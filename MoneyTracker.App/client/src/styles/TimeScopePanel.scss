@@ -20,14 +20,15 @@
             font-family: inherit;
             font-size: inherit;
             color: $primary-light-color;
+            max-width: 120px;
           }
           
-          input[type="month"]::-webkit-calendar-picker-indicator {
-            color: $primary-light-color;
+          input::-webkit-calendar-picker-indicator {
+            filter: invert(1);
           }
           
-          input[type="month"]::-webkit-inner-spin-button,
-          input[type="month"]::-webkit-clear-button {
+          input::-webkit-inner-spin-button,
+          input::-webkit-clear-button {
             display: none;
           }
     }
