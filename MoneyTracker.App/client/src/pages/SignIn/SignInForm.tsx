@@ -18,7 +18,7 @@ const SignInForm = () => {
 
     } = useForm()
 
-    const error = useAppSelector((state) => state.Authorization.error);
+    const serverError = useAppSelector((state) => state.Registration.error);
     const IsSinging = useAppSelector((state) => state.Authorization.loading);
     const dispatch = useAppDispatch();
 
