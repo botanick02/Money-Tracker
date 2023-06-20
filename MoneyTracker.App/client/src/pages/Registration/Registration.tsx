@@ -5,6 +5,8 @@ import { useForm } from "react-hook-form";
 import { validateEmail, validatePassword } from "../../tools/validator";
 import InputWrapper from "../../elements/InputWrapper";
 import { useEffect } from "react";
+import { useNavigate } from "react-router";
+
 
 const { REGISTRATION } = RegistrationReducer.actions;
 
@@ -14,17 +16,17 @@ const RegistrationForm = () => {
     formState: { errors },
     handleSubmit,
     setError,
-    reset,
+    reset
   } = useForm();
   // const isAuth = useAppSelector((state) => state.Authorization.isAuth);
+  // const error = useAppSelector((state) => state.Registration.error);
   const serverError = useAppSelector((state) => state.Registration.error);
-
   const IsSinging = useAppSelector((state) => state.Registration.loading);
   const dispatch = useAppDispatch();
 
   const Registration = (data: any) => {
     if (validatePassword(data.password)) {
-      setError("password", { message: validatePassword(data.password) });
+        setError("password", { message: validatePassword(data.password) });
       return;
     }
 
@@ -32,11 +34,13 @@ const RegistrationForm = () => {
       setError("email", { message: validateEmail(data.email) });
       return;
     }
+
     if (data.password !== data.confirmPassword) {
       setError("confirmPassword", { message: "Passwords do not match" });
+
       return;
     }
-    //   if (data.checkbox) {
+       //   if (data.checkbox) {
     //     setError("checkbox", { message: "You must agree to the Terms of Service and Privacy Policy" });
     //     return;
     //   }
@@ -56,6 +60,10 @@ const RegistrationForm = () => {
     }
   }, [serverError, setError]);
 
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate("/SignInForm");
+  };
   return (
     <div className="sign-up-mobile">
       {IsSinging ? <div className="loading" /> : null}

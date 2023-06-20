@@ -4,7 +4,6 @@ import "../../styles/Registration.scss";
 import { AuthorizationReducer } from "../../store/Example/Reducers/AuthorizationReducer";
 import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import InputWrapper from "../../elements/InputWrapper";
 
@@ -31,27 +30,20 @@ const SignInForm = () => {
 };
 useEffect(() => {
   if (serverError) {
-    setError("serverError", { message: "Wrong login or password" });
+    setError("email", { message: "Wrong login or password" });
   }
 }, [serverError, setError]);
-  const signIn = (data: any) => {
-    console.log(data);
-    dispatch(SIGN_IN({ email: data.email, password: data.password }));
-  };
+
 
   const signInGoogle = (response: CredentialResponse) => {
     if (response.credential){
       dispatch(SIGN_IN_GOOGLE({ token: response.credential} ));
     }
     else{
-      console.log("No credential in google response");
+      setError("email", { message: "No credential in google response" });
+    
     }
   };
-  const navigate = useNavigate();
-  const handleClick = () => {
-    navigate("/registration");
-  };
-
 
   return (
     <div className="sign-up-mobile">
@@ -93,14 +85,18 @@ useEffect(() => {
                 )}
 
                 <button className="button">Login</button>
-                <GoogleLogin
+               
+                <GoogleLogin 
           onSuccess={(credentialResponse) => {
             signInGoogle(credentialResponse);            
           }}
           onError={() => {
-            console.log("Login Failed");
+            setError("email", { message: "No credential in google response" });
           }}
         />
+        {errors.checkbox && (
+          <p className="error-message">{errors.checkbox.message?.toString()}</p>
+        )}
                 <p className="login-text">
                     Don’t have an account yet? <a href={"/registration"}> Sign Up</a>
                 </p>
