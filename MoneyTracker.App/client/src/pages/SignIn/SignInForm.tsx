@@ -88,7 +88,14 @@ useEffect(() => {
                 )}
 
                 <button className="button">Login</button>
-
+                <GoogleLogin
+          onSuccess={(credentialResponse) => {
+            signInGoogle(credentialResponse);            
+          }}
+          onError={() => {
+            console.log("Login Failed");
+          }}
+        />
                 <p className="login-text">
                     Don’t have an account yet? <a href={"/registration"}> Sign Up</a>
                 </p>
