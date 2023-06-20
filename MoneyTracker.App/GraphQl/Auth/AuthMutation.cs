@@ -32,6 +32,25 @@ namespace MoneyTracker.App.GraphQl.Auth
                     }
                 });
 
+            Field<LoginResponseType>("GoogleLogin")
+                .Argument<GoogleLoginInputType>("LoginCredentials")
+                .Resolve(context =>
+                {
+                    var loginCredentials = context.GetArgument<GoogleLoginInput>("LoginCredentials");
+
+                    try
+                    {
+                        return authService.AuthenticateUser(loginCredentials.Token, httpContextAccessor.HttpContext!).Result;
+                    }
+                    catch (Exception ex)
+                    {
+                        var exception = new ExecutionError(ex.Message);
+                        exception.Code = "UNAUTHORIZED";
+                        context.Errors.Add(exception);
+                        return null;
+                    }
+                });
+
             Field<bool>("LogOut")
                .Resolve(context =>
                {

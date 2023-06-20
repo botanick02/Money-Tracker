@@ -4,8 +4,10 @@ using System.Security.Claims;
 using MoneyTracker.App.GraphQl.Auth.Types.Inputs;
 using MoneyTracker.App.GraphQl.Auth.Types;
 using AutoMapper;
-using System.ComponentModel.DataAnnotations;
 using MoneyTracker.App.Helpers;
+using Google.Apis.Auth;
+using GraphQLParser;
+using System.Runtime.Serialization;
 
 namespace MoneyTracker.Business.Services
 {
@@ -26,7 +28,8 @@ namespace MoneyTracker.Business.Services
         {
             var user = userRepository.GetUserByEmail(email);
 
-            if (user == null || !passwordHashService.VerifyPassword(password, user.PasswordHash, user.PasswordSalt))
+
+            if (user == null || !passwordHashService.VerifyPassword(password, user.PasswordHash!, user.PasswordSalt!))
             {
                 throw new InvalidDataException("Invalid username or password.");
             }
@@ -45,6 +48,43 @@ namespace MoneyTracker.Business.Services
             };
         }
 
+        public async Task<LoginResponse> AuthenticateUser(string googleToken, HttpContext context)
+        {
+            try
+            {
+                var payload = await GoogleJsonWebSignature.ValidateAsync(googleToken);
+
+                if (payload.ExpirationTimeSeconds.HasValue && DateTime.UtcNow.Second > payload.ExpirationTimeSeconds.Value)
+                {
+                    throw new InvalidJwtException("");
+                }
+
+                var user = userRepository.GetUserByEmail(payload.Email);
+
+                if (user == null)
+                {
+                    return RegisterGoogleUser(payload.Email, payload.Name, context);
+                }
+
+                var accessToken = tokenService.GenerateAccessToken(user);
+                var refreshToken = tokenService.GenerateRefreshToken(user);
+
+                CookiesHelper.SetRefrshTokenCookie(refreshToken, context);
+
+                user.RefreshToken = refreshToken;
+                userRepository.UpdateUser(user);
+
+                return new LoginResponse
+                {
+                    AccessToken = accessToken,
+                };
+            }
+            catch (InvalidJwtException ex)
+            {
+                throw new InvalidDataException($"Invalid token {ex}");
+            }
+        }
+
         public LoginResponse RefreshAccessToken(HttpContext context)
         {
             var oldRefreshToken = CookiesHelper.GetRefreshTokenCookie(context);
@@ -56,8 +96,11 @@ namespace MoneyTracker.Business.Services
 
             var claimPrincipal = tokenService.GetPrincipalFromToken(oldRefreshToken);
 
-            var user = userRepository.GetUserById(int.Parse(claimPrincipal.FindFirst(ClaimTypes.NameIdentifier)!.Value));
+            var user = userRepository.GetUserById(claimPrincipal.FindFirst(ClaimTypes.NameIdentifier)!.Value);
             
+            if (user == null) {
+                throw new UserNotFoundException();
+            }
 
             var accessToken = tokenService.GenerateAccessToken(user);
             var refreshToken = tokenService.GenerateRefreshToken(user);
@@ -75,13 +118,13 @@ namespace MoneyTracker.Business.Services
 
         public LoginResponse RegisterUser(UserCreateInput newUser, HttpContext context)
         {
-            var user = mapper.Map<User>(newUser);
-
-            if (userRepository.GetUserByEmail(user.Email) != null)
+            if (userRepository.GetUserByEmail(newUser.Email) != null)
             {
                 throw new UserAlreadyExistsException();
             }
 
+            var newId = Guid.NewGuid().ToString();
+            var user = new User(newId, newUser.Email, newUser.Name);
 
             user.PasswordHash = passwordHashService.HashPassword(newUser.Password, out string salt);
             user.PasswordSalt = salt;
@@ -102,13 +145,42 @@ namespace MoneyTracker.Business.Services
             };
         }
 
+        public LoginResponse RegisterGoogleUser(string email, string name, HttpContext context)
+        {
+
+            var newId = Guid.NewGuid().ToString();
+            var user = new User(newId, email, name);
+
+            var createdUser = userRepository.CreateUser(user);
+
+            if (createdUser == null) 
+            {
+                throw new InvalidDataException("User was not created or created incorrectly");
+            }
+
+            var accessToken = tokenService.GenerateAccessToken(createdUser);
+            var refreshToken = tokenService.GenerateRefreshToken(createdUser);
+
+            CookiesHelper.SetRefrshTokenCookie(refreshToken, context);
+            user.RefreshToken = refreshToken;
+
+            userRepository.UpdateUser(createdUser);
+
+            return new LoginResponse
+            {
+                AccessToken = accessToken
+            };
+        }
+
         public bool LogUserOut(HttpContext context)
         {
-            var existingUser = userRepository.GetUserById(int.Parse(context.User.FindFirst(ClaimTypes.NameIdentifier)!.Value));
+            var existingUser = userRepository.GetUserById(context.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-            existingUser.RefreshToken = "";
-
-            userRepository.UpdateUser(existingUser);
+            if (existingUser != null)
+            {
+                existingUser.RefreshToken = null;
+                userRepository.UpdateUser(existingUser);
+            }
 
             CookiesHelper.ClearRefreshTokenCookie(context);
 
@@ -116,15 +188,38 @@ namespace MoneyTracker.Business.Services
         }
     }
 
+    [Serializable]
     public class UserAlreadyExistsException : Exception
     {
         public UserAlreadyExistsException()
         {
         }
-    } 
+
+        protected UserAlreadyExistsException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+        }
+    }
+
+    [Serializable]
     public class InvalidRefreshTokenException : Exception
     {
         public InvalidRefreshTokenException()
+        {
+        }
+
+        protected InvalidRefreshTokenException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+        }
+    }
+
+    [Serializable]
+    public class UserNotFoundException : Exception
+    {
+        public UserNotFoundException()
+        {
+        }
+
+        protected UserNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
     }
