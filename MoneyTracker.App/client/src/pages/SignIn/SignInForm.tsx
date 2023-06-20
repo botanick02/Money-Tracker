@@ -5,9 +5,9 @@ import { AuthorizationReducer } from "../../store/Example/Reducers/Authorization
 import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { GoogleLogin } from "@react-oauth/google";
+import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 
-const { SIGN_IN, SIGN_IN_SUCCESS, SIGN_IN_ERROR } =
+const { SIGN_IN, SIGN_IN_SUCCESS, SIGN_IN_ERROR, SIGN_IN_GOOGLE } =
   AuthorizationReducer.actions;
 const SignInForm = () => {
   const {
@@ -19,10 +19,20 @@ const SignInForm = () => {
   const IsSinging = useAppSelector((state) => state.Authorization.loading);
   const dispatch = useAppDispatch();
 
-  const SignIn = (data: any) => {
+  const signIn = (data: any) => {
     console.log(data);
     dispatch(SIGN_IN({ email: data.email, password: data.password }));
   };
+
+  const signInGoogle = (response: CredentialResponse) => {
+    if (response.credential){
+      dispatch(SIGN_IN_GOOGLE({ token: response.credential} ));
+    }
+    else{
+      console.log("No credential in google response");
+    }
+  };
+
   const navigate = useNavigate();
   const handleClick = () => {
     navigate("/registration");
@@ -33,7 +43,7 @@ const SignInForm = () => {
       {IsSinging ? <div className="loading......"></div> : null}
 
       <form
-        onSubmit={handleSubmit(SignIn)}
+        onSubmit={handleSubmit(signIn)}
         className="sign-up-mobile form-container"
       >
         <p className="signup">Login</p>
@@ -76,7 +86,7 @@ const SignInForm = () => {
         <button className="btn btn-secondary">Login</button>
         <GoogleLogin
           onSuccess={(credentialResponse) => {
-            console.log(credentialResponse);
+            signInGoogle(credentialResponse);            
           }}
           onError={() => {
             console.log("Login Failed");

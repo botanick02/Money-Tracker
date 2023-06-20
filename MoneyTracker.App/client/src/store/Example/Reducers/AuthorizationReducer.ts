@@ -25,6 +25,11 @@ export const AuthorizationReducer = createSlice({
             state.error = null;
             state.isAuth = false;
         },
+        SIGN_IN_GOOGLE(state, action: PayloadAction<{ token: string }>) {
+            state.loading = true;
+            state.error = null;
+            state.isAuth = false;
+        },
         SIGN_IN_SUCCESS(state) {
             state.isAuth = true;
             state.loading = false;

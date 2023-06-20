@@ -1,8 +1,6 @@
 import { Epic, ofType } from "redux-observable";
 import { filter, from, map, mergeMap } from "rxjs";
 import { store } from "../store";
-import { IUserQuery } from "../../types/GraphQLType";
-
 import { UserReducer } from "./Reducers/UserReducer";
 import { NotificationReducer } from "./Reducers/NotificationReducer";
 import { RefreshTokenReducer } from "./Reducers/RefreshTokenReducer";
