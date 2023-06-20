@@ -1,7 +1,7 @@
 import {combineReducers, configureStore} from "@reduxjs/toolkit";
 import {combineEpics, createEpicMiddleware} from "redux-observable";
 import {RegistrationEpic } from "./Example/RegistrationEpic";
-import { AuthorizationEpic, GetAccessTokenEpic, SignOutEpic } from "./Example/AuthorizationEpic";
+import { AuthorizationEpic, GetAccessTokenEpic, GoogleAuthorizationEpic, SignOutEpic } from "./Example/AuthorizationEpic";
 import UserReducer from "./Example/Reducers/UserReducer";
 import NotificationReducer from "./Example/Reducers/NotificationReducer";
 import AuthorizationReducer from "./Example/Reducers/AuthorizationReducer";
@@ -14,7 +14,8 @@ const rootEpic = combineEpics(
     AuthorizationEpic,
     SignOutEpic,
     GetAccessTokenEpic,
-    RegistrationEpic
+    RegistrationEpic,
+    GoogleAuthorizationEpic
 )
 
 const rootReducer = combineReducers({

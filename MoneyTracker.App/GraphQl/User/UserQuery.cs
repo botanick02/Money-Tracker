@@ -14,7 +14,7 @@ namespace MoneyTracker.App.GraphQl.User
                 .Resolve(context =>
                 {
 
-                    var userId = int.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+                    var userId = context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value;
                     var user = userRepository.GetUserById(userId);
 
                     return user;
