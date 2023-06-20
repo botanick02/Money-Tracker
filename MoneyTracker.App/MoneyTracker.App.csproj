@@ -10,6 +10,7 @@
     <PackageReference Include="Google.Apis.Auth" Version="1.60.0" />
     <PackageReference Include="GraphQL.Server.All" Version="7.4.0" />
     <PackageReference Include="GraphQL.Server.Ui.Altair" Version="7.4.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="7.0.7" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="7.0.5" />
   </ItemGroup>
 

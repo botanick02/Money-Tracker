@@ -5,7 +5,7 @@ namespace MoneyTracker.MsSQL.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        private readonly List<User> users = new List<User>();
+        private List<User> users = new List<User>();
 
         public UserRepository()
         {

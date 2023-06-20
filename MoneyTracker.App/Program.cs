@@ -28,12 +28,17 @@ builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 builder.Services.AddTransient<AuthService>();
 builder.Services.AddTransient<TokenService>();
 builder.Services.AddTransient<PasswordHashService>();
-builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddSingleton<IUserRepository, UserRepository>();
 
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddAuthentication("CustomTokenScheme")
-        .AddScheme<AuthenticationSchemeOptions, CustomTokenAuthenticationHandler>("CustomTokenScheme", options => { });
+        .AddScheme<AuthenticationSchemeOptions, CustomTokenAuthenticationHandler>("CustomTokenScheme", options => { })
+        .AddGoogle(googleOptions =>
+        {
+            googleOptions.ClientId = "503578281552-2tkt0e280t9rguhv8m1fs0q7q5tv2kkk.apps.googleusercontent.com";
+            googleOptions.ClientSecret = "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";
+        });
 
 builder.Services.AddAuthorization();
 

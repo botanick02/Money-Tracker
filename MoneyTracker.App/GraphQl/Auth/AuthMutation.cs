@@ -40,7 +40,7 @@ namespace MoneyTracker.App.GraphQl.Auth
 
                     try
                     {
-                        return authService.AuthenticateUser(loginCredentials.Token, httpContextAccessor.HttpContext!);
+                        return authService.AuthenticateUser(loginCredentials.Token, httpContextAccessor.HttpContext!).Result;
                     }
                     catch (Exception ex)
                     {

@@ -54,7 +54,7 @@ namespace MoneyTracker.Business.Services
             {
                 var payload = await GoogleJsonWebSignature.ValidateAsync(googleToken);
 
-                if (payload.ExpirationTimeSeconds.HasValue && DateTime.UtcNow.Millisecond > payload.ExpirationTimeSeconds.Value)
+                if (payload.ExpirationTimeSeconds.HasValue && DateTime.UtcNow.Second > payload.ExpirationTimeSeconds.Value)
                 {
                     throw new InvalidJwtException("");
                 }
@@ -63,14 +63,25 @@ namespace MoneyTracker.Business.Services
 
                 if (user == null)
                 {
-
+                    return RegisterGoogleUser(payload.Email, payload.Name, context);
                 }
 
+                var accessToken = tokenService.GenerateAccessToken(user);
+                var refreshToken = tokenService.GenerateRefreshToken(user);
+
+                CookiesHelper.SetRefrshTokenCookie(refreshToken, context);
+
+                user.RefreshToken = refreshToken;
+                userRepository.UpdateUser(user);
+
+                return new LoginResponse
+                {
+                    AccessToken = accessToken,
+                };
             }
-            catch (InvalidJwtException)
+            catch (InvalidJwtException ex)
             {
-                // Token is invalid
-                return false;
+                throw new InvalidDataException($"Invalid token {ex}");
             }
         }
 
@@ -112,6 +123,8 @@ namespace MoneyTracker.Business.Services
                 throw new UserAlreadyExistsException();
             }
 
+            var newId = Guid.NewGuid().ToString();
+            var user = new User(newId, newUser.Email, newUser.Name);
 
             user.PasswordHash = passwordHashService.HashPassword(newUser.Password, out string salt);
             user.PasswordSalt = salt;
@@ -134,14 +147,9 @@ namespace MoneyTracker.Business.Services
 
         public LoginResponse RegisterGoogleUser(string email, string name, HttpContext context)
         {
-            var user = new User();
-
 
             var newId = Guid.NewGuid().ToString();
-            var user = new User(newId, newUser.Email, newUser.Name);
-
-            user.PasswordHash = passwordHashService.HashPassword(newUser.Password, out string salt);
-            user.PasswordSalt = salt;
+            var user = new User(newId, email, name);
 
             var createdUser = userRepository.CreateUser(user);
 
