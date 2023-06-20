@@ -34,6 +34,10 @@ const RegistrationForm = () => {
             setError("confirmPassword", { message: "Passwords do not match" });
             return;
           }
+          if (!data.checkbox) {
+            setError("checkbox", { message: "You must agree to the Terms of Service and Privacy Policy" });
+            return;
+          }
 
         console.log(data);
         dispatch(
@@ -112,14 +116,19 @@ const RegistrationForm = () => {
                         By signing up, you agree to the <a href={""}>Terms of Service</a> and <a href={""}>Privacy
                         Policy</a>
                     </label>
+                 
                 </div>
-
+                {errors.checkbox && (
+                    <p className="error-message">{errors.checkbox.message?.toString()}</p>
+                )}
                 <button className="button">Sign Up</button>
 
                 <p className="login-text">
                     Have an account? <a href={"/SignInForm"}>Log In</a>
                 </p>
-
+ {errors.email && (
+                    <p className="error-message">{errors.email.message?.toString()}</p>
+                )}
             </form>
         </div>
     );
