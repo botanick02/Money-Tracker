@@ -2,8 +2,9 @@ import "../../styles/Registration.scss";
 import { RegistrationReducer } from "../../store/Example/Reducers/RegistrationReducer";
 import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
 import { validateEmail, validatePassword } from "../../tools/validator";
+import InputWrapper from "../../elements/InputWrapper";
+import { useEffect } from "react";
 
 const { REGISTRATION } = RegistrationReducer.actions;
 
@@ -13,10 +14,11 @@ const RegistrationForm = () => {
     formState: { errors },
     handleSubmit,
     setError,
-    reset
+    reset,
   } = useForm();
   // const isAuth = useAppSelector((state) => state.Authorization.isAuth);
-  // const error = useAppSelector((state) => state.Registration.error);
+  const serverError = useAppSelector((state) => state.Registration.error);
+
   const IsSinging = useAppSelector((state) => state.Registration.loading);
   const dispatch = useAppDispatch();
 
@@ -30,6 +32,14 @@ const RegistrationForm = () => {
       setError("email", { message: validateEmail(data.email) });
       return;
     }
+    if (data.password !== data.confirmPassword) {
+      setError("confirmPassword", { message: "Passwords do not match" });
+      return;
+    }
+    //   if (data.checkbox) {
+    //     setError("checkbox", { message: "You must agree to the Terms of Service and Privacy Policy" });
+    //     return;
+    //   }
 
     console.log(data);
     dispatch(
@@ -40,83 +50,95 @@ const RegistrationForm = () => {
       })
     );
   };
+  useEffect(() => {
+    if (serverError === "CONFLICT") {
+      setError("email", { message: "User with the same email already exists" });
+    }
+  }, [serverError, setError]);
 
-  const navigate = useNavigate();
-  const handleClick = () => {
-    navigate("/SignInForm");
-  };
   return (
     <div className="sign-up-mobile">
-    {IsSinging ? <div className="loading"></div> : null}
-    <form onSubmit={handleSubmit(Registration)} className="sign-up-mobile form-container">
-      <div className="form-header">
-        <p className="signup">Sign Up</p>
-      </div>
-      <input
-        type="text"
-        className="form-control"
-        placeholder="Username"
-        {...register("username", {
-          required: "Username is required",
-        })}
-      />
-      {errors.username && (
-        <p className="error-message error">{errors.username.message?.toString()}</p>
-      )}
+      {IsSinging ? <div className="loading" /> : null}
+      <h3>Sign Up</h3>
 
-    <input
-      type="email"
-      className="form-control"
-      placeholder="Email"
-      {...register("email", {
-        required: "Email is required",
-      })}
-    />
-    {errors.email && (
-      <p className="error-message error">{errors.email.message?.toString()}</p>
-    )}
+      <form onSubmit={handleSubmit(Registration)} className="form-container">
+        <InputWrapper>
+          <input
+            type="text"
+            placeholder="Username"
+            {...register("username", {
+              required: "Username is required",
+            })}
+          />
+        </InputWrapper>
+        {errors.username && (
+          <p className="error-message">{errors.username.message?.toString()}</p>
+        )}
 
-    <input
-      type="password"
-      className="form-control"
-      placeholder="Password"
-      {...register("password", {
-        required: "Password is required",
-      })}
-    />
-    {errors.password && (
-      <p className="error-message error">{errors.password.message?.toString()}</p>
-    )}
+        <InputWrapper>
+          <input
+            type="email"
+            placeholder="Email"
+            {...register("email", {
+              required: "Email is required",
+            })}
+          />
+        </InputWrapper>
+        {errors.email && (
+          <p className="error-message">{errors.email.message?.toString()}</p>
+        )}
 
-    <input
-      type="password"
-      className="form-control"
-      placeholder="Confirm Password"
-      {...register("confirmPassword", {
-        required: "Confirm Password is required",
-      })}
-    />
-    {errors.confirmPassword && (
-      <p className="error-message error">
-        {errors.confirmPassword.message?.toString()}
-      </p>
-    )}
+        <InputWrapper>
+          <input
+            type="password"
+            placeholder="Password"
+            {...register("password", {
+              required: "Password is required",
+            })}
+          />
+        </InputWrapper>
+        {errors.password && (
+          <p className="error-message">{errors.password.message?.toString()}</p>
+        )}
 
-    <div className="checkbox-container">
-      <input type="checkbox" className="checkbox" />
-      <p className="terms-text">
-        By signing up, you agree to the <span className="highlighted-text">Terms of Service</span> and <span className="highlighted-text">Privacy Policy</span>
-      </p>
+        <InputWrapper>
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            {...register("confirmPassword", {
+              required: "Confirm Password is required",
+            })}
+          />
+        </InputWrapper>
+        {errors.confirmPassword && (
+          <p className="error-message">
+            {errors.confirmPassword.message?.toString()}
+          </p>
+        )}
+
+        <div className="checkbox-container">
+          <input
+            type="checkbox"
+            {...register("checkbox", {
+              required:
+                "You must agree to the Terms of Service and Privacy Policy",
+            })}
+          />
+          <label>
+            By signing up, you agree to the <a href="">Terms of Service</a> and{" "}
+            <a href="">Privacy Policy</a>
+          </label>
+        </div>
+        {errors.checkbox && (
+          <p className="error-message">{errors.checkbox.message?.toString()}</p>
+        )}
+        <button className="button">Sign Up</button>
+
+        <p className="login-text">
+          Have an account? <a href={"/SignInForm"}>Log In</a>
+        </p>
+      </form>
     </div>
-
-    <button className="btn btn-secondary">Sign Up</button>
-
-    <p className="login-text">
-      Have an account? <span onClick={handleClick}>Log In</span>
-    </p>
-
-  </form>
-</div>
   );
 };
 

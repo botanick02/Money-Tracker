@@ -58,8 +58,8 @@ export const RegistrationEpic: Epic<any, any, any> = (action$: any) => {
                         map((data: any) => {
                             console.log(data)
                             if (data.errors) {
-                                store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message)); 
-                                return REGISTRATION_ERROR(data.errors[0].message);
+                                store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].extensions.code)); 
+                                return REGISTRATION_ERROR(data.errors[0].extensions.code);
                               } else {
                               
 if (data.data.auth.createUser.accessToken && data.data.auth.createUser.accessToken !== '') {

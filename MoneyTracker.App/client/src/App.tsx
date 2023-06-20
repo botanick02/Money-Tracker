@@ -63,6 +63,3 @@ function App() {
 
 export default App;
 
-// How to use Dropdown
-//<Dropdown selectHandler={()=>{}} options={Option[]}/>
-

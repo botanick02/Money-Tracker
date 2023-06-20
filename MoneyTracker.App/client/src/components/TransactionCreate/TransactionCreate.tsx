@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import InputField from "../../elements/InputField";
+import InputWrapper from "../../elements/InputWrapper";
 import Dropdown, {Option} from "../../elements/Dropdown/Dropdown";
 
 
@@ -73,6 +73,8 @@ const TransactionCreate: React.FC<Props> = ({openPopupHandle, transactionDefault
         openPopupHandle()
     }
 
+    const [date, setDate] = useState(new Date());
+
 
     return (
         <div className={"transaction-create-bg"}>
@@ -92,7 +94,9 @@ const TransactionCreate: React.FC<Props> = ({openPopupHandle, transactionDefault
                     </li>
                 </ul>
                 <div className={"transaction-create__fields"}>
-                    <InputField type={"datetime-local"}/>
+                    <InputWrapper type={"datetime-local"}>
+                        <input value={date.toISOString().substring(0,16)} type="datetime-local"/>
+                    </InputWrapper>
                     {
                         type != "transfer"
                             ? <Dropdown title={"Account"} selectHandler={handleAccountChange} options={accountOptions}/>
@@ -101,16 +105,22 @@ const TransactionCreate: React.FC<Props> = ({openPopupHandle, transactionDefault
                                 <Dropdown title={"To"} selectHandler={handleAccountChange} options={accountOptions}/>
                             </div>
                     }
-                    <InputField type={"number"} placeholder={"Amount"}/>
+                    <InputWrapper>
+                        <input type="number" placeholder="Amount"/>
+                    </InputWrapper>
                     {
                         type != "transfer"
                             ? <Dropdown title={"Category"} selectHandler={handleCategoryChange}
                                         options={categoryOptions}/>
-                            : <InputField type={"number"} placeholder={"Commission"}/>
+                            : <InputWrapper type={"number"} placeholder={"Commission"}/>
 
                     }
-                    <InputField placeholder={"Title"}/>
-                    <InputField placeholder={"Note"}/>
+                    <InputWrapper>
+                        <input type="text" placeholder="Title"/>
+                    </InputWrapper>
+                    <InputWrapper>
+                        <input type="text" placeholder="Title"/>
+                    </InputWrapper>
                 </div>
                 <div className={"transaction-create__row"}>
                     <button onClick={() => {
