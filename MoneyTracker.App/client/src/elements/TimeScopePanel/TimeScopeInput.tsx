@@ -1,15 +1,53 @@
 import React, { FC } from "react";
-import { TimeScopes } from "../../components/TimeScopePanel/TimeScopePanel";
+import {
+  TimeScopeInputsType,
+  TimeScopes,
+} from "../../components/TimeScopePanel/TimeScopePanel";
 
-const TimeScopeInput: FC<{ scope: TimeScopes }> = ({ scope }) => {
-  const renderInput = () => {
+interface TimeScopeInputProps {
+  scope: TimeScopes;
+  values: TimeScopeInputsType;
+  setValue: (value: any) => void;
+}
+
+const TimeScopeInput = ({ scope, values, setValue }: TimeScopeInputProps) => {
+  var localValues = values;
+
+  function renderInput() {
     switch (scope) {
       case TimeScopes.Daily:
-        return <input type="date" />;
+        return (
+          <input
+            type="date"
+            value={values.daily}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              const updatedValues = { ...values, daily: event.target.value };
+              setValue(updatedValues);
+            }}
+          />
+        );
       case TimeScopes.Weekly:
-        return <input type="week" />;
+        return (
+          <input
+            type="week"
+            value={values.weekly}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              const updatedValues = { ...values, weekly: event.target.value };
+              setValue(updatedValues);
+            }}
+          />
+        );
       case TimeScopes.Monthly:
-        return <input type="month" />;
+        return (
+          <input
+            type="month"
+            value={values.monthly}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              const updatedValues = { ...values, monthly: event.target.value };
+              setValue(updatedValues);
+            }}
+          />
+        );
       case TimeScopes.Yearly:
         return (
           <input
@@ -18,19 +56,44 @@ const TimeScopeInput: FC<{ scope: TimeScopes }> = ({ scope }) => {
             max={new Date().getFullYear()}
             step="1"
             placeholder={new Date().getFullYear().toString()}
+            value={values.yearly}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              const updatedValues = { ...values, yearly: event.target.value };
+              setValue(updatedValues);
+            }}
           />
         );
       case TimeScopes.All:
-        return <></>;
+        return null;
       case TimeScopes.Custom:
         return (
           <>
-            <input type="date" />
-            <input type="date" />
+            <input
+              type="date"
+              value={values.custom.from}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                const updatedValues = {
+                  ...values,
+                  custom: { ...values.custom, from: event.target.value },
+                };
+                setValue(updatedValues);
+              }}
+            />
+            <input
+              type="date"
+              value={values.custom.to}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                const updatedValues = {
+                  ...values,
+                  custom: { ...values.custom, to: event.target.value },
+                };
+                setValue(updatedValues);
+              }}
+            />
           </>
         );
     }
-  };
+  }
 
   return renderInput();
 };
