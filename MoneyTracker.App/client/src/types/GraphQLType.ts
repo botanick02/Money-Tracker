@@ -12,10 +12,16 @@ interface ILoginResponse {
   accessToken: string;
 }
 
-export interface IUserQuery {
+export interface ILoginQuery {
   errors: IError[] | null;
-  data: IUserData
+  data: ILoginData
 }
+
+export interface IGoogleLoginQuery {
+  errors: IError[] | null;
+  data: IGoogleLoginData
+}
+
 export interface IError {
   message: string;
   extensions: {
@@ -23,10 +29,19 @@ export interface IError {
     codes: string[];
   };
 }
-export interface IUserData {
+export interface ILoginData {
   auth: {
     createUser: boolean;
     login: {
+      accessToken: string;
+    } | null;
+  };
+}
+
+export interface IGoogleLoginData {
+  auth: {
+    createUser: boolean;
+    googleLogin: {
       accessToken: string;
     } | null;
   };

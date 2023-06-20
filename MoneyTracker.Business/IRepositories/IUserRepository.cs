@@ -4,7 +4,7 @@ namespace MoneyTracker.Business.IRepositories
 {
     public interface IUserRepository
     {
-        User? GetUserById(int id);
+        User? GetUserById(string id);
 
         User? GetUserByEmail(string email);
 
