@@ -30,6 +30,10 @@ const RegistrationForm = () => {
             setError("email", {message: validateEmail(data.email)});
             return;
         }
+        if (data.password !== data.confirmPassword) {
+            setError("confirmPassword", { message: "Passwords do not match" });
+            return;
+          }
 
         console.log(data);
         dispatch(

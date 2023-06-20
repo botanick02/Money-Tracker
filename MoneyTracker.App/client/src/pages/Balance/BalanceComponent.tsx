@@ -15,7 +15,7 @@ const BalanceComponent = () => {
 
   return (
  
-    <div>
+    <div>git
     <Transactions />
     <button className="button " onClick={() =>
         {
