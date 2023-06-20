@@ -4,7 +4,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using MoneyTracker.App.Authentication;
 using MoneyTracker.App.GraphQl;
-using MoneyTracker.App.Helpers;
 using MoneyTracker.Business.IRepositories;
 using MoneyTracker.Business.Services;
 using MoneyTracker.Business.Utilities;
