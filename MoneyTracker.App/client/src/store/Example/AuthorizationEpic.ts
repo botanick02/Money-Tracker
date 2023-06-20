@@ -55,6 +55,7 @@ export const AuthorizationEpic: Epic<any, any, any> = (action$: any) => {
       ).pipe(
         mergeMap((response) =>
           from(response.json()).pipe(
+            
             map((data: ILoginQuery) => {
               console.log(data);
               if (data.errors) {
