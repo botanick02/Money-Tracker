@@ -1,7 +1,7 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 
-import {BrowserRouter, Routes, Route} from "react-router-dom";
-import {useAppDispatch, useAppSelector} from "./hooks/useAppDispatch";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "./hooks/useAppDispatch";
 import SignInForm from "./pages/SignIn/SignInForm";
 import BalanceComponent from "./pages/Balance/BalanceComponent";
 import { RefreshTokenReducer } from "./store/Example/Reducers/RefreshTokenReducer";
@@ -11,8 +11,8 @@ import Registration from "./pages/Registration/Registration";
 import Transactions from "./pages/Transactions/Transactions";
 import Layout from "./components/common/Layout";
 
-const {GET_ACCESS_TOKEN} = RefreshTokenReducer.actions;
-const {GET_USER_INFO} = UserReducer.actions;
+const { GET_ACCESS_TOKEN } = RefreshTokenReducer.actions;
+const { GET_USER_INFO } = UserReducer.actions;
 
 function App() {
   const isAuth = useAppSelector((state) => state.Authorization.isAuth);
@@ -30,7 +30,6 @@ function App() {
   }, []);
 
   useEffect(() => {
-    
     if (isAuth) {
       dispatch(GET_USER_INFO());
     }
@@ -38,28 +37,28 @@ function App() {
   console.log(isAuth);
   return (
     <BrowserRouter>
-    <Routes>
-      <Route
-        path="/"
-        element={isAuth ? <BalanceComponent /> : <SignInForm />}
-      />
-      <Route
-        path="/registration"
-        element={isAuth ? <BalanceComponent /> : <Registration />}
-      />
-      <Route
-        path="/SignInForm"
-        element={isAuth ? <BalanceComponent /> : <SignInForm />}
-      />
-      
-      <Route path={"/home"} element={<Layout />}>
-            <Route index element={<Transactions/>}/>
-       </Route>
-
-    </Routes>
-  </BrowserRouter>
+      <Routes>
+        {isAuth ? (
+          <Route path={"/"} element={<Layout />}>
+            <Route index element={<Transactions />} />
+            <Route path='*' element={<Navigate to='/' />} />
+          </Route>
+        ) : (
+          <>
+           <Route
+              path='SignInForm' 
+              element={<SignInForm />}
+            />
+            <Route
+              path="/registration"
+              element={<Registration />}
+            />
+            <Route path='*' element={<Navigate to='/SignInForm' />} />
+          </>
+        )}
+      </Routes>
+    </BrowserRouter>
   );
 }
 
 export default App;
-

@@ -5,6 +5,9 @@ import TransactionCreate from "../../components/TransactionCreate/TransactionCre
 
 import {default as test} from "../../components/TransactionList/testData.json"
 import TimeScopePanel from '../../components/TimeScopePanel/TimeScopePanel';
+import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { AuthorizationReducer } from "../../store/Example/Reducers/AuthorizationReducer";
+import { useNavigate } from "react-router";
 
 
 const tmpFunc = (filter: "income" | "expense") => {
@@ -13,8 +16,12 @@ const tmpFunc = (filter: "income" | "expense") => {
 }
 
 const Transactions = () => {
+    const { SIGN_OUT } = AuthorizationReducer.actions;
+    const navigate = useNavigate ();
+
     const expense = tmpFunc("expense")
     const income = tmpFunc("income")
+    const dispatch = useAppDispatch();
 
     const [defaultTransaction, setDefaultTransaction] = useState<"expense" | "income" | "transfer">("expense")
 
@@ -50,6 +57,13 @@ const Transactions = () => {
                     handlePopupOpen()
                 }} className={"new-transaction button"}> + </div>
             }
+            <button className="button " onClick={() =>
+        {
+      dispatch(SIGN_OUT())
+      navigate('/')
+      }}>
+        Sign Out
+      </button>
         </main>
     );
 };

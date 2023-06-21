@@ -6,6 +6,8 @@ import { validateEmail, validatePassword } from "../../tools/validator";
 import InputWrapper from "../../elements/InputWrapper";
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
+import React from "react";
+import { Link } from "react-router-dom";
 
 
 const { REGISTRATION } = RegistrationReducer.actions;
@@ -143,7 +145,7 @@ const RegistrationForm = () => {
         <button className="button">Sign Up</button>
 
         <p className="login-text">
-          Have an account? <a href={"/SignInForm"}>Log In</a>
+          Have an account? <Link to={"/SignInForm"}>Log In</Link>
         </p>
       </form>
     </div>
