@@ -11,11 +11,11 @@ namespace MoneyTracker.App.GraphQl.User
         public UserQuery(IUserRepository userRepository) {
 
             Field<UserType>("GetUserData")
-                .Resolve(context =>
+                .ResolveAsync(async context =>
                 {
 
                     var userId = context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value;
-                    var user = userRepository.GetUserById(userId);
+                    var user = await userRepository.GetUserByIdAsync(userId);
 
                     return user;
                 }).Authorize();

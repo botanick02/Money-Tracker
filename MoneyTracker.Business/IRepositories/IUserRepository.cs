@@ -4,14 +4,14 @@ namespace MoneyTracker.Business.IRepositories
 {
     public interface IUserRepository
     {
-        User? GetUserById(string id);
+        Task<User?> GetUserByIdAsync(string id);
 
-        User? GetUserByEmail(string email);
+        Task<User?> GetUserByEmailAsync(string email);
 
-        User? CreateUser(User user);
+        Task<User?> CreateUserAsync(User user);
 
-        User? UpdateUser(User user);
+        Task<User?> UpdateUserAsync(User user);
 
-        bool DeleteUser(User user);
+        Task<bool> DeleteUserAsync(User user);
     }
 }
