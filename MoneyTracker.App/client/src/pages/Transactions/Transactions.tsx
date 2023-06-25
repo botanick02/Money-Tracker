@@ -63,6 +63,8 @@ const Transactions = () => {
         </div>
       </div>
       <TransactionList />
+      <TransactionList />
+      <TransactionList />
       {!isCreatePopupOpen && (
         <div
           onClick={() => {

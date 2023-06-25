@@ -39,19 +39,15 @@ function App() {
         {isAuth ? (
           <Route path={"/"} element={<Layout />}>
             <Route index element={<Transactions />} />
-            <Route path='*' element={<Navigate to='/' />} />
+            <Route path="/budgets" element={<>sdfsdf</>} />
+            <Route path="/stats" element={<></>} />
+            <Route path="/settings" element={<></>} />
           </Route>
         ) : (
           <>
-           <Route
-              path='SignInForm' 
-              element={<SignInForm />}
-            />
-            <Route
-              path="/registration"
-              element={<Registration />}
-            />
-            <Route path='*' element={<Navigate to='/SignInForm' />} />
+            <Route path="SignInForm" element={<SignInForm />} />
+            <Route path="/registration" element={<Registration />} />
+            <Route path="*" element={<Navigate to="/SignInForm" />} />
           </>
         )}
       </Routes>
