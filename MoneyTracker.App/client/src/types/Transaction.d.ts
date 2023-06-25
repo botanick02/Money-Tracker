@@ -1,3 +1,5 @@
+import { Category } from "./Category";
+
 interface Transaction {
     id: number,
     amount: number,

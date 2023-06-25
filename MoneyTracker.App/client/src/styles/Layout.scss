@@ -1,9 +1,23 @@
 @import "Variables";
 
+
 .header {
+    position: sticky;
+    top: 0px;
     height: 58px;
     width: 100%;
     background-color: $primary-dark-color;
     display: flex;
     align-items: center;
 }
+
+.nav-menu {
+    position: sticky;
+    width: 100%;
+    height: 58px;
+    bottom: 0px;
+    background-color: $primary-dark-color;
+    display: flex;
+}
+
+@import "AccountSelector";

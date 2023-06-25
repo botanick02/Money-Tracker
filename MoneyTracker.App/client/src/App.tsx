@@ -1,9 +1,7 @@
 import React, { useEffect } from "react";
-
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "./hooks/useAppDispatch";
 import SignInForm from "./pages/SignIn/SignInForm";
-import BalanceComponent from "./pages/Balance/BalanceComponent";
 import { RefreshTokenReducer } from "./store/Example/Reducers/RefreshTokenReducer";
 import { UserReducer } from "./store/Example/Reducers/UserReducer";
 import { checkTokenExpire } from "./tools/checkTokenExpire";
