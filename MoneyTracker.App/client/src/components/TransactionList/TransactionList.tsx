@@ -1,6 +1,7 @@
 import React from 'react';
 import {default as test} from "./testData.json"
 import TransactionItem from "../../elements/TransactionItem";
+import { Transaction } from '../../types/Transaction';
 
 const getOnlyDate = (dateString: string) => {
     const date = new Date(dateString);

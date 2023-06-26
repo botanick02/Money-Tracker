@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { IUserType, UserLoginType } from "../../types/IUserType";
 import "../../styles/Registration.scss";
 import { AuthorizationReducer } from "../../store/Example/Reducers/AuthorizationReducer";
 import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
