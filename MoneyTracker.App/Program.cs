@@ -8,6 +8,7 @@ using MoneyTracker.Business.IRepositories;
 using MoneyTracker.Business.Services;
 using MoneyTracker.Business.Utilities;
 using MoneyTracker.MsSQL.Repositories;
+using Google.Apis.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,7 +28,7 @@ builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 builder.Services.AddTransient<AuthService>();
 builder.Services.AddTransient<TokenService>();
-builder.Services.AddTransient<PasswordHashService>();
+builder.Services.AddTransient<PasswordHashService>(); 
 builder.Services.AddSingleton<IUserRepository, UserRepository>();
 
 builder.Services.AddHttpContextAccessor();
