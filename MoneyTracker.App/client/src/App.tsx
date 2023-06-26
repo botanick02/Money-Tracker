@@ -39,9 +39,10 @@ function App() {
         {isAuth ? (
           <Route path={"/"} element={<Layout />}>
             <Route index element={<Transactions />} />
-            <Route path="/budgets" element={<>sdfsdf</>} />
-            <Route path="/stats" element={<></>} />
-            <Route path="/settings" element={<></>} />
+            <Route path="/budgets" element={<main>sdfsdf</main>} />
+            <Route path="/stats" element={<main></main>} />
+            <Route path="/settings" element={<main></main>} />
+            <Route path="*" element={<Navigate to="/" />} />
           </Route>
         ) : (
           <>

@@ -29,11 +29,12 @@ const Transactions = () => {
 
   const [isCreatePopupOpen, setIsCreatePopupOpen] = useState<boolean>(false);
   const handlePopupOpen = () => {
+    document.body.classList.toggle("no-scroll");
     setIsCreatePopupOpen((prevState) => !prevState);
   };
 
   return (
-    <>
+    <main>
       {isCreatePopupOpen && (
         <TransactionCreate
           transactionDefaultType={defaultTransaction}
@@ -41,7 +42,6 @@ const Transactions = () => {
         />
       )}
       <TimeScopePanel />
-
       <div className={"transaction-sums"}>
         <div
           onClick={() => {
@@ -62,9 +62,9 @@ const Transactions = () => {
           {expense} $
         </div>
       </div>
+
       <TransactionList />
-      <TransactionList />
-      <TransactionList />
+
       {!isCreatePopupOpen && (
         <div
           onClick={() => {
@@ -85,7 +85,7 @@ const Transactions = () => {
       >
         Sign Out
       </button>
-    </>
+    </main>
   );
 };
 
