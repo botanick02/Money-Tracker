@@ -1,6 +1,6 @@
-import {Category} from "./Category";
+import { Category } from "./Category";
 
-export interface Transaction {
+interface Transaction {
     id: number,
     amount: number,
     category: Category,

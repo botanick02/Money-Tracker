@@ -1,9 +1,7 @@
 import React, { useEffect } from "react";
-
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "./hooks/useAppDispatch";
 import SignInForm from "./pages/SignIn/SignInForm";
-import BalanceComponent from "./pages/Balance/BalanceComponent";
 import { RefreshTokenReducer } from "./store/Example/Reducers/RefreshTokenReducer";
 import { UserReducer } from "./store/Example/Reducers/UserReducer";
 import { checkTokenExpire } from "./tools/checkTokenExpire";
@@ -41,19 +39,16 @@ function App() {
         {isAuth ? (
           <Route path={"/"} element={<Layout />}>
             <Route index element={<Transactions />} />
-            <Route path='*' element={<Navigate to='/' />} />
+            <Route path="/budgets" element={<main>sdfsdf</main>} />
+            <Route path="/stats" element={<main></main>} />
+            <Route path="/settings" element={<main></main>} />
+            <Route path="*" element={<Navigate to="/" />} />
           </Route>
         ) : (
           <>
-           <Route
-              path='SignInForm' 
-              element={<SignInForm />}
-            />
-            <Route
-              path="/registration"
-              element={<Registration />}
-            />
-            <Route path='*' element={<Navigate to='/SignInForm' />} />
+            <Route path="SignInForm" element={<SignInForm />} />
+            <Route path="/registration" element={<Registration />} />
+            <Route path="*" element={<Navigate to="/SignInForm" />} />
           </>
         )}
       </Routes>

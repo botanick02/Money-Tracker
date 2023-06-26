@@ -15,24 +15,24 @@ namespace MoneyTracker.MsSQL.Repositories
                 PasswordSalt = "zjXh750tlEvmvRM1HAVj7g=="
             });
         }
-        public User? GetUserById(string id)
+        public async Task<User?> GetUserByIdAsync(string id)
         {
             var user = users.FirstOrDefault(u => u.Id == id);
             return user;
         }
-        public User? GetUserByEmail(string email)
+        public async Task<User?> GetUserByEmailAsync(string email)
         {
             var user = users.FirstOrDefault(u => u.Email == email);
             return user;
         }
 
-        public User? CreateUser(User user)
+        public async Task<User?> CreateUserAsync(User user)
         {
             users.Add(user);
             return user;
         }
 
-        public User? UpdateUser(User user)
+        public async Task<User?> UpdateUserAsync(User user)
         {
             var existingUser = users.FirstOrDefault(u => u.Id == user.Id);
             if (existingUser != null)
@@ -44,7 +44,7 @@ namespace MoneyTracker.MsSQL.Repositories
             return existingUser;
         }
 
-        public bool DeleteUser(User user)
+        public async Task<bool> DeleteUserAsync(User user)
         {
             bool removed = users.Remove(user);
             return removed;
