@@ -8,6 +8,7 @@ import { checkTokenExpire } from "./tools/checkTokenExpire";
 import Registration from "./pages/Registration/Registration";
 import Transactions from "./pages/Transactions/Transactions";
 import Layout from "./components/common/Layout";
+import Settings from "./pages/Settings/Settings";
 
 const { GET_ACCESS_TOKEN } = RefreshTokenReducer.actions;
 const { GET_USER_INFO } = UserReducer.actions;
@@ -41,7 +42,7 @@ function App() {
             <Route index element={<Transactions />} />
             <Route path="/budgets" element={<main>sdfsdf</main>} />
             <Route path="/stats" element={<main></main>} />
-            <Route path="/settings" element={<main></main>} />
+            <Route path="/settings" element={<Settings/>}/>
             <Route path="*" element={<Navigate to="/" />} />
           </Route>
         ) : (
