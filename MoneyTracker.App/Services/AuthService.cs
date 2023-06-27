@@ -96,8 +96,7 @@ namespace MoneyTracker.Business.Services
                 throw new UserAlreadyExistsException();
             }
 
-            var newId = Guid.NewGuid().ToString();
-            var user = new User(newId, newUser.Email, newUser.Name);
+            var user = new User(newUser.Email, newUser.Name);
 
             user.PasswordHash = passwordHashService.HashPassword(newUser.Password, out string salt);
             user.PasswordSalt = salt;
@@ -119,8 +118,7 @@ namespace MoneyTracker.Business.Services
 
         public async Task<LoginResponse> RegisterGoogleUser(string email, string name, HttpContext context)
         {
-            var newId = Guid.NewGuid().ToString();
-            var user = new User(newId, email, name);
+            var user = new User(email, name);
 
             var createdUser = await userRepository.CreateUserAsync(user);
             if (createdUser == null)

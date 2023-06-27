@@ -9,7 +9,7 @@ namespace MoneyTracker.MsSQL.Repositories
 
         public UserRepository()
         {
-            users.Add(new User("ff5a686f-809f-45b4-8ec6-1749723c2738", "john@example.com", "John")
+            users.Add(new User("john@example.com", "John")
             {
                 PasswordHash = "iRvIS1UHa2MZ7sExsJCL9uZrd+uEdWlr+Y/KUrnH1iI=",
                 PasswordSalt = "zjXh750tlEvmvRM1HAVj7g=="
@@ -17,7 +17,7 @@ namespace MoneyTracker.MsSQL.Repositories
         }
         public async Task<User?> GetUserByIdAsync(string id)
         {
-            var user = users.FirstOrDefault(u => u.Id == id);
+            var user = users.FirstOrDefault(u => u.Id.ToString() == id);
             return user;
         }
         public async Task<User?> GetUserByEmailAsync(string email)
