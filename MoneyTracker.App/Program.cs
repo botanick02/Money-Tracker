@@ -4,11 +4,16 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using MoneyTracker.App.Authentication;
 using MoneyTracker.App.GraphQl;
-using MoneyTracker.Business.IRepositories;
 using MoneyTracker.Business.Services;
 using MoneyTracker.Business.Utilities;
 using MoneyTracker.MsSQL.Repositories;
 using Google.Apis.Auth;
+using MoneyTracker.Business.Interfaces;
+using MoneyTracker.Infrastructure.EventStore;
+using MoneyTracker.Business.Commands;
+using MoneyTracker.Business.CommandHandlers;
+using MoneyTracker.Business.Events;
+using MoneyTracker.Business.EventHandlers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +35,15 @@ builder.Services.AddTransient<AuthService>();
 builder.Services.AddTransient<TokenService>();
 builder.Services.AddTransient<PasswordHashService>(); 
 builder.Services.AddSingleton<IUserRepository, UserRepository>();
+builder.Services.AddSingleton<ITransactionRepository, TransactionRepository>();
+builder.Services.AddSingleton<IEventStore, EventStore>();
+
+builder.Services.AddTransient<ICommandHandler<CreateTransactionCommand>, CreateTransactionCommandHandler>();
+builder.Services.AddTransient<CommandDispatcher>();
+
+builder.Services.AddTransient<IEventHandler<TransactionCreatedEvent>, TransactionCreatedEventHandler>();
+builder.Services.AddTransient<EventDispatcher>();
+
 
 builder.Services.AddHttpContextAccessor();
 

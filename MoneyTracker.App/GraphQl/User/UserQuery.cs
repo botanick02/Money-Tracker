@@ -1,7 +1,7 @@
 ﻿using GraphQL;
 using GraphQL.Types;
 using MoneyTracker.App.GraphQl.User.Types;
-using MoneyTracker.Business.IRepositories;
+using MoneyTracker.Business.Interfaces;
 using System.Security.Claims;
 
 namespace MoneyTracker.App.GraphQl.User

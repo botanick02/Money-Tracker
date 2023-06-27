@@ -1,5 +1,4 @@
-﻿using MoneyTracker.Business.IRepositories;
-using MoneyTracker.Business.Entities;
+﻿using MoneyTracker.Business.Entities;
 using System.Security.Claims;
 using MoneyTracker.App.GraphQl.Auth.Types.Inputs;
 using MoneyTracker.App.GraphQl.Auth.Types;
@@ -7,6 +6,7 @@ using AutoMapper;
 using MoneyTracker.App.Helpers;
 using Google.Apis.Auth;
 using System.Runtime.Serialization;
+using MoneyTracker.Business.Interfaces;
 
 namespace MoneyTracker.Business.Services
 {
@@ -96,8 +96,7 @@ namespace MoneyTracker.Business.Services
                 throw new UserAlreadyExistsException();
             }
 
-            var newId = Guid.NewGuid().ToString();
-            var user = new User(newId, newUser.Email, newUser.Name);
+            var user = new User(newUser.Email, newUser.Name);
 
             user.PasswordHash = passwordHashService.HashPassword(newUser.Password, out string salt);
             user.PasswordSalt = salt;
@@ -119,8 +118,7 @@ namespace MoneyTracker.Business.Services
 
         public async Task<LoginResponse> RegisterGoogleUser(string email, string name, HttpContext context)
         {
-            var newId = Guid.NewGuid().ToString();
-            var user = new User(newId, email, name);
+            var user = new User(email, name);
 
             var createdUser = await userRepository.CreateUserAsync(user);
             if (createdUser == null)

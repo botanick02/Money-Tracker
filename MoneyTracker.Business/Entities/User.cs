@@ -4,7 +4,7 @@ namespace MoneyTracker.Business.Entities
 {
     public class User
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         public string Name { get; set; }
 
@@ -16,9 +16,8 @@ namespace MoneyTracker.Business.Entities
 
         public string? RefreshToken { get; set; }
 
-        public User(Guid id, string email, string name)
+        public User(string email, string name)
         {
-            Id = id;
             Name = name;
             Email = email;
         }

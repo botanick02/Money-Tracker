@@ -1,6 +1,6 @@
 ﻿using MoneyTracker.Business.Entities;
 
-namespace MoneyTracker.Business.IRepositories
+namespace MoneyTracker.Business.Interfaces
 {
     public interface IUserRepository
     {
