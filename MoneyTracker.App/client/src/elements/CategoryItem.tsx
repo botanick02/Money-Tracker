@@ -10,9 +10,9 @@ const CategoryItem: FC<{ transaction: Transaction, percentage: number, color: st
         <img src={transaction.category.iconUrl} alt="category" />
       </div>
       <div>
-        <div className="category__title">{transaction.category.name}{transaction.category.percentage}</div>
+        <div className="category__title">{transaction.category.name} </div>
       </div>
-      <div className="category__amount">{transaction.amount} $ {percentage}</div>
+      <div className="category__amount">{transaction.amount} $ | {percentage} % </div>
     </div>
   );
 };
