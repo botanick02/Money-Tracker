@@ -1,0 +1,39 @@
+@import "src/styles/Variables";
+
+.category-sums{
+  display: flex;
+  justify-content: space-between;
+  padding: 0 8px;
+  margin-top: 20px;
+
+  >div{
+    width: 116px;
+    height: 27px;
+    border-radius: 10px;
+    text-align: center;
+    padding: 5px;
+    cursor: pointer;
+
+  }
+  &__income{
+    background: $primary-color;
+  }
+  &__expense{
+    background: $secondary-color;
+  }
+}
+
+.new-category{
+  position: fixed;
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+  font-size: 35px;
+  font-weight: 300;
+  padding: 14px;
+  right: 15px;
+  bottom: $layout-panel_height + 15px;
+}
+
+@import "CategoryList";
+@import "CategoryCreate";

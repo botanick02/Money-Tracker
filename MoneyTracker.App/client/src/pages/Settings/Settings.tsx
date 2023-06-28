@@ -13,16 +13,17 @@ const Settings = () => {
 
   return (
     <main>
- 
-      <button
-        className="button "
-        onClick={() => {
-          dispatch(SIGN_OUT());
-          navigate("/");
-        }}
-      >
-        Sign Out
-      </button>
+ <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+  <button
+    className="button"
+    onClick={() => {
+      dispatch(SIGN_OUT());
+      navigate("/");
+    }}
+  >
+    Sign Out
+  </button>
+</div>
     </main>
   );
 };
