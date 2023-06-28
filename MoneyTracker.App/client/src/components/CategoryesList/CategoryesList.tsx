@@ -46,14 +46,18 @@ const CategoryesList = () => {
     0
   );
 
- 
+  const sortedCategories = Object.values(categorySummary).sort((a, b) => {
+    const percentageA = (a.amount / totalAmount) * 100;
+    const percentageB = (b.amount / totalAmount) * 100;
+    return percentageB - percentageA;
+  });
 
   return (
     <div>
       <div className="chart-container">
         <div className="chart-wrapper">
           <PieChart
-            data={Object.values(categorySummary).map((category) => ({
+            data={Object.values(sortedCategories).map((category) => ({
               title: category.category.name,
               value: category.amount,
               color: category.color // Используем рандомный цвет категории
@@ -64,7 +68,7 @@ const CategoryesList = () => {
         </div>
       </div>
       <div className="category-list">
-        {Object.values(categorySummary).map((category) => {
+        {Object.values(sortedCategories).map((category) => {
           const percentage = parseFloat(((category.amount / totalAmount) * 100).toFixed(2));
 
           return (
