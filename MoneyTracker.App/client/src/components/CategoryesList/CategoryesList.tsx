@@ -9,10 +9,19 @@ interface CategorySummary {
   [categoryId: number]: {
     amount: number;
     category: Category;
+    color: string; // Добавляем поле для хранения цвета
   };
 }
 
 const CategoryesList = () => {
+    const getRandomColor = () => {
+        const letters = '0123456789ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+          color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+      };
   const Categoryes = test as Transaction[];
 
   const categorySummary: CategorySummary = {};
@@ -26,7 +35,8 @@ const CategoryesList = () => {
     } else {
       categorySummary[categoryId] = {
         amount: amount,
-        category: item.category
+        category: item.category,
+        color: getRandomColor() // Генерируем рандомный цвет для категории
       };
     }
   });
@@ -36,14 +46,7 @@ const CategoryesList = () => {
     0
   );
 
-  const getRandomColor = () => {
-    const letters = '0123456789ABCDEF';
-    let color = '#';
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-  };
+ 
 
   return (
     <div>
@@ -53,20 +56,10 @@ const CategoryesList = () => {
             data={Object.values(categorySummary).map((category) => ({
               title: category.category.name,
               value: category.amount,
-              color: getRandomColor()
+              color: category.color // Используем рандомный цвет категории
             }))}
-          
-           
             animate
             animationDuration={500}
-            label={({ dataEntry }) => `${Math.round(dataEntry.percentage)}%`} // Отображение процентов
-            labelPosition={45} // Расположение процентов внутри сегментов
-            labelStyle={{
-              fontSize: '10px',
-              fontFamily: 'sans-serif',
-              fill: '#fff',
-              fontWeight: 'bold'
-            }} // Стиль для отображения процентов
           />
         </div>
       </div>
@@ -79,6 +72,7 @@ const CategoryesList = () => {
               key={category.category.id}
               transaction={category}
               percentage={percentage}
+              color={category.color} // Передаем рандомный цвет в CategoryItem
             />
           );
         })}
