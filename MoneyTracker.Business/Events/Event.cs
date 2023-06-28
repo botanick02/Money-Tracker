@@ -8,9 +8,9 @@
 
         public int Version { get; init; }
 
-        public DateTime TimeStamp { get; init; }
-
         public string Type { get; init; }
+
+        public DateTime CreatedAt { get; init; }
 
         public string Data { get; init; }
     }

@@ -3,6 +3,7 @@ using MoneyTracker.Business.Events;
 using MoneyTracker.Business.Interfaces;
 using Newtonsoft.Json;
 using static MoneyTracker.Business.Commands.Category.CategoryCommands;
+using static MoneyTracker.Business.Events.Categories.CategoryEvents;
 
 namespace MoneyTracker.Business.Commands.Category
 {
@@ -18,36 +19,20 @@ namespace MoneyTracker.Business.Commands.Category
 
         public bool Handle(CreateCategoryCommand command)
         {
-            var data = new CreateCategoryData()
+
+            var categoryId = Guid.NewGuid();
+
+            var categoryCreatedEvent = new CategoryCreated
             {
+                Id = categoryId,
                 Name = command.Name,
                 Type = command.Type,
             };
-            
 
-            var dataStr = JsonConvert.SerializeObject(data);
-
-            var categoryCreatedEvent = new Event
-            {
-                Id = Guid.NewGuid(),
-                StreamId = Guid.NewGuid(),
-                Type = "CreateCategory",
-                Version = 1,
-                TimeStamp = DateTime.Now,
-                Data = dataStr
-            };
-
-            eventStore.AppendEvent(categoryCreatedEvent);
+            eventStore.AppendEvent(categoryId, categoryCreatedEvent);
 
             return true;
         }
-    }
-
-    public class CreateCategoryData
-    {
-        public string Name { get; set; }
-
-        public string Type { get; set; }
     }
 
     public class UpdateCategoryNameCommandHandler : ICommandHandler<UpdateCategoryNameCommand>
@@ -68,33 +53,16 @@ namespace MoneyTracker.Business.Commands.Category
                 return false;
             }
 
-            existingEvents = existingEvents.OrderByDescending(e => e.Version);
+            var streamId = Guid.Parse(command.Id);
 
-            var data = new UpdateCategoryNameData
+            var categoryCreatedEvent = new CategoryNameUpdated
             {
                 Name = command.Name,
             };
 
-            var dataStr = JsonConvert.SerializeObject(data);
-
-            var categoryCreatedEvent = new Event
-            {
-                Id = Guid.NewGuid(),
-                StreamId = Guid.Parse(command.Id),
-                Type = "UpdateCategoryName",
-                Version = existingEvents.First().Version + 1,
-                TimeStamp = DateTime.Now,
-                Data = dataStr
-            };
-
-            eventStore.AppendEvent(categoryCreatedEvent);
+            eventStore.AppendEvent(streamId, categoryCreatedEvent);
 
             return true;
-        }
-
-        public class UpdateCategoryNameData
-        {
-            public string Name { get; set; }
         }
     }
 }

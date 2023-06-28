@@ -1,5 +1,6 @@
 ﻿using MoneyTracker.Business.Events;
 using MoneyTracker.Business.Interfaces;
+using Newtonsoft.Json;
 
 namespace MoneyTracker.Infrastructure.EventStore
 {
@@ -7,9 +8,9 @@ namespace MoneyTracker.Infrastructure.EventStore
     {
         private List<Event> eventStore = new List<Event>();
 
-        public T AggregateStream<T>(Guid streamId, T @default, Func<T, Event, T> evolve)
+        public T AggregateStream<T>(Guid streamId, T @default, Func<T, object, T> evolve)
         {
-            var events = GetEventsByAggregateId(streamId).OrderBy(e => e.Version);
+            var events = GetEventsByAggregateId(streamId);
 
             var aggregate = @default;
 
@@ -21,37 +22,24 @@ namespace MoneyTracker.Infrastructure.EventStore
             return aggregate;
         }
 
-        public void AppendEvent(Event @event)
+        public void AppendEvent<TEvent>(Guid streamId, TEvent @event)
         {
-            eventStore.Add(@event);
+            var events = eventStore.Where(e => e.StreamId == streamId).OrderByDescending(e => e.Version);
+
+            eventStore.Add(new Event
+            {
+                Id = Guid.NewGuid(),
+                Data = JsonConvert.SerializeObject(@event),
+                StreamId = streamId,
+                Type = @event.GetType().AssemblyQualifiedName,
+                Version = events.Any() ? events.First().Version + 1 : 1,
+            });
         }
 
-        public IEnumerable<Event> GetEventsByAggregateId(Guid aggregateId)
+        public List<object> GetEventsByAggregateId(Guid aggregateId)
         {
-            var events = new List<Event>();
-
-            foreach (var @event in eventStore)
-            {
-                if (@event.StreamId == aggregateId)
-                {
-                    events.Add(@event);
-                }
-            }
-
-            return events;
-        }
-
-        public IEnumerable<Event> GetEventsByType(string type)
-        {
-            var events = new List<Event>();
-
-            foreach (var @event in eventStore)
-            {
-                if (@event.Type == type)
-                {
-                    events.Add(@event);
-                }
-            }
+            var events = eventStore.Where(e => e.StreamId == aggregateId)
+                .Select(e => JsonConvert.DeserializeObject(e.Data, Type.GetType(e.Type))).ToList();
 
             return events;
         }

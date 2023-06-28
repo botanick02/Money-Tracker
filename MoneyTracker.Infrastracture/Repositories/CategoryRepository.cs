@@ -1,10 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using MoneyTracker.Business.Commands.Category;
-using MoneyTracker.Business.Entities;
-using MoneyTracker.Business.Events;
+﻿using MoneyTracker.Business.Entities;
 using MoneyTracker.Business.Interfaces;
-using Newtonsoft.Json;
-using static MoneyTracker.Business.Commands.Category.UpdateCategoryNameCommandHandler;
+using System.Diagnostics;
+using static MoneyTracker.Business.Events.Categories.CategoryEvents;
 
 namespace MoneyTracker.Infrastracture.Repositories
 {
@@ -17,45 +14,37 @@ namespace MoneyTracker.Infrastracture.Repositories
         }
         public Category GetCategoryById(Guid id)
         {
-            return eventStore.AggregateStream<Category>(id, new Category(), CategoryRepository.Evolve);
+            return eventStore.AggregateStream(id, new Category(), Evolve);
         }
 
-        public static Category Evolve(Category category, Event @event)
+        public static Category Evolve(Category category, object @event)
         {
-            switch (@event.Type)
+            return @event switch
             {
-                case "CreateCategory":
-                    return Create(@event);
-
-                case "UpdateCategoryName":
-                    return UpdateCategoryName(category, @event);
-
-                default: break;
-            }
-
-            return null;
-        }
-
-
-        public static Category Create(Event @event)
-        {
-            var data = JsonConvert.DeserializeObject<CreateCategoryData>(@event.Data);
-
-            return new Category()
-            {
-                Id = @event.StreamId,
-                Name = data.Name,
-                Type = data.Type,
+                CategoryCreated categoryCreated =>
+                    Create(categoryCreated),
+                CategoryNameUpdated categoryNameUpdated =>
+                    Apply(category, categoryNameUpdated),
             };
         }
 
-        public static Category UpdateCategoryName(Category category, Event @event)
-        {
-            var data = JsonConvert.DeserializeObject<UpdateCategoryNameData>(@event.Data);
 
+        private static Category Create(CategoryCreated @event)
+        {
+            return new Category()
+            {
+                Id = @event.Id,
+                Name = @event.Name,
+                Type = @event.Type,
+            };
+        }
+
+        private static Category Apply(Category category, CategoryNameUpdated @event)
+        {
             var updatedCategory = category;
-            updatedCategory.Name = data.Name;
+            updatedCategory.Name = @event.Name;
             return updatedCategory;
         }
+            
     }
 }

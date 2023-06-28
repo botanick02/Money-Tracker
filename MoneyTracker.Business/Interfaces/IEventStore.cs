@@ -4,12 +4,10 @@ namespace MoneyTracker.Business.Interfaces
 {
     public interface IEventStore
     {
-        public void AppendEvent(Event @event);
+        public void AppendEvent<TEvent>(Guid streamId, TEvent @event);
 
-        public IEnumerable<Event> GetEventsByAggregateId(Guid aggregateId);
+        public List<object> GetEventsByAggregateId(Guid aggregateId);
 
-        public IEnumerable<Event> GetEventsByType(string type);
-
-        public T AggregateStream<T>(Guid streamId, T @default, Func<T, Event, T> evolve);
+        public T AggregateStream<T>(Guid streamId, T @default, Func<T, object, T> evolve);
     }
 }

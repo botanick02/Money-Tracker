@@ -1,13 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MoneyTracker.Business.Events.Categories
+﻿namespace MoneyTracker.Business.Events.Categories
 {
     public class CategoryEvents
     {
-        
+        public record CategoryCreated
+        {
+            public Guid Id { get; init; }
+
+            public string Name { get; init; }
+
+            public string Type { get; init; }
+        }
+
+        public record CategoryNameUpdated
+        {
+            public string Name { get; init; }
+        }
     }
 }
