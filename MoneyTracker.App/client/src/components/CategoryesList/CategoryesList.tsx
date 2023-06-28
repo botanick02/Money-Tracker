@@ -9,7 +9,7 @@ interface CategorySummary {
   [categoryId: number]: {
     amount: number;
     category: Category;
-    color: string; // Добавляем поле для хранения цвета
+    color: string; 
   };
 }
 
@@ -36,7 +36,7 @@ const CategoryesList = () => {
       categorySummary[categoryId] = {
         amount: amount,
         category: item.category,
-        color: getRandomColor() // Генерируем рандомный цвет для категории
+        color: getRandomColor() 
       };
     }
   });
@@ -60,7 +60,7 @@ const CategoryesList = () => {
             data={Object.values(sortedCategories).map((category) => ({
               title: category.category.name,
               value: category.amount,
-              color: category.color // Используем рандомный цвет категории
+              color: category.color 
             }))}
             animate
             animationDuration={500}
@@ -76,7 +76,7 @@ const CategoryesList = () => {
               key={category.category.id}
               transaction={category}
               percentage={percentage}
-              color={category.color} // Передаем рандомный цвет в CategoryItem
+              color={category.color} 
             />
           );
         })}
