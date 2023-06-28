@@ -1,6 +1,6 @@
 ﻿using GraphQL.Types;
 using MoneyTracker.App.GraphQl.Auth;
-using MoneyTracker.App.GraphQl.Transaction;
+using MoneyTracker.App.GraphQl.Category;
 
 namespace MoneyTracker.App.GraphQl
 {
@@ -11,7 +11,7 @@ namespace MoneyTracker.App.GraphQl
             Field<AuthMutation>("Auth")
                     .Resolve(_ => new { });
 
-            Field<TransactionMutation>("Transaction")
+            Field<CategoryMutation>("Category")
                     .Resolve(_ => new { });
         }
     }

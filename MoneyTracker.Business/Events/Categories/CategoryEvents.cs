@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MoneyTracker.Business.Commands
+namespace MoneyTracker.Business.Events.Categories
 {
-    public interface ICommand
+    public class CategoryEvents
     {
+        
     }
 }

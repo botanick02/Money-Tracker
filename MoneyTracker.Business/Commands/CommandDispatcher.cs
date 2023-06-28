@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using MoneyTracker.Business.CommandHandlers;
-using System.Windows.Input;
+using System;
 
 namespace MoneyTracker.Business.Commands
 {
@@ -13,7 +12,7 @@ namespace MoneyTracker.Business.Commands
             this.serviceProvider = serviceProvider;
         }
 
-        public void Dispatch<TCommand>(TCommand command) where TCommand : ICommand
+        public void Dispatch<TCommand>(TCommand command)
         {
             var handler = serviceProvider.GetService<ICommandHandler<TCommand>>();
             if (handler == null)
