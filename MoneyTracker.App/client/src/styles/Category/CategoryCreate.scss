@@ -1,9 +1,9 @@
 @import "src/styles/Variables";
 
 
-.transaction-create-bg {
+.category-create-bg {
   overflow-y: hidden;
-  z-index: 4;
+  z-index: 3;
   position: fixed;
   top: 0;
   width: 100%;
@@ -15,7 +15,7 @@
   padding: 12px;
 }
 
-.transaction-create {
+.category-create {
   $border-radius: 20px;
   $padding: 31px;
 

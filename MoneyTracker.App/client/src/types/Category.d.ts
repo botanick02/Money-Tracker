@@ -3,4 +3,5 @@ export interface Category {
     name: string,
     iconUrl: string,
     type: "income" | "expense"
+    percentage?:number
 }

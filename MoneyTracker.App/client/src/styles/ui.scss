@@ -102,3 +102,46 @@
 .no-scroll{
   overflow: hidden;
 }
+
+.row-title{
+  width: 100%;
+  margin-top: calc(40px - 14px);
+  padding: 0 8px;
+}
+
+.row-item{
+  display: flex;
+  align-items: center;
+  height: 50px;
+  width: 100%;
+  padding: 0 8px;
+  position: relative;
+  background: $background-light-color;
+
+  &__indicator{
+    width: 8px;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    &__expense{background: $secondary-color}
+    &__income{background: $primary-color}
+  }
+  &__category-icon{
+    width: 50px;
+    height: 100%;
+    margin-right: 1em;
+  }
+  &__amount{
+    margin-left: auto;
+    &__expense{color: $secondary-color}
+    &__income{color: $primary-color}
+  }
+  &__title{
+    font-size: 16px;
+  }
+  &__sub-title{
+    font-size: 14px;
+    font-weight: 300;
+  }
+}

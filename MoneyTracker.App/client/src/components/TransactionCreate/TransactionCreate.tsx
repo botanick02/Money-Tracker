@@ -126,7 +126,7 @@ const TransactionCreate: React.FC<Props> = ({openPopupHandle, transactionDefault
                     <button onClick={() => {
                         handleSafe()
                     }} className={"button"}>
-                        Safe
+                        Save
                     </button>
                     <button onClick={() => {
                         handleCancel()

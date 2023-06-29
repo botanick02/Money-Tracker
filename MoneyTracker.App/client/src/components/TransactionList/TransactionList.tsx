@@ -17,7 +17,7 @@ const TransactionList = () => {
                 transactions.map((item, index)=> {
                         if (index == 0 || getOnlyDate(transactions[index-1].dateTime) != getOnlyDate(item.dateTime))
                             return <React.Fragment key={item.id}>
-                                <div className={"transaction-list__date"}>{getOnlyDate(item.dateTime)}</div>
+                                <div className={"row-title"}>{getOnlyDate(item.dateTime)}</div>
                                 <TransactionItem transaction={item}/>
                             </React.Fragment>
                         return <TransactionItem key={item.id} transaction={item}/>
