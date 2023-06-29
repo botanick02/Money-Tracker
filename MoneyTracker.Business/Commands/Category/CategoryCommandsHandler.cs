@@ -46,7 +46,7 @@ namespace MoneyTracker.Business.Commands.Category
 
         public bool Handle(UpdateCategoryNameCommand command)
         {
-            var existingEvents = eventStore.GetEventsByAggregateId(Guid.Parse(command.Id));
+            var existingEvents = eventStore.GetEvents(Guid.Parse(command.Id));
 
             if (!existingEvents.Any())
             {

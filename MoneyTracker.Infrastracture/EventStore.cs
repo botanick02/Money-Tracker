@@ -8,9 +8,9 @@ namespace MoneyTracker.Infrastructure.EventStore
     {
         private List<Event> eventStore = new List<Event>();
 
-        public T AggregateStream<T>(Guid streamId, T @default, Func<T, object, T> evolve)
+        public T AggregateStream<T>(Guid streamId, T @default, Func<T, object, T> evolve, int? version = null)
         {
-            var events = GetEventsByAggregateId(streamId);
+            var events = GetEvents(streamId, version);
 
             var aggregate = @default;
 
@@ -36,12 +36,16 @@ namespace MoneyTracker.Infrastructure.EventStore
             });
         }
 
-        public List<object> GetEventsByAggregateId(Guid aggregateId)
+        public List<object> GetEvents(Guid aggregateId, int? version = null)
         {
-            var events = eventStore.Where(e => e.StreamId == aggregateId)
-                .Select(e => JsonConvert.DeserializeObject(e.Data, Type.GetType(e.Type))).ToList();
+            var events = eventStore.Where(e => e.StreamId == aggregateId);
+            
+            if (version != null)
+            {
+                events = events.Where(e => e.Version <= version);
+            }
 
-            return events;
+            return events.Select(e => JsonConvert.DeserializeObject(e.Data, Type.GetType(e.Type))).ToList();
         }
     }
 }

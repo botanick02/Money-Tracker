@@ -11,12 +11,15 @@ namespace MoneyTracker.App.GraphQl.Category
     {
         public CategoryQuery(ICategoryRepository categoryRepository) {
             Field<CategoryType>("GetCategory")
-                .Argument<string>("CategoryId")
+                .Argument<StringGraphType>("CategoryId")
+                .Argument<IntGraphType>("Version")
                 .Resolve(context =>
                 {
                     var id = context.GetArgument<string>("CategoryId");
 
-                    return categoryRepository.GetCategoryById(Guid.Parse(id));
+                    var version = context.GetArgument<int?>("Version");
+
+                    return categoryRepository.GetCategoryById(Guid.Parse(id), version);
                 });
         }
     }
