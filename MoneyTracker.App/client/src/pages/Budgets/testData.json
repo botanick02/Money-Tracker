@@ -1,0 +1,67 @@
+[
+  {
+    "id": 1,
+    "category": {
+      "id": 1,
+      "name": "Food and Drink",
+      "iconUrl": "https://picsum.photos/51",
+      "type": "expense"
+    },
+    "limit": 500,
+    "spent": 50,
+    "dateStart": "2022-01-14 00:00:00",
+    "dateEnd": "2022-02-14 00:00:00"
+  },
+  {
+    "id": 2,
+    "category": {
+      "id": 2,
+      "name": "Health",
+      "iconUrl": "https://picsum.photos/50",
+      "type": "expense"
+    },
+    "limit": 200,
+    "spent": 80,
+    "dateStart": "2022-01-15 00:00:00",
+    "dateEnd": "2022-02-15 00:00:00"
+  },
+  {
+    "id": 3,
+    "category": {
+      "id": 3,
+      "name": "Restaurants",
+      "iconUrl": "https://picsum.photos/52",
+      "type": "expense"
+    },
+    "limit": 0,
+    "spent": 50,
+    "dateStart": null,
+    "dateEnd": null
+  },
+  {
+    "id": 4,
+    "category": {
+      "id": 4,
+      "name": "Entertainment",
+      "iconUrl": "https://picsum.photos/53",
+      "type": "expense"
+    },
+    "limit": 0,
+    "spent": 0,
+    "dateStart": null,
+    "dateEnd": null
+  },
+  {
+    "id": 5,
+    "category": {
+      "id": 5,
+      "name": "Transportation",
+      "iconUrl": "https://picsum.photos/51",
+      "type": "expense"
+    },
+    "limit": 0,
+    "spent": 20,
+    "dateStart": 0,
+    "dateEnd": 0
+  }
+]
