@@ -1,6 +1,5 @@
 using GraphQL;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using MoneyTracker.App.Authentication;
 using MoneyTracker.App.GraphQl;
@@ -8,7 +7,6 @@ using MoneyTracker.Business.IRepositories;
 using MoneyTracker.Business.Services;
 using MoneyTracker.Business.Utilities;
 using MoneyTracker.MsSQL.Repositories;
-using Google.Apis.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 
