@@ -1,0 +1,14 @@
+.budgets{
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  .row-title{
+    text-align: left;
+  }
+  .button{
+    padding: 0.5em;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 400;
+  }
+}

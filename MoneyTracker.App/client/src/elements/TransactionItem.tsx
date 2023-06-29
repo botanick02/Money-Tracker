@@ -7,16 +7,16 @@ import { Transaction } from '../types/Transaction';
 const TransactionItem: FC<{transaction: Transaction}> = ({transaction}) => {
 
     return (
-        <div className={"transaction"}>
-            <div className={`transaction__indicator transaction__indicator__${transaction.category.type}`}/>
-            <div className={"transaction__category-icon"}>
+        <div className={"row-item"}>
+            <div className={`row-item__indicator row-item__indicator__${transaction.category.type}`}/>
+            <div className={"row-item__category-icon"}>
                 <img src={transaction.category.iconUrl} alt="category"/>
             </div>
             <div>
-                <div className={"transaction__title"}>{transaction.title}</div>
-                <div className={"transaction__category-name"}>{transaction.category.name}</div>
+                <div className={"row-item__title"}>{transaction.title}</div>
+                <div className={"row-item__sub-title"}>{transaction.category.name}</div>
             </div>
-            <div className={`transaction__amount transaction__amount__${transaction.category.type}`}>{transaction.amount} $</div>
+            <div className={`row-item__amount transaction__amount__${transaction.category.type}`}>{transaction.amount} $</div>
         </div>
     );
 };
