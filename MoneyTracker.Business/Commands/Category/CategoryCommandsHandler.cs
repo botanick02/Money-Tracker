@@ -29,7 +29,7 @@ namespace MoneyTracker.Business.Commands.Category
                 Type = command.Type,
             };
 
-            eventStore.AppendEvent(categoryId, categoryCreatedEvent);
+            eventStore.AppendEvent(categoryCreatedEvent);
 
             return true;
         }
@@ -46,21 +46,20 @@ namespace MoneyTracker.Business.Commands.Category
 
         public bool Handle(UpdateCategoryNameCommand command)
         {
-            var existingEvents = eventStore.GetEvents(Guid.Parse(command.Id));
+            var existingEvents = eventStore.GetEvents();
 
             if (!existingEvents.Any())
             {
                 return false;
             }
 
-            var streamId = Guid.Parse(command.Id);
-
             var categoryCreatedEvent = new CategoryNameUpdated
             {
+                Id = Guid.Parse(command.Id),
                 Name = command.Name,
             };
 
-            eventStore.AppendEvent(streamId, categoryCreatedEvent);
+            eventStore.AppendEvent(categoryCreatedEvent);
 
             return true;
         }

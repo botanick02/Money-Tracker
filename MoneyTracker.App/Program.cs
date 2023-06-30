@@ -12,6 +12,10 @@ using MoneyTracker.Business.Commands;
 using MoneyTracker.Business.Commands.Category;
 using static MoneyTracker.Business.Commands.Category.CategoryCommands;
 using MoneyTracker.Infrastracture.Repositories;
+using MoneyTracker.Infrastracture;
+using MoneyTracker.Business.EventAppliers;
+using static MoneyTracker.Business.Events.Categories.CategoryEvents;
+using MoneyTracker.Business.EventAppliers.Category;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,16 +36,20 @@ builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 builder.Services.AddTransient<AuthService>();
 builder.Services.AddTransient<TokenService>();
 builder.Services.AddTransient<PasswordHashService>(); 
-builder.Services.AddSingleton<IUserRepository, UserRepository>();
+builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddSingleton<IEventStore, EventStore>();
-builder.Services.AddSingleton<ICategoryRepository, CategoryRepository>();
+builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
 
 builder.Services.AddTransient<ICommandHandler<CreateCategoryCommand>, CreateCategoryCommandHandler>();
 
 builder.Services.AddTransient<ICommandHandler<UpdateCategoryNameCommand>, UpdateCategoryNameCommandHandler>();
+
 builder.Services.AddTransient<CommandDispatcher>();
 
+builder.Services.AddTransient<IEventApplier<CategoryCreated>, CategoryCreatedEventApplier>();
+builder.Services.AddTransient<IEventApplier<CategoryNameUpdated>, CategoryNameUpdatedEventApplier>();
 
+builder.Services.AddTransient<ReadModelExtensions>();
 
 builder.Services.AddHttpContextAccessor();
 

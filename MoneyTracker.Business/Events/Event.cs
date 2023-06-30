@@ -4,8 +4,6 @@
     {
         public Guid Id { get; init; }
 
-        public Guid StreamId { get; init; }
-
         public int Version { get; init; }
 
         public string Type { get; init; }

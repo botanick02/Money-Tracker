@@ -1,21 +1,19 @@
 ﻿using MoneyTracker.Business.Entities;
 using MoneyTracker.Business.Interfaces;
-using MoneyTracker.Business.Services;
-using System.Diagnostics;
-using static MoneyTracker.Business.Events.Categories.CategoryEvents;
 
 namespace MoneyTracker.Infrastracture.Repositories
 {
     public class CategoryRepository : ICategoryRepository
     {
-        private readonly IEventStore eventStore;
-        public CategoryRepository(IEventStore eventStore)
+        private readonly ReadModelExtensions readModelExtensions;
+        public CategoryRepository(ReadModelExtensions readModelExtensions)
         {
-            this.eventStore = eventStore;
+            this.readModelExtensions = readModelExtensions;
         }
-        public Category GetCategoryById(Guid id, int? version = null)
+        public List<Category> GetCategories()
         {
-            return eventStore.AggregateStream(id, new Category(), CategoryService.Evolve, version);
+            var readModel = readModelExtensions.GetReadModel();
+            return readModel.Categories;
         }
 
     }

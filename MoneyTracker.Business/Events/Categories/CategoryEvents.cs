@@ -13,6 +13,8 @@
 
         public record CategoryNameUpdated
         {
+            public Guid Id { get; init; }
+
             public string Name { get; init; }
         }
     }

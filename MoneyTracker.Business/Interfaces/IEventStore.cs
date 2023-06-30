@@ -1,13 +1,11 @@
-﻿using MoneyTracker.Business.Events;
-
-namespace MoneyTracker.Business.Interfaces
+﻿namespace MoneyTracker.Business.Interfaces
 {
     public interface IEventStore
     {
-        public void AppendEvent<TEvent>(Guid streamId, TEvent @event);
+        public void AppendEvent<TEvent>(TEvent @event);
 
-        public List<object> GetEvents(Guid aggregateId, int? version = null);
+        public List<object> GetEvents();
 
-        public T AggregateStream<T>(Guid streamId, T @default, Func<T, object, T> evolve, int? version = null);
+        public T AggregateModel<T>(T @default, Func<T, object, T> evolve);
     }
 }

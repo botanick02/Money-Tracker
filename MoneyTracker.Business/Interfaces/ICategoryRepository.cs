@@ -9,6 +9,6 @@ namespace MoneyTracker.Business.Interfaces
 {
     public interface ICategoryRepository
     {
-        public Category GetCategoryById(Guid id, int? version = null);
+        public List<Category> GetCategories();
     }
 }
