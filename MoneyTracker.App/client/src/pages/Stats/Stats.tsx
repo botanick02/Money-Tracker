@@ -22,8 +22,23 @@ const Stats = () => {
 
   return (
     <main>
-  
       <TimeScopePanel />
+      <div className={"transaction-sums"}>
+        <div
+         
+          className={"transaction-sums__income"}
+        >
+          Income
+        </div>
+        <div
+          onClick={() => {
+           
+          }}
+          className={"transaction-sums__expense"}
+        >
+          Expense
+        </div>
+        </div>
       <CategoryesList />
     
     </main>
