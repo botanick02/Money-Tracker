@@ -6,9 +6,7 @@ const CategoryItem: FC<{ transaction: Transaction, percentage: number, color: st
   return (
     <div className="category">
       <div className={`category__indicator `} style={{ backgroundColor: color }} />
-      <div className="category__category-icon">
-        <img src={transaction.category.iconUrl} alt="category" />
-      </div>
+     
       <div>
         <div className="category__title">{transaction.category.name} </div>
       </div>

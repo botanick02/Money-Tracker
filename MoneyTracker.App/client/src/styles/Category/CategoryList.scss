@@ -1,16 +1,19 @@
 @import "src/styles/Variables";
 
 
-.category-list{
+.category-list {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  &__date{
-    width: 100%;
-    text-align: center;
-    margin-top: calc(40px - 14px);
-  }
+  margin-left: 20px; /* Задайте нужное значение отступа слева */
+  margin-right: 20px; /* Задайте нужное значение отступа справа */
 }
+
+.category-list__date {
+  width: 100%;
+  text-align: center;
+  margin-top: calc(40px - 14px);
+}
+
 
 .category{
   display: flex;
@@ -18,29 +21,18 @@
   height: 50px;
   width: 100%;
   padding-right: 8px;
-  background: $background-light-color;
+ 
 }
 
 .category__indicator {
-  width: 30px;
-  height: 100%;
- 
-
-  &__expense {
-    background: $secondary-color;
-  }
-
-  &__income {
-    background: $primary-color;
-  }
+  width: 25px;
+  height: 25px; 
+  border-radius: 50%; 
+  margin-right: 10px; 
 }
 
-.category__category-icon{
-  width: 50px;
-  height: 50px;
-  margin-right: 1em;
 
-}
+
 
 .category__amount{
   margin-left: auto;
