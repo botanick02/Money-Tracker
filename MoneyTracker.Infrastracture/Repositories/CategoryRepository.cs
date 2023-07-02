@@ -10,9 +10,9 @@ namespace MoneyTracker.Infrastracture.Repositories
         {
             this.readModelExtensions = readModelExtensions;
         }
-        public List<Category> GetCategories()
+        public List<Category> GetCategories(DateTime? dateTimeTo = null)
         {
-            var readModel = readModelExtensions.GetReadModel();
+            var readModel = readModelExtensions.GetReadModel(dateTimeTo);
             return readModel.Categories;
         }
 

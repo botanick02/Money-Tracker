@@ -37,18 +37,20 @@ namespace MoneyTracker.Business.Commands.Category
 
     public class UpdateCategoryNameCommandHandler : ICommandHandler<UpdateCategoryNameCommand>
     {
+        private readonly ICategoryRepository categoryRepository;
         private readonly IEventStore eventStore;
 
-        public UpdateCategoryNameCommandHandler(IEventStore eventStore)
+        public UpdateCategoryNameCommandHandler(ICategoryRepository categoryRepository, IEventStore eventStore)
         {
+            this.categoryRepository = categoryRepository;
             this.eventStore = eventStore;
         }
 
         public bool Handle(UpdateCategoryNameCommand command)
         {
-            var existingEvents = eventStore.GetEvents();
+            var existingCategory = categoryRepository.GetCategories().Find(c => c.Id == Guid.Parse(command.Id));
 
-            if (!existingEvents.Any())
+            if (existingCategory == null)
             {
                 return false;
             }

@@ -16,6 +16,7 @@ using MoneyTracker.Infrastracture;
 using MoneyTracker.Business.EventAppliers;
 using static MoneyTracker.Business.Events.Categories.CategoryEvents;
 using MoneyTracker.Business.EventAppliers.Category;
+using MoneyTracker.Business;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,6 +46,9 @@ builder.Services.AddTransient<ICommandHandler<CreateCategoryCommand>, CreateCate
 builder.Services.AddTransient<ICommandHandler<UpdateCategoryNameCommand>, UpdateCategoryNameCommandHandler>();
 
 builder.Services.AddTransient<CommandDispatcher>();
+builder.Services.AddTransient<EventDispatcher>();
+
+builder.Services.AddSingleton<CurrentReadModel>();
 
 builder.Services.AddTransient<IEventApplier<CategoryCreated>, CategoryCreatedEventApplier>();
 builder.Services.AddTransient<IEventApplier<CategoryNameUpdated>, CategoryNameUpdatedEventApplier>();

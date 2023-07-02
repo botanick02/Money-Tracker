@@ -1,4 +1,6 @@
-﻿namespace MoneyTracker.Business.EventAppliers
+﻿using MoneyTracker.Business.Interfaces;
+
+namespace MoneyTracker.Business.EventAppliers
 {
     public interface IEventApplier<T>
     {
