@@ -11,11 +11,20 @@ namespace MoneyTracker.App.GraphQl.User
         public UserQuery(IUserRepository userRepository) {
 
             Field<UserType>("GetUserData")
-                .ResolveAsync(async context =>
+                .Resolve(context =>
                 {
 
                     var userId = context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value;
-                    var user = await userRepository.GetUserByIdAsync(userId);
+
+                    if (!Guid.TryParse(userId, out var userGuidId))
+                    {
+                        var exception = new ExecutionError($"Invalid user id");
+                        exception.Code = "VALIDATION_ERROR";
+                        context.Errors.Add(exception);
+                        return false;
+                    }
+
+                    var user = userRepository.GetUserById(userGuidId);
 
                     return user;
                 }).Authorize();

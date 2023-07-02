@@ -2,6 +2,7 @@
 using GraphQL.Types;
 using MoneyTracker.App.GraphQl.Auth.Types.Inputs;
 using MoneyTracker.Business.Commands;
+using MoneyTracker.Business.Commands.Category;
 using static MoneyTracker.Business.Commands.Category.CategoryCommands;
 
 namespace MoneyTracker.App.GraphQl.Category
@@ -33,13 +34,31 @@ namespace MoneyTracker.App.GraphQl.Category
                     var id = context.GetArgument<string>("CategoryId");
                     var name = context.GetArgument<string>("Name");
 
+                    if (!Guid.TryParse(id, out var categoryGuidId))
+                    {
+                        var exception = new ExecutionError($"CategoryId: Category Id is invalid");
+                        exception.Code = "VALIDATION_ERROR";
+                        context.Errors.Add(exception);
+                        return false;
+                    }
+
                     var command = new UpdateCategoryNameCommand()
                     {
-                        Id = id,
+                        Id = categoryGuidId,
                         Name = name,
                     };
 
-                    commandDispatcher.Dispatch(command);
+                    try
+                    {
+                        commandDispatcher.Dispatch(command);
+                    }
+                    catch (CategoryNotFoundException ex)
+                    {
+                        var exception = new ExecutionError($"CategoryId: Category Id is invalid");
+                        exception.Code = "VALIDATION_ERROR";
+                        context.Errors.Add(exception);
+                        return false;
+                    }
                     return true;
                 });
         }

@@ -10,6 +10,8 @@ namespace MoneyTracker.Business.Entities
 
         public string Email { get; set; }
 
+        public bool GoogleAuth { get; set; }
+
         public string? PasswordHash { get; set; }
 
         public string? PasswordSalt { get; set; }

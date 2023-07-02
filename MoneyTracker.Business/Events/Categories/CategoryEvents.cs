@@ -2,7 +2,7 @@
 {
     public class CategoryEvents
     {
-        public record CategoryCreated
+        public record CategoryCreatedEvent
         {
             public Guid Id { get; init; }
 
@@ -11,7 +11,7 @@
             public string Type { get; init; }
         }
 
-        public record CategoryNameUpdated
+        public record CategoryNameUpdatedEvent
         {
             public Guid Id { get; init; }
 

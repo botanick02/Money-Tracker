@@ -4,14 +4,8 @@ namespace MoneyTracker.Business.Interfaces
 {
     public interface IUserRepository
     {
-        Task<User?> GetUserByIdAsync(string id);
+        User GetUserById(Guid id, DateTime? dateTimeTo = null);
 
-        Task<User?> GetUserByEmailAsync(string email);
-
-        Task<User?> CreateUserAsync(User user);
-
-        Task<User?> UpdateUserAsync(User user);
-
-        Task<bool> DeleteUserAsync(User user);
+        User GetUserByEmail(string email, DateTime? dateTimeTo = null);
     }
 }

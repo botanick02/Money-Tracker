@@ -2,6 +2,7 @@
 using MoneyTracker.Business.Events;
 using MoneyTracker.Business.Interfaces;
 using Newtonsoft.Json;
+using System.Runtime.Serialization;
 using static MoneyTracker.Business.Commands.Category.CategoryCommands;
 using static MoneyTracker.Business.Events.Categories.CategoryEvents;
 
@@ -22,7 +23,7 @@ namespace MoneyTracker.Business.Commands.Category
 
             var categoryId = Guid.NewGuid();
 
-            var categoryCreatedEvent = new CategoryCreated
+            var categoryCreatedEvent = new CategoryCreatedEvent
             {
                 Id = categoryId,
                 Name = command.Name,
@@ -48,22 +49,35 @@ namespace MoneyTracker.Business.Commands.Category
 
         public bool Handle(UpdateCategoryNameCommand command)
         {
-            var existingCategory = categoryRepository.GetCategories().Find(c => c.Id == Guid.Parse(command.Id));
+            var existingCategory = categoryRepository.GetCategories().Find(c => c.Id == command.Id);
 
             if (existingCategory == null)
             {
-                return false;
+                throw new CategoryNotFoundException("Category to update was not found");
             }
 
-            var categoryCreatedEvent = new CategoryNameUpdated
+            var categoryCreatedEvent = new CategoryNameUpdatedEvent
             {
-                Id = Guid.Parse(command.Id),
+                Id = command.Id,
                 Name = command.Name,
             };
 
             eventStore.AppendEvent(categoryCreatedEvent);
 
             return true;
+        }
+
+    }
+
+    [Serializable]
+    public class CategoryNotFoundException : Exception
+    {
+        public CategoryNotFoundException(string message)
+        {
+        }
+
+        protected CategoryNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
         }
     }
 }

@@ -15,14 +15,14 @@ namespace MoneyTracker.Business.Commands.Category
         }
 
         public class UpdateCategoryNameCommand
-        {
-            public string Id { get; set; }
+        {   
+            public Guid Id { get; set; }
             public string Name { get; set; }
         }
 
         public class DeactivateCategoryCommand
         {
-            public string Id { get; set; }
+            public Guid Id { get; set; }
         }
     }
 }
