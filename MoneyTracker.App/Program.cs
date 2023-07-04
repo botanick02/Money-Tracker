@@ -20,6 +20,10 @@ using static MoneyTracker.Business.Events.Auth.AuthEvents;
 using static MoneyTracker.Business.EventAppliers.Auth.AuthEventAppliers;
 using static MoneyTracker.Business.Commands.Auth.AuthCommands;
 using static MoneyTracker.Business.Commands.Auth.AuthCommandsHandler;
+using MoneyTracker.Business.ReadStoreModel;
+using MoneyTracker.Infrastracture.MsSQL;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,15 +37,19 @@ builder.Services.AddCors(options =>
                .AllowCredentials();
     });
 });
+builder.Services.AddTransient<IDBInitializer, MsSQLDBInitializer>();
+builder.Services.AddTransient<IEventStoreRepository, EventStoreMsSqlRepository>();
 
 builder.Services.Configure<AuthTokenSettings>(builder.Configuration.GetSection("AuthTokenSettings"));
-builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 builder.Services.AddTransient<AuthService>();
 builder.Services.AddTransient<TokenService>();
-builder.Services.AddTransient<PasswordHashService>(); 
+builder.Services.AddTransient<PasswordHashService>();
+
+
+builder.Services.AddTransient<IEventStore, EventStore>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
-builder.Services.AddSingleton<IEventStore, EventStore>();
 builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
 
 builder.Services.AddTransient<ICommandHandler<CreateCategoryCommand>, CreateCategoryCommandHandler>();
@@ -64,6 +72,7 @@ builder.Services.AddTransient<IEventApplier<GoogleUserRegisteredEvent>, GoogleUs
 builder.Services.AddTransient<IEventApplier<UserRefreshTokenSetEvent>, UserRefreshTokenSetEventApplier>();
 
 builder.Services.AddTransient<ReadModelExtensions>();
+
 
 builder.Services.AddHttpContextAccessor();
 
@@ -88,9 +97,14 @@ builder.Services.AddSpaStaticFiles(configuration =>
 {
     configuration.RootPath = "client/build";
 });
-
-
 var app = builder.Build();
+
+var dbInitializer = app.Services.GetRequiredService<IDBInitializer>();
+dbInitializer.InitializeDatabase();
+
+var currentReadModel = app.Services.GetRequiredService<CurrentReadModel>();
+var readModelExtensions = app.Services.GetRequiredService<ReadModelExtensions>();
+currentReadModel.CurrentModel = readModelExtensions.GetReadModel(DateTime.Now);
 
 app.UseAuthentication();
 app.UseAuthorization();

@@ -157,12 +157,13 @@ namespace MoneyTracker.Business.Services
         {
             var existingUser = userRepository.GetUserById(Guid.Parse(context.User.FindFirst(ClaimTypes.NameIdentifier)!.Value));
 
-            if (existingUser != null)
+            if (existingUser == null)
             {
-                await SetUserRefreshToken(existingUser.Id, null);
+                return true;
             }
 
             CookiesHelper.ClearRefreshTokenCookie(context);
+            await SetUserRefreshToken(existingUser.Id, null);
 
             return true;
         }

@@ -1,4 +1,5 @@
 ﻿using MoneyTracker.Business.Entities;
+using MoneyTracker.Business.ReadStoreModel;
 using static MoneyTracker.Business.Events.Auth.AuthEvents;
 
 namespace MoneyTracker.Business.EventAppliers.Auth

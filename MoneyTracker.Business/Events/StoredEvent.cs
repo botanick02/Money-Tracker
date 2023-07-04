@@ -2,9 +2,7 @@
 {
     public record StoredEvent
     {
-        public Guid Id { get; init; }
-
-        public int Version { get; init; }
+        public int Id { get; init; }
 
         public string Type { get; init; }
 

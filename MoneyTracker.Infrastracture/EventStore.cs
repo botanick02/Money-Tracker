@@ -1,7 +1,9 @@
-﻿using MoneyTracker.Business;
+﻿using Microsoft.Extensions.Configuration;
+using MoneyTracker.Business;
 using MoneyTracker.Business.EventAppliers;
 using MoneyTracker.Business.Events;
 using MoneyTracker.Business.Interfaces;
+using MoneyTracker.Business.ReadStoreModel;
 using MoneyTracker.Infrastracture;
 using Newtonsoft.Json;
 using System;
@@ -10,12 +12,12 @@ namespace MoneyTracker.Infrastructure.EventStore
 {
     public class EventStore : IEventStore
     {
-        private List<StoredEvent> eventStore = new List<StoredEvent>();
         private readonly CurrentReadModel currentReadModel;
-
-        public EventStore(CurrentReadModel currentReadModel)
+        private readonly IEventStoreRepository eventStoreRepository;
+        public EventStore(CurrentReadModel currentReadModel, IEventStoreRepository eventStoreRepository)
         {
             this.currentReadModel = currentReadModel;
+            this.eventStoreRepository = eventStoreRepository;
         }
 
         public T AggregateModel<T>(DateTime dateTimeTo, T @default, Func<T, object, T> evolve)
@@ -34,23 +36,21 @@ namespace MoneyTracker.Infrastructure.EventStore
 
         public void AppendEvent<TEvent>(TEvent @event)
         {
-            var events = eventStore;
-
-            eventStore.Add(new StoredEvent
+            var newEvent = new StoredEvent
             {
-                Id = Guid.NewGuid(),
                 Data = JsonConvert.SerializeObject(@event),
                 Type = @event.GetType().AssemblyQualifiedName,
-                Version = events.Any() ? events.First().Version + 1 : 1,
                 CreatedAt = DateTime.Now,
-            });
+            };
+
+            eventStoreRepository.AppendEvent(newEvent);
 
             currentReadModel.Update(@event);
         }
 
         public List<object> GetEvents(DateTime dateTimeTo)
         {
-            var events = eventStore.Where(e => e.CreatedAt <= dateTimeTo);
+            var events = eventStoreRepository.GetEvents(dateTimeTo);
             return events.Select(e => JsonConvert.DeserializeObject(e.Data, Type.GetType(e.Type))).ToList();
         }
     }

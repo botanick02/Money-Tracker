@@ -1,4 +1,5 @@
-﻿using static MoneyTracker.Business.Events.Categories.CategoryEvents;
+﻿using MoneyTracker.Business.ReadStoreModel;
+using static MoneyTracker.Business.Events.Categories.CategoryEvents;
 
 namespace MoneyTracker.Business.EventAppliers.Category
 {

@@ -12,12 +12,14 @@ namespace MoneyTracker.MsSQL.Repositories
         {
             this.readModelExtensions = readModelExtensions;
         }
+
         public User GetUserById(Guid id, DateTime? dateTimeTo = null)
         {
             var readModel = readModelExtensions.GetReadModel(dateTimeTo);
             var user = readModel.Users.FirstOrDefault(u => u.Id == id);
             return user;
         }
+
         public User GetUserByEmail(string email, DateTime? dateTimeTo = null)
         {
             var readModel = readModelExtensions.GetReadModel(dateTimeTo);

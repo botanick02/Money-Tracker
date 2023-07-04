@@ -1,6 +1,6 @@
-﻿using MoneyTracker.Business;
-using MoneyTracker.Business.EventAppliers;
+﻿using MoneyTracker.Business.EventAppliers;
 using MoneyTracker.Business.Interfaces;
+using MoneyTracker.Business.ReadStoreModel;
 
 namespace MoneyTracker.Infrastracture
 {
@@ -10,7 +10,7 @@ namespace MoneyTracker.Infrastracture
         private readonly EventDispatcher eventAppliersDispatcher;
         private readonly CurrentReadModel currentReadModel;
 
-        public ReadModelExtensions(IEventStore eventStore, IServiceProvider serviceProvider, EventDispatcher eventAppliersDispatcher, CurrentReadModel currentReadModel)
+        public ReadModelExtensions(IEventStore eventStore, EventDispatcher eventAppliersDispatcher, CurrentReadModel currentReadModel)
         {
             this.eventStore = eventStore;
             this.eventAppliersDispatcher = eventAppliersDispatcher;

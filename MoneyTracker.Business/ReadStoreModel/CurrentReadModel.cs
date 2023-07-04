@@ -1,17 +1,13 @@
-﻿using MoneyTracker.Business;
-using MoneyTracker.Business.EventAppliers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MoneyTracker.Business.EventAppliers;
+using MoneyTracker.Business.Interfaces;
+using MoneyTracker.Infrastracture;
 
-namespace MoneyTracker.Infrastracture
+namespace MoneyTracker.Business.ReadStoreModel
 {
     public class CurrentReadModel
     {
         private readonly EventDispatcher eventDispatcher;
-        public ReadModel CurrentModel { get; private set; }
+        public ReadModel CurrentModel { get; set; }
 
         public CurrentReadModel(EventDispatcher eventDispatcher)
         {

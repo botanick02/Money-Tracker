@@ -1,4 +1,4 @@
-﻿using MoneyTracker.Business.Interfaces;
+﻿using MoneyTracker.Business.ReadStoreModel;
 
 namespace MoneyTracker.Business.EventAppliers
 {
