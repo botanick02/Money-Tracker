@@ -20,7 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MoneyTracker.Business\MoneyTracker.Business.csproj" />
-    <ProjectReference Include="..\MoneyTracker.MsSQL\MoneyTracker.MsSQL.csproj" />
+    <ProjectReference Include="..\MoneyTracker.Infrastracture\MoneyTracker.Infrastracture.csproj" />
   </ItemGroup>
 
 </Project>
