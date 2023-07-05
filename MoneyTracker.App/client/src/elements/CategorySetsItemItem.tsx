@@ -14,7 +14,7 @@ const CategorySetsItem: FC<{category: ICategoryType}> = ({category}) => {
             </div>
             <div>
                 <div className={"row-item__title"}>{category.name}</div>
-                
+                <div className={"row-item__sub-title"}>{category.id}</div>
             </div>
 
         </div>

@@ -46,6 +46,7 @@ function App() {
             <Route path="/budgets" element={<Budgets/>} />
             <Route path="/stats" element={<Stats/>} />
             <Route path="/settings" element={<Settings/>}/>
+            <Route path="/CategoryList" element={<CategoryList/>}/>
             <Route path="*" element={<Navigate to="/" />} />
           </Route>
         ) : (

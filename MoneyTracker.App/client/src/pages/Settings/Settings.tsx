@@ -18,6 +18,7 @@ const Settings = () => {
 }
   return (
 <main>
+<div className="transaction-list">
   <Link to="/CategoryList">
     <SettingsItem item={item} />
   </Link>
@@ -31,6 +32,7 @@ const Settings = () => {
     >
       Sign Out
     </button>
+  </div>
   </div>
 </main>
   );
