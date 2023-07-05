@@ -71,3 +71,55 @@ export const CategoryItemsEpic: Epic<any, any, any> = (action$, state$) => {
     )
   );
 };
+
+
+const {
+  EDIT_CATEGORY,
+  EDIT_CATEGORY_SUCCESS,
+  EDIT_CATEGORY_ERROR,
+} = CategoryItemReducer.actions;
+
+export const EditCategoryEpic: Epic<any, any, any> = (action$, state$) => {
+  const editCategoryMutation = (categoryId: string, name: string) => {
+    return `mutation {
+      category {
+        renameCategoryTest(categoryId: "${categoryId}", name: "${name}")
+      }
+    }`;
+  };
+
+  return action$.pipe(
+    ofType(EDIT_CATEGORY),
+    mergeMap((action) => {
+      const { categoryId, name } = action.payload;
+      return from(
+        fetch(GraphQlEndpoint, {
+          method: "POST",
+          mode: "cors",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            query: editCategoryMutation(categoryId, name),
+          }),
+        })
+      ).pipe(
+        mergeMap((response) =>
+          from(response.json()).pipe(
+            mergeMap((data: any) => {
+              console.log(data);
+              if (data.errors) {
+                store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message));
+                return [EDIT_CATEGORY_ERROR(data.errors[0].message)];
+              } else {
+                return [EDIT_CATEGORY_SUCCESS({ editSuccess: true })];
+              }
+            })
+          )
+        )
+      );
+    })
+  );
+};

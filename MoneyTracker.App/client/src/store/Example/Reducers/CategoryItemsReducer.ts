@@ -7,6 +7,7 @@ export interface CreateCategoryState {
   error: null | string;
   categories: ICategoryType[];
   countOfElements: number;
+  editSuccess:boolean
 }
 
 const initialState: CreateCategoryState = {
@@ -14,6 +15,7 @@ const initialState: CreateCategoryState = {
   loading: false,
   categories: [],
   countOfElements: 10,
+  editSuccess:false
 };
 
 export const CategoryItemReducer = createSlice({
@@ -42,6 +44,27 @@ export const CategoryItemReducer = createSlice({
       state.loading = false;
       state.error = action.payload;
       state.categories = [];
+    },
+    EDIT_CATEGORY(
+      state,
+      action: PayloadAction<{ categoryId: string; name: string }>
+    ) {
+      state.editSuccess = false
+      state.loading = true;
+      state.error = null;
+    },
+    EDIT_CATEGORY_SUCCESS(
+      state,
+      action: PayloadAction<{ editSuccess: boolean;}>
+    ) {
+      state.loading = false;
+      state.error = null;
+      state.editSuccess = action.payload.editSuccess;
+     
+    },
+    EDIT_CATEGORY_ERROR(state, action: PayloadAction<string>) {
+      state.loading = false;
+      state.error = action.payload;
     },
   },
 });

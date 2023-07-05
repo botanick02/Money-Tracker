@@ -1,17 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import InputWrapper from "../../elements/InputWrapper";
 import Dropdown, { Option } from "../../elements/Dropdown/Dropdown";
+import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { CategoryItemReducer } from '../../store/Example/Reducers/CategoryItemsReducer';
 
 interface Props {
   openPopupHandle(): void;
   transactionDefaultType: string;
   name: string;
+id: string;
 }
 
 const CategoryCreate: React.FC<Props> = ({
   openPopupHandle,
   transactionDefaultType,
   name,
+  id
   
 }) => {
   const [type, setType] = useState(transactionDefaultType);
@@ -58,6 +62,7 @@ const CategoryCreate: React.FC<Props> = ({
   const handleColorChange = (option: Option) => {
     setColor(option);
   };
+  const { EDIT_CATEGORY } = CategoryItemReducer.actions;
 
   const [image, setImage] = useState<Option>(imageOptions[0]);
   const handleImageChange = (option: Option) => {
@@ -67,8 +72,15 @@ const CategoryCreate: React.FC<Props> = ({
   const handleCancel = () => {
     openPopupHandle();
   };
-
+  const dispatch = useAppDispatch();
   const handleSave = () => {
+    dispatch({
+      type: EDIT_CATEGORY,
+      payload: {
+        categoryId: id, 
+        name: inputValue 
+      }
+    });
     openPopupHandle();
   };
   const [inputValue, setInputValue] = useState(name);
@@ -76,7 +88,7 @@ const CategoryCreate: React.FC<Props> = ({
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
   };
-
+  
   return (
     <div className="transaction-create-bg">
       <div className="transaction-create">

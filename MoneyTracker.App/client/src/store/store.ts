@@ -8,7 +8,7 @@ import AuthorizationReducer from "./Example/Reducers/AuthorizationReducer";
 import RefreshTokenReducer from "./Example/Reducers/RefreshTokenReducer";
 import RegistrationReducer from "./Example/Reducers/RegistrationReducer";
 import CategoryReducer  from "./Example/Reducers/CategoryItemsReducer";
-import { CategoryItemsEpic } from "./Example/CategoryItemsEpic";
+import { CategoryItemsEpic, EditCategoryEpic } from "./Example/CategoryItemsEpic";
 
 const epicMiddleware = createEpicMiddleware()
 
@@ -18,7 +18,8 @@ const rootEpic = combineEpics(
     GetAccessTokenEpic,
     RegistrationEpic,
     GoogleAuthorizationEpic,
-    CategoryItemsEpic
+    CategoryItemsEpic,
+    EditCategoryEpic
 )
 
 const rootReducer = combineReducers({

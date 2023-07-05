@@ -8,7 +8,7 @@ import InputWrapper from "../../elements/InputWrapper";
 import { Link } from "react-router-dom";
 
 
-const { SIGN_IN, SIGN_IN_SUCCESS, SIGN_IN_ERROR, SIGN_IN_GOOGLE } =
+const { SIGN_IN,SIGN_IN_GOOGLE } =
   AuthorizationReducer.actions;
 const SignInForm = () => {
 
