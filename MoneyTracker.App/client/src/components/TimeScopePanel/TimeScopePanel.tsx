@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Dropdown, { Option } from "../../elements/Dropdown/Dropdown";
 import TimeScopeInput from "../../elements/TimeScopePanel/TimeScopeInput";
 import {
@@ -6,6 +6,11 @@ import {
   getCurrentISOMonthValue,
   getCurrentISOWeekValue,
 } from "../../tools/Dates/currentIsoDates";
+
+import { useDispatch } from "react-redux";
+import { SET_DATE_TIME } from "../../store/Example/Reducers/DateTimeReducer";
+import { useAppSelector } from "../../hooks/useAppDispatch";
+
 
 export enum TimeScopes {
   Daily,
@@ -28,6 +33,8 @@ export interface TimeScopeInputsType {
 }
 
 const TimeScopePanel = () => {
+  const dispatch = useDispatch();
+
   const [timeScopeInputs, setTimeScopeInputs] = useState<TimeScopeInputsType>({
     daily: getCurrentISODateValue(),
     weekly: getCurrentISOWeekValue(),
@@ -50,8 +57,16 @@ const TimeScopePanel = () => {
   const [currentTimeScope, setCurrentTimeScope] = useState(TimeScopes.Daily);
 
   const updateTImeScope = (option: Option) => {
-    setCurrentTimeScope(TimeScopes[option.value as keyof typeof TimeScopes]);
+    const timeScope = TimeScopes[option.value as keyof typeof TimeScopes];
+    setCurrentTimeScope(timeScope);
+
+
+    dispatch(SET_DATE_TIME(timeScopeInputs.daily+`T13:45:30`));
   };
+  useEffect(() => {
+    dispatch(SET_DATE_TIME(timeScopeInputs.daily+`T13:45:30`));
+    
+  }, [timeScopeInputs]);
 
   return (
     <div className={"time-scope-panel"}>

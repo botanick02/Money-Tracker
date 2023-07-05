@@ -9,6 +9,7 @@ import RefreshTokenReducer from "./Example/Reducers/RefreshTokenReducer";
 import RegistrationReducer from "./Example/Reducers/RegistrationReducer";
 import CategoryReducer  from "./Example/Reducers/CategoryItemsReducer";
 import { CategoryItemsEpic, EditCategoryEpic } from "./Example/CategoryItemsEpic";
+import DateTimeReducer from "./Example/Reducers/DateTimeReducer";
 
 const epicMiddleware = createEpicMiddleware()
 
@@ -29,6 +30,7 @@ const rootReducer = combineReducers({
     RefreshToken: RefreshTokenReducer,
     Category:CategoryReducer,
     Registration:RegistrationReducer,
+    DateTime:DateTimeReducer
  
 })
 
