@@ -4,7 +4,7 @@
     "amount": 6000,
     "category": {
       "id": 2,
-      "name": "Salary",
+      "name": "Rent",
       "iconUrl": "https://picsum.photos/51",
       "type": "income"
     }

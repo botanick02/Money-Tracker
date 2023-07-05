@@ -1,5 +1,4 @@
-﻿using MoneyTracker.Business.IRepositories;
-using MoneyTracker.Business.Entities;
+﻿using MoneyTracker.Business.Entities;
 using System.Security.Claims;
 using MoneyTracker.App.GraphQl.Auth.Types.Inputs;
 using MoneyTracker.App.GraphQl.Auth.Types;
@@ -7,6 +6,12 @@ using AutoMapper;
 using MoneyTracker.App.Helpers;
 using Google.Apis.Auth;
 using System.Runtime.Serialization;
+using MoneyTracker.Business.Interfaces;
+using MoneyTracker.Business.EventAppliers;
+using MoneyTracker.Business.Commands;
+using static MoneyTracker.Business.Commands.Auth.AuthCommands;
+using MoneyTracker.App;
+using System.Xml.Linq;
 
 namespace MoneyTracker.Business.Services
 {
@@ -15,21 +20,22 @@ namespace MoneyTracker.Business.Services
         private readonly IUserRepository userRepository;
         private readonly TokenService tokenService;
         private readonly PasswordHashService passwordHashService;
-        public AuthService(IUserRepository userRepository, TokenService tokenService, PasswordHashService passwordHashService)
+        private readonly CommandDispatcher commandDispatcher;
+        public AuthService(IUserRepository userRepository, TokenService tokenService, PasswordHashService passwordHashService, CommandDispatcher commandDispatcher)
         {
             this.userRepository = userRepository;
             this.tokenService = tokenService;
             this.passwordHashService = passwordHashService;
+            this.commandDispatcher = commandDispatcher;
         }
         public async Task<LoginResponse> AuthenticateUser(string email, string password, HttpContext context)
         {
-            var user = await userRepository.GetUserByEmailAsync(email);
+            var user = userRepository.GetUserByEmail(email);
 
             if (user == null || !passwordHashService.VerifyPassword(password, user.PasswordHash!, user.PasswordSalt!))
             {
                 throw new UnauthorizedAccessException("Invalid username or password.");
             }
-
             var accessToken = await GenerateTokensAndSetCookiesAsync(user, context);
 
             return new LoginResponse
@@ -44,7 +50,7 @@ namespace MoneyTracker.Business.Services
             {
                 var payload = await GoogleJsonWebSignature.ValidateAsync(googleToken);
 
-                var user = await userRepository.GetUserByEmailAsync(payload.Email);
+                var user = userRepository.GetUserByEmail(payload.Email);
 
                 if (user == null)
                 {
@@ -75,7 +81,7 @@ namespace MoneyTracker.Business.Services
 
             var claimPrincipal = tokenService.GetPrincipalFromToken(oldRefreshToken);
 
-            var user = await userRepository.GetUserByIdAsync(claimPrincipal.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var user = userRepository.GetUserById(Guid.Parse(claimPrincipal.FindFirst(ClaimTypes.NameIdentifier)!.Value));
             
             if (user == null) {
                 throw new InvalidJwtException("User doesn't not exist any more");
@@ -91,17 +97,23 @@ namespace MoneyTracker.Business.Services
 
         public async Task<LoginResponse> RegisterUser(UserCreateInput newUser, HttpContext context)
         {
-            if (await userRepository.GetUserByEmailAsync(newUser.Email) != null)
+            if (userRepository.GetUserByEmail(newUser.Email) != null)
             {
                 throw new UserAlreadyExistsException();
             }
 
-            var user = new User(newUser.Email, newUser.Name);
 
-            user.PasswordHash = passwordHashService.HashPassword(newUser.Password, out string salt);
-            user.PasswordSalt = salt;
-            
-            var createdUser = await userRepository.CreateUserAsync(user);
+            var command = new RegisterUserCommand
+            {
+                Email = newUser.Email,
+                Name = newUser.Name,
+                PasswordHash = passwordHashService.HashPassword(newUser.Password, out string salt),
+                PasswordSalt = salt,
+            };
+
+            commandDispatcher.Dispatch(command);
+
+            var createdUser = await TryGetCreatedUser(newUser.Email);
 
             if (createdUser == null)
             {
@@ -118,9 +130,16 @@ namespace MoneyTracker.Business.Services
 
         public async Task<LoginResponse> RegisterGoogleUser(string email, string name, HttpContext context)
         {
-            var user = new User(email, name);
+            var command = new RegisterGoogleUserCommand
+            {
+                Email = email,
+                Name = name,
+            };
 
-            var createdUser = await userRepository.CreateUserAsync(user);
+            commandDispatcher.Dispatch(command);
+
+            var createdUser = await TryGetCreatedUser(email);
+
             if (createdUser == null)
             {
                 throw new UserNotFoundException("User was not created or created incorrectly");
@@ -136,15 +155,15 @@ namespace MoneyTracker.Business.Services
 
         public async Task<bool> LogUserOut(HttpContext context)
         {
-            var existingUser = await userRepository.GetUserByIdAsync(context.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var existingUser = userRepository.GetUserById(Guid.Parse(context.User.FindFirst(ClaimTypes.NameIdentifier)!.Value));
 
-            if (existingUser != null)
+            if (existingUser == null)
             {
-                existingUser.RefreshToken = null;
-                await userRepository.UpdateUserAsync(existingUser);
+                return true;
             }
 
             CookiesHelper.ClearRefreshTokenCookie(context);
+            await SetUserRefreshToken(existingUser.Id, null);
 
             return true;
         }
@@ -156,10 +175,37 @@ namespace MoneyTracker.Business.Services
 
             CookiesHelper.SetRefrshTokenCookie(refreshToken, context);
 
-            user.RefreshToken = refreshToken;
-            await userRepository.UpdateUserAsync(user);
+            await SetUserRefreshToken(user.Id, refreshToken);
 
             return accessToken;
+        }
+
+        private async Task<bool> SetUserRefreshToken(Guid userId, string? refreshToken)
+        {
+            var command = new SetUserRefreshTokenCommand
+            {
+                UserId = userId,
+                RefreshToken = refreshToken,
+            };
+
+            commandDispatcher.Dispatch(command);
+
+            return true;
+        }
+
+        private async Task<User?> TryGetCreatedUser(string email)
+        {
+            for (int attempts = 0; attempts < 5; attempts++)
+            {
+                var user = userRepository.GetUserByEmail(email);
+                if (user != null)
+                {
+                    return user;
+                }
+
+                Thread.Sleep(1000); 
+            }
+            return null;
         }
     }
 

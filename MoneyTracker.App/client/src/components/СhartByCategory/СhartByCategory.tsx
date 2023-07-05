@@ -13,7 +13,7 @@ interface CategorySummary {
   };
 }
 
-const CategoryesList = () => {
+const СhartByCategory = () => {
     const getRandomColor = () => {
         const letters = '0123456789ABCDEF';
         let color = '#';
@@ -85,4 +85,4 @@ const CategoryesList = () => {
   );
 };
 
-export default CategoryesList;
+export default СhartByCategory;

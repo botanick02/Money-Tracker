@@ -11,6 +11,7 @@ import Layout from "./components/common/Layout";
 import Settings from "./pages/Settings/Settings";
 import Stats from "./pages/Stats/Stats";
 import Budgets from "./pages/Budgets/Budgets";
+import CategoryList from "./components/CategoryList/CategoryList";
 
 const { GET_ACCESS_TOKEN } = RefreshTokenReducer.actions;
 const { GET_USER_INFO } = UserReducer.actions;
@@ -45,6 +46,7 @@ function App() {
             <Route path="/budgets" element={<Budgets/>} />
             <Route path="/stats" element={<Stats/>} />
             <Route path="/settings" element={<Settings/>}/>
+            <Route path="/CategoryList" element={<CategoryList/>}/>
             <Route path="*" element={<Navigate to="/" />} />
           </Route>
         ) : (

@@ -9,7 +9,7 @@ import SetBudget from "../../components/SetBudget";
 const Budgets = () => {
     const data = test as Budget[]
     const budgeted = data.filter(item => item.limit > 0)
-    const nonBudgeted = data.filter(item => item.limit == 0)
+    const nonBudgeted = data.filter(item => item.limit === 0)
 
     return (
         <main className={"budgets"}>
