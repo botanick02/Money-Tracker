@@ -61,10 +61,10 @@ const TimeScopePanel = () => {
     setCurrentTimeScope(timeScope);
 
 
-    dispatch(SET_DATE_TIME(timeScopeInputs.daily+`T13:45:30`));
+    dispatch(SET_DATE_TIME(timeScopeInputs.daily+`T00:00:30`));
   };
   useEffect(() => {
-    dispatch(SET_DATE_TIME(timeScopeInputs.daily+`T13:45:30`));
+    dispatch(SET_DATE_TIME(timeScopeInputs.daily+`T00:00:30`));
     
   }, [timeScopeInputs]);
 
