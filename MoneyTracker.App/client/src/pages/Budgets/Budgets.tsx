@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {default as test} from "./testData.json"
 import {Budget} from "../../types/Budget";
 import CategoryBudgetItem from "../../elements/CategoryBudgetItem";
 import TimeScopePanel from "../../components/TimeScopePanel/TimeScopePanel";
+import SetBudget from "../../components/SetBudget";
 
 
 const Budgets = () => {

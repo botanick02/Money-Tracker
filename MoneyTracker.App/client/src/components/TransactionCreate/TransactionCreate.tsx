@@ -77,9 +77,9 @@ const TransactionCreate: React.FC<Props> = ({openPopupHandle, transactionDefault
 
 
     return (
-        <div className={"transaction-create-bg"}>
-            <div className={"transaction-create"}>
-                <ul className={"transaction-create__type"}>
+        <div className={"popup-bg"}>
+            <div className={"popup"}>
+                <ul className={"popup__header"}>
                     <li onClick={() => {
                         setType("income")
                     }} className={type == "income" ? "current-type" : ""}>Income
@@ -93,14 +93,14 @@ const TransactionCreate: React.FC<Props> = ({openPopupHandle, transactionDefault
                     }} className={type == "transfer" ? "current-type" : ""}>Transfer
                     </li>
                 </ul>
-                <div className={"transaction-create__fields"}>
+                <div className={"popup__fields"}>
                     <InputWrapper type={"datetime-local"}>
                         <input value={date.toISOString().substring(0,16)} type="datetime-local"/>
                     </InputWrapper>
                     {
                         type != "transfer"
                             ? <Dropdown title={"Account"} selectHandler={handleAccountChange} options={accountOptions}/>
-                            : <div className={"transaction-create__row"}>
+                            : <div className={"popup__row"}>
                                 <Dropdown title={"From"} selectHandler={handleAccountChange} options={accountOptions}/>
                                 <Dropdown title={"To"} selectHandler={handleAccountChange} options={accountOptions}/>
                             </div>
@@ -112,7 +112,9 @@ const TransactionCreate: React.FC<Props> = ({openPopupHandle, transactionDefault
                         type != "transfer"
                             ? <Dropdown title={"Category"} selectHandler={handleCategoryChange}
                                         options={categoryOptions}/>
-                            : <InputWrapper type={"number"} placeholder={"Commission"}/>
+                            : <InputWrapper>
+                                <input type="number" placeholder="Commission"/>
+                            </InputWrapper>
 
                     }
                     <InputWrapper>
@@ -122,7 +124,7 @@ const TransactionCreate: React.FC<Props> = ({openPopupHandle, transactionDefault
                         <input type="text" placeholder="Title"/>
                     </InputWrapper>
                 </div>
-                <div className={"transaction-create__row"}>
+                <div className={"popup__row"}>
                     <button onClick={() => {
                         handleSafe()
                     }} className={"button"}>

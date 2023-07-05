@@ -1,7 +1,6 @@
 @import "src/styles/Variables";
 
-
-.transaction-create-bg {
+.popup-bg{
   overflow-y: hidden;
   z-index: 4;
   position: fixed;
@@ -15,7 +14,7 @@
   padding: 12px;
 }
 
-.transaction-create {
+.popup{
   $border-radius: 20px;
   $padding: 31px;
 
@@ -24,39 +23,15 @@
   background: $background-color;
   padding: $padding;
 
-  &__type {
+  &__header{
     display: flex;
-    justify-content: space-between;
     margin: -$padding;
     margin-bottom: 0;
     font-size: 16px;
-
-    li {
-      height: 34px;
-      width: 100%;
-      text-align: center;
-      line-height: 34px;
-      opacity: .4;
-      cursor: pointer;
-
-      &.current-type {
-        opacity: 1;
-      }
-
-      &:nth-child(1) {
-        background: $primary-color;
-        border-top-left-radius: $border-radius;
-      }
-
-      &:nth-child(2) {
-        background: $secondary-color;
-      }
-
-      &:nth-child(3) {
-        background: $light-gray-color;
-        border-top-right-radius: $border-radius;
-      }
-    }
+    border-radius: 0;
+    border-top-left-radius: $border-radius;
+    border-top-right-radius: $border-radius;
+    min-height: 34px;
   }
 
   &__fields {
@@ -75,7 +50,7 @@
     gap: 1em;
   }
 
-  button {
+  .button {
     width: 100%;
   }
 
@@ -121,4 +96,5 @@
       }
     }
   }
+
 }
