@@ -7,7 +7,7 @@ export const checkTokenExpire = (): boolean => {
         return true;
     }
     let dateExp = new Date(timeConverter(parseJwt(token).exp));
-    console.log(dateExp)
+  
     return dateExp.valueOf() < new Date().valueOf();
 };
 

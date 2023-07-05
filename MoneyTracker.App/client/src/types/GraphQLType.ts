@@ -59,9 +59,18 @@ interface ILoginResponse {
 }
 
 export interface QueryUserType {
+  isActive: string;
+  type: string;
   id: number;
   name: string;
   email: string;
+}
+export interface QueryCategoryType {
+  isActive: boolean;
+  type: string;
+  id: string;
+  name: string;
+ 
 }
 
 export interface AccessToken {
