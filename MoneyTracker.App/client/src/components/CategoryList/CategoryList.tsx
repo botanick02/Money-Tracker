@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
 import CategorySetsItemItem from "../../elements/CategorySetsItemItem";
 import { CategoryItemReducer } from "../../store/Example/Reducers/CategoryItemsReducer";
 import CategoryCreate from "../CategoryCreate/CategoryCreate";
+import TimeScopePanel from "../TimeScopePanel/TimeScopePanel";
 
 const CategoryList = () => {
   const items = useAppSelector((state) => state.Category.categories);
@@ -37,7 +38,9 @@ const CategoryList = () => {
   }, [page, countOfElements,editSuccess]);
 
   return (
+ <main>
     <div className="transaction-list">
+    <TimeScopePanel />
       {isCreatePopupOpen && (
         <CategoryCreate
           transactionDefaultType={defaultTransaction}
@@ -66,6 +69,7 @@ const CategoryList = () => {
         </div>
       )}
     </div>
+    </main>
   );
 };
 

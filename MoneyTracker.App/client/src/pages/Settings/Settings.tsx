@@ -17,7 +17,7 @@ const Settings = () => {
   iconUrl:`https://picsum.photos/51`
 }
   return (
-<main>
+
 <div className="transaction-list">
   <Link to="/CategoryList">
     <SettingsItem item={item} />
@@ -34,7 +34,7 @@ const Settings = () => {
     </button>
   </div>
   </div>
-</main>
+
   );
 };
 
