@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import TimeScopePanel from "../../components/TimeScopePanel/TimeScopePanel";
-import CategoryesList from "../../components/CategoryesList/CategoryesList";
+import СhartByCategory from "../../components/СhartByCategory/СhartByCategory";
 
 const Stats = () => {
-  const [activeFilter, setActiveFilter] = useState("income"); // Состояние для отслеживания активного фильтра
+  const [activeFilter, setActiveFilter] = useState("income"); 
 
   const handleFilterChange = (filter: "income" | "expense") => {
     setActiveFilter(filter);
@@ -28,7 +28,7 @@ const Stats = () => {
           Expense
         </div>
       </div>
-      <CategoryesList />
+      <СhartByCategory />
     </main>
   );
 };
