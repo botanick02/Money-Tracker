@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
 import { useForm } from "react-hook-form";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import InputWrapper from "../../elements/InputWrapper";
+import { Link } from "react-router-dom";
 
 
 const { SIGN_IN, SIGN_IN_SUCCESS, SIGN_IN_ERROR, SIGN_IN_GOOGLE } =
@@ -97,7 +98,8 @@ useEffect(() => {
           <p className="error-message">{errors.checkbox.message?.toString()}</p>
         )}
                 <p className="login-text">
-                    Don’t have an account yet? <a href={"/registration"}> Sign Up</a>
+                    Don’t have an account yet?  <Link to={"/registration"}>Sign Up</Link>
+                   
                 </p>
 
             </form>

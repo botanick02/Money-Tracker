@@ -7,6 +7,8 @@ import NotificationReducer from "./Example/Reducers/NotificationReducer";
 import AuthorizationReducer from "./Example/Reducers/AuthorizationReducer";
 import RefreshTokenReducer from "./Example/Reducers/RefreshTokenReducer";
 import RegistrationReducer from "./Example/Reducers/RegistrationReducer";
+import CategoryReducer  from "./Example/Reducers/CategoryItemsReducer";
+import { CategoryItemsEpic } from "./Example/CategoryItemsEpic";
 
 const epicMiddleware = createEpicMiddleware()
 
@@ -15,7 +17,8 @@ const rootEpic = combineEpics(
     SignOutEpic,
     GetAccessTokenEpic,
     RegistrationEpic,
-    GoogleAuthorizationEpic
+    GoogleAuthorizationEpic,
+    CategoryItemsEpic
 )
 
 const rootReducer = combineReducers({
@@ -23,7 +26,9 @@ const rootReducer = combineReducers({
     User: UserReducer,
     Notifications: NotificationReducer,
     RefreshToken: RefreshTokenReducer,
-    Registration:RegistrationReducer
+    Category:CategoryReducer,
+    Registration:RegistrationReducer,
+ 
 })
 
 export const store = configureStore({
