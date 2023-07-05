@@ -31,7 +31,7 @@ const Transactions = () => {
   };
 
   return (
-    <main>
+    <main className={'transactions'}>
       {isCreatePopupOpen && (
         <TransactionCreate
           transactionDefaultType={defaultTransaction}

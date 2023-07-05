@@ -16,7 +16,7 @@ const TransactionItem: FC<{transaction: Transaction}> = ({transaction}) => {
                 <div className={"row-item__title"}>{transaction.title}</div>
                 <div className={"row-item__sub-title"}>{transaction.category.name}</div>
             </div>
-            <div className={`row-item__amount transaction__amount__${transaction.category.type}`}>{transaction.amount} $</div>
+            <div className={`row-item__amount row-item__amount__${transaction.category.type}`}>{transaction.amount} $</div>
         </div>
     );
 };

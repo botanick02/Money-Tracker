@@ -1,0 +1,22 @@
+@import "src/styles/Variables";
+
+.input-field{
+  width: 100%;
+  padding: 3.5px 16px;
+  background: $primary-light-color;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  border-radius: 13px;
+  gap: 1em;
+  font-size: 16px;
+  input{
+    font-size: inherit;
+    background: none;
+    min-height: 32px;
+    width: 100%;
+    flex-grow: 1;
+    outline: none;
+    border: none;
+  }
+}

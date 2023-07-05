@@ -1,5 +1,39 @@
 @import "src/styles/Variables";
 
+.transactions{
+  .popup__header{
+    $border-radius: 20px;
+    $padding: 31px;
+    justify-content: space-between;
+    li {
+      height: 34px;
+      width: 100%;
+      text-align: center;
+      line-height: 34px;
+      opacity: .4;
+      cursor: pointer;
+
+      &.current-type {
+        opacity: 1;
+      }
+
+      &:nth-child(1) {
+        background: $primary-color;
+        border-top-left-radius: $border-radius;
+      }
+
+      &:nth-child(2) {
+        background: $secondary-color;
+      }
+
+      &:nth-child(3) {
+        background: $light-gray-color;
+        border-top-right-radius: $border-radius;
+      }
+    }
+  }
+}
+
 .transaction-sums{
   display: flex;
   justify-content: space-between;
@@ -36,4 +70,3 @@
 }
 
 @import "TransactionList";
-@import "TransactionCreate";

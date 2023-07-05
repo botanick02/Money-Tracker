@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {default as test} from "./testData.json"
 import {Budget} from "../../types/Budget";
 import CategoryBudgetItem from "../../elements/CategoryBudgetItem";
 import TimeScopePanel from "../../components/TimeScopePanel/TimeScopePanel";
+import SetBudget from "../../components/SetBudget";
 
 
 const Budgets = () => {
@@ -15,11 +16,11 @@ const Budgets = () => {
             <TimeScopePanel />
             <div className={"row-title"}>Budgeted Categories</div>
             {
-                budgeted.map(item => <CategoryBudgetItem budget={item}/>)
+                budgeted.map(item => <CategoryBudgetItem key={item.id} budget={item}/>)
             }
             <div className={"row-title"}>Not Budgeted Categories</div>
             {
-                nonBudgeted.map(item => <CategoryBudgetItem budget={item}/>)
+                nonBudgeted.map(item => <CategoryBudgetItem key={item.id} budget={item}/>)
             }
         </main>
     );
