@@ -6,6 +6,7 @@ import CategoryCreate from "../CategoryCreate/CategoryCreate";
 import TimeScopePanel from "../TimeScopePanel/TimeScopePanel";
 
 const CategoryList = () => {
+  const dateTimeTo = useAppSelector((state) => state.DateTime.dateTime)
   const items = useAppSelector((state) => state.Category.categories);
   const { FETCH_CATEGORIES,EDIT_CATEGORY } = CategoryItemReducer.actions;
   const editSuccess = useAppSelector((state) => state.Category.editSuccess)
@@ -30,12 +31,10 @@ const CategoryList = () => {
 
   const page = 1;
   const countOfElements = 5;
+  
   useEffect(() => {
-    console.log(name, id);
-  }, [name, id]);
-  useEffect(() => {
-    dispatch(FETCH_CATEGORIES({ page, countOfElements }));
-  }, [page, countOfElements,editSuccess]);
+    dispatch(FETCH_CATEGORIES({ page, countOfElements, dateTimeTo }));
+  }, [page, countOfElements,editSuccess,dateTimeTo]);
 
   return (
  <main>
