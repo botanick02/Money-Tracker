@@ -35,11 +35,14 @@ const CategoryList = () => {
   useEffect(() => {
     dispatch(FETCH_CATEGORIES({ page, countOfElements, dateTimeTo }));
   }, [page, countOfElements,editSuccess,dateTimeTo]);
-
+  const [type, setType] = useState("");
   return (
  <main>
+  
     <div className="transaction-list">
+    
     <TimeScopePanel />
+    
       {isCreatePopupOpen && (
         <CategoryCreate
           transactionDefaultType={defaultTransaction}

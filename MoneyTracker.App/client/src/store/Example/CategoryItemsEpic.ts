@@ -14,7 +14,8 @@ const { FETCH_CATEGORIES, FETCH_CATEGORIES_SUCCESS, FETCH_CATEGORIES_ERROR } =
   export const CategoryItemsEpic: Epic<any, any, any> = (action$, state$) => {
     const categoryQuery = (page: number, countOfElements: number, dateTimeTo: string | null) => {
       console.log(dateTimeTo);
-      return `query {
+      return `
+      {
         category {
           getCategories(dateTimeTo: "${dateTimeTo}") {
             id
@@ -23,7 +24,8 @@ const { FETCH_CATEGORIES, FETCH_CATEGORIES_SUCCESS, FETCH_CATEGORIES_ERROR } =
             isActive
           }
         }
-      }`;
+      }
+      `;
     };
   
     return action$.pipe(
