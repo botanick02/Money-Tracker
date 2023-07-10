@@ -2,6 +2,7 @@
 using GraphQL.Types;
 using MoneyTracker.App.GraphQl.Auth;
 using MoneyTracker.App.GraphQl.Category;
+using MoneyTracker.App.GraphQl.Transaction;
 using MoneyTracker.App.GraphQl.User;
 
 namespace MoneyTracker.App.GraphQl
@@ -14,6 +15,9 @@ namespace MoneyTracker.App.GraphQl
                      .Resolve(_ => new { });
             
             Field<CategoryQuery>("Category")
+                     .Resolve(_ => new { });
+
+            Field<TransactionQuery>("Transaction")
                      .Resolve(_ => new { });
         }
     }

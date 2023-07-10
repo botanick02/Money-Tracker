@@ -1,9 +1,8 @@
 ﻿using GraphQL;
 using GraphQL.Types;
-using MoneyTracker.App.GraphQl.Auth.Types.Inputs;
 using MoneyTracker.Business.Commands;
-using MoneyTracker.Business.Commands.Category;
 using static MoneyTracker.Business.Commands.Category.CategoryCommands;
+using static MoneyTracker.Business.Commands.Category.CategoryCommandsHandler;
 
 namespace MoneyTracker.App.GraphQl.Category
 {

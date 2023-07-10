@@ -3,7 +3,7 @@ using MoneyTracker.Business.Interfaces;
 using MoneyTracker.Infrastracture;
 using System;
 
-namespace MoneyTracker.MsSQL.Repositories
+namespace MoneyTracker.Infrastracture.MsSQL
 {
     public class UserRepository : IUserRepository
     {
