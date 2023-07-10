@@ -4,7 +4,9 @@
     {
         public record DebitTransactionAddedEvent
         {
-            public Guid Id { get; set; }
+            public Guid Id { get; set; } = Guid.NewGuid();
+
+            public Guid TransactionId { get; set; }
 
             public Guid UserId { get; set; }
 
@@ -23,7 +25,9 @@
 
         public record CreditTransactionAddedEvent
         {
-            public Guid Id { get; set; }
+            public Guid Id { get; set; } = Guid.NewGuid();
+
+            public Guid TransactionId { get; set; }
 
             public Guid UserId { get; set; }
 
@@ -42,9 +46,8 @@
 
         public record TransactionCanceledEvent
         {
-            public Guid DebitTransactionId { get; set;}
+            public Guid TransactionId { get; set;}
 
-            public Guid CreditTransactionId { get; set;}
         }
     }
 }
