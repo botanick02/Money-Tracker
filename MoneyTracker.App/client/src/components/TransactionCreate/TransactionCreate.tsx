@@ -1,7 +1,8 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import InputWrapper from "../../elements/InputWrapper";
 import Dropdown, {Option} from "../../elements/Dropdown/Dropdown";
-
+import { CategoryItemReducer } from "../../store/Example/Reducers/CategoryItemsReducer";
+import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
 
 interface Props {
     openPopupHandle(): void
@@ -11,47 +12,34 @@ interface Props {
 
 const TransactionCreate: React.FC<Props> = ({openPopupHandle, transactionDefaultType}) => {
     const [type, setType] = useState(transactionDefaultType)
-
+    const dispatch = useAppDispatch();
+    const dateTimeTo = useAppSelector((state) => state.DateTime.dateTime)
+      const { FETCH_CATEGORIES} = CategoryItemReducer.actions;
+      useEffect(() => {
+        dispatch(FETCH_CATEGORIES({
+          dateTimeTo
+    
+        }));
+      }, []);
+      const categoryItems = useAppSelector((state) => state.Category.categories);
     const accountOptions: Option[] = [
         {
             label: "Privat",
-            value: 0
+            value: "999b9ae3-9556-41ee-a5b2-0e216fa0431p"
         },
         {
             label: "Mono",
-            value: 1
+            value: "999b9ae3-9556-41ee-a5b2-0e216fa0431M"
         },
         {
             label: "Cash",
-            value: 2
-        },
-        {
-            label: "Cash1",
-            value: 3
+            value: "999b9ae3-9556-41ee-a5b2-0e216fa0431C"
         }
     ]
-    const categoryOptions: Option[] = [
-        {
-            icon: "https://picsum.photos/50",
-            label: "Food and Drink",
-            value: 0
-        },
-        {
-            icon: "https://picsum.photos/51",
-            label: "Restaurant",
-            value: 1
-        },
-        {
-            icon: "https://picsum.photos/52",
-            label: "Games",
-            value: 2
-        },
-        {
-            icon: "https://picsum.photos/53",
-            label: "Health",
-            value: 3
-        }
-    ]
+    const categoryOptions: Option[] = categoryItems.map(category => ({
+        label: category.name,
+        value: category.id
+      }));
 
     const [account, setAccount] = useState<Option>(accountOptions[0])
 
@@ -62,6 +50,7 @@ const TransactionCreate: React.FC<Props> = ({openPopupHandle, transactionDefault
     const [category, setCategory] = useState<Option>(accountOptions[0])
 
     const handleCategoryChange = (option: Option) => {
+        console.log(option)
         setCategory(option)
     }
 
@@ -142,3 +131,4 @@ const TransactionCreate: React.FC<Props> = ({openPopupHandle, transactionDefault
 };
 
 export default TransactionCreate;
+
