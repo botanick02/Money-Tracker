@@ -68,6 +68,7 @@ const TimeScopePanel = () => {
     
   }, [timeScopeInputs]);
 
+
   return (
     <div className={"time-scope-panel"}>
       <div className={"time-scope-panel__date-picker"}>
