@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TransactionList from "../../components/TransactionList/TransactionList";
 import TransactionCreate from "../../components/TransactionCreate/TransactionCreate";
 import { default as test } from "../../components/TransactionList/testData.json";
@@ -8,7 +8,6 @@ import { TransactionItemsReducer } from "../../store/Example/Reducers/Transactio
 
 import { Transaction } from "../../types/Transaction";
 
-import { useDispatch } from "react-redux";
 
 
 const tmpFunc = (filter: "income" | "expense") => {
@@ -17,16 +16,16 @@ const tmpFunc = (filter: "income" | "expense") => {
 };
 
 const Transactions = () => {
+
   const expense = tmpFunc("expense");
   const income = tmpFunc("income");
   const dispatch = useAppDispatch();
-  const reduxDispatch = useDispatch();
   const { FETCH_TRANSACTIONS } = TransactionItemsReducer.actions;
   const dateTimeTo = useAppSelector((state) => state.DateTime.dateTime)
   const [defaultTransaction, setDefaultTransaction] = useState<
     "expense" | "income" | "transfer"
   >("expense");
-
+ 
   const [isCreatePopupOpen, setIsCreatePopupOpen] = useState<boolean>(false);
   const handlePopupOpen = () => {
     document.body.classList.toggle("no-scroll");
