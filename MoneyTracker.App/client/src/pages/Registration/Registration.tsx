@@ -63,9 +63,7 @@ const RegistrationForm = () => {
   }, [serverError, setError]);
 
   const navigate = useNavigate();
-  const handleClick = () => {
-    navigate("/SignInForm");
-  };
+
   return (
     <div className="sign-up-mobile">
       {IsSinging ? <div className="loading" /> : null}
