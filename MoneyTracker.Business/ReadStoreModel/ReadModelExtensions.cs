@@ -1,4 +1,5 @@
 ﻿using MoneyTracker.Business.EventAppliers;
+using MoneyTracker.Business.Events;
 using MoneyTracker.Business.Interfaces;
 using MoneyTracker.Business.ReadStoreModel;
 
@@ -27,7 +28,7 @@ namespace MoneyTracker.Infrastracture
             return currentReadModel.CurrentModel;
         }
 
-        public ReadModel Evolve(ReadModel currentModel, object @event)
+        public ReadModel Evolve(ReadModel currentModel, Event @event)
         {
             return eventAppliersDispatcher.Apply(currentModel, @event);
         }
