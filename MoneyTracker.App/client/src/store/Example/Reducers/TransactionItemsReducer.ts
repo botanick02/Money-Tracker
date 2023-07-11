@@ -6,7 +6,7 @@ export interface CreateTransactionState {
   error: null | string;
   transactions: ITransactionType[];
   countOfElements: number;
-  editSuccess: boolean;
+  addTransactionSuccess: boolean;
 }
 
 const initialState: CreateTransactionState = {
@@ -14,7 +14,7 @@ const initialState: CreateTransactionState = {
   loading: false,
   transactions: [],
   countOfElements: 10,
-  editSuccess: false
+  addTransactionSuccess: false
 };
 
 export const TransactionItemsReducer = createSlice({
@@ -43,7 +43,28 @@ export const TransactionItemsReducer = createSlice({
       state.loading = false;
       state.error = action.payload;
       state.transactions = [];
-    }
+    },
+    ADD_TRANSACTION(
+      state,
+      action: PayloadAction<{ amount: number; categoryId: any;   title: string; fromAccountId:string; toAccountId:string; }>
+    ) {
+      state.addTransactionSuccess = false
+      state.loading = true;
+      state.error = null;
+    },
+    ADD_TRANSACTION_SUCCESS(
+      state,
+      action: PayloadAction<{ addTransactionSuccess: boolean;}>
+    ) {
+      state.loading = false;
+      state.error = null;
+      state.addTransactionSuccess = action.payload.addTransactionSuccess;
+     
+    },
+    ADD_TRANSACTION_ERROR(state, action: PayloadAction<string>) {
+      state.loading = false;
+      state.error = action.payload;
+    },
   },
 });
 

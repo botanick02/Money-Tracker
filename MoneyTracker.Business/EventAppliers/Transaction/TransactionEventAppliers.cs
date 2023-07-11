@@ -14,6 +14,7 @@ namespace MoneyTracker.Business.EventAppliers.Transaction
                 var debitTransaction = new Entities.Transaction
                 {
                     Id = @event.Id,
+                    TransactionId = @event.TransactionId,
                     UserId = @event.UserId,
                     Title = @event.Title,
                     Note = @event.Note,
@@ -38,6 +39,7 @@ namespace MoneyTracker.Business.EventAppliers.Transaction
                 var debitTransaction = new Entities.Transaction
                 {
                     Id = @event.Id,
+                    TransactionId = @event.TransactionId,
                     UserId = @event.UserId,
                     Title = @event.Title,
                     Note = @event.Note,
@@ -53,23 +55,23 @@ namespace MoneyTracker.Business.EventAppliers.Transaction
             }
         }
 
-        public class DebitTransactionCanceledEventApplier : IEventApplier<TransactionCanceledEvent>
+        public class TransactionCanceledEventApplier : IEventApplier<TransactionCanceledEvent>
         {
             public ReadModel Apply(ReadModel currentModel, TransactionCanceledEvent @event)
             {
                 var updatedModel = currentModel;
 
-                var debitTransactionToCancel = updatedModel.Transactions.FirstOrDefault(t => t.Id == @event.DebitTransactionId);
+                var transactionsToCancel = updatedModel.Transactions.Where(t => t.TransactionId == @event.TransactionId).ToList();
 
-                var creditTransactionToCancel = updatedModel.Transactions.FirstOrDefault(t => t.Id == @event.CreditTransactionId);
-
-                if (debitTransactionToCancel == null || creditTransactionToCancel == null)
+                if (transactionsToCancel.Count < 2)
                 {
-                    throw new ArgumentException("Credit or debit transaction was not found to cancel", nameof(@event));
+                    throw new ArgumentException("transaction to cancel was not found", nameof(@event));
                 }
 
-                updatedModel.Transactions.Remove(debitTransactionToCancel);
-                updatedModel.Transactions.Remove(creditTransactionToCancel);
+                foreach (var transaction in transactionsToCancel)
+                {
+                    updatedModel.Transactions.Remove(transaction);
+                }
 
                 return updatedModel;
             }

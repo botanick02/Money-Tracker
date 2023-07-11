@@ -61,6 +61,7 @@ builder.Services.AddTransient<ICommandHandler<RegisterGoogleUserCommand>, Regist
 builder.Services.AddTransient<ICommandHandler<SetUserRefreshTokenCommand>, SetUserRefreshTokenCommandHandler>();
 
 builder.Services.AddTransient<ICommandHandler<AddTransactionCommand>, AddTransactionCommandHandler>();
+builder.Services.AddTransient<ICommandHandler<CancelTransactionCommand>, CancelTransactionCommandHandler>();
 
 builder.Services.AddTransient<CommandDispatcher>();
 builder.Services.AddTransient<EventDispatcher>();
@@ -76,6 +77,7 @@ builder.Services.AddTransient<IEventApplier<UserRefreshTokenSetEvent>, UserRefre
 
 builder.Services.AddTransient<IEventApplier<DebitTransactionAddedEvent>, DebitTransactionAddedEventApplier>();
 builder.Services.AddTransient<IEventApplier<CreditTransactionAddedEvent>, CreditTransactionAddedEventApplier>();
+builder.Services.AddTransient<IEventApplier<TransactionCanceledEvent>, TransactionCanceledEventApplier>();
 
 builder.Services.AddTransient<ReadModelExtensions>();
 

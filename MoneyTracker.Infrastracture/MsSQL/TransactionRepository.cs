@@ -12,6 +12,12 @@ namespace MoneyTracker.Infrastracture.MsSQL
             this.readModelExtensions = readModelExtensions;
         }
 
+        public List<Transaction> GetTransactionsByTransactionId(Guid transactionId, DateTime? dateTimeTo = null)
+        {
+            var readModel = readModelExtensions.GetReadModel(dateTimeTo);
+            return readModel.Transactions.Where(t => t.TransactionId == transactionId).ToList();
+        }
+
         public List<Transaction> GetTransactions(DateTime? dateTimeTo = null)
         {
             var readModel = readModelExtensions.GetReadModel(dateTimeTo);

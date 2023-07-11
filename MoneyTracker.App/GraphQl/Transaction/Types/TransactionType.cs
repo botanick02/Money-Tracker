@@ -6,6 +6,10 @@ namespace MoneyTracker.App.GraphQl.Transaction.Types
     {
         public TransactionType()
         {
+            Field(t => t.Id);
+
+            Field(t => t.TransactionId);
+
             Field(t => t.UserId);
 
             Field(t => t.Title);
