@@ -70,3 +70,62 @@ export const TransactionItemsEpic: Epic<any, any, any> = (action$, state$) => {
     })
   );
 };
+
+const {
+  ADD_TRANSACTION,
+  ADD_TRANSACTION_SUCCESS,
+  ADD_TRANSACTION_ERROR,
+} = TransactionItemsReducer.actions;
+
+export const addTransactionEpic: Epic<any, any, any> = (action$, state$) => {
+  const addTransactionMutation = (categoryId: string, amount: number, title: string,fromAccountId: string,toAccountId: string,) => {
+    return `mutation {
+      transaction {
+        addTransaction(
+          transaction: {
+             amount:${amount}
+            categoryId: "${categoryId}"
+            title: "${title}"
+            fromAccountId: "${fromAccountId}"
+            toAccountId: "${toAccountId}"
+          }
+        )
+      }
+    }`;
+  };
+
+  return action$.pipe(
+    ofType(ADD_TRANSACTION),
+    mergeMap((action) => {
+      const { categoryId, amount,title,fromAccountId,toAccountId } = action.payload;
+      return from(
+        fetch(GraphQlEndpoint, {
+          method: "POST",
+          mode: "cors",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            query: addTransactionMutation(categoryId, amount,title,fromAccountId,toAccountId),
+          }),
+        })
+      ).pipe(
+        mergeMap((response) =>
+          from(response.json()).pipe(
+            mergeMap((data: any) => {
+              console.log(data);
+              if (data.errors) {
+                store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message));
+                return [ADD_TRANSACTION_ERROR(data.errors[0].message)];
+              } else {
+                return [ADD_TRANSACTION_SUCCESS({ addTransactionSuccess: true })];
+              }
+            })
+          )
+        )
+      );
+    })
+  );
+};
