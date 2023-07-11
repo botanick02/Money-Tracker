@@ -17,7 +17,7 @@ const { FETCH_CATEGORIES, FETCH_CATEGORIES_SUCCESS, FETCH_CATEGORIES_ERROR } =
       return `
       {
         category {
-          getCategories(dateTimeTo: "${dateTimeTo}") {
+          getCategories {
             id
             name
             type

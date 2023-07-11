@@ -106,6 +106,7 @@ export const addTransactionEpic: Epic<any, any, any> = (action$, state$) => {
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
+            Authorization: "Bearer " + localStorage.getItem("accessToken")
           },
           body: JSON.stringify({
             query: addTransactionMutation(categoryId, amount,title,fromAccountId,toAccountId),
