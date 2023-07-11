@@ -16,7 +16,7 @@ namespace MoneyTracker.App.GraphQl.Category
                     var command = new CreateCategoryCommand()
                     {
                         Name = "testCat",
-                        Type = "Income",
+                        Type = "income",
                     };
 
                     commandDispatcher.Dispatch(command);

@@ -26,9 +26,12 @@ export const CategoryItemReducer = createSlice({
   reducers: {
     FETCH_CATEGORIES(
       state,
-      action: PayloadAction<{ page: number; countOfElements: number; dateTimeTo:string|null }>
-      
-    ) {
+      action: PayloadAction<{
+        page?: number;
+        countOfElements?: number;
+        dateTimeTo: string | null;
+      }>
+    ){
       state.loading = true;
       state.error = null;
       state.categories = [];
