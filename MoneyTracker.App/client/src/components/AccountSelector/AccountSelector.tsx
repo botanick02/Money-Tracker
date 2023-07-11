@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CurrentAccount from "../../elements/Accounts/CurrentAccount";
 import { Account } from "../../types/Account";
 import { default as test } from "./testData.json";
 import AccountListItem from "../../elements/Accounts/AccountListItem";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { SET_ACTUAL_ACCOUNT } from "../../store/Example/Reducers/AccountReducer";
 
 const AccountSelector = () => {
   const accounts = test as Account[];
@@ -14,7 +16,13 @@ const AccountSelector = () => {
   const switchListState = () => {
     setIsListOpen(!isListOpen);
   };
+  const dispatch = useAppDispatch();
 
+
+
+  useEffect(() => {
+    dispatch(SET_ACTUAL_ACCOUNT(currentAccountId||""));
+  }, [currentAccountId]);
   return (
     <div className={"account-selector"}>
       <CurrentAccount

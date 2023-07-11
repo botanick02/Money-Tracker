@@ -12,6 +12,7 @@ import { CategoryItemsEpic, EditCategoryEpic } from "./Example/CategoryItemsEpic
 import DateTimeReducer from "./Example/Reducers/DateTimeReducer";
 import {TransactionItemsEpic, addTransactionEpic } from "./Example/TransactionItemsEpic";
 import TransactionItemsReducer from "./Example/Reducers/TransactionItemsReducer";
+import AccountReducer from "./Example/Reducers/AccountReducer";
 
 const epicMiddleware = createEpicMiddleware()
 
@@ -35,7 +36,8 @@ const rootReducer = combineReducers({
     Category:CategoryReducer,
     Registration:RegistrationReducer,
     DateTime:DateTimeReducer,
-    TransactionItems:TransactionItemsReducer
+    TransactionItems:TransactionItemsReducer,
+    Account:AccountReducer
  
 })
 
