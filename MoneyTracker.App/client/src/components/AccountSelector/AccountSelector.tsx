@@ -3,7 +3,7 @@ import CurrentAccount from "../../elements/Accounts/CurrentAccount";
 import { Account } from "../../types/Account";
 import { default as test } from "./testData.json";
 import AccountListItem from "../../elements/Accounts/AccountListItem";
-import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
 import { SET_ACTUAL_ACCOUNT } from "../../store/Example/Reducers/AccountReducer";
 
 const AccountSelector = () => {
@@ -17,27 +17,32 @@ const AccountSelector = () => {
     setIsListOpen(!isListOpen);
   };
   const dispatch = useAppDispatch();
-
-
+  const actualBalance = useAppSelector((state) => state.Account.actualBalance);
 
   useEffect(() => {
-    dispatch(SET_ACTUAL_ACCOUNT(currentAccountId||""));
+    dispatch(SET_ACTUAL_ACCOUNT(currentAccountId || ""));
   }, [currentAccountId]);
+
   return (
     <div className={"account-selector"}>
       <CurrentAccount
         account={accounts.find((a) => a.id === currentAccountId)!}
         onClick={switchListState}
+        actualBalance={actualBalance}
       />
 
       {isListOpen && (
-        <div className={"account-selector__list-bg"} onClick={() => setIsListOpen(false)}>
+        <div
+          className={"account-selector__list-bg"}
+          onClick={() => setIsListOpen(false)}
+        >
           <div className={"account-selector__list"}>
             {accounts
               .filter((a) => a.id !== currentAccountId)
               .map((account) => (
                 <AccountListItem
                   account={account}
+                  actualBalance={actualBalance}
                   key={account.id}
                   onSelected={setCurrentAccountId}
                 />

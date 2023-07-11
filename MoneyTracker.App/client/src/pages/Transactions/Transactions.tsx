@@ -17,8 +17,6 @@ const tmpFunc = (filter: "income" | "expense") => {
 
 const Transactions = () => {
 
-  const expense = tmpFunc("expense");
-  const income = tmpFunc("income");
   const dispatch = useAppDispatch();
   const { FETCH_TRANSACTIONS } = TransactionItemsReducer.actions;
   const dateTimeTo = useAppSelector((state) => state.DateTime.dateTime)
@@ -36,7 +34,9 @@ const Transactions = () => {
     console.log("Adding transaction...");
     dispatch(FETCH_TRANSACTIONS({ dateTimeTo: dateTimeTo }));
   };
-
+  const income = useAppSelector((state) => state.Account.actuaIncomelBalance);
+  const expense = useAppSelector((state) => state.Account.actualExpenseBalance);
+  
   return (
     <main className={'transactions'}>
       {isCreatePopupOpen && (

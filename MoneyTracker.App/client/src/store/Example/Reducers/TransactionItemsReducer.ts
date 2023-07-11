@@ -29,7 +29,6 @@ export const TransactionItemsReducer = createSlice({
       state.error = null;
       state.transactions = [];
       state.countOfElements = 0;
-      console.log(action.payload);
     },
     FETCH_TRANSACTIONS_SUCCESS(
       state,
@@ -37,12 +36,15 @@ export const TransactionItemsReducer = createSlice({
     ) {
       state.loading = false;
       state.error = null;
-      state.transactions = action.payload.transactions;
+      state.transactions = action.payload.transactions.slice().reverse();
+
+      
     },
     FETCH_TRANSACTIONS_ERROR(state, action: PayloadAction<string>) {
       state.loading = false;
       state.error = action.payload;
       state.transactions = [];
+      
     },
     ADD_TRANSACTION(
       state,
@@ -69,3 +71,4 @@ export const TransactionItemsReducer = createSlice({
 });
 
 export default TransactionItemsReducer.reducer;
+

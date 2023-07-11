@@ -2,6 +2,7 @@ import React, { FC } from "react";
 import { Account } from "../../types/Account";
 
 const AccountListItem: FC<{
+  actualBalance:number
   account: Account;
   onSelected: (accountId: string) => void;
 }> = ({ account, onSelected }) => {
