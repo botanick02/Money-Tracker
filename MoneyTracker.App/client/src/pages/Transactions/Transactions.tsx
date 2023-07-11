@@ -6,14 +6,6 @@ import TimeScopePanel from "../../components/TimeScopePanel/TimeScopePanel";
 import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
 import { TransactionItemsReducer } from "../../store/Example/Reducers/TransactionItemsReducer";
 
-import { Transaction } from "../../types/Transaction";
-
-
-
-const tmpFunc = (filter: "income" | "expense") => {
-  const data = test.filter((item) => item.category.type === filter) as Transaction[];
-  return data.reduce((acc, item) => acc + item.amount, 0);
-};
 
 const Transactions = () => {
 

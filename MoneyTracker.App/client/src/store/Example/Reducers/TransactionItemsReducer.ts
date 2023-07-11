@@ -3,18 +3,22 @@ import { ITransactionType } from "../../../types/ITransactionType";
 
 export interface CreateTransactionState {
   loading: boolean;
+  cancelLoading: boolean;
   error: null | string;
   transactions: ITransactionType[];
   countOfElements: number;
   addTransactionSuccess: boolean;
+  cancelTransactionSuccess: boolean;
 }
 
 const initialState: CreateTransactionState = {
   error: null,
+  cancelLoading: false,
   loading: false,
   transactions: [],
   countOfElements: 10,
-  addTransactionSuccess: false
+  addTransactionSuccess: false,
+  cancelTransactionSuccess: false
 };
 
 export const TransactionItemsReducer = createSlice({
@@ -64,6 +68,30 @@ export const TransactionItemsReducer = createSlice({
      
     },
     ADD_TRANSACTION_ERROR(state, action: PayloadAction<string>) {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    CANCEL_TRANSACTION(
+      state,
+      action: PayloadAction<{ transactionId:string;}>
+    ) {
+      state.cancelTransactionSuccess = false
+      state.loading = true;
+      state.cancelLoading = true;
+      state.error = null;
+    },
+    CANCEL_TRANSACTION_SUCCESS(
+      state,
+      action: PayloadAction<{ cancelTransactionSuccess: boolean;}>
+    ) {
+      state.loading = false;
+      state.error = null;
+      state.cancelLoading = false;
+      state.cancelTransactionSuccess = action.payload.cancelTransactionSuccess;
+      
+     
+    },
+    CANCEL_TRANSACTION_ERROR(state, action: PayloadAction<string>) {
       state.loading = false;
       state.error = action.payload;
     },

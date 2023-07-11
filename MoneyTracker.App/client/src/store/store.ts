@@ -10,7 +10,7 @@ import RegistrationReducer from "./Example/Reducers/RegistrationReducer";
 import CategoryReducer  from "./Example/Reducers/CategoryItemsReducer";
 import { CategoryItemsEpic, EditCategoryEpic } from "./Example/CategoryItemsEpic";
 import DateTimeReducer from "./Example/Reducers/DateTimeReducer";
-import {TransactionItemsEpic, addTransactionEpic } from "./Example/TransactionItemsEpic";
+import {TransactionItemsEpic, addTransactionEpic, cancelTransactionEpic } from "./Example/TransactionItemsEpic";
 import TransactionItemsReducer from "./Example/Reducers/TransactionItemsReducer";
 import AccountReducer from "./Example/Reducers/AccountReducer";
 
@@ -25,7 +25,8 @@ const rootEpic = combineEpics(
     CategoryItemsEpic,
     EditCategoryEpic,
     TransactionItemsEpic,
-    addTransactionEpic
+    addTransactionEpic,
+    cancelTransactionEpic
 )
 
 const rootReducer = combineReducers({

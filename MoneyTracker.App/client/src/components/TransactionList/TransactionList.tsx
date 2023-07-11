@@ -17,11 +17,13 @@ const TransactionList = () => {
     const { FETCH_TRANSACTIONS } = TransactionItemsReducer.actions;
     const { FETCH_CATEGORIES } = CategoryItemReducer.actions;
     const { SET_ACTUAL_BALANCE,SET_ACTUAL_INCOME_BALANCE,SET_ACTUAL_EXPENSE_BALANCE } = AccountReducer.actions;
-    const addTransactionSuccess = useAppSelector((state) => state.TransactionItems.addTransactionSuccess);
+    const addTransactionSuccess = useAppSelector((state) => state.TransactionItems.cancelLoading);
  
 
     const dispatch = useAppDispatch();
     const transactions = useAppSelector((state) => state.TransactionItems.transactions);
+    const cancelTransaction = useAppSelector((state) => state.TransactionItems.cancelTransactionSuccess);
+
     const [items, setItems] = useState(transactions);
 
     
@@ -39,7 +41,7 @@ const TransactionList = () => {
     }
    
     const sum = filteredArray.reduce((total, item) => total + item.amount, 0);
-    console.log(sum)
+
     const positiveSum = filteredArray.reduce((total, item) => {
         if (item.amount > 0) {
           return total + item.amount;

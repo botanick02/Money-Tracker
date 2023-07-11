@@ -22,6 +22,7 @@ export const TransactionItemsEpic: Epic<any, any, any> = (action$, state$) => {
             categoryId
             createdAt
             accountId
+            transactionId
           }
         }
       }
@@ -122,6 +123,59 @@ export const addTransactionEpic: Epic<any, any, any> = (action$, state$) => {
                 return [ADD_TRANSACTION_ERROR(data.errors[0].message)];
               } else {
                 return [ADD_TRANSACTION_SUCCESS({ addTransactionSuccess: true })];
+              }
+            })
+          )
+        )
+      );
+    })
+  );
+};
+
+
+const {
+  CANCEL_TRANSACTION,
+  CANCEL_TRANSACTION_SUCCESS,
+  CANCEL_TRANSACTION_ERROR,
+} = TransactionItemsReducer.actions;
+
+export const cancelTransactionEpic: Epic<any, any, any> = (action$, state$) => {
+  const cancelTransactionMutation = (transactionId: string) => {
+    return `mutation {
+      transaction {
+    cancelTransaction(cancelTransactionInput: { transactionId: "${transactionId}" })
+      }
+    } `;
+  };
+
+  return action$.pipe(
+    ofType(CANCEL_TRANSACTION),
+    mergeMap((action) => {
+      const { transactionId} = action.payload;
+      return from(
+        fetch(GraphQlEndpoint, {
+          method: "POST",
+          mode: "cors",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: "Bearer " + localStorage.getItem("accessToken")
+          },
+          body: JSON.stringify({
+            query: cancelTransactionMutation(transactionId),
+          }),
+        })
+      ).pipe(
+        mergeMap((response) =>
+          from(response.json()).pipe(
+            mergeMap((data: any) => {
+              console.log(data);
+              if (data.errors) {
+                store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message));
+                return [CANCEL_TRANSACTION_ERROR(data.errors[0].message)];
+              } else {
+                return [CANCEL_TRANSACTION_SUCCESS({ cancelTransactionSuccess: true })];
               }
             })
           )

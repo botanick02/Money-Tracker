@@ -6,4 +6,5 @@ export interface ITransactionType {
   categoryId: string;
   createdAt: string;
   accountId: string;
+  transactionId: string;
 }
