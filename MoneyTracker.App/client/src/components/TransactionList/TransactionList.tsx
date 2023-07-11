@@ -17,15 +17,25 @@ const TransactionList = () => {
     const { FETCH_CATEGORIES } = CategoryItemReducer.actions;
     const addTransactionSuccess = useAppSelector((state) => state.TransactionItems.addTransactionSuccess);
     const account = useAppSelector((state) => state.Account.actualAccount);
-    const fetchTransactionsLoading = useAppSelector((state) => state.TransactionItems.loading);
 
     const dispatch = useAppDispatch();
     const transactions = useAppSelector((state) => state.TransactionItems.transactions);
     const [items, setItems] = useState(transactions);
 
     const reversedItems = items.slice().reverse();
-    const filteredArray = reversedItems.filter(item => item.accountId === account);
+    let   filteredArray = reversedItems.filter(item => item.accountId === account);
+    if (account==="645645646"){
 
+        filteredArray=  reversedItems.filter(item => {
+            return (
+              item.accountId === "69ae7bca-b2ed-47f1-a084-6bb08ed49a6e" ||
+              item.accountId === "bc62fbf1-0f5c-4cc0-b995-7573ad855e8d" ||
+              item.accountId === "4856a9ed-4045-4848-a9b4-b3b36404c69f"
+            );
+          });
+    }
+   
+ 
     useEffect(() => {
         dispatch(FETCH_TRANSACTIONS({ dateTimeTo }));
         dispatch(FETCH_CATEGORIES({ dateTimeTo }));
