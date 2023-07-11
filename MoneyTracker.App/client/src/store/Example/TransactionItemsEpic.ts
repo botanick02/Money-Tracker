@@ -14,7 +14,7 @@ export const TransactionItemsEpic: Epic<any, any, any> = (action$, state$) => {
     return `
       query {
         transaction {
-          getTransactions(dateTimeTo: "${dateTimeTo}") {
+          getTransactions {
             userId
             title
             note
