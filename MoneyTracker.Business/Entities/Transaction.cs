@@ -4,6 +4,8 @@
     {
         public Guid Id { get; set; } = Guid.NewGuid();
 
+        public Guid TransactionId { get; set; }
+
         public Guid UserId { get; set; }
 
         public string Title { get; set; }

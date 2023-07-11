@@ -21,9 +21,7 @@
 
         public class CancelTransactionCommand
         {
-            public Guid DebitTransactionId { get; set; }
-
-            public Guid DepositTransactionId { get; set; }
+            public Guid TransactionId { get; set; }
         }
     }
 }

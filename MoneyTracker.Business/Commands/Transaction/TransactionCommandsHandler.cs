@@ -10,16 +10,18 @@ namespace MoneyTracker.Business.Commands.Transaction
         {
             private readonly IEventStore eventStore;
 
-            public AddTransactionCommandHandler(IEventStore eventStore)
+            public AddTransactionCommandHandler(IEventStore eventStore, ITransactionRepository transactionRepository)
             {
                 this.eventStore = eventStore;
             }
 
             public bool Handle(AddTransactionCommand command)
             {
-                var debitTransaction = new DebitTransactionAddedEvent
+                var transactionId = Guid.NewGuid();
+
+                var debitTransactionEvent = new DebitTransactionAddedEvent
                 {
-                    Id = Guid.NewGuid(),
+                    TransactionId = transactionId,
                     UserId = command.UserId,
                     CategoryId = command.CategoryId,
                     CreatedAt = DateTime.UtcNow,
@@ -29,9 +31,9 @@ namespace MoneyTracker.Business.Commands.Transaction
                     Amount = command.Amount,
                 };
 
-                var creditTransaction = new CreditTransactionAddedEvent
+                var creditTransactionEvent = new CreditTransactionAddedEvent
                 {
-                    Id = Guid.NewGuid(),
+                    TransactionId = transactionId,
                     UserId = command.UserId,
                     CategoryId = command.CategoryId,
                     CreatedAt = DateTime.UtcNow,
@@ -41,8 +43,39 @@ namespace MoneyTracker.Business.Commands.Transaction
                     Amount = command.Amount,
                 };
 
-                eventStore.AppendEvent(debitTransaction); //TODO: implement simultaneous event append with sql transactions
-                eventStore.AppendEvent(creditTransaction);
+                eventStore.AppendEvent(debitTransactionEvent); //TODO: implement simultaneous event append with sql transactions
+                eventStore.AppendEvent(creditTransactionEvent);
+
+                return true;
+            }
+        }
+
+        public class CancelTransactionCommandHandler : ICommandHandler<CancelTransactionCommand>
+        {
+            private readonly IEventStore eventStore;
+            private readonly ITransactionRepository transactionRepository;
+
+
+            public CancelTransactionCommandHandler(IEventStore eventStore, ITransactionRepository transactionRepository)
+            {
+                this.eventStore = eventStore;
+                this.transactionRepository = transactionRepository;
+            }
+
+            public bool Handle(CancelTransactionCommand command)
+            {
+                var transactions = transactionRepository.GetTransactionsByTransactionId(command.TransactionId);
+                if (transactions.Count < 2)
+                {
+                    return false;
+                }
+
+                var cancelEvent = new TransactionCanceledEvent
+                {
+                    TransactionId = command.TransactionId,
+                };
+
+                eventStore.AppendEvent(cancelEvent);
 
                 return true;
             }
