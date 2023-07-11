@@ -2,6 +2,7 @@
 using GraphQL.Types;
 using MoneyTracker.App.GraphQl.Transaction.Types;
 using MoneyTracker.Business.Interfaces;
+using System.Security.Claims;
 
 namespace MoneyTracker.App.GraphQl.Transaction
 {
@@ -14,8 +15,10 @@ namespace MoneyTracker.App.GraphQl.Transaction
                 .Resolve(context =>
                 {
                     var dateTimeTo = context.GetArgument<DateTime?>("DateTimeTo");
-                    return transactionRepository.GetTransactions(dateTimeTo);
-                });
+                    var userId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+                    return transactionRepository.GetTransactions(userId, dateTimeTo);
+                }).Authorize();
         }
     }
 }

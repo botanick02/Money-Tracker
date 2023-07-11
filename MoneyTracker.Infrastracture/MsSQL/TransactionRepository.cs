@@ -18,10 +18,10 @@ namespace MoneyTracker.Infrastracture.MsSQL
             return readModel.Transactions.Where(t => t.TransactionId == transactionId).ToList();
         }
 
-        public List<Transaction> GetTransactions(DateTime? dateTimeTo = null)
+        public List<Transaction> GetTransactions(Guid userId, DateTime? dateTimeTo = null)
         {
             var readModel = readModelExtensions.GetReadModel(dateTimeTo);
-            return readModel.Transactions.ToList();
+            return readModel.Transactions.Where(t => t.UserId == userId).ToList();
         }
     }
 }
