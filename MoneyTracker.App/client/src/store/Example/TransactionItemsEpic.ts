@@ -12,17 +12,17 @@ const { FETCH_TRANSACTIONS,FETCH_TRANSACTIONS_SUCCESS, FETCH_TRANSACTIONS_ERROR 
 export const TransactionItemsEpic: Epic<any, any, any> = (action$, state$) => {
   const transactionQuery = (dateTimeTo: string | null) => {
     return `
-      query {
+      {
         transaction {
           getTransactions {
-            userId
+            id
+            transactionId
             title
             note
             amount
             categoryId
             createdAt
             accountId
-            transactionId
           }
         }
       }
@@ -42,9 +42,11 @@ export const TransactionItemsEpic: Epic<any, any, any> = (action$, state$) => {
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
+            Authorization: "Bearer " + localStorage.getItem("accessToken")
           },
           body: JSON.stringify({
             query: transactionQuery(dateTimeTo),
+          
           }),
         })
       ).pipe(
