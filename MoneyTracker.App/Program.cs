@@ -5,13 +5,10 @@ using MoneyTracker.App.Authentication;
 using MoneyTracker.App.GraphQl;
 using MoneyTracker.Business.Services;
 using MoneyTracker.Business.Utilities;
-using MoneyTracker.MsSQL.Repositories;
 using MoneyTracker.Business.Interfaces;
 using MoneyTracker.Infrastructure.EventStore;
 using MoneyTracker.Business.Commands;
-using MoneyTracker.Business.Commands.Category;
 using static MoneyTracker.Business.Commands.Category.CategoryCommands;
-using MoneyTracker.Infrastracture.Repositories;
 using MoneyTracker.Infrastracture;
 using MoneyTracker.Business.EventAppliers;
 using static MoneyTracker.Business.Events.Categories.CategoryEvents;
@@ -22,8 +19,11 @@ using static MoneyTracker.Business.Commands.Auth.AuthCommands;
 using static MoneyTracker.Business.Commands.Auth.AuthCommandsHandler;
 using MoneyTracker.Business.ReadStoreModel;
 using MoneyTracker.Infrastracture.MsSQL;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+using static MoneyTracker.Business.Commands.Category.CategoryCommandsHandler;
+using static MoneyTracker.Business.Commands.Transaction.TransactionCommands;
+using static MoneyTracker.Business.Commands.Transaction.TransactionCommandsHandler;
+using static MoneyTracker.Business.Events.Transaction.TransactionEvents;
+using static MoneyTracker.Business.EventAppliers.Transaction.TransactionEventAppliers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,6 +51,7 @@ builder.Services.AddTransient<PasswordHashService>();
 builder.Services.AddTransient<IEventStore, EventStore>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
+builder.Services.AddTransient<ITransactionRepository, TransactionRepository>();
 
 builder.Services.AddTransient<ICommandHandler<CreateCategoryCommand>, CreateCategoryCommandHandler>();
 builder.Services.AddTransient<ICommandHandler<UpdateCategoryNameCommand>, UpdateCategoryNameCommandHandler>();
@@ -58,6 +59,9 @@ builder.Services.AddTransient<ICommandHandler<UpdateCategoryNameCommand>, Update
 builder.Services.AddTransient<ICommandHandler<RegisterUserCommand>, RegisterUserCommandHandler>();
 builder.Services.AddTransient<ICommandHandler<RegisterGoogleUserCommand>, RegisterGoogleUserCommandHandler>();
 builder.Services.AddTransient<ICommandHandler<SetUserRefreshTokenCommand>, SetUserRefreshTokenCommandHandler>();
+
+builder.Services.AddTransient<ICommandHandler<AddTransactionCommand>, AddTransactionCommandHandler>();
+builder.Services.AddTransient<ICommandHandler<CancelTransactionCommand>, CancelTransactionCommandHandler>();
 
 builder.Services.AddTransient<CommandDispatcher>();
 builder.Services.AddTransient<EventDispatcher>();
@@ -70,6 +74,10 @@ builder.Services.AddTransient<IEventApplier<CategoryNameUpdatedEvent>, CategoryN
 builder.Services.AddTransient<IEventApplier<UserRegisteredEvent>, UserRegisteredEventApplier>();
 builder.Services.AddTransient<IEventApplier<GoogleUserRegisteredEvent>, GoogleUserRegisteredEventApplier>();
 builder.Services.AddTransient<IEventApplier<UserRefreshTokenSetEvent>, UserRefreshTokenSetEventApplier>();
+
+builder.Services.AddTransient<IEventApplier<DebitTransactionAddedEvent>, DebitTransactionAddedEventApplier>();
+builder.Services.AddTransient<IEventApplier<CreditTransactionAddedEvent>, CreditTransactionAddedEventApplier>();
+builder.Services.AddTransient<IEventApplier<TransactionCanceledEvent>, TransactionCanceledEventApplier>();
 
 builder.Services.AddTransient<ReadModelExtensions>();
 

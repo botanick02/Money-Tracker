@@ -4,6 +4,7 @@ import { Transaction } from '../../types/Transaction';
 import CategoryItem from '../../elements/CategoryItem';
 import { Category } from '../../types/Category';
 import { PieChart } from 'react-minimal-pie-chart';
+import { useAppSelector } from '../../hooks/useAppDispatch';
 
 interface CategorySummary {
   [categoryId: number]: {
@@ -14,6 +15,9 @@ interface CategorySummary {
 }
 
 const СhartByCategory = () => {
+  const categories = useAppSelector((state) => state.Category.categories)
+  const transactions = useAppSelector((state) => state.TransactionItems.transactions)
+
     const getRandomColor = () => {
         const letters = '0123456789ABCDEF';
         let color = '#';

@@ -3,5 +3,8 @@ export interface ICategoryType {
   name: string;
   type: string;
   isActive: boolean;
+  icon: string;
+  amount:number
+  color:string
 }
 

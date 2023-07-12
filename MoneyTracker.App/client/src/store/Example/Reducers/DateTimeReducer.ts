@@ -3,11 +3,11 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 export interface DateTimeState {
   dateTime: string | null;
 }
-
+const currentDate = new Date().toISOString().substring(0, 19);
 const initialState: DateTimeState = {
-  dateTime: null,
+  dateTime: currentDate,
 };
-
+console.log(currentDate)
 export const DateTimeReducer = createSlice({
   name: "DateTime",
   initialState: initialState,

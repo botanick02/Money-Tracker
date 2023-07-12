@@ -8,7 +8,7 @@ import TimeScopePanel from "../TimeScopePanel/TimeScopePanel";
 const CategoryList = () => {
   const dateTimeTo = useAppSelector((state) => state.DateTime.dateTime)
   const items = useAppSelector((state) => state.Category.categories);
-  const { FETCH_CATEGORIES,EDIT_CATEGORY } = CategoryItemReducer.actions;
+  const { FETCH_CATEGORIES} = CategoryItemReducer.actions;
   const editSuccess = useAppSelector((state) => state.Category.editSuccess)
   const [defaultTransaction, setDefaultTransaction] = useState<
     "expense" | "income"
@@ -35,11 +35,14 @@ const CategoryList = () => {
   useEffect(() => {
     dispatch(FETCH_CATEGORIES({ page, countOfElements, dateTimeTo }));
   }, [page, countOfElements,editSuccess,dateTimeTo]);
-
+  const [type, setType] = useState("");
   return (
  <main>
+  
     <div className="transaction-list">
+    
     <TimeScopePanel />
+    
       {isCreatePopupOpen && (
         <CategoryCreate
           transactionDefaultType={defaultTransaction}

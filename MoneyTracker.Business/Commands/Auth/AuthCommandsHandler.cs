@@ -1,5 +1,4 @@
-﻿using MoneyTracker.Business.Entities;
-using MoneyTracker.Business.Interfaces;
+﻿using MoneyTracker.Business.Interfaces;
 using static MoneyTracker.Business.Commands.Auth.AuthCommands;
 using static MoneyTracker.Business.Events.Auth.AuthEvents;
 
@@ -9,12 +8,10 @@ namespace MoneyTracker.Business.Commands.Auth
     {
         public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand>
         {
-            private readonly IUserRepository userRepository;
             private readonly IEventStore eventStore;
 
-            public RegisterUserCommandHandler(IUserRepository userRepository, IEventStore eventStore)
+            public RegisterUserCommandHandler(IEventStore eventStore)
             {
-                this.userRepository = userRepository;
                 this.eventStore = eventStore;
             }
 
