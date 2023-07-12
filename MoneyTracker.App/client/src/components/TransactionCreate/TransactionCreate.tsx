@@ -60,7 +60,8 @@ const TransactionCreate: React.FC<Props> = ({ openPopupHandle, transactionDefaul
   
   const [fromAccountId, setFromAccountId] = useState(account.value);
   const [toAccountId, setToAccountId] = useState(mocAccountSOptions.Expense);
-
+  const [categoryId, setCategoryId] = useState<Option| string>(accountOptions[0]);
+  console.log(categoryId)
   const handleAccountChange = (option: Option) => {
     setAccount(option);
     console.log(option)
@@ -74,10 +75,11 @@ const TransactionCreate: React.FC<Props> = ({ openPopupHandle, transactionDefaul
       setToAccountId(mocAccountSOptions.Expense);
 
     }
+    
   };
 
 
-  const [categoryId, setCategoryId] = useState<Option>(accountOptions[0]);
+
 
   const handleCategoryChange = (option: Option) => {
      setCategoryId(option);
@@ -117,6 +119,7 @@ const TransactionCreate: React.FC<Props> = ({ openPopupHandle, transactionDefaul
           </li>
           <li onClick={() => {
             setType("transfer");
+            setCategoryId("1afa0565-c46b-4b13-88b0-b8d7fca78340")
           }} className={type === "transfer" ? "current-type" : ""}>Transfer
           </li>
         </ul>
