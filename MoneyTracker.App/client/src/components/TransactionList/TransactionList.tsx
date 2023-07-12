@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { default as test } from "./testData.json";
 import TransactionItem from "../../elements/TransactionItem";
-import { Transaction } from '../../types/Transaction';
 import { TransactionItemsReducer } from '../../store/Example/Reducers/TransactionItemsReducer';
 import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
 import { CategoryItemReducer } from '../../store/Example/Reducers/CategoryItemsReducer';
-import {AccountReducer} from '../../store/Example/Reducers/AccountReducer';
 
 const getOnlyDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -16,7 +13,6 @@ const TransactionList = () => {
     const dateTimeTo = useAppSelector((state) => state.DateTime.dateTime);
     const { FETCH_TRANSACTIONS } = TransactionItemsReducer.actions;
     const { FETCH_CATEGORIES } = CategoryItemReducer.actions;
-    const { SET_ACTUAL_BALANCE,SET_ACTUAL_INCOME_BALANCE,SET_ACTUAL_EXPENSE_BALANCE } = AccountReducer.actions;
     const addTransactionSuccess = useAppSelector((state) => state.TransactionItems.addTransactionSuccess);
     const cancelTransactionSuccess = useAppSelector((state) => state.TransactionItems.cancelTransactionSuccess);
 
@@ -38,30 +34,12 @@ const TransactionList = () => {
           });
     }
    
-    const sum = filteredArray.reduce((total, item) => total + item.amount, 0);
-    console.log(sum)
-    const positiveSum = filteredArray.reduce((total, item) => {
-        if (item.amount > 0) {
-          return total + item.amount;
-        }
-        return total;
-      }, 0);
-      
-      const negativeSum = filteredArray.reduce((total, item) => {
-        if (item.amount < 0) {
-          return total + item.amount;
-        }
-        return total;
-      }, 0);
+   
     useEffect(() => {
         dispatch(FETCH_TRANSACTIONS({ dateTimeTo }));
         dispatch(FETCH_CATEGORIES({ dateTimeTo }));
-        dispatch(SET_ACTUAL_BALANCE(sum));
-        dispatch( SET_ACTUAL_INCOME_BALANCE( positiveSum));
-        dispatch( SET_ACTUAL_EXPENSE_BALANCE(negativeSum));
-     
-        
-    }, [account, dateTimeTo,addTransactionSuccess]);
+  
+    }, [account, dateTimeTo,addTransactionSuccess,cancelTransactionSuccess]);
 
     useEffect(() => {
         setItems(transactions);
