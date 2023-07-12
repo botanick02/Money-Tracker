@@ -5,9 +5,12 @@ import { NotificationReducer } from "./Reducers/NotificationReducer";
 import { TransactionItemsReducer } from "./Reducers/TransactionItemsReducer";
 import { ITransactionType } from "../../types/ITransactionType";
 import { GraphQlEndpoint } from "../../api/queries/tmp";
+import {AccountReducer} from "./Reducers/AccountReducer";
+
 
 const { SHOW_ERROR_MESSAGE } = NotificationReducer.actions;
 const { FETCH_TRANSACTIONS,FETCH_TRANSACTIONS_SUCCESS, FETCH_TRANSACTIONS_ERROR } = TransactionItemsReducer.actions;
+const {SET_ACTUAL_BALANCE, SET_ACTUAL_INCOME_BALANCE, SET_ACTUAL_EXPENSE_BALANCE } = AccountReducer.actions;
 
 export const TransactionItemsEpic: Epic<any, any, any> = (action$, state$) => {
   const transactionQuery = (dateTimeTo: string | null) => {
@@ -46,7 +49,6 @@ export const TransactionItemsEpic: Epic<any, any, any> = (action$, state$) => {
           },
           body: JSON.stringify({
             query: transactionQuery(dateTimeTo),
-          
           }),
         })
       ).pipe(
@@ -60,10 +62,42 @@ export const TransactionItemsEpic: Epic<any, any, any> = (action$, state$) => {
               } else {
                 const transactions: ITransactionType[] = data.data.transaction.getTransactions;
                 console.log(transactions);
+
+                
+                const account = state$.value.Account.actualAccount;
+                let filteredArray = transactions.filter((item) => item.accountId === account);
+                if (account === "645645646") {
+                  filteredArray = transactions.filter((item) => {
+                    return (
+                      item.accountId === "69ae7bca-b2ed-47f1-a084-6bb08ed49a6e" ||
+                      item.accountId === "bc62fbf1-0f5c-4cc0-b995-7573ad855e8d" ||
+                      item.accountId === "4856a9ed-4045-4848-a9b4-b3b36404c69f"
+                    );
+                  });
+                }
+
+               
+                const sum = filteredArray.reduce((total, item) => total + item.amount, 0);
+                const positiveSum = filteredArray.reduce((total, item) => {
+                  if (item.amount > 0) {
+                    return total + item.amount;
+                  }
+                  return total;
+                }, 0);
+                const negativeSum = filteredArray.reduce((total, item) => {
+                  if (item.amount < 0) {
+                    return total + item.amount;
+                  }
+                  return total;
+                }, 0);
+
                 return [
                   FETCH_TRANSACTIONS_SUCCESS({
                     transactions,
                   }),
+                  SET_ACTUAL_BALANCE(sum),
+                  SET_ACTUAL_INCOME_BALANCE(positiveSum),
+                  SET_ACTUAL_EXPENSE_BALANCE(negativeSum),
                 ];
               }
             })
@@ -73,6 +107,8 @@ export const TransactionItemsEpic: Epic<any, any, any> = (action$, state$) => {
     })
   );
 };
+
+export default TransactionItemsEpic;
 
 const {
   ADD_TRANSACTION,

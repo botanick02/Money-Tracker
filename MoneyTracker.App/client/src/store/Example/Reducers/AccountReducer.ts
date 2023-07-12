@@ -25,6 +25,7 @@ export const AccountReducer = createSlice({
     },
     CLEAR_ACTUAL_ACCOUNT(state) {
       state.actualAccount = "645645646";
+      
     },
     SET_ACTUAL_BALANCE(state, action: PayloadAction<number>) {
       state.actualBalance = action.payload;;
@@ -41,6 +42,6 @@ export const AccountReducer = createSlice({
   },
 });
 
-export const { SET_ACTUAL_ACCOUNT, CLEAR_ACTUAL_ACCOUNT } = AccountReducer.actions;
+export const { SET_ACTUAL_ACCOUNT, CLEAR_ACTUAL_ACCOUNT,SET_ACTUAL_BALANCE,SET_ACTUAL_EXPENSE_BALANCE } = AccountReducer.actions;
 
 export default AccountReducer.reducer;
