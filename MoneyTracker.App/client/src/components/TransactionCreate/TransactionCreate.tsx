@@ -60,7 +60,8 @@ const TransactionCreate: React.FC<Props> = ({ openPopupHandle, transactionDefaul
   
   const [fromAccountId, setFromAccountId] = useState(account.value);
   const [toAccountId, setToAccountId] = useState(mocAccountSOptions.Expense);
-
+  const [categoryId, setCategoryId] = useState<Option| string>(accountOptions[0]);
+  console.log(categoryId)
   const handleAccountChange = (option: Option) => {
     setAccount(option);
     console.log(option)
@@ -74,10 +75,18 @@ const TransactionCreate: React.FC<Props> = ({ openPopupHandle, transactionDefaul
       setToAccountId(mocAccountSOptions.Expense);
 
     }
+    
   };
+  const handleAccount1Change = (option: Option) => {
+  setFromAccountId(String(option));
+   
+  };
+  const handleAccount2Change = (option: Option) => {
+  setToAccountId(String(option));
+};
 
 
-  const [categoryId, setCategoryId] = useState<Option>(accountOptions[0]);
+
 
   const handleCategoryChange = (option: Option) => {
      setCategoryId(option);
@@ -117,20 +126,21 @@ const TransactionCreate: React.FC<Props> = ({ openPopupHandle, transactionDefaul
           </li>
           <li onClick={() => {
             setType("transfer");
+            setCategoryId("1afa0565-c46b-4b13-88b0-b8d7fca78340")
           }} className={type === "transfer" ? "current-type" : ""}>Transfer
           </li>
         </ul>
         <div className={"popup__fields"}>
-          <InputWrapper type={"datetime-local"}>
+          {/* <InputWrapper type={"datetime-local"}>
             <input value={date.toISOString().substring(0, 16)} type="datetime-local" onChange={(e) => setDate(new Date(e.target.value))} />
-          </InputWrapper>
+          </InputWrapper> */}
           {
             type !== "transfer" ? (
               <Dropdown title={"Account"} selectHandler={handleAccountChange} options={accountOptions} />
             ) : (
               <div className={"popup__row"}>
-                <Dropdown title={"From"} selectHandler={handleAccountChange} options={accountOptions} />
-                <Dropdown title={"To"} selectHandler={handleAccountChange} options={accountOptions} />
+                <Dropdown title={"From"} selectHandler={handleAccount1Change} options={accountOptions} />
+                <Dropdown title={"To"} selectHandler={handleAccount2Change} options={accountOptions} />
               </div>
             )
           }
@@ -149,9 +159,9 @@ const TransactionCreate: React.FC<Props> = ({ openPopupHandle, transactionDefaul
           <InputWrapper>
             <input type="text" placeholder="Title" onChange={(e) => setTitle(e.target.value)} />
           </InputWrapper>
-          <InputWrapper>
+          {/* <InputWrapper>
             <input type="text" placeholder="Note" />
-          </InputWrapper>
+          </InputWrapper> */}
         </div>
         <div className={"popup__row"}>
           <button onClick={handleSave} className={"button"}>
