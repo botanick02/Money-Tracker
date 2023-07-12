@@ -4,7 +4,7 @@ export interface ICategoryType {
   type: string;
   isActive: boolean;
   icon: string;
- 
- 
+  amount:number
+  color:string
 }
 

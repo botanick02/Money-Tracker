@@ -131,9 +131,9 @@ const TransactionCreate: React.FC<Props> = ({ openPopupHandle, transactionDefaul
           </li>
         </ul>
         <div className={"popup__fields"}>
-          <InputWrapper type={"datetime-local"}>
+          {/* <InputWrapper type={"datetime-local"}>
             <input value={date.toISOString().substring(0, 16)} type="datetime-local" onChange={(e) => setDate(new Date(e.target.value))} />
-          </InputWrapper>
+          </InputWrapper> */}
           {
             type !== "transfer" ? (
               <Dropdown title={"Account"} selectHandler={handleAccountChange} options={accountOptions} />
@@ -159,9 +159,9 @@ const TransactionCreate: React.FC<Props> = ({ openPopupHandle, transactionDefaul
           <InputWrapper>
             <input type="text" placeholder="Title" onChange={(e) => setTitle(e.target.value)} />
           </InputWrapper>
-          <InputWrapper>
+          {/* <InputWrapper>
             <input type="text" placeholder="Note" />
-          </InputWrapper>
+          </InputWrapper> */}
         </div>
         <div className={"popup__row"}>
           <button onClick={handleSave} className={"button"}>
