@@ -2,38 +2,38 @@
 {
     public class AuthEvents
     {
-        public class UserRegisteredEvent
+        public record UserRegisteredEvent : Event
         {
-            public Guid UserId { get; set; }
+            public Guid UserId { get; init; }
 
-            public string Email { get; set; }
+            public string Email { get; init; }
 
-            public string Name { get; set; }
+            public string Name { get; init; }
 
-            public string PasswordHash { get; set; }
+            public string PasswordHash { get; init; }
 
-            public string PasswordSalt { get; set; }
+            public string PasswordSalt { get; init; }
 
             public bool GoogleAuth { get; } = false;
         }
 
-        public class GoogleUserRegisteredEvent
+        public record GoogleUserRegisteredEvent : Event
         {
-            public Guid UserId { get; set; }
+            public Guid UserId { get; init; }
 
-            public string Email { get; set; }
+            public string Email { get; init; }
 
-            public string Name { get; set; }
+            public string Name { get; init; }
 
 
             public bool GoogleAuth { get; } = true;
         }
 
-        public class UserRefreshTokenSetEvent
+        public record UserRefreshTokenSetEvent : Event
         {
-            public Guid UserId { get; set; }
+            public Guid UserId { get; init; }
 
-            public string? RefreshToken { get; set; }
+            public string? RefreshToken { get; init; }
         }
     }
 }

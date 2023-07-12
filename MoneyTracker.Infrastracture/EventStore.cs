@@ -1,12 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
-using MoneyTracker.Business;
-using MoneyTracker.Business.EventAppliers;
-using MoneyTracker.Business.Events;
+﻿using MoneyTracker.Business.Events;
 using MoneyTracker.Business.Interfaces;
 using MoneyTracker.Business.ReadStoreModel;
-using MoneyTracker.Infrastracture;
 using Newtonsoft.Json;
-using System;
 
 namespace MoneyTracker.Infrastructure.EventStore
 {
@@ -20,7 +15,7 @@ namespace MoneyTracker.Infrastructure.EventStore
             this.eventStoreRepository = eventStoreRepository;
         }
 
-        public T AggregateModel<T>(DateTime dateTimeTo, T @default, Func<T, object, T> evolve)
+        public T AggregateModel<T>(DateTime dateTimeTo, T @default, Func<T, Event, T> evolve)
         {
             var events = GetEvents(dateTimeTo);
 
@@ -34,7 +29,7 @@ namespace MoneyTracker.Infrastructure.EventStore
             return aggregate;
         }
 
-        public void AppendEvent<TEvent>(TEvent @event)
+        public void AppendEvent(Event @event)
         {
             var newEvent = new StoredEvent
             {
@@ -48,10 +43,15 @@ namespace MoneyTracker.Infrastructure.EventStore
             currentReadModel.Update(@event);
         }
 
-        public List<object> GetEvents(DateTime dateTimeTo)
+        public List<Event> GetEvents(DateTime dateTimeTo)
         {
-            var events = eventStoreRepository.GetEvents(dateTimeTo);
-            return events.Select(e => JsonConvert.DeserializeObject(e.Data, Type.GetType(e.Type))).ToList();
+            var events = eventStoreRepository.GetEvents(dateTimeTo)
+                .Select(e => JsonConvert.DeserializeObject(e.Data, Type.GetType(e.Type)))
+                .Where(obj => obj is Event)
+                .Cast<Event>()
+                .ToList();
+
+            return events;
         }
     }
 }

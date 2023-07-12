@@ -1,4 +1,6 @@
-﻿using MoneyTracker.Business.ReadStoreModel;
+﻿using Microsoft.Extensions.DependencyInjection;
+using MoneyTracker.Business.Events;
+using MoneyTracker.Business.ReadStoreModel;
 
 namespace MoneyTracker.Business.EventAppliers
 {
@@ -11,23 +13,23 @@ namespace MoneyTracker.Business.EventAppliers
             this.serviceProvider = serviceProvider;
         }
 
-        public ReadModel Apply(ReadModel currentModel, object @event)
+        public ReadModel Apply(ReadModel currentModel, Event @event)
         {
             var eventType = @event.GetType();
-            var eventApplierType = typeof(IEventApplier<>).MakeGenericType(eventType);
 
-            var eventApplier = serviceProvider.GetService(eventApplierType);
-            if (eventApplier != null)
+            var applierType = typeof(IEventApplier<>).MakeGenericType(eventType);
+            var applier = serviceProvider.GetRequiredService(applierType);
+
+            var applyMethod = applier.GetType().GetMethod("Apply");
+            var applyResult = applyMethod!.Invoke(applier, new object[] { currentModel, @event });
+
+            if (applyResult is ReadModel result)
             {
-                var applyMethod = eventApplierType.GetMethod("Apply");
-                var applyResult = applyMethod.Invoke(eventApplier, new object[] { currentModel, @event });
-                if (applyResult is ReadModel result)
-                {
-                    return result;
-                }
+                return result;
             }
 
             return currentModel;
         }
+
     }
 }
