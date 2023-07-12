@@ -2,14 +2,14 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { useAppSelector } from "../../../hooks/useAppDispatch";
 
 export interface Account {
-  actualAccount: string | null;
+  actualAccount: string 
   actualBalance:number
   actuaIncomelBalance:number
   actualExpenseBalance:number
 }
 
 const initialState: Account = {
-  actualAccount: "Total",
+  actualAccount: "645645646",
   actualBalance:0,
   actuaIncomelBalance:0,
   actualExpenseBalance:0
@@ -24,7 +24,8 @@ export const AccountReducer = createSlice({
       console.log(action.payload)
     },
     CLEAR_ACTUAL_ACCOUNT(state) {
-      state.actualAccount = "Total";
+      state.actualAccount = "645645646";
+      
     },
     SET_ACTUAL_BALANCE(state, action: PayloadAction<number>) {
       state.actualBalance = action.payload;;
@@ -41,6 +42,6 @@ export const AccountReducer = createSlice({
   },
 });
 
-export const { SET_ACTUAL_ACCOUNT, CLEAR_ACTUAL_ACCOUNT } = AccountReducer.actions;
+export const { SET_ACTUAL_ACCOUNT, CLEAR_ACTUAL_ACCOUNT,SET_ACTUAL_BALANCE,SET_ACTUAL_EXPENSE_BALANCE } = AccountReducer.actions;
 
 export default AccountReducer.reducer;

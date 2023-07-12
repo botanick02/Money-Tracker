@@ -64,7 +64,7 @@ export const TransactionItemsReducer = createSlice({
     ) {
       state.loading = false;
       state.error = null;
-      state.addTransactionSuccess = action.payload.addTransactionSuccess;
+      state.addTransactionSuccess = true;
      
     },
     ADD_TRANSACTION_ERROR(state, action: PayloadAction<string>) {

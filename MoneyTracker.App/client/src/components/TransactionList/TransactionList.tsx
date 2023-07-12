@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { default as test } from "./testData.json";
 import TransactionItem from "../../elements/TransactionItem";
-import { Transaction } from '../../types/Transaction';
 import { TransactionItemsReducer } from '../../store/Example/Reducers/TransactionItemsReducer';
 import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
 import { CategoryItemReducer } from '../../store/Example/Reducers/CategoryItemsReducer';
-import {AccountReducer} from '../../store/Example/Reducers/AccountReducer';
 
 const getOnlyDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -16,14 +13,11 @@ const TransactionList = () => {
     const dateTimeTo = useAppSelector((state) => state.DateTime.dateTime);
     const { FETCH_TRANSACTIONS } = TransactionItemsReducer.actions;
     const { FETCH_CATEGORIES } = CategoryItemReducer.actions;
-    const { SET_ACTUAL_BALANCE,SET_ACTUAL_INCOME_BALANCE,SET_ACTUAL_EXPENSE_BALANCE } = AccountReducer.actions;
-    const addTransactionSuccess = useAppSelector((state) => state.TransactionItems.cancelLoading);
- 
+    const addTransactionSuccess = useAppSelector((state) => state.TransactionItems.addTransactionSuccess);
+    const cancelTransactionSuccess = useAppSelector((state) => state.TransactionItems.cancelTransactionSuccess);
 
     const dispatch = useAppDispatch();
     const transactions = useAppSelector((state) => state.TransactionItems.transactions);
-    const cancelTransaction = useAppSelector((state) => state.TransactionItems.cancelTransactionSuccess);
-
     const [items, setItems] = useState(transactions);
 
     
@@ -40,39 +34,22 @@ const TransactionList = () => {
           });
     }
    
-    const sum = filteredArray.reduce((total, item) => total + item.amount, 0);
-
-    const positiveSum = filteredArray.reduce((total, item) => {
-        if (item.amount > 0) {
-          return total + item.amount;
-        }
-        return total;
-      }, 0);
-      
-      const negativeSum = filteredArray.reduce((total, item) => {
-        if (item.amount < 0) {
-          return total + item.amount;
-        }
-        return total;
-      }, 0);
+   
     useEffect(() => {
         dispatch(FETCH_TRANSACTIONS({ dateTimeTo }));
-        dispatch(SET_ACTUAL_BALANCE(sum));
-        dispatch( SET_ACTUAL_INCOME_BALANCE( positiveSum));
-        dispatch( SET_ACTUAL_EXPENSE_BALANCE(negativeSum));
         dispatch(FETCH_CATEGORIES({ dateTimeTo }));
-        
-    }, [addTransactionSuccess, account, dateTimeTo]);
+  
+    }, [account, dateTimeTo,addTransactionSuccess,cancelTransactionSuccess]);
 
     useEffect(() => {
         setItems(transactions);
-    }, [account, transactions]);
+    }, [transactions,cancelTransactionSuccess]);
     
     return (
         <div className={"transaction-list"}>
             {
                 filteredArray.map((item, index) => {
-                    if (index === 0 || getOnlyDate(filteredArray[index - 1]?.createdAt.slice(0, 10)) !== getOnlyDate(item.createdAt)) {
+                    if (index === 0 || getOnlyDate(filteredArray[index - 1]?.createdAt) !== getOnlyDate(item.createdAt)) {
                         return (
                             <React.Fragment key={index}>
                                 <div className={"row-title"}>{getOnlyDate(item.createdAt)}</div>

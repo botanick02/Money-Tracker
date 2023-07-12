@@ -19,6 +19,8 @@ const TransactionCreate: React.FC<Props> = ({ openPopupHandle, transactionDefaul
   const { FETCH_CATEGORIES } = CategoryItemReducer.actions;
   const { ADD_TRANSACTION } = TransactionItemsReducer.actions;
   useEffect(() => {
+
+    setAccount(accountOptions.find(option => option.value === actualAccount) || accountOptions[0])
     dispatch(FETCH_CATEGORIES({
       dateTimeTo
     }));
@@ -50,8 +52,12 @@ const TransactionCreate: React.FC<Props> = ({ openPopupHandle, transactionDefaul
     label: category.name,
     value: category.id
   }));
+  const actualAccount = useAppSelector((state) => state.Account.actualAccount);
 
-  const [account, setAccount] = useState<Option>(accountOptions[0]);
+  const [account, setAccount] = useState<Option>(
+    accountOptions.find(option => option.value === actualAccount) || accountOptions[0]
+  );
+  
   const [fromAccountId, setFromAccountId] = useState(account.value);
   const [toAccountId, setToAccountId] = useState(mocAccountSOptions.Expense);
 
@@ -82,9 +88,7 @@ const TransactionCreate: React.FC<Props> = ({ openPopupHandle, transactionDefaul
   };
 
   const handleSave = () => {
-    console.log("fromAccountId:", fromAccountId);
   
-   
     dispatch(
       ADD_TRANSACTION({
         amount,

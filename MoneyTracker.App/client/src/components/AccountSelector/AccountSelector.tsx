@@ -12,16 +12,17 @@ const AccountSelector = () => {
     accounts.find((a) => a.name === "Total")?.id
   );
   const [isListOpen, setIsListOpen] = useState(false);
-
+const transactions = useAppSelector((state) => state.TransactionItems.transactions);
   const switchListState = () => {
     setIsListOpen(!isListOpen);
   };
   const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(SET_ACTUAL_ACCOUNT(currentAccountId || "645645646"));
+  }, [currentAccountId,transactions]);
+
   const actualBalance = useAppSelector((state) => state.Account.actualBalance);
 
-  useEffect(() => {
-    dispatch(SET_ACTUAL_ACCOUNT(currentAccountId || ""));
-  }, [currentAccountId]);
 
   return (
     <div className={"account-selector"}>
