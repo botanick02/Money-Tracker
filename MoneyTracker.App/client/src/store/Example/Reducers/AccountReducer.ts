@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { useAppSelector } from "../../../hooks/useAppDispatch";
 
 export interface Account {
-  actualAccount: string | null;
+  actualAccount: string 
   actualBalance:number
   actuaIncomelBalance:number
   actualExpenseBalance:number
