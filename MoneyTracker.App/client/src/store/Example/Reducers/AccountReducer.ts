@@ -9,7 +9,7 @@ export interface Account {
 }
 
 const initialState: Account = {
-  actualAccount: "Total",
+  actualAccount: "645645646",
   actualBalance:0,
   actuaIncomelBalance:0,
   actualExpenseBalance:0
@@ -24,7 +24,7 @@ export const AccountReducer = createSlice({
       console.log(action.payload)
     },
     CLEAR_ACTUAL_ACCOUNT(state) {
-      state.actualAccount = "Total";
+      state.actualAccount = "645645646";
     },
     SET_ACTUAL_BALANCE(state, action: PayloadAction<number>) {
       state.actualBalance = action.payload;;

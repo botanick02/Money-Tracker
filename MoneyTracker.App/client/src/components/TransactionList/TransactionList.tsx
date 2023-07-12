@@ -18,7 +18,7 @@ const TransactionList = () => {
     const { FETCH_CATEGORIES } = CategoryItemReducer.actions;
     const { SET_ACTUAL_BALANCE,SET_ACTUAL_INCOME_BALANCE,SET_ACTUAL_EXPENSE_BALANCE } = AccountReducer.actions;
     const addTransactionSuccess = useAppSelector((state) => state.TransactionItems.addTransactionSuccess);
- 
+    const cancelTransactionSuccess = useAppSelector((state) => state.TransactionItems.cancelTransactionSuccess);
 
     const dispatch = useAppDispatch();
     const transactions = useAppSelector((state) => state.TransactionItems.transactions);
@@ -55,22 +55,23 @@ const TransactionList = () => {
       }, 0);
     useEffect(() => {
         dispatch(FETCH_TRANSACTIONS({ dateTimeTo }));
+        dispatch(FETCH_CATEGORIES({ dateTimeTo }));
         dispatch(SET_ACTUAL_BALANCE(sum));
         dispatch( SET_ACTUAL_INCOME_BALANCE( positiveSum));
-        dispatch( SET_ACTUAL_EXPENSE_BALANCE(positiveSum));
-        dispatch(FETCH_CATEGORIES({ dateTimeTo }));
+        dispatch( SET_ACTUAL_EXPENSE_BALANCE(negativeSum));
+     
         
-    }, [addTransactionSuccess, account, dateTimeTo]);
+    }, [account, dateTimeTo,addTransactionSuccess]);
 
     useEffect(() => {
         setItems(transactions);
-    }, [account, transactions]);
+    }, [transactions,cancelTransactionSuccess]);
     
     return (
         <div className={"transaction-list"}>
             {
                 filteredArray.map((item, index) => {
-                    if (index === 0 || getOnlyDate(filteredArray[index - 1]?.createdAt.slice(0, 10)) !== getOnlyDate(item.createdAt)) {
+                    if (index === 0 || getOnlyDate(filteredArray[index - 1]?.createdAt) !== getOnlyDate(item.createdAt)) {
                         return (
                             <React.Fragment key={index}>
                                 <div className={"row-title"}>{getOnlyDate(item.createdAt)}</div>
