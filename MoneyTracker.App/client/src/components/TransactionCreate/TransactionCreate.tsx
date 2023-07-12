@@ -77,6 +77,13 @@ const TransactionCreate: React.FC<Props> = ({ openPopupHandle, transactionDefaul
     }
     
   };
+  const handleAccount1Change = (option: Option) => {
+  setFromAccountId(String(option));
+   
+  };
+  const handleAccount2Change = (option: Option) => {
+  setToAccountId(String(option));
+};
 
 
 
@@ -132,8 +139,8 @@ const TransactionCreate: React.FC<Props> = ({ openPopupHandle, transactionDefaul
               <Dropdown title={"Account"} selectHandler={handleAccountChange} options={accountOptions} />
             ) : (
               <div className={"popup__row"}>
-                <Dropdown title={"From"} selectHandler={handleAccountChange} options={accountOptions} />
-                <Dropdown title={"To"} selectHandler={handleAccountChange} options={accountOptions} />
+                <Dropdown title={"From"} selectHandler={handleAccount1Change} options={accountOptions} />
+                <Dropdown title={"To"} selectHandler={handleAccount2Change} options={accountOptions} />
               </div>
             )
           }
