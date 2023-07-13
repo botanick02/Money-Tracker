@@ -18,7 +18,7 @@ const initialState: CreateTransactionState = {
   transactions: [],
   countOfElements: 10,
   addTransactionSuccess: false,
-  cancelTransactionSuccess: false
+  cancelTransactionSuccess: false,
 };
 
 export const TransactionItemsReducer = createSlice({
@@ -41,57 +41,57 @@ export const TransactionItemsReducer = createSlice({
       state.loading = false;
       state.error = null;
       state.transactions = action.payload.transactions.slice().reverse();
-
-      
     },
     FETCH_TRANSACTIONS_ERROR(state, action: PayloadAction<string>) {
       state.loading = false;
       state.error = action.payload;
       state.transactions = [];
-      
     },
-    ADD_TRANSACTION(
+    ADD_FINANCIAL_OPERATION(
       state,
-      action: PayloadAction<{ amount: number; categoryId: any;   title: string; fromAccountId:string; toAccountId:string; }>
+      action: PayloadAction<{
+        amount: number;
+        categoryId: any;
+        title: string;
+        fromAccountId: string;
+        toAccountId: string;
+      }>
     ) {
-      state.addTransactionSuccess = false
+      state.addTransactionSuccess = false;
       state.loading = true;
       state.error = null;
     },
-    ADD_TRANSACTION_SUCCESS(
+    ADD_FINANCIAL_OPERATION_SUCCESS(
       state,
-      action: PayloadAction<{ addTransactionSuccess: boolean;}>
+      action: PayloadAction<{ addTransactionSuccess: boolean }>
     ) {
       state.loading = false;
       state.error = null;
       state.addTransactionSuccess = true;
-     
     },
-    ADD_TRANSACTION_ERROR(state, action: PayloadAction<string>) {
+    ADD_FINANCIAL_OPERATION_ERROR(state, action: PayloadAction<string>) {
       state.loading = false;
       state.error = action.payload;
     },
-    CANCEL_TRANSACTION(
+    CANCEL_FINANCIAL_OPERATION(
       state,
-      action: PayloadAction<{ transactionId:string;}>
+      action: PayloadAction<{ transactionId: string }>
     ) {
-      state.cancelTransactionSuccess = false
+      state.cancelTransactionSuccess = false;
       state.loading = true;
       state.cancelLoading = true;
       state.error = null;
     },
-    CANCEL_TRANSACTION_SUCCESS(
+    CANCEL_FINANCIAL_OPERATION_SUCCESS(
       state,
-      action: PayloadAction<{ cancelTransactionSuccess: boolean;}>
+      action: PayloadAction<{ cancelTransactionSuccess: boolean }>
     ) {
       state.loading = false;
       state.error = null;
       state.cancelLoading = false;
       state.cancelTransactionSuccess = action.payload.cancelTransactionSuccess;
-      
-     
     },
-    CANCEL_TRANSACTION_ERROR(state, action: PayloadAction<string>) {
+    CANCEL_FINANCIAL_OPERATION_ERROR(state, action: PayloadAction<string>) {
       state.loading = false;
       state.error = action.payload;
     },
@@ -99,4 +99,3 @@ export const TransactionItemsReducer = createSlice({
 });
 
 export default TransactionItemsReducer.reducer;
-

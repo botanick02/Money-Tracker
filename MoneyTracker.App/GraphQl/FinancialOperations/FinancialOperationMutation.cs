@@ -1,23 +1,23 @@
 ﻿using GraphQL;
 using GraphQL.Types;
-using MoneyTracker.App.GraphQl.Transaction.Types.Inputs;
+using MoneyTracker.App.GraphQl.FinancialOperation.Types.Inputs;
 using MoneyTracker.App.Helpers;
 using MoneyTracker.Business.Commands;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
-using static MoneyTracker.Business.Commands.Transaction.TransactionCommands;
+using static MoneyTracker.Business.Commands.FinancialOperation.FinancialOperationCommands;
 
-namespace MoneyTracker.App.GraphQl.Transaction
+namespace MoneyTracker.App.GraphQl.FinancialOperation
 {
-    public class TransactionMutation : ObjectGraphType
+    public class FinancialOperationMutation : ObjectGraphType
     {
-        public TransactionMutation(CommandDispatcher commandDispatcher)
+        public FinancialOperationMutation(CommandDispatcher commandDispatcher)
         {
-            Field<bool>("AddTransaction")
-                .Argument<TransactionInputType>("Transaction")
+            Field<bool>("AddFinancialOperation")
+                .Argument<FinancialOperationInputType>("FinOperation")
                 .Resolve(context =>
                 {
-                    var transaction = context.GetArgument<TransactionInput>("Transaction");
+                    var transaction = context.GetArgument<FinancialOperationInput>("FinOperation");
 
                     bool isValid = ModelValidationHelper.ValidateModel(transaction, out List<ValidationResult> results);
 
@@ -32,7 +32,7 @@ namespace MoneyTracker.App.GraphQl.Transaction
                         return false;
                     }
 
-                    var command = new AddTransactionCommand
+                    var command = new AddFinancialOperation
                     {
                         UserId = Guid.Parse(context.User.FindFirst(ClaimTypes.NameIdentifier)!.Value),
                         Title = transaction.Title!,
@@ -47,11 +47,11 @@ namespace MoneyTracker.App.GraphQl.Transaction
                     return true;
                 }).Authorize();
 
-            Field<bool>("CancelTransaction")
-                .Argument<CancelTransactionInputType>("CancelTransactionInput")
+            Field<bool>("CancelFinancialOperation")
+                .Argument<CancelFinancialOperationInputType>("CancelFinOperationInput")
                 .Resolve(context =>
                 {
-                    var input = context.GetArgument<CancelTransactionInput>("CancelTransactionInput");
+                    var input = context.GetArgument<CancelFinancialOperationInput>("CancelFinOperationInput");
 
                     bool isValid = ModelValidationHelper.ValidateModel(input, out List<ValidationResult> results);
 
@@ -66,28 +66,15 @@ namespace MoneyTracker.App.GraphQl.Transaction
                         return false;
                     }
 
-                    var command = new CancelTransactionCommand
+                    var command = new CancelFinancialOperation
                     {
-                        TransactionId = Guid.Parse(input.TransactionId),
+                        TransactionId = Guid.Parse(input.OperationId),
                     };
 
                     commandDispatcher.Dispatch(command);
 
                     return true;
                 });
-        }
-    }
-
-    public class GuidValidationAttribute : ValidationAttribute
-    {
-        public override bool IsValid(object value)
-        {
-            if (value is string stringValue)
-            {
-                return Guid.TryParse(stringValue, out _);
-            }
-
-            return false;
         }
     }
 }

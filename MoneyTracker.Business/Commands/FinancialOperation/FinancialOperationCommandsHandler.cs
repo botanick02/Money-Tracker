@@ -1,27 +1,27 @@
 ﻿using MoneyTracker.Business.Interfaces;
-using static MoneyTracker.Business.Commands.Transaction.TransactionCommands;
-using static MoneyTracker.Business.Events.Transaction.TransactionEvents;
+using static MoneyTracker.Business.Commands.FinancialOperation.FinancialOperationCommands;
+using static MoneyTracker.Business.Events.FinancialOperation.FinancialOperationEvents;
 
-namespace MoneyTracker.Business.Commands.Transaction
+namespace MoneyTracker.Business.Commands.FinancialOperation
 {
-    public class TransactionCommandsHandler
+    public class FinancialOperationCommandsHandler
     {
-        public class AddTransactionCommandHandler : ICommandHandler<AddTransactionCommand>
+        public class AddFinancialOperationCommandHandler : ICommandHandler<AddFinancialOperation>
         {
             private readonly IEventStore eventStore;
 
-            public AddTransactionCommandHandler(IEventStore eventStore, ITransactionRepository transactionRepository)
+            public AddFinancialOperationCommandHandler(IEventStore eventStore, ITransactionRepository transactionRepository)
             {
                 this.eventStore = eventStore;
             }
 
-            public bool Handle(AddTransactionCommand command)
+            public bool Handle(AddFinancialOperation command)
             {
                 var transactionId = Guid.NewGuid();
 
                 var debitTransactionEvent = new DebitTransactionAddedEvent
                 {
-                    TransactionId = transactionId,
+                    OperationId = transactionId,
                     UserId = command.UserId,
                     CategoryId = command.CategoryId,
                     CreatedAt = DateTime.UtcNow,
@@ -33,7 +33,7 @@ namespace MoneyTracker.Business.Commands.Transaction
 
                 var creditTransactionEvent = new CreditTransactionAddedEvent
                 {
-                    TransactionId = transactionId,
+                    OperationId = transactionId,
                     UserId = command.UserId,
                     CategoryId = command.CategoryId,
                     CreatedAt = DateTime.UtcNow,
@@ -50,19 +50,19 @@ namespace MoneyTracker.Business.Commands.Transaction
             }
         }
 
-        public class CancelTransactionCommandHandler : ICommandHandler<CancelTransactionCommand>
+        public class CancelFinancialOperationCommandHandler : ICommandHandler<CancelFinancialOperation>
         {
             private readonly IEventStore eventStore;
             private readonly ITransactionRepository transactionRepository;
 
 
-            public CancelTransactionCommandHandler(IEventStore eventStore, ITransactionRepository transactionRepository)
+            public CancelFinancialOperationCommandHandler(IEventStore eventStore, ITransactionRepository transactionRepository)
             {
                 this.eventStore = eventStore;
                 this.transactionRepository = transactionRepository;
             }
 
-            public bool Handle(CancelTransactionCommand command)
+            public bool Handle(CancelFinancialOperation command)
             {
                 var transactions = transactionRepository.GetTransactionsByTransactionId(command.TransactionId);
                 if (transactions.Count < 2)
@@ -70,9 +70,9 @@ namespace MoneyTracker.Business.Commands.Transaction
                     return false;
                 }
 
-                var cancelEvent = new TransactionCanceledEvent
+                var cancelEvent = new FinancialOperationCanceled
                 {
-                    TransactionId = command.TransactionId,
+                    OperationId = command.TransactionId,
                 };
 
                 eventStore.AppendEvent(cancelEvent);

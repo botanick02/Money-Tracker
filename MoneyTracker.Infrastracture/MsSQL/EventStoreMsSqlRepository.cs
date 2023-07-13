@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using MoneyTracker.Business.Events;
 using MoneyTracker.Business.Interfaces;
-using System;
 using System.Data.SqlClient;
 
 namespace MoneyTracker.Infrastracture.MsSQL

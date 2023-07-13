@@ -1,4 +1,5 @@
 export interface ITransactionType {
+  operationId: string;
   userId: string;
   title: string;
   note: string | null;
@@ -6,5 +7,4 @@ export interface ITransactionType {
   categoryId: string;
   createdAt: string;
   accountId: string;
-  transactionId: string;
 }

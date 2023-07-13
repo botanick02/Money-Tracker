@@ -15,7 +15,7 @@ namespace MoneyTracker.Infrastracture.MsSQL
         public List<Transaction> GetTransactionsByTransactionId(Guid transactionId, DateTime? dateTimeTo = null)
         {
             var readModel = readModelExtensions.GetReadModel(dateTimeTo);
-            return readModel.Transactions.Where(t => t.TransactionId == transactionId).ToList();
+            return readModel.Transactions.Where(t => t.OperationId == transactionId).ToList();
         }
 
         public List<Transaction> GetTransactions(Guid userId, DateTime? dateTimeTo = null)

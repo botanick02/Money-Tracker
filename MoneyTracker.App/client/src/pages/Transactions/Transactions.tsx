@@ -4,7 +4,7 @@ import TransactionCreate from "../../components/TransactionCreate/TransactionCre
 import { default as test } from "../../components/TransactionList/testData.json";
 import TimeScopePanel from "../../components/TimeScopePanel/TimeScopePanel";
 import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
-import { TransactionItemsReducer } from "../../store/Example/Reducers/TransactionItemsReducer";
+import { TransactionItemsReducer } from "../../store/Example/Reducers/FinancialOperationsReducer";
 
 
 const Transactions = () => {

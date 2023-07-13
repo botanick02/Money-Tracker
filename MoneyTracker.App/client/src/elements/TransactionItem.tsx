@@ -2,8 +2,8 @@ import React, { FC, useEffect } from 'react';
 import { ReactComponent as EditIcon } from "../assets/icons/Edit-icon.svg";
 import { ITransactionType } from '../types/ITransactionType';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
-import { TransactionItemsReducer } from '../store/Example/Reducers/TransactionItemsReducer';
-const { CANCEL_TRANSACTION } = TransactionItemsReducer.actions;
+import { TransactionItemsReducer } from '../store/Example/Reducers/FinancialOperationsReducer';
+const { CANCEL_FINANCIAL_OPERATION } = TransactionItemsReducer.actions;
 
 const TransactionItem: FC<{ transaction: ITransactionType }> = ({ transaction }) => {
   const categoryItems = useAppSelector((state) => state.Category.categories);
@@ -14,7 +14,7 @@ const TransactionItem: FC<{ transaction: ITransactionType }> = ({ transaction })
     const confirmed = window.confirm("Are you sure you want to delete this transaction?");
 
     if (confirmed) {
-        dispatch(CANCEL_TRANSACTION({ transactionId }));
+        dispatch(CANCEL_FINANCIAL_OPERATION({ transactionId }));
       ;
     }
   };
@@ -33,7 +33,7 @@ const TransactionItem: FC<{ transaction: ITransactionType }> = ({ transaction })
       <div className={`row-item__amount row-item__amount__${type}`}>{transaction.amount} $</div>
       <EditIcon
         onClick={() => {
-          handleDeleteClick(transaction.transactionId)
+          handleDeleteClick(transaction.operationId)
         }}
         className={"edit-icon"} />
     </div>

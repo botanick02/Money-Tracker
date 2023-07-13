@@ -1,12 +1,12 @@
-﻿namespace MoneyTracker.Business.Events.Transaction
+﻿namespace MoneyTracker.Business.Events.FinancialOperation
 {
-    public class TransactionEvents
+    public class FinancialOperationEvents
     {
         public record DebitTransactionAddedEvent : Event
         {
             public Guid Id { get; set; } = Guid.NewGuid();
 
-            public Guid TransactionId { get; set; }
+            public Guid OperationId { get; set; }
 
             public Guid UserId { get; set; }
 
@@ -27,7 +27,7 @@
         {
             public Guid Id { get; set; } = Guid.NewGuid();
 
-            public Guid TransactionId { get; set; }
+            public Guid OperationId { get; set; }
 
             public Guid UserId { get; set; }
 
@@ -44,9 +44,9 @@
             public Guid AccountId { get; set; }
         }
 
-        public record TransactionCanceledEvent : Event
+        public record FinancialOperationCanceled : Event
         {
-            public Guid TransactionId { get; set;}
+            public Guid OperationId { get; set;}
 
         }
     }

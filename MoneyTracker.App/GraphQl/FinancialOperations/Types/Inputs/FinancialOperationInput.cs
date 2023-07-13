@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MoneyTracker.App.Helpers;
+using System.ComponentModel.DataAnnotations;
 
-namespace MoneyTracker.App.GraphQl.Transaction.Types.Inputs
+namespace MoneyTracker.App.GraphQl.FinancialOperation.Types.Inputs
 {
-    public class TransactionInput
+    public class FinancialOperationInput
     {
         [Required(ErrorMessage = "Title is required")]
         public string? Title { get; set; }

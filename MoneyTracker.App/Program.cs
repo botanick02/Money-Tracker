@@ -20,10 +20,10 @@ using static MoneyTracker.Business.Commands.Auth.AuthCommandsHandler;
 using MoneyTracker.Business.ReadStoreModel;
 using MoneyTracker.Infrastracture.MsSQL;
 using static MoneyTracker.Business.Commands.Category.CategoryCommandsHandler;
-using static MoneyTracker.Business.Commands.Transaction.TransactionCommands;
-using static MoneyTracker.Business.Commands.Transaction.TransactionCommandsHandler;
-using static MoneyTracker.Business.Events.Transaction.TransactionEvents;
-using static MoneyTracker.Business.EventAppliers.Transaction.TransactionEventAppliers;
+using static MoneyTracker.Business.Commands.FinancialOperation.FinancialOperationCommands;
+using static MoneyTracker.Business.Commands.FinancialOperation.FinancialOperationCommandsHandler;
+using static MoneyTracker.Business.Events.FinancialOperation.FinancialOperationEvents;
+using static MoneyTracker.Business.EventAppliers.FinancialOperation.FinancialOperationEventAppliers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,8 +60,8 @@ builder.Services.AddTransient<ICommandHandler<RegisterUserCommand>, RegisterUser
 builder.Services.AddTransient<ICommandHandler<RegisterGoogleUserCommand>, RegisterGoogleUserCommandHandler>();
 builder.Services.AddTransient<ICommandHandler<SetUserRefreshTokenCommand>, SetUserRefreshTokenCommandHandler>();
 
-builder.Services.AddTransient<ICommandHandler<AddTransactionCommand>, AddTransactionCommandHandler>();
-builder.Services.AddTransient<ICommandHandler<CancelTransactionCommand>, CancelTransactionCommandHandler>();
+builder.Services.AddTransient<ICommandHandler<AddFinancialOperation>, AddFinancialOperationCommandHandler>();
+builder.Services.AddTransient<ICommandHandler<CancelFinancialOperation>, CancelFinancialOperationCommandHandler>();
 
 builder.Services.AddTransient<CommandDispatcher>();
 builder.Services.AddTransient<EventDispatcher>();
@@ -77,7 +77,7 @@ builder.Services.AddTransient<IEventApplier<UserRefreshTokenSetEvent>, UserRefre
 
 builder.Services.AddTransient<IEventApplier<DebitTransactionAddedEvent>, DebitTransactionAddedEventApplier>();
 builder.Services.AddTransient<IEventApplier<CreditTransactionAddedEvent>, CreditTransactionAddedEventApplier>();
-builder.Services.AddTransient<IEventApplier<TransactionCanceledEvent>, TransactionCanceledEventApplier>();
+builder.Services.AddTransient<IEventApplier<FinancialOperationCanceled>, FinancialOperationCanceledEventApplier>();
 
 builder.Services.AddTransient<ReadModelExtensions>();
 
