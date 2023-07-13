@@ -1,6 +1,6 @@
 ﻿using GraphQL.Types;
 
-namespace MoneyTracker.App.GraphQl.Transaction.Types
+namespace MoneyTracker.App.GraphQl.FinancialOperation.Types
 {
     public class TransactionType : ObjectGraphType<Business.Entities.Transaction>
     {
@@ -8,7 +8,7 @@ namespace MoneyTracker.App.GraphQl.Transaction.Types
         {
             Field(t => t.Id);
 
-            Field(t => t.TransactionId);
+            Field(t => t.OperationId);
 
             Field(t => t.UserId);
 

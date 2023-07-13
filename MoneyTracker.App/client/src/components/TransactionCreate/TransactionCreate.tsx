@@ -3,7 +3,7 @@ import InputWrapper from "../../elements/InputWrapper";
 import Dropdown, { Option } from "../../elements/Dropdown/Dropdown";
 import { CategoryItemReducer } from "../../store/Example/Reducers/CategoryItemsReducer";
 import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
-import { TransactionItemsReducer } from "../../store/Example/Reducers/TransactionItemsReducer";
+import { TransactionItemsReducer } from "../../store/Example/Reducers/FinancialOperationsReducer";
 
 interface Props {
   openPopupHandle(): void
@@ -17,7 +17,7 @@ const TransactionCreate: React.FC<Props> = ({ openPopupHandle, transactionDefaul
   const dispatch = useAppDispatch();
   const dateTimeTo = useAppSelector((state) => state.DateTime.dateTime);
   const { FETCH_CATEGORIES } = CategoryItemReducer.actions;
-  const { ADD_TRANSACTION } = TransactionItemsReducer.actions;
+  const { ADD_FINANCIAL_OPERATION } = TransactionItemsReducer.actions;
   useEffect(() => {
 
     setAccount(accountOptions.find(option => option.value === actualAccount) || accountOptions[0])
@@ -99,7 +99,7 @@ const TransactionCreate: React.FC<Props> = ({ openPopupHandle, transactionDefaul
   const handleSave = () => {
   
     dispatch(
-      ADD_TRANSACTION({
+      ADD_FINANCIAL_OPERATION({
         amount,
         categoryId,
         title,

@@ -1,16 +1,16 @@
 ﻿using GraphQL;
 using GraphQL.Types;
-using MoneyTracker.App.GraphQl.Transaction.Types;
+using MoneyTracker.App.GraphQl.FinancialOperation.Types;
 using MoneyTracker.Business.Interfaces;
 using System.Security.Claims;
 
-namespace MoneyTracker.App.GraphQl.Transaction
+namespace MoneyTracker.App.GraphQl.FinancialOperation
 {
-    public class TransactionQuery : ObjectGraphType
+    public class FinancialOperationQuery : ObjectGraphType
     {
-        public TransactionQuery(ITransactionRepository transactionRepository)
+        public FinancialOperationQuery(ITransactionRepository transactionRepository)
         {
-            Field<ListGraphType<TransactionType>>("GetTransactions")
+            Field<ListGraphType<TransactionType>>("GetFinancialOperations")
                 .Argument<DateTimeGraphType>("DateTimeTo")
                 .Resolve(context =>
                 {

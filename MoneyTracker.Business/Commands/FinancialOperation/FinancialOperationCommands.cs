@@ -1,8 +1,8 @@
-﻿namespace MoneyTracker.Business.Commands.Transaction
+﻿namespace MoneyTracker.Business.Commands.FinancialOperation
 {
-    public class TransactionCommands
+    public class FinancialOperationCommands
     {
-        public class AddTransactionCommand
+        public class AddFinancialOperation
         {
             public Guid UserId { get; set; }
 
@@ -19,7 +19,7 @@
             public Guid ToAccountId { get; set; }
         }
 
-        public class CancelTransactionCommand
+        public class CancelFinancialOperation
         {
             public Guid TransactionId { get; set; }
         }

@@ -1,9 +1,9 @@
 ﻿using MoneyTracker.Business.ReadStoreModel;
-using static MoneyTracker.Business.Events.Transaction.TransactionEvents;
+using static MoneyTracker.Business.Events.FinancialOperation.FinancialOperationEvents;
 
-namespace MoneyTracker.Business.EventAppliers.Transaction
+namespace MoneyTracker.Business.EventAppliers.FinancialOperation
 {
-    public class TransactionEventAppliers
+    public class FinancialOperationEventAppliers
     {
         public class DebitTransactionAddedEventApplier : IEventApplier<DebitTransactionAddedEvent>
         {
@@ -14,7 +14,7 @@ namespace MoneyTracker.Business.EventAppliers.Transaction
                 var debitTransaction = new Entities.Transaction
                 {
                     Id = @event.Id,
-                    TransactionId = @event.TransactionId,
+                    OperationId = @event.OperationId,
                     UserId = @event.UserId,
                     Title = @event.Title,
                     Note = @event.Note,
@@ -39,7 +39,7 @@ namespace MoneyTracker.Business.EventAppliers.Transaction
                 var debitTransaction = new Entities.Transaction
                 {
                     Id = @event.Id,
-                    TransactionId = @event.TransactionId,
+                    OperationId = @event.OperationId,
                     UserId = @event.UserId,
                     Title = @event.Title,
                     Note = @event.Note,
@@ -55,17 +55,17 @@ namespace MoneyTracker.Business.EventAppliers.Transaction
             }
         }
 
-        public class TransactionCanceledEventApplier : IEventApplier<TransactionCanceledEvent>
+        public class FinancialOperationCanceledEventApplier : IEventApplier<FinancialOperationCanceled>
         {
-            public ReadModel Apply(ReadModel currentModel, TransactionCanceledEvent @event)
+            public ReadModel Apply(ReadModel currentModel, FinancialOperationCanceled @event)
             {
                 var updatedModel = currentModel;
 
-                var transactionsToCancel = updatedModel.Transactions.Where(t => t.TransactionId == @event.TransactionId).ToList();
+                var transactionsToCancel = updatedModel.Transactions.Where(t => t.OperationId == @event.OperationId).ToList();
 
                 if (transactionsToCancel.Count < 2)
                 {
-                    throw new ArgumentException("transaction to cancel was not found", nameof(@event));
+                    throw new ArgumentException("Transaction to cancel was not found", nameof(@event));
                 }
 
                 foreach (var transaction in transactionsToCancel)

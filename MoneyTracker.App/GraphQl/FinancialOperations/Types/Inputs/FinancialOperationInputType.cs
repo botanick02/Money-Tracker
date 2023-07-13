@@ -1,11 +1,10 @@
 ﻿using GraphQL.Types;
-using static MoneyTracker.Business.Commands.Transaction.TransactionCommands;
 
-namespace MoneyTracker.App.GraphQl.Transaction.Types.Inputs
+namespace MoneyTracker.App.GraphQl.FinancialOperation.Types.Inputs
 {
-    public class TransactionInputType : InputObjectGraphType<TransactionInput>
+    public class FinancialOperationInputType : InputObjectGraphType<FinancialOperationInput>
     {
-        public TransactionInputType()
+        public FinancialOperationInputType()
         {
             Field(t => t.CategoryId);
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import TransactionItem from "../../elements/TransactionItem";
-import { TransactionItemsReducer } from '../../store/Example/Reducers/TransactionItemsReducer';
+import { TransactionItemsReducer } from '../../store/Example/Reducers/FinancialOperationsReducer';
 import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
 import { CategoryItemReducer } from '../../store/Example/Reducers/CategoryItemsReducer';
 
