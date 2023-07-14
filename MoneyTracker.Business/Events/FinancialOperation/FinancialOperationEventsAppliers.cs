@@ -1,7 +1,6 @@
-﻿using MoneyTracker.Business.Events.FinancialOperation;
-using MoneyTracker.Business.ReadStoreModel;
+﻿using MoneyTracker.Business.ReadStoreModel;
 
-namespace MoneyTracker.Business.EventAppliers.FinancialOperation
+namespace MoneyTracker.Business.Events.FinancialOperation
 {
     public class DebitTransactionAddedEventApplier : IEventApplier<DebitTransactionAddedEvent>
     {
@@ -53,9 +52,9 @@ namespace MoneyTracker.Business.EventAppliers.FinancialOperation
         }
     }
 
-    public class FinancialOperationCanceledEventApplier : IEventApplier<FinancialOperationCanceled>
+    public class FinancialOperationCanceledEventApplier : IEventApplier<FinancialOperationCanceledEvent>
     {
-        public ReadModel Apply(ReadModel currentModel, FinancialOperationCanceled @event)
+        public ReadModel Apply(ReadModel currentModel, FinancialOperationCanceledEvent @event)
         {
             var updatedModel = currentModel;
 

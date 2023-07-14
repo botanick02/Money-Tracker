@@ -100,12 +100,12 @@ namespace MoneyTracker.Business.Services
 
 
             var command = new RegisterUserCommand
-            {
-                Email = newUser.Email,
-                Name = newUser.Name,
-                PasswordHash = passwordHashService.HashPassword(newUser.Password, out string salt),
-                PasswordSalt = salt,
-            };
+            (
+                Email: newUser.Email,
+                Name: newUser.Name,
+                PasswordHash: passwordHashService.HashPassword(newUser.Password, out string salt),
+                PasswordSalt: salt
+            );
 
             commandDispatcher.Dispatch(command);
 
@@ -127,10 +127,10 @@ namespace MoneyTracker.Business.Services
         public async Task<LoginResponse> RegisterGoogleUser(string email, string name, HttpContext context)
         {
             var command = new RegisterGoogleUserCommand
-            {
-                Email = email,
-                Name = name,
-            };
+            (
+                Email: email, 
+                Name: name
+            );
 
             commandDispatcher.Dispatch(command);
 
@@ -179,10 +179,10 @@ namespace MoneyTracker.Business.Services
         private async Task<bool> SetUserRefreshToken(Guid userId, string? refreshToken)
         {
             var command = new SetUserRefreshTokenCommand
-            {
-                UserId = userId,
-                RefreshToken = refreshToken,
-            };
+            (
+                UserId: userId,
+                RefreshToken: refreshToken
+            );
 
             commandDispatcher.Dispatch(command);
 

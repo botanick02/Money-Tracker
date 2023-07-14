@@ -1,5 +1,4 @@
-﻿using MoneyTracker.Business.EventAppliers;
-using MoneyTracker.Business.Events;
+﻿using MoneyTracker.Business.Events;
 using MoneyTracker.Business.Interfaces;
 using MoneyTracker.Business.ReadStoreModel;
 

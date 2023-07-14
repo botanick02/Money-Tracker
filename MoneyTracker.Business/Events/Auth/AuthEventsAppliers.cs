@@ -1,8 +1,7 @@
 ﻿using MoneyTracker.Business.Entities;
-using MoneyTracker.Business.Events.Auth;
 using MoneyTracker.Business.ReadStoreModel;
 
-namespace MoneyTracker.Business.EventAppliers.Auth
+namespace MoneyTracker.Business.Events.Auth
 {
     public class UserRegisteredEventApplier : IEventApplier<UserRegisteredEvent>
     {

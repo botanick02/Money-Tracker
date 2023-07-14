@@ -1,7 +1,6 @@
-﻿using MoneyTracker.Business.Events.Categories;
-using MoneyTracker.Business.ReadStoreModel;
+﻿using MoneyTracker.Business.ReadStoreModel;
 
-namespace MoneyTracker.Business.EventAppliers.Category
+namespace MoneyTracker.Business.Events.Categories
 {
     public class CategoryNameUpdatedEventApplier : IEventApplier<CategoryNameUpdatedEvent>
     {

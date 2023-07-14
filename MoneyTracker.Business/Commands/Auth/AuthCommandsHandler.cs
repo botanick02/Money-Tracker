@@ -1,4 +1,5 @@
-﻿using MoneyTracker.Business.Events.Auth;
+﻿using MoneyTracker.Business.Entities;
+using MoneyTracker.Business.Events.Auth;
 using MoneyTracker.Business.Interfaces;
 
 namespace MoneyTracker.Business.Commands.Auth
@@ -14,14 +15,13 @@ namespace MoneyTracker.Business.Commands.Auth
 
         public bool Handle(RegisterUserCommand command)
         {
-            var userRegisteredEvent = new UserRegisteredEvent
-            {
-                UserId = Guid.NewGuid(),
-                Email = command.Email,
-                Name = command.Name,
-                PasswordHash = command.PasswordHash,
-                PasswordSalt = command.PasswordSalt,
-            };
+            var userRegisteredEvent = new UserRegisteredEvent(
+                UserId: Guid.NewGuid(),
+                Email: command.Email,
+                Name: command.Name,
+                PasswordHash: command.PasswordHash,
+                PasswordSalt: command.PasswordSalt
+            );
             eventStore.AppendEvent(userRegisteredEvent);
 
             return true;
@@ -41,12 +41,11 @@ namespace MoneyTracker.Business.Commands.Auth
 
         public bool Handle(RegisterGoogleUserCommand command)
         {
-            var userRegisteredEvent = new GoogleUserRegisteredEvent
-            {
-                UserId = Guid.NewGuid(),
-                Email = command.Email,
-                Name = command.Name,
-            };
+            var userRegisteredEvent = new GoogleUserRegisteredEvent(
+                 UserId: Guid.NewGuid(),
+                 Email: command.Email,
+                 Name: command.Name
+             );
             eventStore.AppendEvent(userRegisteredEvent);
 
             return true;
@@ -66,11 +65,8 @@ namespace MoneyTracker.Business.Commands.Auth
 
         public bool Handle(SetUserRefreshTokenCommand command)
         {
-            var userRefreshTokenSetEvent = new UserRefreshTokenSetEvent
-            {
-                UserId = command.UserId,
-                RefreshToken = command.RefreshToken
-            };
+            var userRefreshTokenSetEvent = new UserRefreshTokenSetEvent(UserId: command.UserId,
+                RefreshToken: command.RefreshToken);
 
             eventStore.AppendEvent(userRefreshTokenSetEvent);
 

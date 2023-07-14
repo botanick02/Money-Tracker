@@ -19,11 +19,11 @@ namespace MoneyTracker.Business.Commands.Category
             var categoryId = Guid.NewGuid();
 
             var categoryCreatedEvent = new CategoryCreatedEvent
-            {
-                Id = categoryId,
-                Name = command.Name,
-                Type = command.Type,
-            };
+            (
+                Id: categoryId,
+                Name: command.Name,
+                Type: command.Type
+            );
 
             eventStore.AppendEvent(categoryCreatedEvent);
 
@@ -52,10 +52,10 @@ namespace MoneyTracker.Business.Commands.Category
             }
 
             var categoryCreatedEvent = new CategoryNameUpdatedEvent
-            {
-                Id = command.Id,
-                Name = command.Name,
-            };
+            (
+                Id: command.Id,
+                Name: command.Name
+            );
 
             eventStore.AppendEvent(categoryCreatedEvent);
 

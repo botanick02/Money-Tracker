@@ -3,7 +3,7 @@ using MoneyTracker.Business.Interfaces;
 
 namespace MoneyTracker.Business.Commands.FinancialOperation
 {
-    public class AddFinancialOperationCommandHandler : ICommandHandler<AddFinancialOperation>
+    public class AddFinancialOperationCommandHandler : ICommandHandler<AddFinancialOperationCommand>
     {
         private readonly IEventStore eventStore;
 
@@ -12,33 +12,33 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
             this.eventStore = eventStore;
         }
 
-        public bool Handle(AddFinancialOperation command)
+        public bool Handle(AddFinancialOperationCommand command)
         {
             var transactionId = Guid.NewGuid();
 
             var debitTransactionEvent = new DebitTransactionAddedEvent
-            {
-                OperationId = transactionId,
-                UserId = command.UserId,
-                CategoryId = command.CategoryId,
-                CreatedAt = DateTime.UtcNow,
-                AccountId = command.ToAccountId,
-                Title = command.Title,
-                Note = command.Note,
-                Amount = command.Amount,
-            };
+            (
+                OperationId: transactionId,
+                UserId: command.UserId,
+                CategoryId: command.CategoryId,
+                CreatedAt: DateTime.UtcNow,
+                AccountId: command.ToAccountId,
+                Title: command.Title,
+                Note: command.Note,
+                Amount : command.Amount
+            );
 
             var creditTransactionEvent = new CreditTransactionAddedEvent
-            {
-                OperationId = transactionId,
-                UserId = command.UserId,
-                CategoryId = command.CategoryId,
-                CreatedAt = DateTime.UtcNow,
-                AccountId = command.FromAccountId,
-                Title = command.Title,
-                Note = command.Note,
-                Amount = command.Amount,
-            };
+            (
+                OperationId: transactionId,
+                UserId: command.UserId,
+                CategoryId: command.CategoryId,
+                CreatedAt: DateTime.UtcNow,
+                AccountId: command.FromAccountId,
+                Title: command.Title,
+                Note: command.Note,
+                Amount: command.Amount
+            );
 
             eventStore.AppendEvent(debitTransactionEvent); //TODO: implement simultaneous event append with sql transactions
             eventStore.AppendEvent(creditTransactionEvent);
@@ -47,7 +47,7 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
         }
     }
 
-    public class CancelFinancialOperationCommandHandler : ICommandHandler<CancelFinancialOperation>
+    public class CancelFinancialOperationCommandHandler : ICommandHandler<CancelFinancialOperationCommand>
     {
         private readonly IEventStore eventStore;
         private readonly ITransactionRepository transactionRepository;
@@ -59,7 +59,7 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
             this.transactionRepository = transactionRepository;
         }
 
-        public bool Handle(CancelFinancialOperation command)
+        public bool Handle(CancelFinancialOperationCommand command)
         {
             var transactions = transactionRepository.GetTransactionsByTransactionId(command.TransactionId);
             if (transactions.Count < 2)
@@ -67,10 +67,10 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
                 return false;
             }
 
-            var cancelEvent = new FinancialOperationCanceled
-            {
-                OperationId = command.TransactionId,
-            };
+            var cancelEvent = new FinancialOperationCanceledEvent
+            (
+                OperationId: command.TransactionId
+            );
 
             eventStore.AppendEvent(cancelEvent);
 
