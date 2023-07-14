@@ -1,59 +1,56 @@
 ﻿using MoneyTracker.Business.Entities;
+using MoneyTracker.Business.Events.Auth;
 using MoneyTracker.Business.ReadStoreModel;
-using static MoneyTracker.Business.Events.Auth.AuthEvents;
 
 namespace MoneyTracker.Business.EventAppliers.Auth
 {
-    public class AuthEventAppliers
+    public class UserRegisteredEventApplier : IEventApplier<UserRegisteredEvent>
     {
-        public class UserRegisteredEventApplier : IEventApplier<UserRegisteredEvent>
+        public ReadModel Apply(ReadModel currentModel, UserRegisteredEvent @event)
         {
-            public ReadModel Apply(ReadModel currentModel, UserRegisteredEvent @event)
+            var newUser = new User(@event.Email, @event.Name)
             {
-                var newUser = new User(@event.Email, @event.Name)
-                {
-                    Id = @event.UserId,
-                    PasswordHash = @event.PasswordHash,
-                    PasswordSalt = @event.PasswordSalt,
-                    GoogleAuth = @event.GoogleAuth,
-                };
+                Id = @event.UserId,
+                PasswordHash = @event.PasswordHash,
+                PasswordSalt = @event.PasswordSalt,
+                GoogleAuth = @event.GoogleAuth,
+            };
 
-                var updatedModel = currentModel;
-                updatedModel.Users.Add(newUser);
+            var updatedModel = currentModel;
+            updatedModel.Users.Add(newUser);
 
-                return updatedModel;
-            }
+            return updatedModel;
         }
+    }
 
-        public class GoogleUserRegisteredEventApplier : IEventApplier<GoogleUserRegisteredEvent>
+    public class GoogleUserRegisteredEventApplier : IEventApplier<GoogleUserRegisteredEvent>
+    {
+        public ReadModel Apply(ReadModel currentModel, GoogleUserRegisteredEvent @event)
         {
-            public ReadModel Apply(ReadModel currentModel, GoogleUserRegisteredEvent @event)
+            var newUser = new User(@event.Email, @event.Name)
             {
-                var newUser = new User(@event.Email, @event.Name)
-                {
-                    Id = @event.UserId,
-                    GoogleAuth = false
-                };
+                Id = @event.UserId,
+                GoogleAuth = false
+            };
 
-                var updatedModel = currentModel;
-                updatedModel.Users.Add(newUser);
+            var updatedModel = currentModel;
+            updatedModel.Users.Add(newUser);
 
-                return updatedModel;
-            }
+            return updatedModel;
         }
+    }
 
-        public class UserRefreshTokenSetEventApplier : IEventApplier<UserRefreshTokenSetEvent>
+    public class UserRefreshTokenSetEventApplier : IEventApplier<UserRefreshTokenSetEvent>
+    {
+        public ReadModel Apply(ReadModel currentModel, UserRefreshTokenSetEvent @event)
         {
-            public ReadModel Apply(ReadModel currentModel, UserRefreshTokenSetEvent @event)
+            var userToUpdate = currentModel.Users.FirstOrDefault(u => u.Id == @event.UserId);
+            if (userToUpdate != null)
             {
-                var userToUpdate = currentModel.Users.FirstOrDefault(u => u.Id == @event.UserId);
-                if (userToUpdate != null)
-                {
-                    userToUpdate.RefreshToken = @event.RefreshToken;
-                }
-
-                return currentModel;
+                userToUpdate.RefreshToken = @event.RefreshToken;
             }
+
+            return currentModel;
         }
     }
 }

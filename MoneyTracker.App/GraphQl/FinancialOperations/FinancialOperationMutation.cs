@@ -3,9 +3,9 @@ using GraphQL.Types;
 using MoneyTracker.App.GraphQl.FinancialOperation.Types.Inputs;
 using MoneyTracker.App.Helpers;
 using MoneyTracker.Business.Commands;
+using MoneyTracker.Business.Commands.FinancialOperation;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
-using static MoneyTracker.Business.Commands.FinancialOperation.FinancialOperationCommands;
 
 namespace MoneyTracker.App.GraphQl.FinancialOperation
 {

@@ -1,8 +1,7 @@
 ﻿using GraphQL;
 using GraphQL.Types;
 using MoneyTracker.Business.Commands;
-using static MoneyTracker.Business.Commands.Category.CategoryCommands;
-using static MoneyTracker.Business.Commands.Category.CategoryCommandsHandler;
+using MoneyTracker.Business.Commands.Category;
 
 namespace MoneyTracker.App.GraphQl.Category
 {

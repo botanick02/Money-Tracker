@@ -2,16 +2,12 @@
 using System.Security.Claims;
 using MoneyTracker.App.GraphQl.Auth.Types.Inputs;
 using MoneyTracker.App.GraphQl.Auth.Types;
-using AutoMapper;
 using MoneyTracker.App.Helpers;
 using Google.Apis.Auth;
 using System.Runtime.Serialization;
 using MoneyTracker.Business.Interfaces;
-using MoneyTracker.Business.EventAppliers;
 using MoneyTracker.Business.Commands;
-using static MoneyTracker.Business.Commands.Auth.AuthCommands;
-using MoneyTracker.App;
-using System.Xml.Linq;
+using MoneyTracker.Business.Commands.Auth;
 
 namespace MoneyTracker.Business.Services
 {
