@@ -6,12 +6,12 @@ using MoneyTracker.App.GraphQl;
 using MoneyTracker.Business.Services;
 using MoneyTracker.Business.Utilities;
 using MoneyTracker.Business.Interfaces;
-using MoneyTracker.Infrastructure.EventStore;
-using MoneyTracker.Infrastracture;
-using MoneyTracker.Business.ReadStoreModel;
-using MoneyTracker.Infrastracture.MsSQL;
 using MoneyTracker.Business.Events;
 using MoneyTracker.Business.Commands;
+using MoneyTracker.Infrastructure.EventStore;
+using MoneyTracker.DataAccess;
+using MoneyTracker.DataAccess.MsSQL;
+using MoneyTracker.Business.ReadStoreModel;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,4 +1,5 @@
 ﻿using MoneyTracker.Business.Entities;
+using MoneyTracker.Business.Interfaces;
 
 namespace MoneyTracker.Business.ReadStoreModel
 {

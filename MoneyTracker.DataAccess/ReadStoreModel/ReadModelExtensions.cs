@@ -2,7 +2,7 @@
 using MoneyTracker.Business.Interfaces;
 using MoneyTracker.Business.ReadStoreModel;
 
-namespace MoneyTracker.Infrastracture
+namespace MoneyTracker.DataAccess
 {
     public class ReadModelExtensions
     {

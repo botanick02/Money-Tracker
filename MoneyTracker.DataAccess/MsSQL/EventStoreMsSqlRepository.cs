@@ -4,7 +4,7 @@ using MoneyTracker.Business.Events;
 using MoneyTracker.Business.Interfaces;
 using System.Data.SqlClient;
 
-namespace MoneyTracker.Infrastracture.MsSQL
+namespace MoneyTracker.DataAccess.MsSQL
 {
     public class EventStoreMsSqlRepository : IEventStoreRepository
     {

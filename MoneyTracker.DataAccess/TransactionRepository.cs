@@ -1,8 +1,7 @@
 ﻿using MoneyTracker.Business.Entities;
 using MoneyTracker.Business.Interfaces;
-using System;
 
-namespace MoneyTracker.Infrastracture.MsSQL
+namespace MoneyTracker.DataAccess
 {
     public class TransactionRepository : ITransactionRepository
     {
