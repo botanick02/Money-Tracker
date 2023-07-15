@@ -1,8 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using MoneyTracker.Business.Events;
 using MoneyTracker.Business.ReadStoreModel;
 
-namespace MoneyTracker.Business.EventAppliers
+namespace MoneyTracker.Business.Events
 {
     public class EventDispatcher
     {

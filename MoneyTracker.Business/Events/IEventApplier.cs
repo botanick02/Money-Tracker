@@ -1,6 +1,6 @@
 ﻿using MoneyTracker.Business.ReadStoreModel;
 
-namespace MoneyTracker.Business.EventAppliers
+namespace MoneyTracker.Business.Events
 {
     public interface IEventApplier<T>
     {

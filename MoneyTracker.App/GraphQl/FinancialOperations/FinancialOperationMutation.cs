@@ -3,9 +3,9 @@ using GraphQL.Types;
 using MoneyTracker.App.GraphQl.FinancialOperation.Types.Inputs;
 using MoneyTracker.App.Helpers;
 using MoneyTracker.Business.Commands;
+using MoneyTracker.Business.Commands.FinancialOperation;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
-using static MoneyTracker.Business.Commands.FinancialOperation.FinancialOperationCommands;
 
 namespace MoneyTracker.App.GraphQl.FinancialOperation
 {
@@ -32,16 +32,15 @@ namespace MoneyTracker.App.GraphQl.FinancialOperation
                         return false;
                     }
 
-                    var command = new AddFinancialOperation
-                    {
-                        UserId = Guid.Parse(context.User.FindFirst(ClaimTypes.NameIdentifier)!.Value),
-                        Title = transaction.Title!,
-                        Note = transaction.Note,
-                        Amount = transaction.Amount!,
-                        CategoryId = Guid.Parse(transaction.CategoryId),
-                        FromAccountId = Guid.Parse(transaction.FromAccountId),
-                        ToAccountId = Guid.Parse(transaction.ToAccountId)
-                    };
+                    var command = new AddFinancialOperationCommand
+                    (
+                        UserId: Guid.Parse(context.User.FindFirst(ClaimTypes.NameIdentifier)!.Value), 
+                        Title: transaction.Title!, Note: transaction.Note, Amount: transaction.Amount!, 
+                        CategoryId: Guid.Parse(transaction.CategoryId), 
+                        FromAccountId: Guid.Parse(transaction.FromAccountId), 
+                        ToAccountId: Guid.Parse(transaction.ToAccountId)
+                     );
+
                     commandDispatcher.Dispatch(command);
 
                     return true;
@@ -66,10 +65,10 @@ namespace MoneyTracker.App.GraphQl.FinancialOperation
                         return false;
                     }
 
-                    var command = new CancelFinancialOperation
-                    {
-                        TransactionId = Guid.Parse(input.OperationId),
-                    };
+                    var command = new CancelFinancialOperationCommand
+                    (
+                        TransactionId: Guid.Parse(input.OperationId)
+                    );
 
                     commandDispatcher.Dispatch(command);
 

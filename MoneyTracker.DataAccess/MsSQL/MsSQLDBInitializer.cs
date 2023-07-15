@@ -3,7 +3,7 @@ using Dapper;
 using System.Data.SqlClient;
 using MoneyTracker.Business.Interfaces;
 
-namespace MoneyTracker.Infrastracture.MsSQL
+namespace MoneyTracker.DataAccess.MsSQL
 {
     public class MsSQLDBInitializer : IDBInitializer
     {

@@ -1,5 +1,4 @@
-﻿using MoneyTracker.Business.EventAppliers;
-using MoneyTracker.Business.Events;
+﻿using MoneyTracker.Business.Events;
 
 namespace MoneyTracker.Business.ReadStoreModel
 {
@@ -16,7 +15,7 @@ namespace MoneyTracker.Business.ReadStoreModel
 
         public void Update(Event @event)
         {
-            CurrentModel = eventDispatcher.Apply(CurrentModel, @event);
+            CurrentModel = (ReadModel)eventDispatcher.Apply(CurrentModel, @event);
         }
     }
 }

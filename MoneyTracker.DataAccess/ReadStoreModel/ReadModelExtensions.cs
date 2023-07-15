@@ -1,9 +1,8 @@
-﻿using MoneyTracker.Business.EventAppliers;
-using MoneyTracker.Business.Events;
+﻿using MoneyTracker.Business.Events;
 using MoneyTracker.Business.Interfaces;
 using MoneyTracker.Business.ReadStoreModel;
 
-namespace MoneyTracker.Infrastracture
+namespace MoneyTracker.DataAccess
 {
     public class ReadModelExtensions
     {

@@ -2,16 +2,12 @@
 using System.Security.Claims;
 using MoneyTracker.App.GraphQl.Auth.Types.Inputs;
 using MoneyTracker.App.GraphQl.Auth.Types;
-using AutoMapper;
 using MoneyTracker.App.Helpers;
 using Google.Apis.Auth;
 using System.Runtime.Serialization;
 using MoneyTracker.Business.Interfaces;
-using MoneyTracker.Business.EventAppliers;
 using MoneyTracker.Business.Commands;
-using static MoneyTracker.Business.Commands.Auth.AuthCommands;
-using MoneyTracker.App;
-using System.Xml.Linq;
+using MoneyTracker.Business.Commands.Auth;
 
 namespace MoneyTracker.Business.Services
 {
@@ -104,12 +100,12 @@ namespace MoneyTracker.Business.Services
 
 
             var command = new RegisterUserCommand
-            {
-                Email = newUser.Email,
-                Name = newUser.Name,
-                PasswordHash = passwordHashService.HashPassword(newUser.Password, out string salt),
-                PasswordSalt = salt,
-            };
+            (
+                Email: newUser.Email,
+                Name: newUser.Name,
+                PasswordHash: passwordHashService.HashPassword(newUser.Password, out string salt),
+                PasswordSalt: salt
+            );
 
             commandDispatcher.Dispatch(command);
 
@@ -131,10 +127,10 @@ namespace MoneyTracker.Business.Services
         public async Task<LoginResponse> RegisterGoogleUser(string email, string name, HttpContext context)
         {
             var command = new RegisterGoogleUserCommand
-            {
-                Email = email,
-                Name = name,
-            };
+            (
+                Email: email, 
+                Name: name
+            );
 
             commandDispatcher.Dispatch(command);
 
@@ -183,10 +179,10 @@ namespace MoneyTracker.Business.Services
         private async Task<bool> SetUserRefreshToken(Guid userId, string? refreshToken)
         {
             var command = new SetUserRefreshTokenCommand
-            {
-                UserId = userId,
-                RefreshToken = refreshToken,
-            };
+            (
+                UserId: userId,
+                RefreshToken: refreshToken
+            );
 
             commandDispatcher.Dispatch(command);
 

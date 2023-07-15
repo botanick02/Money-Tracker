@@ -1,8 +1,7 @@
 ﻿using GraphQL;
 using GraphQL.Types;
 using MoneyTracker.Business.Commands;
-using static MoneyTracker.Business.Commands.Category.CategoryCommands;
-using static MoneyTracker.Business.Commands.Category.CategoryCommandsHandler;
+using MoneyTracker.Business.Commands.Category;
 
 namespace MoneyTracker.App.GraphQl.Category
 {
@@ -13,11 +12,11 @@ namespace MoneyTracker.App.GraphQl.Category
             Field<bool>("CreateCategoryTest")
                 .Resolve(context =>
                 {
-                    var command = new CreateCategoryCommand()
-                    {
-                        Name = "testCat",
-                        Type = "income",
-                    };
+                    var command = new CreateCategoryCommand
+                    (
+                        Name: "testCat",
+                        Type: "income"
+                    );
 
                     commandDispatcher.Dispatch(command);
                     return true;
@@ -41,11 +40,11 @@ namespace MoneyTracker.App.GraphQl.Category
                         return false;
                     }
 
-                    var command = new UpdateCategoryNameCommand()
-                    {
-                        Id = categoryGuidId,
-                        Name = name,
-                    };
+                    var command = new UpdateCategoryNameCommand
+                    (
+                        Id: categoryGuidId,
+                        Name: name
+                    );
 
                     try
                     {

@@ -1,39 +1,17 @@
 ﻿namespace MoneyTracker.Business.Events.Auth
 {
-    public class AuthEvents
+    public record UserRegisteredEvent(Guid UserId, string Email, string Name, string PasswordHash, string PasswordSalt)
+    : Event
     {
-        public record UserRegisteredEvent : Event
-        {
-            public Guid UserId { get; init; }
-
-            public string Email { get; init; }
-
-            public string Name { get; init; }
-
-            public string PasswordHash { get; init; }
-
-            public string PasswordSalt { get; init; }
-
-            public bool GoogleAuth { get; } = false;
-        }
-
-        public record GoogleUserRegisteredEvent : Event
-        {
-            public Guid UserId { get; init; }
-
-            public string Email { get; init; }
-
-            public string Name { get; init; }
-
-
-            public bool GoogleAuth { get; } = true;
-        }
-
-        public record UserRefreshTokenSetEvent : Event
-        {
-            public Guid UserId { get; init; }
-
-            public string? RefreshToken { get; init; }
-        }
+        public bool GoogleAuth { get; init; } = false;
     }
+
+    public record GoogleUserRegisteredEvent(Guid UserId, string Email, string Name)
+    : Event
+    {
+        public bool GoogleAuth { get; init; } = true;
+    }
+
+    public record UserRefreshTokenSetEvent(Guid UserId, string? RefreshToken)
+    : Event;
 }

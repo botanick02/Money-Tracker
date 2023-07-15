@@ -1,7 +1,7 @@
 ﻿using MoneyTracker.Business.Entities;
 using MoneyTracker.Business.Interfaces;
 
-namespace MoneyTracker.Infrastracture.MsSQL
+namespace MoneyTracker.DataAccess
 {
     public class CategoryRepository : ICategoryRepository
     {
