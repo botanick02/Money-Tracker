@@ -16,7 +16,7 @@ namespace MoneyTracker.Business.Events.Auth
             };
 
             var updatedModel = currentModel;
-            updatedModel.Users.Add(newUser);
+            updatedModel.Users = updatedModel.Users.Append(newUser);
 
             return updatedModel;
         }
@@ -33,7 +33,7 @@ namespace MoneyTracker.Business.Events.Auth
             };
 
             var updatedModel = currentModel;
-            updatedModel.Users.Add(newUser);
+            updatedModel.Users = updatedModel.Users.Append(newUser);
 
             return updatedModel;
         }

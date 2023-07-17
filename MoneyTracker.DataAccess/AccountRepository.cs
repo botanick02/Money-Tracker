@@ -3,7 +3,7 @@ using MoneyTracker.Business.Interfaces;
 
 namespace MoneyTracker.DataAccess
 {
-    internal class AccountRepository : IAccountRepository
+    public class AccountRepository : IAccountRepository
     {
         private readonly ReadModelExtensions readModelExtensions;
         public AccountRepository(ReadModelExtensions readModelExtensions)

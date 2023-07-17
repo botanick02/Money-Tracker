@@ -2,6 +2,8 @@
 using MoneyTracker.Business.Commands.Auth;
 using MoneyTracker.Business.Commands.Category;
 using MoneyTracker.Business.Commands.FinancialOperation;
+using MoneyTracker.Business.Events.Account;
+using static MoneyTracker.Business.Commands.Auth.AuthCommandsHandler;
 
 namespace MoneyTracker.Business.Commands
 {
@@ -15,7 +17,9 @@ namespace MoneyTracker.Business.Commands
             services.AddTransient<ICommandHandler<RegisterUserCommand>, RegisterUserCommandHandler>();
             services.AddTransient<ICommandHandler<RegisterGoogleUserCommand>, RegisterGoogleUserCommandHandler>();
             services.AddTransient<ICommandHandler<SetUserRefreshTokenCommand>, SetUserRefreshTokenCommandHandler>();
-            services.AddTransient<ICommandHandler<AddFinancialOperationCommand>, AddFinancialOperationCommandHandler>();
+            services.AddTransient<ICommandHandler<AddDebitOperationCommand>, AddDebitOperationCommandHandler>();
+            services.AddTransient<ICommandHandler<AddCreditOperationCommand>, AddCreditOperationCommandHandler>();
+            services.AddTransient<ICommandHandler<AddTransferOperationCommand>, AddTransferOperationCommandHandler>();
             services.AddTransient<ICommandHandler<CancelFinancialOperationCommand>, CancelFinancialOperationCommandHandler>();
         }
     }

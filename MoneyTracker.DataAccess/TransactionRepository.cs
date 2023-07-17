@@ -22,5 +22,11 @@ namespace MoneyTracker.DataAccess
             var readModel = readModelExtensions.GetReadModel(dateTimeTo);
             return readModel.Transactions.Where(t => t.UserId == userId).ToList();
         }
+
+        public List<Transaction> GetAccountTransactions(Guid accountId, DateTime? dateTimeTo = null)
+        {
+            var readModel = readModelExtensions.GetReadModel(dateTimeTo);
+            return readModel.Transactions.Where(t => t.AccountId == accountId).ToList();
+        }
     }
 }

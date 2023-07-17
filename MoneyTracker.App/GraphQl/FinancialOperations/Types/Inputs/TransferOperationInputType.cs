@@ -2,17 +2,15 @@
 
 namespace MoneyTracker.App.GraphQl.FinancialOperation.Types.Inputs
 {
-    public class FinancialOperationInputType : InputObjectGraphType<FinancialOperationInput>
+    public class TransferOperationInputType : InputObjectGraphType<TransferOperationInput>
     {
-        public FinancialOperationInputType()
+        public TransferOperationInputType()
         {
             Field(t => t.CategoryId);
 
             Field(t => t.Title);
 
             Field(t => t.Note, nullable: true);
-
-            Field(t => t.FromAccountId);
 
             Field(t => t.ToAccountId);
 
