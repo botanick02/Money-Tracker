@@ -1,21 +1,32 @@
 ﻿using MoneyTracker.Business.Entities;
+using MoneyTracker.Business.Interfaces;
 using Newtonsoft.Json;
 
 namespace MoneyTracker.DataAccess
 {
-    public class CurrencyRepository
+    public class CurrencyRepository : ICurrencyRepository
     {
-        public List<Currency> Currencies { get; }
+        private readonly IEnumerable<Currency> currencies;
 
         public CurrencyRepository()
         {
             var path = @"../MoneyTracker.DataAccess/Resources/Currencies.json";
-            var currencies = JsonConvert.DeserializeObject<List<Currency>>(File.ReadAllText(path));
-            if (currencies == null)
+            var readCurrencies = JsonConvert.DeserializeObject<List<Currency>>(File.ReadAllText(path));
+            if (readCurrencies == null)
             {
                 throw new FileNotFoundException("Currencies were failed to receive");
             }
-            Currencies = currencies;
+            this.currencies = readCurrencies;
+        }
+
+        public Currency GetCurrencyByCode(string code)
+        {
+            if (!currencies.Any(c => c.Code == code))
+            {
+                throw new ArgumentOutOfRangeException(nameof(code), "Invalid currency  code");
+            }
+
+            return currencies.FirstOrDefault(c => c.Code == code)!;
         }
     }
 }

@@ -6,6 +6,8 @@ namespace MoneyTracker.Business.Interfaces
     {
         List<Transaction> GetTransactions(Guid userId, DateTime? dateTimeTo = null);
 
+        List<Transaction> GetAccountTransactions(Guid accountId, DateTime? dateTimeTo = null);
+
         List<Transaction> GetTransactionsByTransactionId(Guid transactionId, DateTime? dateTimeTo = null);
     }
 }
