@@ -21,21 +21,30 @@ function App() {
   const accessTokenRefreshing = useAppSelector(
     (state) => state.RefreshToken.loading
   );
- 
+
   const dispatch = useAppDispatch();
-  useEffect(() => {
-    if (checkTokenExpire()) {
-      if (!accessTokenRefreshing && isAuth) {
-        dispatch(GET_ACCESS_TOKEN());
-      }
-    }
-  }, []);
 
   useEffect(() => {
     if (isAuth) {
       dispatch(GET_USER_INFO());
     }
   }, [isAuth]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (checkTokenExpire()) {
+        if (!accessTokenRefreshing && isAuth) {
+          dispatch(GET_ACCESS_TOKEN());
+        }
+      }
+    }, 120000); 
+
+    return () => {
+      clearInterval(interval); 
+    };
+  }, [accessTokenRefreshing, dispatch, isAuth]);
+
+  console.log(isAuth);
 
   return (
     <BrowserRouter>
