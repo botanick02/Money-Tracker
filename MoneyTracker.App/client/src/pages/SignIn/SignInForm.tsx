@@ -25,7 +25,7 @@ const SignInForm = () => {
   const dispatch = useAppDispatch();
 
   const SignIn = (data: any) => {
-    console.log(data)
+  
     dispatch(SIGN_IN({email: data.email, password: data.password}));
 };
 useEffect(() => {
