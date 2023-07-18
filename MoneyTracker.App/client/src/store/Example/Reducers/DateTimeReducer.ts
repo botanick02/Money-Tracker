@@ -14,7 +14,7 @@ export const DateTimeReducer = createSlice({
   reducers: {
     SET_DATE_TIME(state, action: PayloadAction<string>) {
       state.dateTime = action.payload;
-      console.log(action.payload)
+
     },
     CLEAR_DATE_TIME(state) {
       state.dateTime = null;

@@ -36,7 +36,7 @@ export const CategoryItemReducer = createSlice({
       state.error = null;
       state.categories = [];
       state.countOfElements = 0;
-      console.log(action.payload)
+   
 
 
     },

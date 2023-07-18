@@ -23,7 +23,7 @@ const Transactions = () => {
   };
 
   const handleAddTransaction = () => {
-    console.log("Adding transaction...");
+  
     dispatch(FETCH_TRANSACTIONS({ dateTimeTo: dateTimeTo }));
   };
   const income = useAppSelector((state) => state.Account.actuaIncomelBalance);

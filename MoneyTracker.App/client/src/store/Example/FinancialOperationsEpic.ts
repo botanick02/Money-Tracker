@@ -62,14 +62,14 @@ export const TransactionItemsEpic: Epic<any, any, any> = (action$, state$) => {
         mergeMap((response) =>
           from(response.json()).pipe(
             mergeMap((data: any) => {
-              console.log(data);
+           
               if (data.errors) {
                 store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message));
                 return [FETCH_TRANSACTIONS_ERROR(data.errors[0].message)];
               } else {
                 const transactions: ITransactionType[] =
                   data.data.financialOperation.getFinancialOperations;
-                console.log(transactions);
+            
 
                 const account = state$.value.Account.actualAccount;
                 let filteredArray = transactions.filter(
@@ -181,7 +181,7 @@ export const addFinancialOperationEpic: Epic<any, any, any> = (
         mergeMap((response) =>
           from(response.json()).pipe(
             mergeMap((data: any) => {
-              console.log(data);
+             
               if (data.errors) {
                 store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message));
                 return [ADD_FINANCIAL_OPERATION_ERROR(data.errors[0].message)];
@@ -235,7 +235,7 @@ export const cancelFinancialOperationEpic: Epic<any, any, any> = (action$, state
         mergeMap((response) =>
           from(response.json()).pipe(
             mergeMap((data: any) => {
-              console.log(data);
+           
               if (data.errors) {
                 store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message));
                 return [CANCEL_FINANCIAL_OPERATION_ERROR(data.errors[0].message)];

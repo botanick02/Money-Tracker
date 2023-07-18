@@ -37,7 +37,7 @@ const { FETCH_CATEGORIES, FETCH_CATEGORIES_SUCCESS, FETCH_CATEGORIES_ERROR } =
   
   export const CategoryItemsEpic: Epic<any, any, any> = (action$, state$) => {
     const categoryQuery = (page: number, countOfElements: number, dateTimeTo: string | null) => {
-      console.log(dateTimeTo);
+
       return `
       {
         category {
@@ -74,7 +74,7 @@ const { FETCH_CATEGORIES, FETCH_CATEGORIES_SUCCESS, FETCH_CATEGORIES_ERROR } =
           mergeMap((response) =>
             from(response.json()).pipe(
               mergeMap((data: any) => {
-                console.log(data);
+              
                 if (data.errors) {
                   store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message));
                   return [FETCH_CATEGORIES_ERROR(data.errors[0].message)];
@@ -87,7 +87,7 @@ const { FETCH_CATEGORIES, FETCH_CATEGORIES_SUCCESS, FETCH_CATEGORIES_ERROR } =
                     isActive: item.isActive,
                     // icon: searchGoogle(item.name)
                   }));
-                  console.log(newItems);
+                
                   return [
                     FETCH_CATEGORIES_SUCCESS({
                       categories: newItems,
@@ -140,7 +140,7 @@ export const EditCategoryEpic: Epic<any, any, any> = (action$, state$) => {
         mergeMap((response) =>
           from(response.json()).pipe(
             mergeMap((data: any) => {
-              console.log(data);
+         
               if (data.errors) {
                 store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message));
                 return [EDIT_CATEGORY_ERROR(data.errors[0].message)];

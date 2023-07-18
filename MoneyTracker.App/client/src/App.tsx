@@ -21,7 +21,7 @@ function App() {
   const accessTokenRefreshing = useAppSelector(
     (state) => state.RefreshToken.loading
   );
-  console.log(accessTokenRefreshing);
+ 
   const dispatch = useAppDispatch();
   useEffect(() => {
     if (checkTokenExpire()) {
@@ -36,7 +36,7 @@ function App() {
       dispatch(GET_USER_INFO());
     }
   }, [isAuth]);
-  console.log(isAuth);
+
   return (
     <BrowserRouter>
       <Routes>
