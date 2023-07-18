@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import TransactionList from "../../components/TransactionList/TransactionList";
 import TransactionCreate from "../../components/TransactionCreate/TransactionCreate";
-import { default as test } from "../../components/TransactionList/testData.json";
 import TimeScopePanel from "../../components/TimeScopePanel/TimeScopePanel";
 import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
 import { TransactionItemsReducer } from "../../store/Example/Reducers/FinancialOperationsReducer";
