@@ -33,9 +33,9 @@ const ChartByCategory = () => {
   let transactions = useAppSelector((state) => state.TransactionItems.transactions);
   const filteredTransactions = useMemo(() => {
     if (typeOfTransactions === "income") {
-      return transactions.filter((transaction) => transaction.accountId === mocAccountSOptions.Expense);
+      return transactions.filter((transaction) => transaction.accountId !== mocAccountSOptions.Income);
     } else if (typeOfTransactions === "expense") {
-      return transactions.filter((transaction) => transaction.accountId === mocAccountSOptions.Income);
+      return transactions.filter((transaction) => transaction.accountId !== mocAccountSOptions.Expense);
     }
     return transactions;
   }, [transactions, typeOfTransactions]);
@@ -63,7 +63,7 @@ const ChartByCategory = () => {
   
     const category = categories.find((cat) => cat.id === categoryId);
   
-    if (category) {
+    if (category && amount !== 0) {
       if (summary[categoryId]) {
         summary[categoryId].amount += amount;
       } else {
@@ -74,7 +74,7 @@ const ChartByCategory = () => {
         };
       }
     }
-  
+    
     return summary;
   }, {} as ICategorySummary);
   
@@ -86,11 +86,14 @@ const ChartByCategory = () => {
     0
   );
 
-  const sortedCategories = Object.values(categorySummary).sort((a, b) => {
+  const sortedCategories = Object.values(categorySummary)
+  .filter(category => category.amount !== 0)
+  .sort((a, b) => {
     const percentageA = (a.amount / totalAmount) * 100;
     const percentageB = (b.amount / totalAmount) * 100;
     return percentageB - percentageA;
   });
+
 
   return (
     <div>
