@@ -18,13 +18,7 @@ const TransactionCreate: React.FC<Props> = ({ openPopupHandle, transactionDefaul
   const dateTimeTo = useAppSelector((state) => state.DateTime.dateTime);
   const { FETCH_CATEGORIES } = CategoryItemReducer.actions;
   const { ADD_FINANCIAL_OPERATION } = TransactionItemsReducer.actions;
-  useEffect(() => {
 
-    setAccount(accountOptions.find(option => option.value === actualAccount) || accountOptions[0])
-    dispatch(FETCH_CATEGORIES({
-      dateTimeTo
-    }));
-  }, []);
 
   const categoryItems = useAppSelector((state) => state.Category.categories);
 
@@ -111,7 +105,24 @@ const TransactionCreate: React.FC<Props> = ({ openPopupHandle, transactionDefaul
   };
 
   const [date, setDate] = useState(new Date());
-
+  useEffect(() => {
+    setAccount(accountOptions.find(option => option.value === actualAccount) || accountOptions[0])
+    dispatch(FETCH_CATEGORIES({
+      dateTimeTo
+    }));
+  
+  }, []);
+   useEffect(() => {
+  
+    if (type === "income") {
+      setFromAccountId(mocAccountSOptions.Income);
+      setToAccountId(String(account));
+    } else if (type === "expense") {
+      setFromAccountId(String(account));
+      setToAccountId(mocAccountSOptions.Expense);
+    }
+  }, [type]);
+  
   return (
     <div className={"popup-bg"}>
       <div className={"popup"}>
@@ -177,3 +188,5 @@ const TransactionCreate: React.FC<Props> = ({ openPopupHandle, transactionDefaul
 };
 
 export default TransactionCreate;
+
+
