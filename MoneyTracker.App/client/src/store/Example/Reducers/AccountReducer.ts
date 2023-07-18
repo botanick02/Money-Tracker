@@ -46,10 +46,6 @@ export const AccountReducer = createSlice({
     SET_CURRENT_ACCOUNT_ID(state, action: PayloadAction<string>) {
       state.currentAccountId = action.payload;
     },
-    SET_ACTUAL_TYPE_BALANCE(state, action: PayloadAction<string>) {
-      state.actualTypeBalance = action.payload;
-  
-    },
   },
 });
 
