@@ -1,7 +1,7 @@
 import { Category } from "./Category";
 
 interface Transaction {
-    id: number,
+    id: string,
     amount: number,
     category: Category,
     dateTime: string,

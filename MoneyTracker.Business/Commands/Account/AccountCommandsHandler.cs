@@ -1,6 +1,13 @@
 ﻿namespace MoneyTracker.Business.Commands.Account
 {
-    internal class AccountCommandsHandler
+    public class AccountCommandsHandler
     {
+        public class CreatePersonalAccountCommandHandler : ICommandHandler<CreatePersonalAccount>
+        {
+            public bool Handle(CreatePersonalAccount command)
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 }

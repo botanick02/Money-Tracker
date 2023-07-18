@@ -36,8 +36,7 @@ const { FETCH_CATEGORIES, FETCH_CATEGORIES_SUCCESS, FETCH_CATEGORIES_ERROR } =
   // }
   
   export const CategoryItemsEpic: Epic<any, any, any> = (action$, state$) => {
-    const categoryQuery = (page: number, countOfElements: number, dateTimeTo: string | null) => {
-
+    const categoryQuery = () => {
       return `
       {
         category {
@@ -55,7 +54,6 @@ const { FETCH_CATEGORIES, FETCH_CATEGORIES_SUCCESS, FETCH_CATEGORIES_ERROR } =
     return action$.pipe(
       ofType(FETCH_CATEGORIES),
       mergeMap((action) => {
-        const { page, countOfElements, dateTimeTo } = action.payload;
   
         return from(
           fetch(GraphQlEndpoint, {
@@ -67,7 +65,7 @@ const { FETCH_CATEGORIES, FETCH_CATEGORIES_SUCCESS, FETCH_CATEGORIES_ERROR } =
               Accept: "application/json",
             },
             body: JSON.stringify({
-              query: categoryQuery(page, countOfElements, dateTimeTo),
+              query: categoryQuery(),
             }),
           })
         ).pipe(

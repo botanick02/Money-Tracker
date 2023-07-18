@@ -33,7 +33,7 @@ const CategoryList = () => {
   const countOfElements = 5;
   
   useEffect(() => {
-    dispatch(FETCH_CATEGORIES({ page, countOfElements, dateTimeTo }));
+    dispatch(FETCH_CATEGORIES());
   }, [page, countOfElements,editSuccess,dateTimeTo]);
   const [type, setType] = useState("");
   return (

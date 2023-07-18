@@ -82,7 +82,7 @@ namespace MoneyTracker.Business.Commands.Auth
         {
             var creditAccountEevnt = new CreditAccountCreatedEvent(Guid.NewGuid(), userId, currency);
             var debitAccountEevnt = new DebitAccountCreatedEvent(Guid.NewGuid(), userId, currency);
-            var personalAccountEevnt = new PersonalAccountCreatedEvent(Guid.NewGuid(), userId, "Default", currency);
+            var personalAccountEevnt = new PersonalAccountCreatedEvent(Guid.NewGuid(), userId, "Cash", currency);
 
             events.Add(creditAccountEevnt);
             events.Add(debitAccountEevnt);

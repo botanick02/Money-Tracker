@@ -1,4 +1,4 @@
-export interface ITransactionType {
+export interface Transaction {
   operationId: string;
   userId: string;
   title: string;

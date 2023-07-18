@@ -78,7 +78,7 @@ namespace MoneyTracker.App.GraphQl.FinancialOperation
                 }).Authorize();
 
             Field<bool>("AddTransferOperation")
-                .Argument<CreditOperationInputType>("TransferOperation")
+                .Argument<TransferOperationInputType>("TransferOperation")
                 .Resolve(context =>
                 {
                     var transaction = context.GetArgument<TransferOperationInput>("TransferOperation");

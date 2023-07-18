@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import TransactionList from "../../components/TransactionList/TransactionList";
 import TransactionCreate from "../../components/TransactionCreate/TransactionCreate";
-import { default as test } from "../../components/TransactionList/testData.json";
 import TimeScopePanel from "../../components/TimeScopePanel/TimeScopePanel";
 import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
 import { TransactionItemsReducer } from "../../store/Example/Reducers/FinancialOperationsReducer";
@@ -23,11 +22,10 @@ const Transactions = () => {
   };
 
   const handleAddTransaction = () => {
-  
     dispatch(FETCH_TRANSACTIONS({ dateTimeTo: dateTimeTo }));
   };
-  const income = useAppSelector((state) => state.Account.actuaIncomelBalance);
-  const expense = useAppSelector((state) => state.Account.actualExpenseBalance);
+  // const income = useAppSelector((state) => state.Account.actuaIncomelBalance);
+  // const expense = useAppSelector((state) => state.Account.actualExpenseBalance);
   
   return (
     <main className={'transactions'}>
@@ -46,7 +44,7 @@ const Transactions = () => {
           }}
           className={"transaction-sums__income"}
         >
-          +{income} $
+          + 0 $
         </div>
         <div
           onClick={() => {
@@ -55,7 +53,7 @@ const Transactions = () => {
           }}
           className={"transaction-sums__expense"}
         >
-          {expense} $
+          - 0 $
         </div>
       </div>
 

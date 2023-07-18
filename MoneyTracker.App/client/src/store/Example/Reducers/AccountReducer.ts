@@ -1,17 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { useAppSelector } from "../../../hooks/useAppDispatch";
 import { Account } from "../../../types/Account";
 
 export interface AccountStore {
   accounts: Account[];
-  total: number;
+  currentAccountId: string;
   loading: boolean;
   error: null | string;
 }
 
 const initialState: AccountStore = {
   accounts: [],
-  total: 0,
+  currentAccountId: "total",
   loading: false,
   error: null,
 };
@@ -28,16 +27,30 @@ export const AccountReducer = createSlice({
       action: PayloadAction<{ accounts: Account[]; total: number }>
     ) {
       state.accounts = action.payload.accounts;
-      state.total = action.payload.total;
+
+      let totalAcount: Account = {
+        id:  "total",
+        name: "Total",
+        balance: action.payload.total,
+        currency: {code: "UAH", symbol: "₴"}
+      }
+
+      state.accounts.push(totalAcount);
+      
       state.loading = false;
     },
-    FETCH_ACCOUNTS_FAIL(state, action: PayloadAction<string>) {
+    FETCH_ACCOUNTS_ERROR(state, action: PayloadAction<string>) {
       state.loading = false;
       state.error = action.payload;
+    },
+    SET_CURRENT_ACCOUNT_ID(state, action: PayloadAction<string>) {
+      state.currentAccountId = action.payload;
     },
   },
 });
 
-export const {} = AccountReducer.actions;
+export const {
+  FETCH_ACCOUNTS, FETCH_ACCOUNTS_ERROR, FETCH_ACCOUNTS_SUCCESS, SET_CURRENT_ACCOUNT_ID
+} = AccountReducer.actions;
 
 export default AccountReducer.reducer;
