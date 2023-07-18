@@ -20,6 +20,10 @@ const ChartByCategory = () => {
   const dispatch = useAppDispatch();
   const { FETCH_TRANSACTIONS } = TransactionItemsReducer.actions;
   const { FETCH_CATEGORIES } = CategoryItemReducer.actions;
+  const mocAccountSOptions = {
+    Income: "0c5c3b75-6094-4156-8c2f-6e0ac5b89fcb",
+    Expense: "7c494473-5889-4d7f-81cc-7f94f5c8cc90"
+  };
 
   const dateTimeTo = useAppSelector((state) => state.DateTime.dateTime)
 
@@ -29,9 +33,9 @@ const ChartByCategory = () => {
   let transactions = useAppSelector((state) => state.TransactionItems.transactions);
   const filteredTransactions = useMemo(() => {
     if (typeOfTransactions === "income") {
-      return transactions.filter((transaction) => transaction.amount > 0);
+      return transactions.filter((transaction) => transaction.accountId === mocAccountSOptions.Expense);
     } else if (typeOfTransactions === "expense") {
-      return transactions.filter((transaction) => transaction.amount < 0);
+      return transactions.filter((transaction) => transaction.accountId === mocAccountSOptions.Income);
     }
     return transactions;
   }, [transactions, typeOfTransactions]);
