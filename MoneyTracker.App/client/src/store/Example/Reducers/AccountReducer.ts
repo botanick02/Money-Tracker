@@ -6,13 +6,15 @@ export interface Account {
   actualBalance:number
   actuaIncomelBalance:number
   actualExpenseBalance:number
+  actualTypeBalance:string
 }
 
 const initialState: Account = {
   actualAccount: "645645646",
   actualBalance:0,
   actuaIncomelBalance:0,
-  actualExpenseBalance:0
+  actualExpenseBalance:0,
+  actualTypeBalance:"expense"
 };
 
 export const AccountReducer = createSlice({
@@ -37,6 +39,10 @@ export const AccountReducer = createSlice({
     },
     SET_ACTUAL_EXPENSE_BALANCE(state, action: PayloadAction<number>) {
       state.actualExpenseBalance = action.payload;
+  
+    },
+    SET_ACTUAL_TYPE_BALANCE(state, action: PayloadAction<string>) {
+      state.actualTypeBalance = action.payload;
   
     },
   },

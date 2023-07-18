@@ -1,12 +1,18 @@
 import React, { useState } from "react";
 import TimeScopePanel from "../../components/TimeScopePanel/TimeScopePanel";
 import СhartByCategory from "../../components/СhartByCategory/СhartByCategory";
+import {AccountReducer} from "../../store/Example/Reducers/AccountReducer";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
 
 const Stats = () => {
   const [activeFilter, setActiveFilter] = useState("income"); 
-
+  const { SET_ACTUAL_TYPE_BALANCE } = AccountReducer.actions;
+  const dispatch = useAppDispatch();
   const handleFilterChange = (filter: "income" | "expense") => {
     setActiveFilter(filter);
+    dispatch(SET_ACTUAL_TYPE_BALANCE(filter));
+  
+    
   };
 
   return (
