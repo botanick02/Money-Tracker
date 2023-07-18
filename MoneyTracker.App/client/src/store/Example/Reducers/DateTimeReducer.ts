@@ -7,7 +7,6 @@ const currentDate = new Date().toISOString().substring(0, 19);
 const initialState: DateTimeState = {
   dateTime: currentDate,
 };
-console.log(currentDate)
 export const DateTimeReducer = createSlice({
   name: "DateTime",
   initialState: initialState,
