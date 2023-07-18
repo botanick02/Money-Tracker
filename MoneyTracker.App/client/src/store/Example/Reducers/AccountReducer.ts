@@ -1,47 +1,43 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { useAppSelector } from "../../../hooks/useAppDispatch";
+import { Account } from "../../../types/Account";
 
-export interface Account {
-  actualAccount: string 
-  actualBalance:number
-  actuaIncomelBalance:number
-  actualExpenseBalance:number
+export interface AccountStore {
+  accounts: Account[];
+  total: number;
+  loading: boolean;
+  error: null | string;
 }
 
-const initialState: Account = {
-  actualAccount: "645645646",
-  actualBalance:0,
-  actuaIncomelBalance:0,
-  actualExpenseBalance:0
+const initialState: AccountStore = {
+  accounts: [],
+  total: 0,
+  loading: false,
+  error: null,
 };
 
 export const AccountReducer = createSlice({
   name: "Account",
   initialState: initialState,
   reducers: {
-    SET_ACTUAL_ACCOUNT(state, action: PayloadAction<string>) {
-      state.actualAccount = action.payload;
-      console.log(action.payload)
+    FETCH_ACCOUNTS(state) {
+      state.loading = true;
     },
-    CLEAR_ACTUAL_ACCOUNT(state) {
-      state.actualAccount = "645645646";
-      
+    FETCH_ACCOUNTS_SUCCESS(
+      state,
+      action: PayloadAction<{ accounts: Account[]; total: number }>
+    ) {
+      state.accounts = action.payload.accounts;
+      state.total = action.payload.total;
+      state.loading = false;
     },
-    SET_ACTUAL_BALANCE(state, action: PayloadAction<number>) {
-      state.actualBalance = action.payload;;
-      console.log(action.payload)
-    },
-    SET_ACTUAL_INCOME_BALANCE(state, action: PayloadAction<number>) {
-      state.actuaIncomelBalance = action.payload;
-      console.log(action.payload)
-    },
-    SET_ACTUAL_EXPENSE_BALANCE(state, action: PayloadAction<number>) {
-      state.actualExpenseBalance = action.payload;
-      console.log(action.payload)
+    FETCH_ACCOUNTS_FAIL(state, action: PayloadAction<string>) {
+      state.loading = false;
+      state.error = action.payload;
     },
   },
 });
 
-export const { SET_ACTUAL_ACCOUNT, CLEAR_ACTUAL_ACCOUNT,SET_ACTUAL_BALANCE,SET_ACTUAL_EXPENSE_BALANCE } = AccountReducer.actions;
+export const {} = AccountReducer.actions;
 
 export default AccountReducer.reducer;

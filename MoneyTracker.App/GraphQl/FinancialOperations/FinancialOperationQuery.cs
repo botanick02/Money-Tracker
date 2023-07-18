@@ -17,7 +17,7 @@ namespace MoneyTracker.App.GraphQl.FinancialOperation
                     var dateTimeTo = context.GetArgument<DateTime?>("DateTimeTo");
                     var userId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-                    return transactionRepository.GetTransactions(userId, dateTimeTo);
+                    return transactionRepository.GetUserTransactions(userId, dateTimeTo);
                 }).Authorize();
         }
     }

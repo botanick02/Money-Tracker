@@ -14,9 +14,10 @@ namespace MoneyTracker.Business.Services
             this.transactionRepository = transactionRepository;
         }
 
-        public List<AccountDto> GetUserPersonalAccounts(Guid userId)
+        public GetAccountsDto GetUserPersonalAccounts(Guid userId)
         {
-            List<AccountDto> accountDtos = new List<AccountDto>();
+
+            var resultDto = new GetAccountsDto();
 
             var userAccounts = accountRepository.GetUserAccounts(userId, AccountType.Personal);
 
@@ -34,10 +35,12 @@ namespace MoneyTracker.Business.Services
                     Balance = accountBalance,
                 };
 
-                accountDtos.Add(accountDto);
+                resultDto.Accounts.Add(accountDto);
             }
 
-            return accountDtos;
+            resultDto.Total = resultDto.Accounts.Sum(a => a.Balance);
+
+            return resultDto;
         }
     }
 }
