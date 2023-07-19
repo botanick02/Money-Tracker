@@ -22,10 +22,10 @@ const Transactions = () => {
   };
 
   const handleAddTransaction = () => {
-    dispatch(FETCH_TRANSACTIONS({ dateTimeTo: dateTimeTo }));
+    dispatch(FETCH_TRANSACTIONS({}));
   };
-  // const income = useAppSelector((state) => state.Account.actuaIncomelBalance);
-  // const expense = useAppSelector((state) => state.Account.actualExpenseBalance);
+  const incomes = useAppSelector((state) => state.TransactionItems.incomes);
+  const expenses = useAppSelector((state) => state.TransactionItems.expenses);
   
   return (
     <main className={'transactions'}>
@@ -44,7 +44,8 @@ const Transactions = () => {
           }}
           className={"transaction-sums__income"}
         >
-          + 0 $
+          Incomes<br/>
+          + {incomes} ₴
         </div>
         <div
           onClick={() => {
@@ -53,7 +54,8 @@ const Transactions = () => {
           }}
           className={"transaction-sums__expense"}
         >
-          - 0 $
+          Expenses<br/>
+          - {-expenses} ₴
         </div>
       </div>
 

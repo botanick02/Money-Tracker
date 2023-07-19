@@ -14,29 +14,33 @@ const {
 } = TransactionItemsReducer.actions;
 
 export const TransactionItemsEpic: Epic<any, any, any> = (action$, state$) => {
-  const transactionQuery = (dateTimeTo: string | null) => {
-    return `query
-      {
-        financialOperation {
-          getFinancialOperations {
-            id
-            operationId
-            title
-            note
-            amount
-            categoryId
-            createdAt
-            accountId
-          }
+  const transactionQuery = (accountId?: string) => {
+    return `query getTransactions{
+      financialOperation{
+       getAccountsTransactions(input: {accountId: ${accountId ? `"${accountId}"` : "null"}}) {
+        transactions {
+          id
+          operationId
+          userId
+          title
+          note
+          amount
+          categoryId
+          createdAt
+          accountId
         }
+        expenses
+        incomes
+      } 
       }
+    }
     `;
   };
 
   return action$.pipe(
     ofType(FETCH_TRANSACTIONS),
     mergeMap((action) => {
-      const { dateTimeTo } = action.payload;
+      const { accountId } = action.payload;
 
       return from(
         fetch(GraphQlEndpoint, {
@@ -49,7 +53,7 @@ export const TransactionItemsEpic: Epic<any, any, any> = (action$, state$) => {
             Authorization: "Bearer " + localStorage.getItem("accessToken"),
           },
           body: JSON.stringify({
-            query: transactionQuery(dateTimeTo),
+            query: transactionQuery(accountId),
           }),
         })
       ).pipe(
@@ -61,11 +65,14 @@ export const TransactionItemsEpic: Epic<any, any, any> = (action$, state$) => {
                 return [FETCH_TRANSACTIONS_ERROR(data.errors[0].message)];
               } else {
                 const transactions: Transaction[] =
-                  data.data.financialOperation.getFinancialOperations;
-
+                  data.data.financialOperation.getAccountsTransactions.transactions;
+                const incomes = data.data.financialOperation.getAccountsTransactions.incomes;
+                const expenses = data.data.financialOperation.getAccountsTransactions.expenses;
                 return [
                   FETCH_TRANSACTIONS_SUCCESS({
                     transactions,
+                    incomes,
+                    expenses
                   }),
                 ];
               }

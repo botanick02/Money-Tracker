@@ -39,6 +39,7 @@ builder.Services.AddTransient<TokenService>();
 builder.Services.AddTransient<PasswordHashService>();
 
 builder.Services.AddTransient<AccountService>();
+builder.Services.AddTransient<TransactionService>();
 
 
 builder.Services.AddTransient<IEventStore, EventStore>();

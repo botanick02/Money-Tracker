@@ -23,10 +23,12 @@ const TransactionList = () => {
     (state) => state.TransactionItems.transactions
   );
 
+  const currentAccountId = useAppSelector(state => state.Account.currentAccountId);
+
   useEffect(() => {
-    dispatch(FETCH_TRANSACTIONS({ dateTimeTo }));
+    dispatch(FETCH_TRANSACTIONS({accountId: currentAccountId === "total" ? undefined : currentAccountId}));
     dispatch(FETCH_CATEGORIES());
-  }, [dateTimeTo]);
+  }, [dateTimeTo, currentAccountId]);
 
   return (
     <div className={"transaction-list"}>

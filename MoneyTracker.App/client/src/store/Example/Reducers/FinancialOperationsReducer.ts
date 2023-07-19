@@ -7,6 +7,8 @@ export interface CreateTransactionState {
   error: null | string;
   transactions: Transaction[];
   countOfElements: number;
+  incomes: number;
+  expenses: number;
 }
 
 const initialState: CreateTransactionState = {
@@ -15,6 +17,8 @@ const initialState: CreateTransactionState = {
   loading: false,
   transactions: [],
   countOfElements: 10,
+  incomes: 0,
+  expenses: 0,
 };
 
 export const TransactionItemsReducer = createSlice({
@@ -23,7 +27,7 @@ export const TransactionItemsReducer = createSlice({
   reducers: {
     FETCH_TRANSACTIONS(
       state,
-      action: PayloadAction<{ dateTimeTo: string | null }>
+      action: PayloadAction<{ accountId?: string }>
     ) {
       state.loading = true;
       state.error = null;
@@ -32,11 +36,13 @@ export const TransactionItemsReducer = createSlice({
     },
     FETCH_TRANSACTIONS_SUCCESS(
       state,
-      action: PayloadAction<{ transactions: Transaction[] }>
+      action: PayloadAction<{ transactions: Transaction[], incomes: number, expenses: number }>
     ) {
       state.loading = false;
       state.error = null;
       state.transactions = action.payload.transactions.slice().reverse();
+      state.incomes = action.payload.incomes;
+      state.expenses = action.payload.expenses;
     },
     FETCH_TRANSACTIONS_ERROR(state, action: PayloadAction<string>) {
       state.loading = false;
