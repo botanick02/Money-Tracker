@@ -40,6 +40,8 @@ builder.Services.AddTransient<IEventStore, EventStore>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
 builder.Services.AddTransient<ITransactionRepository, TransactionRepository>();
+builder.Services.AddTransient<IBudgetRepository, BudgetRepository>();
+
 
 builder.Services.ConfigureCommandHandlers();
 builder.Services.ConfigureEventAppliers();

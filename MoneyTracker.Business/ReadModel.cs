@@ -10,5 +10,6 @@ namespace MoneyTracker.Business.ReadStoreModel
         public List<Transaction> Transactions { get; set; }  = new List<Transaction>();
 
         public List<Category> Categories { get; set; } = new List<Category>();
+        public List<Budget> Budgets { get; set; } = new List<Budget>();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using GraphQL.Types;
 using MoneyTracker.App.GraphQl.Auth;
+using MoneyTracker.App.GraphQl.Budget;
 using MoneyTracker.App.GraphQl.Category;
 using MoneyTracker.App.GraphQl.FinancialOperation;
 
@@ -17,6 +18,8 @@ namespace MoneyTracker.App.GraphQl
             
             Field<FinancialOperationMutation>("FinancialOperation")
                     .Resolve(_ => new { });
+
+            Field<BudgetMutation>("Budget").Resolve(_ => new { });
         }
     }
 }
