@@ -11,5 +11,8 @@ namespace MoneyTracker.Business.ReadStoreModel
         public IEnumerable<Transaction> Transactions { get; set; }  = Enumerable.Empty<Transaction>();
 
         public IEnumerable<Category> Categories { get; set; } = Enumerable.Empty<Category>();
+      
+        public IEnumerable<Budget> Budgets { get; set; } = Enumerable.Empty<Budget>();
+      
     }
 }

@@ -1,4 +1,5 @@
-﻿using MoneyTracker.Business.Events.Categories;
+﻿using MoneyTracker.Business.Events.Budgets;
+using MoneyTracker.Business.Events.Categories;
 using MoneyTracker.Business.Interfaces;
 using System.Runtime.Serialization;
 
@@ -26,6 +27,9 @@ namespace MoneyTracker.Business.Commands.Category
             );
 
             eventStore.AppendEvent(categoryCreatedEvent);
+
+            var budgetCreateEvent = new BudgetCreateEvent(new Entities.Budget(categoryId));
+            eventStore.AppendEvent(budgetCreateEvent);
 
             return true;
         }

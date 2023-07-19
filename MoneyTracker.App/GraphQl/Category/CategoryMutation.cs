@@ -1,6 +1,7 @@
 ﻿using GraphQL;
 using GraphQL.Types;
 using MoneyTracker.Business.Commands;
+using MoneyTracker.Business.Commands.Budget;
 using MoneyTracker.Business.Commands.Category;
 
 namespace MoneyTracker.App.GraphQl.Category
