@@ -1,23 +1,27 @@
 ﻿using GraphQL;
 using GraphQL.Types;
 using MoneyTracker.App.GraphQl.FinancialOperation.Types;
+using MoneyTracker.App.GraphQl.FinancialOperations.Types;
+using MoneyTracker.App.GraphQl.FinancialOperations.Types.Inputs;
 using MoneyTracker.Business.Interfaces;
+using MoneyTracker.Business.Services;
 using System.Security.Claims;
 
 namespace MoneyTracker.App.GraphQl.FinancialOperation
 {
     public class FinancialOperationQuery : ObjectGraphType
     {
-        public FinancialOperationQuery(ITransactionRepository transactionRepository)
+        public FinancialOperationQuery(TransactionService transactionService)
         {
-            Field<ListGraphType<TransactionType>>("GetFinancialOperations")
-                .Argument<DateTimeGraphType>("DateTimeTo")
+            Field<GetTransactionsDtoType>("GetAccountsTransactions")
+                .Argument<GetTransactionsForAccountsInputType>("Input")
                 .Resolve(context =>
                 {
-                    var dateTimeTo = context.GetArgument<DateTime?>("DateTimeTo");
+                    var input = context.GetArgument<GetTransactionsForAccountsInput>("Input");
+
                     var userId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-                    return transactionRepository.GetUserTransactions(userId, dateTimeTo);
+                    return transactionService.GetTransactionsData(userId, input?.AccountId);
                 }).Authorize();
         }
     }
