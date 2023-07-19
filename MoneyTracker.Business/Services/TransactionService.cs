@@ -22,12 +22,14 @@ namespace MoneyTracker.Business.Services
                 {
                     res.Transactions.AddRange(transactionRepository!.GetAccountTransactions(account.Id));
                 }
-                res.Transactions = res.Transactions.OrderByDescending(t => t.CreatedAt).ToList();
             }
             else
             {
                 res.Transactions.AddRange(transactionRepository!.GetAccountTransactions((Guid)accountId));
             }
+
+            res.Transactions = res.Transactions.OrderBy(t => t.CreatedAt).ToList();
+
             res.Expenses = res.Transactions.Where(t => t.Amount < 0).Sum(t => t.Amount);
             res.Incomes = res.Transactions.Where(t => t.Amount > 0).Sum(t => t.Amount);
 
