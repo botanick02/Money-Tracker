@@ -13,7 +13,7 @@ namespace MoneyTracker.DataAccess
         public List<Category> GetCategories(DateTime? dateTimeTo = null)
         {
             var readModel = readModelExtensions.GetReadModel(dateTimeTo);
-            return readModel.Categories;
+            return readModel.Categories.ToList();
         }
 
     }

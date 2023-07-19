@@ -20,7 +20,7 @@ const Dropdown: FC<SelectPropsType> = ({ selectHandler, options, title }) => {
 
   const setSelectedThenCloseDropdown = (index: number) => {
     setSelectedOptionId(index);
-    selectHandler(options[index].value);
+    selectHandler(options[index]);
     console.log(options[index])
     setIsOptionsOpen(false);
   };

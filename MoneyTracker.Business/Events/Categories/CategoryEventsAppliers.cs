@@ -30,7 +30,7 @@ namespace MoneyTracker.Business.Events.Categories
             };
 
             var updatedModel = currentmodel;
-            updatedModel.Categories.Add(newCategory);
+            updatedModel.Categories = updatedModel.Categories.Append(newCategory);
 
             return updatedModel;
         }

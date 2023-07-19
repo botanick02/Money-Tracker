@@ -1,14 +1,15 @@
 ﻿using MoneyTracker.Business.Entities;
-using MoneyTracker.Business.Interfaces;
 
 namespace MoneyTracker.Business.ReadStoreModel
 {
     public class ReadModel
     {
-        public List<User> Users { get; set; } = new List<User>();
+        public IEnumerable<User> Users { get; set; } = Enumerable.Empty<User>();
 
-        public List<Transaction> Transactions { get; set; }  = new List<Transaction>();
+        public IEnumerable<Account> Accounts { get; set; } = Enumerable.Empty<Account>();
 
-        public List<Category> Categories { get; set; } = new List<Category>();
+        public IEnumerable<Transaction> Transactions { get; set; }  = Enumerable.Empty<Transaction>();
+
+        public IEnumerable<Category> Categories { get; set; } = Enumerable.Empty<Category>();
     }
 }

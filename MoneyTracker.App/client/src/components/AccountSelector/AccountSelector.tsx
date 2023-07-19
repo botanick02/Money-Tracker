@@ -1,35 +1,40 @@
 import React, { useEffect, useState } from "react";
 import CurrentAccount from "../../elements/Accounts/CurrentAccount";
-import { Account } from "../../types/Account";
-import { default as test } from "./testData.json";
 import AccountListItem from "../../elements/Accounts/AccountListItem";
 import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
-import { SET_ACTUAL_ACCOUNT } from "../../store/Example/Reducers/AccountReducer";
+import {
+  FETCH_ACCOUNTS,
+  SET_CURRENT_ACCOUNT_ID,
+} from "../../store/Example/Reducers/AccountReducer";
 
 const AccountSelector = () => {
-  const accounts = test as Account[];
-  const [currentAccountId, setCurrentAccountId] = useState(
-    accounts.find((a) => a.name === "Total")?.id
+  const accounts = useAppSelector((state) => state.Account.accounts);
+  const currentAccountId = useAppSelector(
+    (state) => state.Account.currentAccountId
   );
   const [isListOpen, setIsListOpen] = useState(false);
-const transactions = useAppSelector((state) => state.TransactionItems.transactions);
+
+  useEffect(() => {
+    dispatch(FETCH_ACCOUNTS());
+  }, []);
+
+
   const switchListState = () => {
     setIsListOpen(!isListOpen);
   };
+
+  
   const dispatch = useAppDispatch();
-  useEffect(() => {
-    dispatch(SET_ACTUAL_ACCOUNT(currentAccountId || "645645646"));
-  }, [currentAccountId,transactions]);
 
-  const actualBalance = useAppSelector((state) => state.Account.actualBalance);
+  const setCurrentAccountId = (id: string) => {
+    dispatch(SET_CURRENT_ACCOUNT_ID(id));
+  };
 
-
-  return (
+  return accounts.length > 0 ? (
     <div className={"account-selector"}>
       <CurrentAccount
         account={accounts.find((a) => a.id === currentAccountId)!}
         onClick={switchListState}
-        actualBalance={actualBalance}
       />
 
       {isListOpen && (
@@ -43,7 +48,6 @@ const transactions = useAppSelector((state) => state.TransactionItems.transactio
               .map((account) => (
                 <AccountListItem
                   account={account}
-                  actualBalance={actualBalance}
                   key={account.id}
                   onSelected={setCurrentAccountId}
                 />
@@ -52,7 +56,7 @@ const transactions = useAppSelector((state) => state.TransactionItems.transactio
         </div>
       )}
     </div>
-  );
+  ) : (<></>);
 };
 
 export default AccountSelector;

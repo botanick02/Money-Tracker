@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MoneyTracker.App.GraphQl.FinancialOperation.Types.Inputs
 {
-    public class FinancialOperationInput
+    public class DebitOperationInput
     {
         [Required(ErrorMessage = "Title is required")]
         public string? Title { get; set; }
@@ -15,9 +15,6 @@ namespace MoneyTracker.App.GraphQl.FinancialOperation.Types.Inputs
 
         [GuidValidationAttribute(ErrorMessage = "CategoryId is invalid")]
         public string CategoryId { get; set; }
-
-        [GuidValidationAttribute(ErrorMessage = "FromAccountId is invalid")]
-        public string FromAccountId { get; set; }
 
         [GuidValidationAttribute(ErrorMessage = "ToAccountId is invalid")]
         public string ToAccountId { get; set; }

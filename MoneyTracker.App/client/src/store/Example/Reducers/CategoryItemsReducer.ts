@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Category } from "../../../types/Category";
 import { ICategoryType } from "../../../types/ICategoryType";
 
 
@@ -25,22 +26,11 @@ export const CategoryItemReducer = createSlice({
   initialState: initialState,
   reducers: {
     FETCH_CATEGORIES(
-      state,
-      action: PayloadAction<{
-        page?: number;
-        countOfElements?: number;
-        dateTimeTo: string | null;
-      }>
+      state
     ){
       state.loading = true;
       state.error = null;
-      state.categories = [];
-      state.countOfElements = 0;
-      console.log(action.payload)
-
-
     },
-    
     FETCH_CATEGORIES_SUCCESS(
       state,
       action: PayloadAction<{ categories: ICategoryType[];}>
@@ -53,7 +43,6 @@ export const CategoryItemReducer = createSlice({
     FETCH_CATEGORIES_ERROR(state, action: PayloadAction<string>) {
       state.loading = false;
       state.error = action.payload;
-      state.categories = [];
     },
     EDIT_CATEGORY(
       state,
@@ -70,7 +59,6 @@ export const CategoryItemReducer = createSlice({
       state.loading = false;
       state.error = null;
       state.editSuccess = action.payload.editSuccess;
-     
     },
     EDIT_CATEGORY_ERROR(state, action: PayloadAction<string>) {
       state.loading = false;

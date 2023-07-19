@@ -25,6 +25,9 @@ builder.Services.AddCors(options =>
                .AllowCredentials();
     });
 });
+
+builder.Services.AddSingleton<CurrencyRepository>();
+
 builder.Services.AddTransient<IDBInitializer, MsSQLDBInitializer>();
 builder.Services.AddTransient<IEventStoreRepository, EventStoreMsSqlRepository>();
 
@@ -35,11 +38,15 @@ builder.Services.AddTransient<AuthService>();
 builder.Services.AddTransient<TokenService>();
 builder.Services.AddTransient<PasswordHashService>();
 
+builder.Services.AddTransient<AccountService>();
+
 
 builder.Services.AddTransient<IEventStore, EventStore>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
 builder.Services.AddTransient<ITransactionRepository, TransactionRepository>();
+builder.Services.AddTransient<IAccountRepository, AccountRepository>();
+builder.Services.AddTransient<ICurrencyRepository, CurrencyRepository>();
 
 builder.Services.ConfigureCommandHandlers();
 builder.Services.ConfigureEventAppliers();
@@ -47,6 +54,7 @@ builder.Services.ConfigureEventAppliers();
 builder.Services.AddTransient<ReadModelExtensions>();
 
 builder.Services.AddSingleton<CurrentReadModel>();
+
 
 builder.Services.AddHttpContextAccessor();
 
@@ -79,6 +87,8 @@ dbInitializer.InitializeDatabase();
 var currentReadModel = app.Services.GetRequiredService<CurrentReadModel>();
 var readModelExtensions = app.Services.GetRequiredService<ReadModelExtensions>();
 currentReadModel.CurrentModel = readModelExtensions.GetReadModel(DateTime.Now);
+
+app.Services.GetRequiredService<CurrencyRepository>();
 
 app.UseAuthentication();
 app.UseAuthorization();
