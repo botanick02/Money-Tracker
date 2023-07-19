@@ -33,7 +33,7 @@ export const NotificationReducer = createSlice({
                     { id: actualId, message: action.payload, isActive: true, isSuccess: true, isError: false, isWarning: false },
                 ];
             }
-            console.log("SUCCESS: " + state.messages[actualId].message);
+         
         },
         SHOW_ERROR_MESSAGE(state, action: PayloadAction<string>) {
             const actualId = state.messages ? state.messages.length : 0;

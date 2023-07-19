@@ -57,7 +57,7 @@ export const AuthorizationEpic: Epic<any, any, any> = (action$: any) => {
           from(response.json()).pipe(
             
             map((data: ILoginQuery) => {
-              console.log(data);
+           
               if (data.errors) {
                 store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message));
                 return SIGN_IN_ERROR(data.errors[0].message);
@@ -119,7 +119,7 @@ export const GoogleAuthorizationEpic: Epic<any, any, any> = (action$: any) => {
         mergeMap((response) =>
           from(response.json()).pipe(
             map((data: IGoogleLoginQuery) => {
-              console.log(data);
+            
               if (data.errors) {
                 store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message));
                 return SIGN_IN_ERROR(data.errors[0].message);
@@ -179,7 +179,7 @@ export const GetAccessTokenEpic: Epic<any, any, any> = (action$) => {
         mergeMap((responce) =>
           from(responce.json()).pipe(
             map((data: any) => {
-              console.log(data);
+         
               localStorage.setItem(
                 "accessToken",
                 data.data.auth.refreshToken.accessToken
@@ -222,7 +222,7 @@ export const SignOutEpic: Epic<any, any, any> = (action$: any) => {
         mergeMap((response) =>
           from(response.json()).pipe(
             map((data) => {
-              console.log(data);
+           
               if (data.data.auth.logOut == true) {
                 localStorage.clear();
                 return SIGN_OUT_SUCCESS();

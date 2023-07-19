@@ -1,14 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ITransactionType } from "../../../types/ITransactionType";
+import { Transaction } from "../../../types/ITransactionType";
 
 export interface CreateTransactionState {
   loading: boolean;
   cancelLoading: boolean;
   error: null | string;
-  transactions: ITransactionType[];
+  transactions: Transaction[];
   countOfElements: number;
-  addTransactionSuccess: boolean;
-  cancelTransactionSuccess: boolean;
+  incomes: number;
+  expenses: number;
 }
 
 const initialState: CreateTransactionState = {
@@ -17,8 +17,8 @@ const initialState: CreateTransactionState = {
   loading: false,
   transactions: [],
   countOfElements: 10,
-  addTransactionSuccess: false,
-  cancelTransactionSuccess: false,
+  incomes: 0,
+  expenses: 0,
 };
 
 export const TransactionItemsReducer = createSlice({
@@ -27,7 +27,7 @@ export const TransactionItemsReducer = createSlice({
   reducers: {
     FETCH_TRANSACTIONS(
       state,
-      action: PayloadAction<{ dateTimeTo: string | null }>
+      action: PayloadAction<{ accountId?: string }>
     ) {
       state.loading = true;
       state.error = null;
@@ -36,18 +36,44 @@ export const TransactionItemsReducer = createSlice({
     },
     FETCH_TRANSACTIONS_SUCCESS(
       state,
-      action: PayloadAction<{ transactions: ITransactionType[] }>
+      action: PayloadAction<{ transactions: Transaction[], incomes: number, expenses: number }>
     ) {
       state.loading = false;
       state.error = null;
       state.transactions = action.payload.transactions.slice().reverse();
+      state.incomes = action.payload.incomes;
+      state.expenses = action.payload.expenses;
     },
     FETCH_TRANSACTIONS_ERROR(state, action: PayloadAction<string>) {
       state.loading = false;
       state.error = action.payload;
       state.transactions = [];
     },
-    ADD_FINANCIAL_OPERATION(
+    ADD_DEBIT_OPERATION(
+      state,
+      action: PayloadAction<{
+        amount: number;
+        categoryId: any;
+        title: string;
+        accountId: string;
+      }>
+    ) {
+      state.loading = true;
+      state.error = null;
+    },
+    ADD_CREDIT_OPERATION(
+      state,
+      action: PayloadAction<{
+        amount: number;
+        categoryId: any;
+        title: string;
+        accountId: string;
+      }>
+    ) {
+      state.loading = true;
+      state.error = null;
+    },
+    ADD_TRANSFER_OPERATION(
       state,
       action: PayloadAction<{
         amount: number;
@@ -57,7 +83,6 @@ export const TransactionItemsReducer = createSlice({
         toAccountId: string;
       }>
     ) {
-      state.addTransactionSuccess = false;
       state.loading = true;
       state.error = null;
     },
@@ -67,7 +92,6 @@ export const TransactionItemsReducer = createSlice({
     ) {
       state.loading = false;
       state.error = null;
-      state.addTransactionSuccess = true;
     },
     ADD_FINANCIAL_OPERATION_ERROR(state, action: PayloadAction<string>) {
       state.loading = false;
@@ -77,9 +101,7 @@ export const TransactionItemsReducer = createSlice({
       state,
       action: PayloadAction<{ transactionId: string }>
     ) {
-      state.cancelTransactionSuccess = false;
       state.loading = true;
-      state.cancelLoading = true;
       state.error = null;
     },
     CANCEL_FINANCIAL_OPERATION_SUCCESS(
@@ -88,8 +110,6 @@ export const TransactionItemsReducer = createSlice({
     ) {
       state.loading = false;
       state.error = null;
-      state.cancelLoading = false;
-      state.cancelTransactionSuccess = action.payload.cancelTransactionSuccess;
     },
     CANCEL_FINANCIAL_OPERATION_ERROR(state, action: PayloadAction<string>) {
       state.loading = false;

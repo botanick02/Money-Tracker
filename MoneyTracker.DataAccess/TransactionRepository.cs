@@ -17,10 +17,16 @@ namespace MoneyTracker.DataAccess
             return readModel.Transactions.Where(t => t.OperationId == transactionId).ToList();
         }
 
-        public List<Transaction> GetTransactions(Guid userId, DateTime? dateTimeTo = null)
+        public List<Transaction> GetUserTransactions(Guid userId, DateTime? dateTimeTo = null)
         {
             var readModel = readModelExtensions.GetReadModel(dateTimeTo);
             return readModel.Transactions.Where(t => t.UserId == userId).ToList();
+        }
+
+        public List<Transaction> GetAccountTransactions(Guid accountId, DateTime? dateTimeTo = null)
+        {
+            var readModel = readModelExtensions.GetReadModel(dateTimeTo);
+            return readModel.Transactions.Where(t => t.AccountId == accountId).ToList();
         }
     }
 }

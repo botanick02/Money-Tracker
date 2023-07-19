@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using MoneyTracker.Business.Events.Account;
 using MoneyTracker.Business.Events.Auth;
 using MoneyTracker.Business.Events.Budgets;
 using MoneyTracker.Business.Events.Categories;
@@ -22,6 +23,11 @@ namespace MoneyTracker.Business.Events
 
             services.AddTransient<IEventApplier<BudgetCreateEvent>, BudgetCreateEventApplier>();
             services.AddTransient<IEventApplier<BudgetEditEvent>, BudgetEditEventApplier>();
+
+            services.AddTransient<IEventApplier<CreditAccountCreatedEvent>, CreditAccountCreatedEventApplier>();
+            services.AddTransient<IEventApplier<DebitAccountCreatedEvent>, DebitAccountCreatedEventApplier>();
+            services.AddTransient<IEventApplier<PersonalAccountCreatedEvent>, PersonalAccountCreatedEventApplier>();
+
         }
     }
 }

@@ -1,11 +1,11 @@
 import React, { FC, useEffect } from 'react';
 import { ReactComponent as EditIcon } from "../assets/icons/Edit-icon.svg";
-import { ITransactionType } from '../types/ITransactionType';
+import { Transaction } from '../types/ITransactionType';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { TransactionItemsReducer } from '../store/Example/Reducers/FinancialOperationsReducer';
 const { CANCEL_FINANCIAL_OPERATION } = TransactionItemsReducer.actions;
 
-const TransactionItem: FC<{ transaction: ITransactionType }> = ({ transaction }) => {
+const TransactionItem: FC<{ transaction: Transaction }> = ({ transaction }) => {
   const categoryItems = useAppSelector((state) => state.Category.categories);
   const category = categoryItems.find((category) => category.id === transaction.categoryId);
   const type = transaction.amount > 0 ? 'income' : 'expense';

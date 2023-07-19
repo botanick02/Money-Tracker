@@ -21,7 +21,7 @@ namespace MoneyTracker.Business.Events.FinancialOperation
                 AccountId = @event.AccountId
             };
 
-            updatedModel.Transactions.Add(debitTransaction);
+            updatedModel.Transactions = updatedModel.Transactions.Append(debitTransaction);
 
             return updatedModel;
         }
@@ -46,7 +46,7 @@ namespace MoneyTracker.Business.Events.FinancialOperation
                 AccountId = @event.AccountId
             };
 
-            updatedModel.Transactions.Add(debitTransaction);
+            updatedModel.Transactions = updatedModel.Transactions.Append(debitTransaction);
 
             return updatedModel;
         }
@@ -67,7 +67,7 @@ namespace MoneyTracker.Business.Events.FinancialOperation
 
             foreach (var transaction in transactionsToCancel)
             {
-                updatedModel.Transactions.Remove(transaction);
+                updatedModel.Transactions = updatedModel.Transactions.Where(t => t != transaction);
             }
 
             return updatedModel;

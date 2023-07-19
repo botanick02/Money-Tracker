@@ -1,5 +1,6 @@
 ﻿using GraphQL;
 using GraphQL.Types;
+using MoneyTracker.App.GraphQl.Account;
 using MoneyTracker.App.GraphQl.Auth;
 using MoneyTracker.App.GraphQl.Budget;
 using MoneyTracker.App.GraphQl.Category;
@@ -22,6 +23,9 @@ namespace MoneyTracker.App.GraphQl
                      .Resolve(_ => new { });
 
             Field<BudgetQuery>("Budget").Resolve(_ => new { });
+
+            Field<AccountQuery>("Account")
+                     .Resolve(_ => new { });
         }
     }
 }

@@ -9,7 +9,7 @@ import Registration from "./pages/Registration/Registration";
 import Transactions from "./pages/Transactions/Transactions";
 import Layout from "./components/common/Layout";
 import Settings from "./pages/Settings/Settings";
-import Stats from "./pages/Stats/Stats";
+// import Stats from "./pages/Stats/Stats";
 import Budgets from "./pages/Budgets/Budgets";
 import CategoryList from "./components/CategoryList/CategoryList";
 
@@ -21,22 +21,31 @@ function App() {
   const accessTokenRefreshing = useAppSelector(
     (state) => state.RefreshToken.loading
   );
-  console.log(accessTokenRefreshing);
+
   const dispatch = useAppDispatch();
-  useEffect(() => {
-    if (checkTokenExpire()) {
-      if (!accessTokenRefreshing && isAuth) {
-        dispatch(GET_ACCESS_TOKEN());
-      }
-    }
-  }, []);
 
   useEffect(() => {
     if (isAuth) {
       dispatch(GET_USER_INFO());
     }
   }, [isAuth]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (checkTokenExpire()) {
+        if (!accessTokenRefreshing && isAuth) {
+          dispatch(GET_ACCESS_TOKEN());
+        }
+      }
+    }, 120000); 
+
+    return () => {
+      clearInterval(interval); 
+    };
+  }, [accessTokenRefreshing, dispatch, isAuth]);
+
   console.log(isAuth);
+
   return (
     <BrowserRouter>
       <Routes>
@@ -44,7 +53,7 @@ function App() {
           <Route path={"/"} element={<Layout />}>
             <Route index element={<Transactions />} />
             <Route path="/budgets" element={<Budgets/>} />
-            <Route path="/stats" element={<Stats/>} />
+            {/* <Route path="/stats" element={<Stats/>} /> */}
             <Route path="/settings" element={<Settings/>}/>
             <Route path="/CategoryList" element={<CategoryList/>}/>
             <Route path="*" element={<Navigate to="/" />} />

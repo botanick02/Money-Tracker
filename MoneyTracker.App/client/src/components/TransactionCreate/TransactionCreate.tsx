@@ -1,170 +1,187 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import InputWrapper from "../../elements/InputWrapper";
 import Dropdown, { Option } from "../../elements/Dropdown/Dropdown";
 import { CategoryItemReducer } from "../../store/Example/Reducers/CategoryItemsReducer";
-import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
+import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
 import { TransactionItemsReducer } from "../../store/Example/Reducers/FinancialOperationsReducer";
-
+import { FETCH_ACCOUNTS } from "../../store/Example/Reducers/AccountReducer";
+const { FETCH_CATEGORIES } = CategoryItemReducer.actions;
+const { ADD_DEBIT_OPERATION, ADD_CREDIT_OPERATION, ADD_TRANSFER_OPERATION } =
+  TransactionItemsReducer.actions;
 interface Props {
-  openPopupHandle(): void
-  transactionDefaultType: "expense" | "income" | "transfer"
+  openPopupHandle(): void;
+  transactionDefaultType: "expense" | "income" | "transfer";
 }
 
-const TransactionCreate: React.FC<Props> = ({ openPopupHandle, transactionDefaultType }) => {
+const TransactionCreate: React.FC<Props> = ({
+  openPopupHandle,
+  transactionDefaultType,
+}) => {
   const [type, setType] = useState(transactionDefaultType);
   const [amount, setAmount] = useState(0);
   const [title, setTitle] = useState("");
-  const dispatch = useAppDispatch();
-  const dateTimeTo = useAppSelector((state) => state.DateTime.dateTime);
-  const { FETCH_CATEGORIES } = CategoryItemReducer.actions;
-  const { ADD_FINANCIAL_OPERATION } = TransactionItemsReducer.actions;
-  useEffect(() => {
-
-    setAccount(accountOptions.find(option => option.value === actualAccount) || accountOptions[0])
-    dispatch(FETCH_CATEGORIES({
-      dateTimeTo
-    }));
-  }, []);
-
-  const categoryItems = useAppSelector((state) => state.Category.categories);
-
-  const accountOptions: Option[] = [
-    {
-      label: "Privat",
-      value: "69ae7bca-b2ed-47f1-a084-6bb08ed49a6e"
-    },
-    {
-      label: "Mono",
-      value: "bc62fbf1-0f5c-4cc0-b995-7573ad855e8d"
-    },
-    {
-      label: "Cash",
-      value: "4856a9ed-4045-4848-a9b4-b3b36404c69f"
-    }
-  ];
-
-  const mocAccountSOptions = {
-    Income: "0c5c3b75-6094-4156-8c2f-6e0ac5b89fcb",
-    Expense: "7c494473-5889-4d7f-81cc-7f94f5c8cc90"
-  };
-
-  const categoryOptions: Option[] = categoryItems.map(category => ({
-    label: category.name,
-    value: category.id
-  }));
-  const actualAccount = useAppSelector((state) => state.Account.actualAccount);
-
-  const [account, setAccount] = useState<Option>(
-    accountOptions.find(option => option.value === actualAccount) || accountOptions[0]
-  );
   
-  const [fromAccountId, setFromAccountId] = useState(account.value);
-  const [toAccountId, setToAccountId] = useState(mocAccountSOptions.Expense);
-  const [categoryId, setCategoryId] = useState<Option| string>(accountOptions[0]);
-  console.log(categoryId)
-  const handleAccountChange = (option: Option) => {
-    setAccount(option);
-    console.log(option)
-    if (type === "income") {
-        console.log(option.value)
-      setFromAccountId(mocAccountSOptions.Income);
-      setToAccountId(String(option));
-    } else if (type === "expense") {
-    console.log(option.value)
-      setFromAccountId(String(option));
-      setToAccountId(mocAccountSOptions.Expense);
+  const dispatch = useAppDispatch();
+  const categoryItems = useAppSelector((state) => state.Category.categories);
+  const accounts = useAppSelector((state) => state.Account.accounts);
 
-    }
-    
-  };
-  const handleAccount1Change = (option: Option) => {
-  setFromAccountId(String(option));
-   
-  };
-  const handleAccount2Change = (option: Option) => {
-  setToAccountId(String(option));
-};
+  const accountOptions: Option[] = [];
+  accounts
+    .filter((a) => a.id !== "total")
+    .forEach((account) => {
+      accountOptions.push({
+        label: account.name,
+        value: account.id,
+      });
+    });
 
 
+    const currentAccountId = useAppSelector(
+      (state) => state.Account.currentAccountId
+    );
+  
+    const [account, setAccount] = useState<Option>(
+      accountOptions.find((option) => option.value === currentAccountId) ||
+        accountOptions[0]
+    );
 
+    const [transferAccounts, setTransferAccounts] = useState<{
+      fromAccount: Option;
+      toAccount: Option;
+    }>({ fromAccount: accountOptions[0], toAccount: accountOptions[0]});
+
+    const categoryOptions: Option[] = categoryItems.map((category) => ({
+      label: category.name,
+      value: category.id,
+    }));
+
+  const [categoryId, setCategoryId] = useState<Option>(
+    categoryOptions[0]
+  );
 
   const handleCategoryChange = (option: Option) => {
-     setCategoryId(option);
+    setCategoryId(option);
   };
 
   const handleCancel = () => {
     openPopupHandle();
   };
 
-  const handleSave = () => {
-  
-    dispatch(
-      ADD_FINANCIAL_OPERATION({
-        amount,
-        categoryId,
-        title,
-        fromAccountId,
-        toAccountId
-      })
-    );
+  const handleFinancialOperation = () => {
+    switch(type){
+      case "income": {
+        dispatch(
+          ADD_DEBIT_OPERATION({
+            amount,
+            categoryId: categoryId.value,
+            title,
+            accountId: account.value
+          }));
+          break
+      }
+      case "expense": {
+        dispatch(
+          ADD_CREDIT_OPERATION({
+            amount,
+            categoryId: categoryId.value,
+            title,
+            accountId: account.value
+          }));
+          break
+      }
+      case "transfer":{
+        dispatch(
+          ADD_TRANSFER_OPERATION({
+            amount,
+            categoryId: categoryId.value,
+            title,
+            fromAccountId: transferAccounts.fromAccount.value,
+            toAccountId: transferAccounts.toAccount.value
+          }));
+      }
+    }
+    
     openPopupHandle();
   };
-
-  const [date, setDate] = useState(new Date());
 
   return (
     <div className={"popup-bg"}>
       <div className={"popup"}>
         <ul className={"popup__header"}>
-          <li onClick={() => {
-            setType("income");
-          }} className={type === "income" ? "current-type" : ""}>Income
+          <li
+            onClick={() => {
+              setType("income");
+            }}
+            className={type === "income" ? "current-type" : ""}
+          >
+            Income
           </li>
-          <li onClick={() => {
-            setType("expense");
-          }} className={type === "expense" ? "current-type" : ""}>Expense
+          <li
+            onClick={() => {
+              setType("expense");
+            }}
+            className={type === "expense" ? "current-type" : ""}
+          >
+            Expense
           </li>
-          <li onClick={() => {
-            setType("transfer");
-            setCategoryId("1afa0565-c46b-4b13-88b0-b8d7fca78340")
-          }} className={type === "transfer" ? "current-type" : ""}>Transfer
+          <li
+            onClick={() => {
+              setType("transfer");
+            }}
+            className={type === "transfer" ? "current-type" : ""}
+          >
+            Transfer
           </li>
         </ul>
         <div className={"popup__fields"}>
-          {/* <InputWrapper type={"datetime-local"}>
-            <input value={date.toISOString().substring(0, 16)} type="datetime-local" onChange={(e) => setDate(new Date(e.target.value))} />
-          </InputWrapper> */}
-          {
-            type !== "transfer" ? (
-              <Dropdown title={"Account"} selectHandler={handleAccountChange} options={accountOptions} />
-            ) : (
-              <div className={"popup__row"}>
-                <Dropdown title={"From"} selectHandler={handleAccount1Change} options={accountOptions} />
-                <Dropdown title={"To"} selectHandler={handleAccount2Change} options={accountOptions} />
-              </div>
-            )
-          }
+          {type !== "transfer" ? (
+            <Dropdown
+              title={"Account"}
+              selectHandler={setAccount}
+              options={accountOptions}
+            />
+          ) : (
+            <div className={"popup__row"}>
+              <Dropdown
+                title={"From"}
+                selectHandler={(option) => setTransferAccounts({fromAccount: option, toAccount: transferAccounts.toAccount})}
+                options={accountOptions}
+              />
+              <Dropdown
+                title={"To"}
+                selectHandler={(option) => setTransferAccounts({fromAccount: transferAccounts.fromAccount, toAccount: option})}
+                options={accountOptions}
+              />
+            </div>
+          )}
           <InputWrapper>
-            <input type="number" placeholder="Amount" onChange={(e) => setAmount(Number(e.target.value))} />
+            <input
+              type="number"
+              placeholder="Amount"
+              onChange={(e) => setAmount(Number(e.target.value))}
+            />
           </InputWrapper>
-          {
-            type !== "transfer" ? (
-              <Dropdown title={"Category"} selectHandler={handleCategoryChange} options={categoryOptions} />
-            ) : (
-              <InputWrapper>
-                <input type="number" placeholder="Commission" />
-              </InputWrapper>
-            )
-          }
+          {type !== "transfer" ? (
+            <Dropdown
+              title={"Category"}
+              selectHandler={handleCategoryChange}
+              options={categoryOptions}
+            />
+          ) : (
+            <InputWrapper>
+              <input type="number" placeholder="Commission" />
+            </InputWrapper>
+          )}
           <InputWrapper>
-            <input type="text" placeholder="Title" onChange={(e) => setTitle(e.target.value)} />
+            <input
+              type="text"
+              placeholder="Title"
+              onChange={(e) => setTitle(e.target.value)}
+            />
           </InputWrapper>
-          {/* <InputWrapper>
-            <input type="text" placeholder="Note" />
-          </InputWrapper> */}
         </div>
         <div className={"popup__row"}>
-          <button onClick={handleSave} className={"button"}>
+          <button onClick={handleFinancialOperation} className={"button"}>
             Save
           </button>
           <button onClick={handleCancel} className={"button"}>

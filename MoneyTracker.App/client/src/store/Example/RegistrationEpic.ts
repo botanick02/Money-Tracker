@@ -56,14 +56,14 @@ export const RegistrationEpic: Epic<any, any, any> = (action$: any) => {
                 mergeMap((response) =>
                     from(response.json()).pipe(
                         map((data: any) => {
-                            console.log(data)
+                          
                             if (data.errors) {
                                 store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].extensions.code)); 
                                 return REGISTRATION_ERROR(data.errors[0].extensions.code);
                               } else {
                               
 if (data.data.auth.createUser.accessToken && data.data.auth.createUser.accessToken !== '') {
-    console.log("sdasdasd")
+  
     localStorage.setItem('accessToken', data.data.auth.createUser.accessToken);
     store.dispatch(REGISTRATION_SUCCESS)
     store.dispatch(SIGN_IN_SUCCESS)
