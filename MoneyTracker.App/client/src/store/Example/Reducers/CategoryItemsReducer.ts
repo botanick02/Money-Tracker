@@ -1,13 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Category } from "../../../types/Category";
-import { ICategoryType } from "../../../types/ICategoryType";
-
-
 
 export interface CreateCategoryState {
   loading: boolean;
   error: null | string;
-  categories: ICategoryType[];
+  categories: Category[];
   countOfElements: number;
   editSuccess:boolean
 }
@@ -33,7 +30,7 @@ export const CategoryItemReducer = createSlice({
     },
     FETCH_CATEGORIES_SUCCESS(
       state,
-      action: PayloadAction<{ categories: ICategoryType[];}>
+      action: PayloadAction<{ categories: Category[];}>
     ) {
       state.loading = false;
       state.error = null;

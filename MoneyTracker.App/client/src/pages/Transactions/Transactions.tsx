@@ -3,13 +3,13 @@ import TransactionList from "../../components/TransactionList/TransactionList";
 import TransactionCreate from "../../components/TransactionCreate/TransactionCreate";
 import TimeScopePanel from "../../components/TimeScopePanel/TimeScopePanel";
 import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
-import { TransactionItemsReducer } from "../../store/Example/Reducers/FinancialOperationsReducer";
+import { TransactionItemsSlice } from "../../store/FinancialOperations/FinancialOperations.slice";
 
 
 const Transactions = () => {
 
   const dispatch = useAppDispatch();
-  const { FETCH_TRANSACTIONS } = TransactionItemsReducer.actions;
+  const { FETCH_TRANSACTIONS } = TransactionItemsSlice.actions;
   const dateTimeTo = useAppSelector((state) => state.DateTime.dateTime)
   const [defaultTransaction, setDefaultTransaction] = useState<
     "expense" | "income" | "transfer"

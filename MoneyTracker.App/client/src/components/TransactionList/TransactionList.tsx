@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import TransactionItem from "../../elements/TransactionItem";
-import { TransactionItemsReducer } from "../../store/Example/Reducers/FinancialOperationsReducer";
+import { TransactionItemsSlice } from "../../store/FinancialOperations/FinancialOperations.slice";
 import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
 import { CategoryItemReducer } from "../../store/Example/Reducers/CategoryItemsReducer";
 
@@ -15,7 +15,7 @@ const getOnlyDate = (dateString: string) => {
 
 const TransactionList = () => {
   const dateTimeTo = useAppSelector((state) => state.DateTime.dateTime);
-  const { FETCH_TRANSACTIONS } = TransactionItemsReducer.actions;
+  const { FETCH_TRANSACTIONS } = TransactionItemsSlice.actions;
   const { FETCH_CATEGORIES } = CategoryItemReducer.actions;
 
   const dispatch = useAppDispatch();

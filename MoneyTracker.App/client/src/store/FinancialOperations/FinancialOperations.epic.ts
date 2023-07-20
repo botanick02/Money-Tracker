@@ -1,9 +1,9 @@
 import { Epic, ofType } from "redux-observable";
 import { from, mergeMap } from "rxjs";
 import { store } from "../store";
-import { NotificationReducer } from "./Reducers/NotificationReducer";
-import { TransactionItemsReducer } from "./Reducers/FinancialOperationsReducer";
-import { Transaction } from "../../types/ITransactionType";
+import { NotificationReducer } from "../Example/Reducers/NotificationReducer";
+import { TransactionItemsSlice } from "./FinancialOperations.slice";
+import { Transaction } from "../../types/Transaction";
 import { GraphQlEndpoint } from "../../api/queries/tmp";
 
 const { SHOW_ERROR_MESSAGE } = NotificationReducer.actions;
@@ -11,7 +11,7 @@ const {
   FETCH_TRANSACTIONS,
   FETCH_TRANSACTIONS_SUCCESS,
   FETCH_TRANSACTIONS_ERROR,
-} = TransactionItemsReducer.actions;
+} = TransactionItemsSlice.actions;
 
 export const TransactionItemsEpic: Epic<any, any, any> = (action$, state$) => {
   const transactionQuery = (accountId?: string) => {
@@ -92,7 +92,7 @@ const {
   ADD_TRANSFER_OPERATION,
   ADD_FINANCIAL_OPERATION_SUCCESS,
   ADD_FINANCIAL_OPERATION_ERROR,
-} = TransactionItemsReducer.actions;
+} = TransactionItemsSlice.actions;
 
 
 export const addDebitOperationEpic: Epic<any, any, any> = (
@@ -313,7 +313,7 @@ const {
   CANCEL_FINANCIAL_OPERATION,
   CANCEL_FINANCIAL_OPERATION_ERROR,
   CANCEL_FINANCIAL_OPERATION_SUCCESS,
-} = TransactionItemsReducer.actions;
+} = TransactionItemsSlice.actions;
 
 export const cancelFinancialOperationEpic: Epic<any, any, any> = (
   action$,
