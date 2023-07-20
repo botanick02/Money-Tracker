@@ -121,6 +121,8 @@ export const {
   ADD_FINANCIAL_OPERATION_ERROR,
   ADD_FINANCIAL_OPERATION_SUCCESS,
   CANCEL_FINANCIAL_OPERATION,
+    CANCEL_FINANCIAL_OPERATION_ERROR,
+    CANCEL_FINANCIAL_OPERATION_SUCCESS
 } = FinancialOperationsSlice.actions;
 
 export default FinancialOperationsSlice.reducer;

@@ -18,16 +18,10 @@ import {
   EditCategoryEpic,
 } from "./Example/CategoryItemsEpic";
 import DateTimeReducer from "./Example/Reducers/DateTimeReducer";
-import {
-  TransactionItemsEpic,
-  addCreditOperationEpic,
-  addDebitOperationEpic,
-  addTransferOperationEpic,
-  cancelFinancialOperationEpic,
-} from "./FinancialOperations/FinancialOperations.epic";
-import TransactionItemsSlice from "./FinancialOperations/FinancialOperations.slice";
 import AccountReducer from "./Example/Reducers/AccountReducer";
 import { fetchAccountsEpic } from "./Example/AccountEpic";
+import {FinancialOperationsSlice} from "./FinancialOperations/FinancialOperations.slice";
+import {FinancialOperationEpics} from "./FinancialOperations/FinancialOperations.epic";
 
 const epicMiddleware = createEpicMiddleware();
 
@@ -39,12 +33,9 @@ const rootEpic = combineEpics(
   GoogleAuthorizationEpic,
   CategoryItemsEpic,
   EditCategoryEpic,
-  TransactionItemsEpic,
-  addDebitOperationEpic,
-  addCreditOperationEpic,
-  addTransferOperationEpic,
-  cancelFinancialOperationEpic,
-  fetchAccountsEpic
+  fetchAccountsEpic,
+
+  FinancialOperationEpics
 );
 
 const rootReducer = combineReducers({
@@ -55,7 +46,9 @@ const rootReducer = combineReducers({
   Category: CategoryReducer,
   Registration: RegistrationReducer,
   DateTime: DateTimeReducer,
-  TransactionItems: TransactionItemsSlice,
+
+  FinancialOperations: FinancialOperationsSlice.reducer,
+
   Account: AccountReducer,
 });
 

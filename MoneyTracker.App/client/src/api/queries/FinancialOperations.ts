@@ -17,3 +17,26 @@ export const GetTransactions = `query getTransactions($input: GetTransactionsFor
     } 
     }
   }`
+
+export const AddDebit = `mutation addDebit($debitOperation: DebitOperationInputType!){
+      financialOperation{
+        addDebitOperation(debitOperation: $debitOperation)
+      }
+    }`;
+
+export const AddCredit = `mutation addDebit($creditOperation: CreditOperationInputType!){
+      financialOperation{
+        addCreditOperation(creditOperation: $debitOperation)
+      }
+    }`;
+export const AddTransfer = `mutation addDebit($transferOperation: TransferOperationInputType!){
+      financialOperation{
+        addTransferOperation(transferOperation: $debitOperation)
+      }
+    }`;
+
+export const CancelOperation = `mutation cancelOperation($cancelFinOperationInput: CancelFinancialOperationInputType!) {
+      financialOperation {
+        cancelFinancialOperation(cancelFinOperationInput: $cancelFinOperationInput)
+      }
+    } `
