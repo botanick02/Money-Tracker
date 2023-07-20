@@ -43,7 +43,7 @@ const initialState: CreateTransactionState = {
 };
 
 export const FinancialOperationsSlice = createSlice({
-  name: "TransactionItems",
+  name: "FinancialOperations",
   initialState: initialState,
   reducers: {
     FETCH_TRANSACTIONS_INFO(state, action: PayloadAction<{ accountId?: string }>) {

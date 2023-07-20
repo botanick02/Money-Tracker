@@ -12,16 +12,13 @@ import NotificationReducer from "./Example/Reducers/NotificationReducer";
 import AuthorizationReducer from "./Example/Reducers/AuthorizationReducer";
 import RefreshTokenReducer from "./Example/Reducers/RefreshTokenReducer";
 import RegistrationReducer from "./Example/Reducers/RegistrationReducer";
-import CategoryReducer from "./Example/Reducers/CategoryItemsReducer";
-import {
-  CategoryItemsEpic,
-  EditCategoryEpic,
-} from "./Example/CategoryItemsEpic";
 import DateTimeReducer from "./Example/Reducers/DateTimeReducer";
 import AccountReducer from "./Example/Reducers/AccountReducer";
 import { fetchAccountsEpic } from "./Example/AccountEpic";
 import {FinancialOperationsSlice} from "./FinancialOperations/FinancialOperations.slice";
+import {CategoriesSlice} from "./Categories/Categories.slice";
 import {FinancialOperationEpics} from "./FinancialOperations/FinancialOperations.epic";
+import {CategoriesEpics} from "./Categories/Categories.epic";
 
 const epicMiddleware = createEpicMiddleware();
 
@@ -31,10 +28,9 @@ const rootEpic = combineEpics(
   GetAccessTokenEpic,
   RegistrationEpic,
   GoogleAuthorizationEpic,
-  CategoryItemsEpic,
-  EditCategoryEpic,
   fetchAccountsEpic,
 
+  CategoriesEpics,
   FinancialOperationEpics
 );
 
@@ -43,10 +39,10 @@ const rootReducer = combineReducers({
   User: UserReducer,
   Notifications: NotificationReducer,
   RefreshToken: RefreshTokenReducer,
-  Category: CategoryReducer,
   Registration: RegistrationReducer,
   DateTime: DateTimeReducer,
 
+  Categories: CategoriesSlice.reducer,
   FinancialOperations: FinancialOperationsSlice.reducer,
 
   Account: AccountReducer,
