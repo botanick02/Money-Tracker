@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
-import { ICategoryType } from '../types/ICategoryType';
+import { Category } from '../types/Category';
 
 interface CategorySetsItemProps {
-  category: ICategoryType;
+  category: Category;
   onClick: () => void;
 }
 

@@ -5,7 +5,7 @@ import { AuthorizationReducer } from "./Reducers/AuthorizationReducer";
 import { NotificationReducer } from "./Reducers/NotificationReducer";
 import { RefreshTokenReducer } from "./Reducers/RefreshTokenReducer";
 import { GraphQlEndpoint } from "../../api/queries/tmp";
-import { IGoogleLoginQuery, ILoginQuery } from "../../types/GraphQLType";
+import { GoogleLoginQuery, LoginQuery } from "../../types/GraphQLType";
 const { SHOW_ERROR_MESSAGE } = NotificationReducer.actions;
 const {
   SIGN_IN,
@@ -56,7 +56,7 @@ export const AuthorizationEpic: Epic<any, any, any> = (action$: any) => {
         mergeMap((response) =>
           from(response.json()).pipe(
             
-            map((data: ILoginQuery) => {
+            map((data: LoginQuery) => {
            
               if (data.errors) {
                 store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message));
@@ -118,7 +118,7 @@ export const GoogleAuthorizationEpic: Epic<any, any, any> = (action$: any) => {
       ).pipe(
         mergeMap((response) =>
           from(response.json()).pipe(
-            map((data: IGoogleLoginQuery) => {
+            map((data: GoogleLoginQuery) => {
             
               if (data.errors) {
                 store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message));

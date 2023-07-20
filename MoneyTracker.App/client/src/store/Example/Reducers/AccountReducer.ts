@@ -5,14 +5,13 @@ export interface AccountStore {
   accounts: Account[];
   currentAccountId: string;
   loading: boolean;
-  error: null | string;
+  error?: string;
 }
 
 const initialState: AccountStore = {
   accounts: [],
   currentAccountId: "total",
   loading: false,
-  error: null,
 };
 
 export const AccountReducer = createSlice({
