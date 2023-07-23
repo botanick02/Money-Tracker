@@ -13,8 +13,6 @@ import AuthorizationReducer from "./Example/Reducers/AuthorizationReducer";
 import RefreshTokenReducer from "./Example/Reducers/RefreshTokenReducer";
 import RegistrationReducer from "./Example/Reducers/RegistrationReducer";
 import DateTimeReducer from "./Example/Reducers/DateTimeReducer";
-import AccountReducer from "./Example/Reducers/AccountReducer";
-import { fetchAccountsEpic } from "./Example/AccountEpic";
 import {FinancialOperationsSlice} from "./FinancialOperations/FinancialOperations.slice";
 import {CategoriesSlice} from "./Categories/Categories.slice";
 import {FinancialOperationEpics} from "./FinancialOperations/FinancialOperations.epic";
@@ -28,10 +26,10 @@ const rootEpic = combineEpics(
   GetAccessTokenEpic,
   RegistrationEpic,
   GoogleAuthorizationEpic,
-  fetchAccountsEpic,
-
+  
   CategoriesEpics,
-  FinancialOperationEpics
+  FinancialOperationEpics,
+  AccountEpics
 );
 
 const rootReducer = combineReducers({

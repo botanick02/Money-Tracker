@@ -1,21 +1,22 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Account } from "../../../types/Account";
+import { Account } from "../../types/Account";
 
-export interface AccountStore {
+export interface AccountState {
   accounts: Account[];
   currentAccountId: string;
   loading: boolean;
-  error?: string;
+  error: string | null;
 }
 
-const initialState: AccountStore = {
+const initialState: AccountState = {
   accounts: [],
   currentAccountId: "total",
   loading: false,
+  error: null,
 };
 
 export const AccountReducer = createSlice({
-  name: "Account",
+  name: "Accounts",
   initialState: initialState,
   reducers: {
     FETCH_ACCOUNTS(state) {
