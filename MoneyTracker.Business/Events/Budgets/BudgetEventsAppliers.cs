@@ -15,7 +15,7 @@ namespace MoneyTracker.Business.Events.Budgets
 
             var newBudget = @event.Budget;
 
-            updatedModel.Budgets.Add(newBudget);
+            updatedModel.Budgets.Append(newBudget);
 
             return updatedModel;
         }

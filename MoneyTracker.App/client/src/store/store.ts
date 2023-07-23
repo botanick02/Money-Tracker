@@ -1,49 +1,28 @@
+import { FinancialOperationSlice } from './FinancialOperation/FinancialOperation.slice';
+import { CategoriesEpics } from './Category/Category.epic';
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { combineEpics, createEpicMiddleware } from "redux-observable";
-import { RegistrationEpic } from "./Example/RegistrationEpic";
-import {
-  AuthorizationEpic,
-  GetAccessTokenEpic,
-  GoogleAuthorizationEpic,
-  SignOutEpic,
-} from "./Example/AuthorizationEpic";
-import UserReducer from "./Example/Reducers/UserReducer";
-import NotificationReducer from "./Example/Reducers/NotificationReducer";
-import AuthorizationReducer from "./Example/Reducers/AuthorizationReducer";
-import RefreshTokenReducer from "./Example/Reducers/RefreshTokenReducer";
-import RegistrationReducer from "./Example/Reducers/RegistrationReducer";
-import DateTimeReducer from "./Example/Reducers/DateTimeReducer";
-import {FinancialOperationsSlice} from "./FinancialOperations/FinancialOperations.slice";
-import {CategoriesSlice} from "./Categories/Categories.slice";
-import {FinancialOperationEpics} from "./FinancialOperations/FinancialOperations.epic";
-import {CategoriesEpics} from "./Categories/Categories.epic";
+import { FinancialOperationEpics } from './FinancialOperation/FinancialOperation.epic';
+import { AuthEpics } from './Auth/Auth.epic';
+import { AccountEpics } from './Account/Account.epic';
+import { CategorySlice } from './Category/Category.slice';
+import { AccountSlice }  from './Account/Account.slice'
+import { AuthSlice } from './Auth/Auth.slice';
 
 const epicMiddleware = createEpicMiddleware();
 
 const rootEpic = combineEpics(
-  AuthorizationEpic,
-  SignOutEpic,
-  GetAccessTokenEpic,
-  RegistrationEpic,
-  GoogleAuthorizationEpic,
-  
   CategoriesEpics,
   FinancialOperationEpics,
+  AuthEpics,
   AccountEpics
 );
 
 const rootReducer = combineReducers({
-  Authorization: AuthorizationReducer,
-  User: UserReducer,
-  Notifications: NotificationReducer,
-  RefreshToken: RefreshTokenReducer,
-  Registration: RegistrationReducer,
-  DateTime: DateTimeReducer,
-
-  Categories: CategoriesSlice.reducer,
-  FinancialOperations: FinancialOperationsSlice.reducer,
-
-  Account: AccountReducer,
+  Category: CategorySlice.reducer,
+  FinancialOperation: FinancialOperationSlice.reducer,
+  Account: AccountSlice.reducer,
+  Auth: AuthSlice.reducer,
 });
 
 export const store = configureStore({

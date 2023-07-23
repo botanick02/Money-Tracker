@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import InputWrapper from "../../elements/InputWrapper";
 import Dropdown, { Option } from "../../elements/Dropdown/Dropdown";
 import { useAppDispatch } from '../../hooks/useAppDispatch';
-import { CategoryItemReducer } from '../../store/Example/Reducers/CategoryItemsReducer';
+import { EDIT_CATEGORY } from '../../store/Category/Category.slice';
 
 interface Props {
   openPopupHandle(): void;
@@ -58,29 +58,22 @@ const CategoryCreate: React.FC<Props> = ({
     }
   ];
 
-  const [color, setColor] = useState<Option>(colorOptions[0]);
-  const handleColorChange = (option: Option) => {
-    setColor(option);
-  };
-  const { EDIT_CATEGORY } = CategoryItemReducer.actions;
+  // const [color, setColor] = useState<Option>(colorOptions[0]);
+  // const handleColorChange = (option: Option) => {
+  //   setColor(option);
+  // };
 
-  const [image, setImage] = useState<Option>(imageOptions[0]);
-  const handleImageChange = (option: Option) => {
-    setImage(option);
-  };
+  // const [image, setImage] = useState<Option>(imageOptions[0]);
+  // const handleImageChange = (option: Option) => {
+  //   setImage(option);
+  // };
 
   const handleCancel = () => {
     openPopupHandle();
   };
   const dispatch = useAppDispatch();
   const handleSave = () => {
-    dispatch({
-      type: EDIT_CATEGORY,
-      payload: {
-        categoryId: id, 
-        name: inputValue 
-      }
-    });
+    dispatch(EDIT_CATEGORY({categoryId: id, name: inputValue}));
     openPopupHandle();
   };
   const [inputValue, setInputValue] = useState(name);
@@ -118,12 +111,14 @@ const CategoryCreate: React.FC<Props> = ({
           </InputWrapper>
           <Dropdown
             title="Image"
-            selectHandler={handleImageChange}
+            // selectHandler={handleImageChange}
+            selectHandler={() => {}}
             options={imageOptions}
           />
           <Dropdown
             title="Color"
-            selectHandler={handleColorChange}
+            // selectHandler={handleColorChange}
+            selectHandler={() => {}}
             options={colorOptions}
           />
         </div>

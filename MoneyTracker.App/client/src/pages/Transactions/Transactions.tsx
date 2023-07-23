@@ -1,32 +1,32 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import TransactionList from "../../components/TransactionList/TransactionList";
 import TransactionCreate from "../../components/TransactionCreate/TransactionCreate";
 import TimeScopePanel from "../../components/TimeScopePanel/TimeScopePanel";
 import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
-import { TransactionItemsSlice } from "../../store/FinancialOperations/FinancialOperations.slice";
+import { FETCH_TRANSACTIONS_INFO } from "../../store/FinancialOperation/FinancialOperation.slice";
 
 
 const Transactions = () => {
-
   const dispatch = useAppDispatch();
-  const { FETCH_TRANSACTIONS } = TransactionItemsSlice.actions;
-  const dateTimeTo = useAppSelector((state) => state.DateTime.dateTime)
   const [defaultTransaction, setDefaultTransaction] = useState<
     "expense" | "income" | "transfer"
   >("expense");
  
   const [isCreatePopupOpen, setIsCreatePopupOpen] = useState<boolean>(false);
+  
+  const incomes = useAppSelector((state) => state.FinancialOperation.incomes);
+  const expenses = useAppSelector((state) => state.FinancialOperation.expenses);
+  const currentAccountId = useAppSelector(state => state.Account.currentAccountId)
+
   const handlePopupOpen = () => {
     document.body.classList.toggle("no-scroll");
     setIsCreatePopupOpen((prevState) => !prevState);
   };
 
   const handleAddTransaction = () => {
-    dispatch(FETCH_TRANSACTIONS({}));
+    dispatch(FETCH_TRANSACTIONS_INFO({accountId: currentAccountId === "total" ? null : currentAccountId }));
   };
-  const incomes = useAppSelector((state) => state.TransactionItems.incomes);
-  const expenses = useAppSelector((state) => state.TransactionItems.expenses);
-  
+
   return (
     <main className={'transactions'}>
       {isCreatePopupOpen && (

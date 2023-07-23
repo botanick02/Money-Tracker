@@ -1,14 +1,14 @@
+import React from "react";
 import { Link } from "react-router-dom";
 import SettingsItem from "../../elements/SettingsItem";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
-import { AuthorizationReducer } from "../../store/Example/Reducers/AuthorizationReducer";
 import { useNavigate } from "react-router";
+import { SIGN_OUT } from "../../store/Auth/Auth.slice";
 
 
 
 
 const Settings = () => {
-  const { SIGN_OUT } = AuthorizationReducer.actions;
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();

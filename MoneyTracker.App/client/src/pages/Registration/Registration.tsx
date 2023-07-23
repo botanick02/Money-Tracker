@@ -1,29 +1,23 @@
 import "../../styles/Registration.scss";
-import { RegistrationReducer } from "../../store/Example/Reducers/RegistrationReducer";
 import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
 import { useForm } from "react-hook-form";
 import { validateEmail, validatePassword } from "../../tools/validator";
 import InputWrapper from "../../elements/InputWrapper";
 import { useEffect } from "react";
-import { useNavigate } from "react-router";
 import React from "react";
 import { Link } from "react-router-dom";
+import { REGISTRATION } from "../../store/Auth/Auth.slice";
 
 
-const { REGISTRATION } = RegistrationReducer.actions;
 
 const RegistrationForm = () => {
   const {
     register,
     formState: { errors },
     handleSubmit,
-    setError,
-    reset
-  } = useForm();
-  // const isAuth = useAppSelector((state) => state.Authorization.isAuth);
-  // const error = useAppSelector((state) => state.Registration.error);
-  const serverError = useAppSelector((state) => state.Registration.error);
-  const IsSinging = useAppSelector((state) => state.Registration.loading);
+    setError  } = useForm();
+  const serverError = useAppSelector((state) => state.Auth.error);
+  const IsSinging = useAppSelector((state) => state.Auth.loading);
   const dispatch = useAppDispatch();
 
   const Registration = (data: any) => {
@@ -61,8 +55,6 @@ const RegistrationForm = () => {
       setError("email", { message: "User with the same email already exists" });
     }
   }, [serverError, setError]);
-
-  const navigate = useNavigate();
 
   return (
     <div className="sign-up-mobile">
@@ -133,8 +125,8 @@ const RegistrationForm = () => {
             })}
           />
           <label>
-            By signing up, you agree to the <a href="">Terms of Service</a> and{" "}
-            <a href="">Privacy Policy</a>
+            By signing up, you agree to the <Link to="">Terms of Service</Link> and{" "}
+            <Link to="">Privacy Policy</Link>
           </label>
         </div>
         {errors.checkbox && (

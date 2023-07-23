@@ -28,28 +28,24 @@ export const SignInEpic: Epic<any, any, any> = (action$) => {
   return action$.pipe(
     ofType(SIGN_IN),
     mergeMap((action) =>
-      from(request(Login, action.payload)).pipe(
-        mergeMap((response) =>
-          from(response.json()).pipe(
-            map((data: any) => {
-              if (data.errors) {
-                //   store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message));
-                return SIGN_IN_ERROR(data.errors[0].message);
-              } else {
-                if (
-                  data.data.auth.login &&
-                  data.data.auth.login.accessToken !== ""
-                ) {
-                  localStorage.setItem(
-                    "accessToken",
-                    data.data.auth.login.accessToken
-                  );
-                  return SIGN_IN_SUCCESS();
-                }
-              }
-            })
-          )
-        )
+      from(request(Login, { loginCredentials: action.payload })).pipe(
+        map((data: any) => {
+          if (data.errors) {
+            //   store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message));
+            return SIGN_IN_ERROR(data.errors[0].message);
+          } else {
+            if (
+              data.data.auth.login &&
+              data.data.auth.login.accessToken !== ""
+            ) {
+              localStorage.setItem(
+                "accessToken",
+                data.data.auth.login.accessToken
+              );
+              return SIGN_IN_SUCCESS();
+            }
+          }
+        })
       )
     )
   );
@@ -58,29 +54,25 @@ export const SignInEpic: Epic<any, any, any> = (action$) => {
 export const GoogleSignInEpic: Epic<any, any, any> = (action$: any) => {
   return action$.pipe(
     ofType(SIGN_IN_GOOGLE),
-    mergeMap((action: any) =>
-      from(request(GoogleLogin, action.payload)).pipe(
-        mergeMap((response) =>
-          from(response.json()).pipe(
-            map((data: any) => {
-              if (data.errors) {
-                // store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message));
-                return SIGN_IN_ERROR(data.errors[0].message);
-              } else {
-                if (
-                  data.data.auth.googleLogin &&
-                  data.data.auth.googleLogin.accessToken !== ""
-                ) {
-                  localStorage.setItem(
-                    "accessToken",
-                    data.data.auth.googleLogin.accessToken
-                  );
-                  return SIGN_IN_SUCCESS();
-                }
-              }
-            })
-          )
-        )
+    mergeMap(() =>
+      from(request(GoogleLogin, { loginCredentials: action$.payload })).pipe(
+        map((data: any) => {
+          if (data.errors) {
+            // store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message));
+            return SIGN_IN_ERROR(data.errors[0].message);
+          } else {
+            if (
+              data.data.auth.googleLogin &&
+              data.data.auth.googleLogin.accessToken !== ""
+            ) {
+              localStorage.setItem(
+                "accessToken",
+                data.data.auth.googleLogin.accessToken
+              );
+              return SIGN_IN_SUCCESS();
+            }
+          }
+        })
       )
     )
   );
@@ -91,17 +83,13 @@ export const RefreshAccessTokenEpic: Epic<any, any, any> = (action$) => {
     ofType(REFRESH_ACCESS_TOKEN),
     mergeMap(() =>
       from(request(RefreshAccessToken)).pipe(
-        mergeMap((responce) =>
-          from(responce.json()).pipe(
-            map((data: any) => {
-              localStorage.setItem(
-                "accessToken",
-                data.data.auth.refreshToken.accessToken
-              );
-              return REFRESH_ACCESS_TOKEN_SUCCESS();
-            })
-          )
-        )
+        map((data: any) => {
+          localStorage.setItem(
+            "accessToken",
+            data.data.auth.refreshToken.accessToken
+          );
+          return REFRESH_ACCESS_TOKEN_SUCCESS();
+        })
       )
     )
   );
@@ -112,19 +100,15 @@ export const SignOutEpic: Epic<any, any, any> = (action$: any) => {
     ofType(SIGN_OUT),
     mergeMap(() =>
       from(request(logOut)).pipe(
-        mergeMap((response) =>
-          from(response.json()).pipe(
-            map((data: any) => {
-              if (data.data.auth.logOut == true) {
-                localStorage.clear();
-                return SIGN_OUT_SUCCESS();
-              } else {
-                // store.dispatch(SHOW_ERROR_MESSAGE("Sign out error!"));
-                return SIGN_OUT_ERROR("Sign out error, try again!");
-              }
-            })
-          )
-        )
+        map((data: any) => {
+          if (data.data.auth.logOut === true) {
+            localStorage.clear();
+            return SIGN_OUT_SUCCESS();
+          } else {
+            // store.dispatch(SHOW_ERROR_MESSAGE("Sign out error!"));
+            return SIGN_OUT_ERROR("Sign out error, try again!");
+          }
+        })
       )
     )
   );
@@ -134,25 +118,21 @@ export const RegistrationEpic: Epic<any, any, any> = (action$: any) => {
   return action$.pipe(
     ofType(REGISTRATION),
     mergeMap((action: any) =>
-      from(request(Register, action.payload)).pipe(
-        mergeMap((response) =>
-          from(response.json()).pipe(
-            map((data: any) => {
-              if (data.errors) {
-                // store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].extensions.code));
-                return REGISTRATION_ERROR(data.errors[0].extensions.code);
-              } else {
-                localStorage.setItem(
-                  "accessToken",
-                  data.data.auth.createUser.accessToken
-                );
-                store.dispatch(REGISTRATION_SUCCESS);
-                store.dispatch(SIGN_IN_SUCCESS);
-                return SIGN_IN_SUCCESS();
-              }
-            })
-          )
-        )
+      from(request(Register, { createUser: action.payload })).pipe(
+        map((data: any) => {
+          if (data.errors) {
+            // store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].extensions.code));
+            return REGISTRATION_ERROR(data.errors[0].extensions.code);
+          } else {
+            localStorage.setItem(
+              "accessToken",
+              data.data.auth.createUser.accessToken
+            );
+            store.dispatch(REGISTRATION_SUCCESS);
+            store.dispatch(SIGN_IN_SUCCESS);
+            return SIGN_IN_SUCCESS();
+          }
+        })
       )
     )
   );

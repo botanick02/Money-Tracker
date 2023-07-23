@@ -15,7 +15,7 @@ const initialState: CreateCategoryState = {
   editSuccess: false,
 };
 
-export const CategoriesSlice = createSlice({
+export const CategorySlice = createSlice({
   name: "Categories",
   initialState: initialState,
   reducers: {
@@ -65,6 +65,6 @@ export const {
   EDIT_CATEGORY,
   EDIT_CATEGORY_ERROR,
   EDIT_CATEGORY_SUCCESS,
-} = CategoriesSlice.actions;
+} = CategorySlice.actions;
 
-export default CategoriesSlice.reducer;
+export default CategorySlice.reducer;

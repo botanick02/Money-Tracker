@@ -2,8 +2,7 @@ import React, { FC } from 'react';
 import { ReactComponent as EditIcon } from "../assets/icons/Edit-icon.svg";
 import { Transaction } from '../types/Transaction';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
-import { TransactionItemsSlice } from '../store/FinancialOperations/FinancialOperations.slice';
-const { CANCEL_FINANCIAL_OPERATION } = TransactionItemsSlice.actions;
+import { CANCEL_FINANCIAL_OPERATION } from '../store/FinancialOperation/FinancialOperation.slice';
 
 const TransactionItem: FC<{ transaction: Transaction }> = ({ transaction }) => {
   const categoryItems = useAppSelector((state) => state.Category.categories);
