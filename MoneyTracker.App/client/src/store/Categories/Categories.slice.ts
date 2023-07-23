@@ -1,44 +1,35 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Category } from "../../../types/Category";
-import { ICategoryType } from "../../../types/ICategoryType";
-
-
+import { Category } from "../../types/Category";
 
 export interface CreateCategoryState {
   loading: boolean;
   error: null | string;
-  categories: ICategoryType[];
-  countOfElements: number;
-  editSuccess:boolean
+  categories: Category[];
+  editSuccess: boolean;
 }
 
 const initialState: CreateCategoryState = {
   error: null,
   loading: false,
   categories: [],
-  countOfElements: 10,
   editSuccess: false,
-  };
+};
 
-
-export const CategoryItemReducer = createSlice({
-  name: "CategoryItems",
+export const CategoriesSlice = createSlice({
+  name: "Categories",
   initialState: initialState,
   reducers: {
-    FETCH_CATEGORIES(
-      state
-    ){
+    FETCH_CATEGORIES(state) {
       state.loading = true;
       state.error = null;
     },
     FETCH_CATEGORIES_SUCCESS(
       state,
-      action: PayloadAction<{ categories: ICategoryType[];}>
+      action: PayloadAction<{ categories: Category[] }>
     ) {
       state.loading = false;
       state.error = null;
       state.categories = action.payload.categories;
-     
     },
     FETCH_CATEGORIES_ERROR(state, action: PayloadAction<string>) {
       state.loading = false;
@@ -48,13 +39,13 @@ export const CategoryItemReducer = createSlice({
       state,
       action: PayloadAction<{ categoryId: string; name: string }>
     ) {
-      state.editSuccess = false
+      state.editSuccess = false;
       state.loading = true;
       state.error = null;
     },
     EDIT_CATEGORY_SUCCESS(
       state,
-      action: PayloadAction<{ editSuccess: boolean;}>
+      action: PayloadAction<{ editSuccess: boolean }>
     ) {
       state.loading = false;
       state.error = null;
@@ -67,4 +58,13 @@ export const CategoryItemReducer = createSlice({
   },
 });
 
-export default CategoryItemReducer.reducer;
+export const {
+  FETCH_CATEGORIES,
+  FETCH_CATEGORIES_ERROR,
+  FETCH_CATEGORIES_SUCCESS,
+  EDIT_CATEGORY,
+  EDIT_CATEGORY_ERROR,
+  EDIT_CATEGORY_SUCCESS,
+} = CategoriesSlice.actions;
+
+export default CategoriesSlice.reducer;

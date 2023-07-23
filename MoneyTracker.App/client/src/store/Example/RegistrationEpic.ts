@@ -4,7 +4,6 @@ import { store } from "../store";
 import { UserReducer } from "./Reducers/UserReducer";
 import { NotificationReducer } from "./Reducers/NotificationReducer";
 import { RefreshTokenReducer } from "./Reducers/RefreshTokenReducer";
-import { GraphQlEndpoint } from "../../api/queries/tmp";
 import { RegistrationReducer } from "./Reducers/RegistrationReducer";
 import { AuthorizationReducer } from "./Reducers/AuthorizationReducer";
 const { GET_USER_INFO } = UserReducer.actions;

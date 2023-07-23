@@ -3,11 +3,11 @@ import InputWrapper from "../../elements/InputWrapper";
 import Dropdown, { Option } from "../../elements/Dropdown/Dropdown";
 import { CategoryItemReducer } from "../../store/Example/Reducers/CategoryItemsReducer";
 import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
-import { TransactionItemsReducer } from "../../store/Example/Reducers/FinancialOperationsReducer";
+import { TransactionItemsSlice } from "../../store/FinancialOperations/FinancialOperations.slice";
 import { FETCH_ACCOUNTS } from "../../store/Example/Reducers/AccountReducer";
 const { FETCH_CATEGORIES } = CategoryItemReducer.actions;
 const { ADD_DEBIT_OPERATION, ADD_CREDIT_OPERATION, ADD_TRANSFER_OPERATION } =
-  TransactionItemsReducer.actions;
+  TransactionItemsSlice.actions;
 interface Props {
   openPopupHandle(): void;
   transactionDefaultType: "expense" | "income" | "transfer";

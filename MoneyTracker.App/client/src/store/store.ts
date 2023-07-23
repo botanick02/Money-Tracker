@@ -1,59 +1,59 @@
-import {combineReducers, configureStore} from "@reduxjs/toolkit";
-import {combineEpics, createEpicMiddleware} from "redux-observable";
-import {RegistrationEpic } from "./Example/RegistrationEpic";
-import { AuthorizationEpic, GetAccessTokenEpic, GoogleAuthorizationEpic, SignOutEpic } from "./Example/AuthorizationEpic";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { combineEpics, createEpicMiddleware } from "redux-observable";
+import { RegistrationEpic } from "./Example/RegistrationEpic";
+import {
+  AuthorizationEpic,
+  GetAccessTokenEpic,
+  GoogleAuthorizationEpic,
+  SignOutEpic,
+} from "./Example/AuthorizationEpic";
 import UserReducer from "./Example/Reducers/UserReducer";
 import NotificationReducer from "./Example/Reducers/NotificationReducer";
 import AuthorizationReducer from "./Example/Reducers/AuthorizationReducer";
 import RefreshTokenReducer from "./Example/Reducers/RefreshTokenReducer";
 import RegistrationReducer from "./Example/Reducers/RegistrationReducer";
-import CategoryReducer  from "./Example/Reducers/CategoryItemsReducer";
-import { CategoryItemsEpic, EditCategoryEpic } from "./Example/CategoryItemsEpic";
 import DateTimeReducer from "./Example/Reducers/DateTimeReducer";
-import {TransactionItemsEpic, addCreditOperationEpic, addDebitOperationEpic, addTransferOperationEpic, cancelFinancialOperationEpic } from "./Example/FinancialOperationsEpic";
-import TransactionItemsReducer from "./Example/Reducers/FinancialOperationsReducer";
-import AccountReducer from "./Example/Reducers/AccountReducer";
-import { fetchAccountsEpic } from "./Example/AccountEpic";
+import {FinancialOperationsSlice} from "./FinancialOperations/FinancialOperations.slice";
+import {CategoriesSlice} from "./Categories/Categories.slice";
+import {FinancialOperationEpics} from "./FinancialOperations/FinancialOperations.epic";
+import {CategoriesEpics} from "./Categories/Categories.epic";
 
-const epicMiddleware = createEpicMiddleware()
+const epicMiddleware = createEpicMiddleware();
 
 const rootEpic = combineEpics(
-    AuthorizationEpic,
-    SignOutEpic,
-    GetAccessTokenEpic,
-    RegistrationEpic,
-    GoogleAuthorizationEpic,
-    CategoryItemsEpic,
-    EditCategoryEpic,
-    TransactionItemsEpic,
-    addDebitOperationEpic,
-    addCreditOperationEpic,
-    addTransferOperationEpic,
-    cancelFinancialOperationEpic,
-    fetchAccountsEpic,
-)
+  AuthorizationEpic,
+  SignOutEpic,
+  GetAccessTokenEpic,
+  RegistrationEpic,
+  GoogleAuthorizationEpic,
+  
+  CategoriesEpics,
+  FinancialOperationEpics,
+  AccountEpics
+);
 
 const rootReducer = combineReducers({
-    Authorization: AuthorizationReducer,
-    User: UserReducer,
-    Notifications: NotificationReducer,
-    RefreshToken: RefreshTokenReducer,
-    Category:CategoryReducer,
-    Registration:RegistrationReducer,
-    DateTime:DateTimeReducer,
-    TransactionItems:TransactionItemsReducer,
-    Account:AccountReducer
-})
+  Authorization: AuthorizationReducer,
+  User: UserReducer,
+  Notifications: NotificationReducer,
+  RefreshToken: RefreshTokenReducer,
+  Registration: RegistrationReducer,
+  DateTime: DateTimeReducer,
+
+  Categories: CategoriesSlice.reducer,
+  FinancialOperations: FinancialOperationsSlice.reducer,
+
+  Account: AccountReducer,
+});
 
 export const store = configureStore({
-    reducer: rootReducer
-    ,
-    middleware: getDefaultMiddleware =>
-        getDefaultMiddleware({
-            serializableCheck: false,
-        }).concat(epicMiddleware)
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }).concat(epicMiddleware),
 });
 
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;
-epicMiddleware.run(rootEpic)
+epicMiddleware.run(rootEpic);

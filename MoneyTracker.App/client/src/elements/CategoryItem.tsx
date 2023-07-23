@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
-import { ICategoryType } from '../types/ICategoryType';
+import { Category } from '../types/Category';
 
 interface CategoryItemProps {
   category: {
     amount: number;
-    category: ICategoryType;
+    category: Category;
     color: string;
   };
   percentage: number;

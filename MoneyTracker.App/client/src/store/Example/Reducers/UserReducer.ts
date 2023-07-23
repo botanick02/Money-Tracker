@@ -1,19 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IUserType } from "../../../types/IUserType";
-import { QueryUserType } from "../../../types/GraphQLType";
+import { User } from "../../../types/User";
 
 
 
-export interface CreateUserState {
+export interface UserStore {
     loading: boolean;
-    error: null | string;
-    userInfo: null | IUserType;
+    error?: string;
+    user?: User;
 }
 
-const initialState: CreateUserState = {
-    error: null,
+const initialState: UserStore = {
     loading: false,
-    userInfo: null,
 };
 
 export const UserReducer = createSlice({
@@ -21,22 +18,18 @@ export const UserReducer = createSlice({
     initialState: initialState,
     reducers: {
         GET_USER_INFO(state) {
-            state.userInfo = null;
+            state.user = undefined;
             state.loading = true;
         },
-        GET_USER_INFO_SUCCESS(state, action: PayloadAction<QueryUserType>) {
-            let user: IUserType = {
-               
-            
+        GET_USER_INFO_SUCCESS(state, action: PayloadAction<User>) {
+            let user: User = {
                 name: action.payload.name,
-        
                 email: action.payload.email,
-
             };
-            state.userInfo = user;
+            state.user = user;
         },
         GET_USER_INFO_ERROR(state, action: PayloadAction<string>) {
-            state.userInfo = null;
+            state.user = undefined;
             state.error = action.payload;
             state.loading = false;
         },
