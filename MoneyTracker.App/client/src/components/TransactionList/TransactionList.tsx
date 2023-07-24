@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import TransactionItem from "../../elements/TransactionItem";
-import { TransactionItemsReducer } from "../../store/Example/Reducers/FinancialOperationsReducer";
 import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
-import { CategoryItemReducer } from "../../store/Example/Reducers/CategoryItemsReducer";
+import { FETCH_TRANSACTIONS_INFO } from "../../store/FinancialOperation/FinancialOperation.slice";
+import { FETCH_CATEGORIES } from "../../store/Category/Category.slice";
 
 const getOnlyDate = (dateString: string) => {
   const date = new Date(dateString);
@@ -14,21 +14,19 @@ const getOnlyDate = (dateString: string) => {
 };
 
 const TransactionList = () => {
-  const dateTimeTo = useAppSelector((state) => state.DateTime.dateTime);
-  const { FETCH_TRANSACTIONS } = TransactionItemsReducer.actions;
-  const { FETCH_CATEGORIES } = CategoryItemReducer.actions;
-
   const dispatch = useAppDispatch();
   const transactions = useAppSelector(
-    (state) => state.TransactionItems.transactions
+    (state) => state.FinancialOperation.transactions
   );
 
-  const currentAccountId = useAppSelector(state => state.Account.currentAccountId);
+  const currentAccountId = useAppSelector(
+    (state) => state.Account.currentAccountId
+  );
 
   useEffect(() => {
-    dispatch(FETCH_TRANSACTIONS({accountId: currentAccountId === "total" ? undefined : currentAccountId}));
+    dispatch(FETCH_TRANSACTIONS_INFO({ accountId: currentAccountId === "total" ? null : currentAccountId }));
     dispatch(FETCH_CATEGORIES());
-  }, [dateTimeTo, currentAccountId]);
+  }, [currentAccountId, dispatch]);
 
   return (
     <div className={"transaction-list"}>

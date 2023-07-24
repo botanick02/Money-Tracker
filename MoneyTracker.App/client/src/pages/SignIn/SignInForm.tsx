@@ -1,15 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import "../../styles/Registration.scss";
-import { AuthorizationReducer } from "../../store/Example/Reducers/AuthorizationReducer";
 import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
 import { useForm } from "react-hook-form";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import InputWrapper from "../../elements/InputWrapper";
 import { Link } from "react-router-dom";
+import { SIGN_IN, SIGN_IN_GOOGLE } from "../../store/Auth/Auth.slice";
 
-
-const { SIGN_IN,SIGN_IN_GOOGLE } =
-  AuthorizationReducer.actions;
 const SignInForm = () => {
 
   const {
@@ -20,8 +17,8 @@ const SignInForm = () => {
     handleSubmit,
     setError
   } = useForm();
-  const serverError = useAppSelector((state) => state.Authorization.error);
-  const IsSinging = useAppSelector((state) => state.Authorization.loading);
+  const serverError = useAppSelector((state) => state.Auth.error);
+  const IsSinging = useAppSelector((state) => state.Auth.loading);
   const dispatch = useAppDispatch();
 
   const SignIn = (data: any) => {

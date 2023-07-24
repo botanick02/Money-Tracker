@@ -1,22 +1,22 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Account } from "../../../types/Account";
+import { Account } from "../../types/Account";
 
-export interface AccountStore {
+export interface AccountState {
   accounts: Account[];
-  currentAccountId: string;
+  currentAccountId: string | null;
   loading: boolean;
-  error: null | string;
+  error: string | null;
 }
 
-const initialState: AccountStore = {
+const initialState: AccountState = {
   accounts: [],
   currentAccountId: "total",
   loading: false,
   error: null,
 };
 
-export const AccountReducer = createSlice({
-  name: "Account",
+export const AccountSlice = createSlice({
+  name: "Accounts",
   initialState: initialState,
   reducers: {
     FETCH_ACCOUNTS(state) {
@@ -29,7 +29,7 @@ export const AccountReducer = createSlice({
       state.accounts = action.payload.accounts;
 
       let totalAcount: Account = {
-        id:  "total",
+        id: "total",
         name: "Total",
         balance: action.payload.total,
         currency: {code: "UAH", symbol: "₴"}
@@ -51,6 +51,6 @@ export const AccountReducer = createSlice({
 
 export const {
   FETCH_ACCOUNTS, FETCH_ACCOUNTS_ERROR, FETCH_ACCOUNTS_SUCCESS, SET_CURRENT_ACCOUNT_ID
-} = AccountReducer.actions;
+} = AccountSlice.actions;
 
-export default AccountReducer.reducer;
+export default AccountSlice.reducer;

@@ -4,17 +4,6 @@ import CategoryItem from '../../elements/CategoryItem';
 
 import { PieChart } from 'react-minimal-pie-chart';
 import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
-import { ICategoryType } from '../../types/ICategoryType';
-import { TransactionItemsReducer } from '../../store/Example/Reducers/FinancialOperationsReducer';
-import { CategoryItemReducer } from '../../store/Example/Reducers/CategoryItemsReducer';
-
-interface ICategorySummary {
-  [categoryId: string]: {
-    amount: number;
-    category: ICategoryType;
-    color: string; 
-  };
-}
 
 // const ChartByCategory = () => {
 //   const dispatch = useAppDispatch();

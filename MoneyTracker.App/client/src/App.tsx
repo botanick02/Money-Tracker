@@ -2,8 +2,6 @@ import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "./hooks/useAppDispatch";
 import SignInForm from "./pages/SignIn/SignInForm";
-import { RefreshTokenReducer } from "./store/Example/Reducers/RefreshTokenReducer";
-import { UserReducer } from "./store/Example/Reducers/UserReducer";
 import { checkTokenExpire } from "./tools/checkTokenExpire";
 import Registration from "./pages/Registration/Registration";
 import Transactions from "./pages/Transactions/Transactions";
@@ -12,29 +10,20 @@ import Settings from "./pages/Settings/Settings";
 // import Stats from "./pages/Stats/Stats";
 import Budgets from "./pages/Budgets/Budgets";
 import CategoryList from "./components/CategoryList/CategoryList";
-
-const { GET_ACCESS_TOKEN } = RefreshTokenReducer.actions;
-const { GET_USER_INFO } = UserReducer.actions;
+import { REFRESH_ACCESS_TOKEN } from "./store/Auth/Auth.slice";
 
 function App() {
-  const isAuth = useAppSelector((state) => state.Authorization.isAuth);
+  const isAuth = useAppSelector((state) => state.Auth.isAuth);
   const accessTokenRefreshing = useAppSelector(
-    (state) => state.RefreshToken.loading
+    (state) => state.Auth.loading
   );
-
   const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    if (isAuth) {
-      dispatch(GET_USER_INFO());
-    }
-  }, [isAuth]);
 
   useEffect(() => {
     const interval = setInterval(() => {
       if (checkTokenExpire()) {
         if (!accessTokenRefreshing && isAuth) {
-          dispatch(GET_ACCESS_TOKEN());
+          dispatch(REFRESH_ACCESS_TOKEN());
         }
       }
     }, 120000); 

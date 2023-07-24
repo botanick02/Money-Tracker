@@ -5,26 +5,22 @@ import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
 import {
   FETCH_ACCOUNTS,
   SET_CURRENT_ACCOUNT_ID,
-} from "../../store/Example/Reducers/AccountReducer";
+} from "../../store/Account/Account.slice";
 
 const AccountSelector = () => {
+  const dispatch = useAppDispatch();
   const accounts = useAppSelector((state) => state.Account.accounts);
   const currentAccountId = useAppSelector(
     (state) => state.Account.currentAccountId
   );
   const [isListOpen, setIsListOpen] = useState(false);
-
   useEffect(() => {
     dispatch(FETCH_ACCOUNTS());
-  }, []);
-
+  }, [dispatch]);
 
   const switchListState = () => {
     setIsListOpen(!isListOpen);
   };
-
-  
-  const dispatch = useAppDispatch();
 
   const setCurrentAccountId = (id: string) => {
     dispatch(SET_CURRENT_ACCOUNT_ID(id));
@@ -56,7 +52,9 @@ const AccountSelector = () => {
         </div>
       )}
     </div>
-  ) : (<></>);
+  ) : (
+    <></>
+  );
 };
 
 export default AccountSelector;

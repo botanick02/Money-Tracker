@@ -2,7 +2,7 @@
   {
     "id": 1,
     "category": {
-      "id": 1,
+      "id": "1",
       "name": "Food and Drink",
       "iconUrl": "https://picsum.photos/51",
       "type": "expense"
@@ -15,7 +15,7 @@
   {
     "id": 2,
     "category": {
-      "id": 2,
+      "id": "2",
       "name": "Health",
       "iconUrl": "https://picsum.photos/50",
       "type": "expense"
@@ -28,7 +28,7 @@
   {
     "id": 3,
     "category": {
-      "id": 3,
+      "id": "3",
       "name": "Restaurants",
       "iconUrl": "https://picsum.photos/52",
       "type": "expense"
@@ -41,7 +41,7 @@
   {
     "id": 4,
     "category": {
-      "id": 4,
+      "id": "4",
       "name": "Entertainment",
       "iconUrl": "https://picsum.photos/53",
       "type": "expense"
@@ -54,7 +54,7 @@
   {
     "id": 5,
     "category": {
-      "id": 5,
+      "id": "5",
       "name": "Transportation",
       "iconUrl": "https://picsum.photos/51",
       "type": "expense"

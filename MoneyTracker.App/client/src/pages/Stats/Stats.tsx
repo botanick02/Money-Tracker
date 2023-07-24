@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import TimeScopePanel from "../../components/TimeScopePanel/TimeScopePanel";
 // import СhartByCategory from "../../components/СhartByCategory/СhartByCategory";
-import {AccountReducer} from "../../store/Example/Reducers/AccountReducer";
 import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
 
 // const Stats = () => {

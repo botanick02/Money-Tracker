@@ -1,13 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import InputWrapper from "../../elements/InputWrapper";
 import Dropdown, { Option } from "../../elements/Dropdown/Dropdown";
-import { CategoryItemReducer } from "../../store/Example/Reducers/CategoryItemsReducer";
 import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
-import { TransactionItemsReducer } from "../../store/Example/Reducers/FinancialOperationsReducer";
-import { FETCH_ACCOUNTS } from "../../store/Example/Reducers/AccountReducer";
-const { FETCH_CATEGORIES } = CategoryItemReducer.actions;
-const { ADD_DEBIT_OPERATION, ADD_CREDIT_OPERATION, ADD_TRANSFER_OPERATION } =
-  TransactionItemsReducer.actions;
+import { ADD_CREDIT_OPERATION, ADD_DEBIT_OPERATION, ADD_TRANSFER_OPERATION } from "../../store/FinancialOperation/FinancialOperation.slice";
 interface Props {
   openPopupHandle(): void;
   transactionDefaultType: "expense" | "income" | "transfer";
@@ -75,7 +70,7 @@ const TransactionCreate: React.FC<Props> = ({
             amount,
             categoryId: categoryId.value,
             title,
-            accountId: account.value
+            toAccountId: account.value
           }));
           break
       }
@@ -85,7 +80,7 @@ const TransactionCreate: React.FC<Props> = ({
             amount,
             categoryId: categoryId.value,
             title,
-            accountId: account.value
+            fromAccountId: account.value
           }));
           break
       }
