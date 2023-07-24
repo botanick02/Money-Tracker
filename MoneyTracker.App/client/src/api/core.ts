@@ -8,7 +8,8 @@ export const request = async (query?: string, variables?: any) => {
         method: "POST",
         headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem("accessToken") 
         },
         body: JSON.stringify({query, variables})
     })).json()

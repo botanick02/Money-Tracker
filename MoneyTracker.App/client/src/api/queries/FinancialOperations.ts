@@ -24,14 +24,14 @@ export const AddDebit = `mutation addDebit($debitOperation: DebitOperationInputT
       }
     }`;
 
-export const AddCredit = `mutation addDebit($creditOperation: CreditOperationInputType!){
+export const AddCredit = `mutation addCredit($creditOperation: CreditOperationInputType!){
       financialOperation{
-        addCreditOperation(creditOperation: $debitOperation)
+        addCreditOperation(creditOperation: $creditOperation)
       }
     }`;
-export const AddTransfer = `mutation addDebit($transferOperation: TransferOperationInputType!){
+export const AddTransfer = `mutation addTransfer($transferOperation: TransferOperationInputType!){
       financialOperation{
-        addTransferOperation(transferOperation: $debitOperation)
+        addTransferOperation(transferOperation: $transferOperation)
       }
     }`;
 

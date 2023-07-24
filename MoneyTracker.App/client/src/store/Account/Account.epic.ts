@@ -1,17 +1,15 @@
 import { Epic, combineEpics, ofType } from "redux-observable";
 import { from, mergeMap } from "rxjs";
-import { FETCH_ACCOUNTS, FETCH_ACCOUNTS_ERROR, FETCH_ACCOUNTS_SUCCESS } from "./Accounts.slice";
+import { FETCH_ACCOUNTS, FETCH_ACCOUNTS_ERROR, FETCH_ACCOUNTS_SUCCESS } from "./Account.slice";
 import { request } from "../../api/core"
 import { GetAccounts } from "../../api/queries/Accounts";
 
 export const fetchAccountsEpic: Epic<any, any, any> = (action$, state$) => {
   return action$.pipe(
     ofType(FETCH_ACCOUNTS),
-    mergeMap((action) => from(request(GetAccounts)
+    mergeMap(() => from(request(GetAccounts)
       ).pipe(
-        mergeMap((response) =>
-          from(response.json()).pipe(
-            mergeMap((data: any) => {
+        mergeMap((data: any) => {
               if (data.errors) {
                 // store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message));
                 return [FETCH_ACCOUNTS_ERROR(data.errors[0].message)];
@@ -29,8 +27,6 @@ export const fetchAccountsEpic: Epic<any, any, any> = (action$, state$) => {
           )
         )
       )
-    )
-  );
 };
 
 export const AccountEpics = combineEpics(fetchAccountsEpic)

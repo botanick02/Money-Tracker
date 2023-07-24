@@ -1,6 +1,5 @@
 import {combineEpics, Epic, ofType} from "redux-observable";
 import { from, mergeMap } from "rxjs";
-import { store } from "../store";
 import { Transaction } from "../../types/Transaction";
 import {
     ADD_CREDIT_OPERATION,
@@ -12,7 +11,7 @@ import {
     FETCH_TRANSACTIONS_INFO,
     FETCH_TRANSACTIONS_INFO_ERROR,
     FETCH_TRANSACTIONS_INFO_SUCCESS
-} from "./FinancialOperations.slice";
+} from "./FinancialOperation.slice";
 import {request} from "../../api/core";
 import {
     AddCredit,
@@ -26,11 +25,8 @@ import {
 export const TransactionItemsEpic: Epic<any, any, any> = (action$, state$) => {
   return action$.pipe(
     ofType(FETCH_TRANSACTIONS_INFO),
-    mergeMap((action) => from(request(GetTransactions, action.payload)).pipe(
-
-        mergeMap((response) =>
-          from(response.json()).pipe(
-            mergeMap((data: any) => {
+    mergeMap((action) => from(request(GetTransactions, { input: action.payload })).pipe(
+        mergeMap((data: any) => {
               if (data.errors) {
                 // store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message));
                 return [FETCH_TRANSACTIONS_INFO_ERROR(data.errors[0].message)];
@@ -51,8 +47,6 @@ export const TransactionItemsEpic: Epic<any, any, any> = (action$, state$) => {
           )
         )
       )
-    )
-  )
 }
 
 
@@ -64,11 +58,9 @@ export const AddDebitOperationEpic: Epic<any, any, any> = (
   return action$.pipe(
     ofType(ADD_DEBIT_OPERATION),
     mergeMap((action) => from(
-          request(AddDebit, action.payload)
+          request(AddDebit, { debitOperation: action.payload })
       ).pipe(
-        mergeMap((response) =>
-          from(response.json()).pipe(
-            mergeMap((data: any) => {
+        mergeMap((data: any) => {
               if (data.errors) {
                 // store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message));
                 return [ADD_FINANCIAL_OPERATION_ERROR(data.errors[0].message)];
@@ -83,8 +75,6 @@ export const AddDebitOperationEpic: Epic<any, any, any> = (
           )
         )
       )
-    )
-  )
 }
 
 
@@ -96,11 +86,9 @@ export const AddCreditOperationEpic: Epic<any, any, any> = (
   return action$.pipe(
     ofType(ADD_CREDIT_OPERATION),
     mergeMap((action) => from(
-          request(AddCredit, action.payload)
+          request(AddCredit, { creditOperation: action.payload })
       ).pipe(
-        mergeMap((response) =>
-          from(response.json()).pipe(
-            mergeMap((data: any) => {
+        mergeMap((data: any) => {
               if (data.errors) {
                 // store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message));
                 return [ADD_FINANCIAL_OPERATION_ERROR(data.errors[0].message)];
@@ -115,8 +103,6 @@ export const AddCreditOperationEpic: Epic<any, any, any> = (
           )
         )
       )
-    )
-  )
 }
 
 export const AddTransferOperationEpic: Epic<any, any, any> = (
@@ -127,12 +113,10 @@ export const AddTransferOperationEpic: Epic<any, any, any> = (
   return action$.pipe(
     ofType(ADD_TRANSFER_OPERATION),
     mergeMap((action) => from(
-          request(AddTransfer, action.payload)
+          request(AddTransfer, { transferOperation: action.payload })
 
       ).pipe(
-        mergeMap((response) =>
-          from(response.json()).pipe(
-            mergeMap((data: any) => {
+        mergeMap((data: any) => {
               if (data.errors) {
                 // store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message));
                 return [ADD_FINANCIAL_OPERATION_ERROR(data.errors[0].message)];
@@ -147,8 +131,6 @@ export const AddTransferOperationEpic: Epic<any, any, any> = (
           )
         )
       )
-    )
-  )
 }
 
 export const CancelFinancialOperationEpic: Epic<any, any, any> = (
@@ -159,11 +141,9 @@ export const CancelFinancialOperationEpic: Epic<any, any, any> = (
   return action$.pipe(
     ofType(CANCEL_FINANCIAL_OPERATION),
     mergeMap((action) => from(
-          request(CancelOperation, action.payload)
+          request(CancelOperation, { cancelOperationInput: action.payload })
       ).pipe(
-        mergeMap((response) =>
-          from(response.json()).pipe(
-            mergeMap((data: any) => {
+        mergeMap((data: any) => {
               if (data.errors) {
                 // store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message));
                 return [
@@ -180,8 +160,6 @@ export const CancelFinancialOperationEpic: Epic<any, any, any> = (
           )
         )
       )
-    )
-  )
 }
 
 export const FinancialOperationEpics = combineEpics(

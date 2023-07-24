@@ -2,10 +2,10 @@ import React, { FC } from 'react';
 import { ReactComponent as EditIcon } from "../assets/icons/Edit-icon.svg";
 import { Transaction } from '../types/Transaction';
 import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
-import {CANCEL_FINANCIAL_OPERATION} from "../store/FinancialOperations/FinancialOperations.slice";
+import { CANCEL_FINANCIAL_OPERATION } from '../store/FinancialOperation/FinancialOperation.slice';
 
 const TransactionItem: FC<{ transaction: Transaction }> = ({ transaction }) => {
-  const {categories} = useAppSelector((state) => state.Categories);
+  const {categories} = useAppSelector((state) => state.Category);
   const category = categories.find((category) => category === transaction.category);
   const type = transaction.amount > 0 ? 'income' : 'expense';
   const dispatch = useAppDispatch();

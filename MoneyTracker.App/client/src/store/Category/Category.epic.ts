@@ -9,17 +9,15 @@ import {
   EDIT_CATEGORY,
   EDIT_CATEGORY_ERROR,
   EDIT_CATEGORY_SUCCESS,
-} from "./Categories.slice";
-import { GetCategories } from "../../api/queries/Categories";
+} from "./Category.slice";
+import { EditCategory, GetCategories } from "../../api/queries/Categories";
 
 export const GetCategoriesEpic: Epic<any, any, any> = (action$, state$) => {
   return action$.pipe(
     ofType(FETCH_CATEGORIES),
-    mergeMap((action) =>
-      from(request(GetCategories, action.payload)).pipe(
-        mergeMap((response) =>
-          from(response.json()).pipe(
-            mergeMap((data: any) => {
+    mergeMap(() =>
+      from(request(GetCategories)).pipe(
+        mergeMap(((data: any) => {
               if (data.errors) {
                 // store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message));
                 return [FETCH_CATEGORIES_ERROR(data.errors[0].message)];
@@ -36,16 +34,13 @@ export const GetCategoriesEpic: Epic<any, any, any> = (action$, state$) => {
         )
       )
     )
-  );
 };
 
 export const EditCategoryEpic: Epic<any, any, any> = (action$, state$) => {
   return action$.pipe(
     ofType(EDIT_CATEGORY),
-    mergeMap((action) => from(request(GetCategories, action.payload)).pipe(
-        mergeMap((response) =>
-          from(response.json()).pipe(
-            mergeMap((data: any) => {
+    mergeMap((action) => from(request(EditCategory, action.payload)).pipe(
+        mergeMap((data: any) => {
               if (data.errors) {
                 // store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message));
                 return [EDIT_CATEGORY_ERROR(data.errors[0].message)];
@@ -56,8 +51,6 @@ export const EditCategoryEpic: Epic<any, any, any> = (action$, state$) => {
           )
         )
       )
-    )
-  );
 };
 
 export const CategoriesEpics = combineEpics(

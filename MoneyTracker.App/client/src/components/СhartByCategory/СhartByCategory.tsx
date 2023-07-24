@@ -4,8 +4,6 @@ import CategoryItem from '../../elements/CategoryItem';
 
 import { PieChart } from 'react-minimal-pie-chart';
 import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
-import { TransactionItemsSlice } from '../../store/FinancialOperations/FinancialOperations.slice';
-import { CategoryItemReducer } from '../../store/Example/Reducers/CategoryItemsReducer';
 
 // const ChartByCategory = () => {
 //   const dispatch = useAppDispatch();

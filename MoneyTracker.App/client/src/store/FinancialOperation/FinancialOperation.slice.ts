@@ -7,8 +7,12 @@ interface Operation {
   title: string;
 }
 
-interface DebitCreditOperation extends Operation {
-  accountId: string;
+interface DebitOperation extends Operation {
+  toAccountId: string;
+}
+
+interface CreditOperation extends Operation {
+  fromAccountId: string;
 }
 
 interface TransferOperation extends Operation {
@@ -42,11 +46,11 @@ const initialState: CreateTransactionState = {
   error: null,
 };
 
-export const FinancialOperationsSlice = createSlice({
+export const FinancialOperationSlice = createSlice({
   name: "FinancialOperations",
   initialState: initialState,
   reducers: {
-    FETCH_TRANSACTIONS_INFO(state, action: PayloadAction<{ accountId?: string }>) {
+    FETCH_TRANSACTIONS_INFO(state, action: PayloadAction<{ accountId: string | null}>) {
       state.loading = true;
       state.error = null;
       state.transactions = [];
@@ -67,11 +71,11 @@ export const FinancialOperationsSlice = createSlice({
       state.error = action.payload;
       state.transactions = [];
     },
-    ADD_DEBIT_OPERATION(state, action: PayloadAction<DebitCreditOperation>) {
+    ADD_DEBIT_OPERATION(state, action: PayloadAction<DebitOperation>) {
       state.loading = true;
       state.error = null;
     },
-    ADD_CREDIT_OPERATION(state, action: PayloadAction<DebitCreditOperation>) {
+    ADD_CREDIT_OPERATION(state, action: PayloadAction<CreditOperation>) {
       state.loading = true;
       state.error = null;
     },
@@ -123,6 +127,6 @@ export const {
   CANCEL_FINANCIAL_OPERATION,
     CANCEL_FINANCIAL_OPERATION_ERROR,
     CANCEL_FINANCIAL_OPERATION_SUCCESS
-} = FinancialOperationsSlice.actions;
+} = FinancialOperationSlice.actions;
 
-export default FinancialOperationsSlice.reducer;
+export default FinancialOperationSlice.reducer;
