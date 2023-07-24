@@ -17,7 +17,7 @@ namespace MoneyTracker.DataAccess
             this.readModelExtensions = readModelExtensions;
         }
 
-        public List<Budget> GetBudgets(DateTime? dateTimeTo = null)
+        public IEnumerable<Budget> GetBudgets(DateTime? dateTimeTo = null)
         {
             var readModel = readModelExtensions.GetReadModel(dateTimeTo);
             return readModel.Budgets;
