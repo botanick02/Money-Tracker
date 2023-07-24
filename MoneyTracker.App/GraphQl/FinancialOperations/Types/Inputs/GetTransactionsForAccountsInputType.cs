@@ -7,6 +7,10 @@ namespace MoneyTracker.App.GraphQl.FinancialOperations.Types.Inputs
         public GetTransactionsForAccountsInputType()
         {
             Field(g => g.AccountId, nullable: true);
+
+            Field(g => g.FromDate, nullable: true);
+
+            Field(g => g.ToDate, nullable: true);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace MoneyTracker.Business.Services
             this.accountRepository = accountRepository;
         }
 
-        public GetTransactionsDto GetTransactionsData(Guid userId, Guid? accountId = null)
+        public GetTransactionsDto GetTransactionsData(Guid userId, DateTime? fromDate = null, DateTime? toDate = null, Guid? accountId = null)
         {
             var res = new GetTransactionsDto();
             if (accountId == null) {
@@ -28,7 +28,18 @@ namespace MoneyTracker.Business.Services
                 res.Transactions.AddRange(transactionRepository!.GetAccountTransactions((Guid)accountId));
             }
 
+            if (fromDate != null)
+            {
+                res.Transactions = res.Transactions.Where(t => t.CreatedAt > fromDate).ToList();
+            }
+
+            if (toDate != null)
+            {
+                res.Transactions = res.Transactions.Where(t => t.CreatedAt < toDate).ToList();
+            }
+
             res.Transactions = res.Transactions.OrderBy(t => t.CreatedAt).ToList();
+
 
             res.Expenses = res.Transactions.Where(t => t.Amount < 0).Sum(t => t.Amount);
             res.Incomes = res.Transactions.Where(t => t.Amount > 0).Sum(t => t.Amount);
