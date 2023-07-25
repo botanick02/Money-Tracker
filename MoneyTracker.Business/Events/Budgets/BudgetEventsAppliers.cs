@@ -29,7 +29,7 @@ namespace MoneyTracker.Business.Events.Budgets
             var budgetToEdit = updatedModel.Budgets.FirstOrDefault(c => c.Id == @event.Budget.Id);
             if (budgetToEdit != null)
             {
-                budgetToEdit = @event.Budget;
+                budgetToEdit.Limit = @event.Budget.Limit;
             }
 
             return updatedModel;

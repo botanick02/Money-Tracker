@@ -40,6 +40,7 @@ builder.Services.AddTransient<PasswordHashService>();
 
 builder.Services.AddTransient<AccountService>();
 builder.Services.AddTransient<TransactionService>();
+builder.Services.AddTransient<BudgetService>();
 
 
 builder.Services.AddTransient<IEventStore, EventStore>();
@@ -78,7 +79,9 @@ builder.Services.AddGraphQL(b => b
     .AddGraphTypes(typeof(MoneyTrackerSchema).Assembly)
     .AddAutoClrMappings()
     .AddSystemTextJson()
-    .AddAuthorizationRule());
+    .AddAuthorizationRule()
+    .AddErrorInfoProvider(options => options.ExposeExceptionStackTrace = true)
+    );
 
 builder.Services.AddSpaStaticFiles(configuration =>
 {

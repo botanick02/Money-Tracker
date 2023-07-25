@@ -14,3 +14,8 @@ export const request = async (query?: string, variables?: any) => {
         body: JSON.stringify({query, variables})
     })).json()
 }
+
+export const requestWithAuth = async (query?: string, variables?: any) => {
+
+
+}

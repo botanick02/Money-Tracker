@@ -5,8 +5,8 @@ import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { CANCEL_FINANCIAL_OPERATION } from '../store/FinancialOperation/FinancialOperation.slice';
 
 const TransactionItem: FC<{ transaction: Transaction }> = ({ transaction }) => {
-  const categoryItems = useAppSelector((state) => state.Category.categories);
-  const category = categoryItems.find((category) => category === transaction.category);
+  const {categories} = useAppSelector((state) => state.Category);
+  const category = categories.find((category) => category === transaction.category);
   const type = transaction.amount > 0 ? 'income' : 'expense';
   const dispatch = useAppDispatch();
   const handleDeleteClick = (transactionId: string) => {

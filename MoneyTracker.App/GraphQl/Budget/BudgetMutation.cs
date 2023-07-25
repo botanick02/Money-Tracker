@@ -1,5 +1,6 @@
 ﻿using GraphQL;
 using GraphQL.Types;
+using MoneyTracker.App.GraphQl.Budget.Types;
 using MoneyTracker.Business.Commands;
 using MoneyTracker.Business.Commands.Budget;
 
@@ -10,8 +11,8 @@ namespace MoneyTracker.App.GraphQl.Budget
         public BudgetMutation(CommandDispatcher commandDispatcher)
         {
 
-            Field<bool>("EditBudget")
-                .Argument<Business.Entities.Budget>("Budget")
+            Field<bool>("editBudget")
+                .Argument<BudgetInputType>("Budget")
                 .Resolve(context =>
                 {
                     var budget = context.GetArgument<Business.Entities.Budget>("Budget");

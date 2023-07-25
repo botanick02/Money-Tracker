@@ -9,6 +9,6 @@ namespace MoneyTracker.Business.Interfaces
 {
     public interface IBudgetRepository
     {
-        public List<Budget> GetBudgets(DateTime? dateTimeTo = null);
+        public IEnumerable<Budget> GetBudgets(DateTime? dateTimeTo = null);
     }
 }

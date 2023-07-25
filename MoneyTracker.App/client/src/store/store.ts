@@ -8,6 +8,8 @@ import { AccountEpics } from './Account/Account.epic';
 import { CategorySlice } from './Category/Category.slice';
 import { AccountSlice }  from './Account/Account.slice'
 import { AuthSlice } from './Auth/Auth.slice';
+import {BudgetEpics} from "./Budgets/Budgets.epic";
+import BudgetListSlice from "./Budgets/Budgets.slice";
 
 const epicMiddleware = createEpicMiddleware();
 
@@ -15,7 +17,8 @@ const rootEpic = combineEpics(
   CategoriesEpics,
   FinancialOperationEpics,
   AuthEpics,
-  AccountEpics
+  AccountEpics,
+  BudgetEpics
 );
 
 const rootReducer = combineReducers({
@@ -23,6 +26,7 @@ const rootReducer = combineReducers({
   FinancialOperation: FinancialOperationSlice.reducer,
   Account: AccountSlice.reducer,
   Auth: AuthSlice.reducer,
+  Budgets: BudgetListSlice.reducer
 });
 
 export const store = configureStore({

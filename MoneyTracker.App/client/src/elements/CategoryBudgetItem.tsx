@@ -18,7 +18,7 @@ function formatDate(dateString: string): string {
 
 
 const CategoryBudgetItem: React.FC<Props> = ({budget}) => {
-    const limitSpent = budget.limit - budget.spent
+    const limitSpent = budget.limit + budget.spent
     const [isExtended, setIsExtended] = React.useState<boolean>(false)
 
     const handleRowClick = () => {
@@ -44,7 +44,8 @@ const CategoryBudgetItem: React.FC<Props> = ({budget}) => {
                     handleRowClick()
                 }}>
                     <div className={"row-item__category-icon"}>
-                        <img src={budget.category.iconUrl} alt="category"/>
+                        {/*<img src={budget.category.iconUrl} alt="category"/>*/}
+                        <img src={"https://picsum.photos/50"} alt="category"/>
                     </div>
                     <div>
                         <div className={"row-item__title"}>{budget.category.name}</div>
@@ -72,9 +73,12 @@ const CategoryBudgetItem: React.FC<Props> = ({budget}) => {
                             <div>Spent: {budget.spent}$</div>
                             <Link to={"/home"}>View Transactions</Link>
                         </div>
-                        <div>
-                            {formatDate(budget.dateStart)} - {formatDate(budget.dateEnd)}
-                        </div>
+                        {
+                            (!!budget.startDate && !!budget.endDate) &&
+                            <div>
+                                {formatDate(budget.startDate)} - {formatDate(budget.endDate)}
+                            </div>
+                        }
                     </div>
                 }
             </div>
