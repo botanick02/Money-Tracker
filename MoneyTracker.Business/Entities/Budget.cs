@@ -19,8 +19,5 @@ namespace MoneyTracker.Business.Entities
         public Budget(Guid CategiryId) {
             this.CategoryId = CategiryId;
         }
-        public Budget() {
-            
-        }
     }
 }

@@ -31,6 +31,7 @@ namespace MoneyTracker.Business.Events.Categories
 
             var updatedModel = currentmodel;
             updatedModel.Categories = updatedModel.Categories.Append(newCategory);
+            updatedModel.Budgets = updatedModel.Budgets.Append(new Entities.Budget(@event.Id));
 
             return updatedModel;
         }

@@ -1,10 +1,17 @@
 import { Category } from "./Category";
 
 export interface Budget {
-    id: number,
+    // id: number,
+    //
     category: Category,
-    limit: number,
+    // limit: number,
+    // spent: number,
+    // dateStart: string,
+    // dateEnd: string
+
+    id: string,
     spent: number,
-    dateStart: string,
-    dateEnd: string
+    limit: number,
+    endDate: string | null,
+    startDate: string | null
 }

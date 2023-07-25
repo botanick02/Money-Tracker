@@ -9,17 +9,18 @@ const initialState: BudgetState = {
     budgetList: []
 }
 
-const budgetListSlice = createSlice({
+const BudgetListSlice = createSlice({
     name: "userSlice",
     initialState,
     reducers: {
-        fetch_budget:(state, action:PayloadAction<Budget>) => {
-            return {...state, user: action.payload}
+        fetch_budget:(state, action:PayloadAction<Budget[]>) => {
+
+            return {...state, budgetList: action.payload}
         }
     }
 })
 
 
 export const fetchBudgetAction = createAction<string>("fetchUser");
-export default budgetListSlice;
-export const {fetch_budget} = budgetListSlice.actions
+export default BudgetListSlice;
+export const {fetch_budget} = BudgetListSlice.actions

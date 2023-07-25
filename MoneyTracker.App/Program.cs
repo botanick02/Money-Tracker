@@ -40,6 +40,7 @@ builder.Services.AddTransient<PasswordHashService>();
 
 builder.Services.AddTransient<AccountService>();
 builder.Services.AddTransient<TransactionService>();
+builder.Services.AddTransient<BudgetService>();
 
 
 builder.Services.AddTransient<IEventStore, EventStore>();
