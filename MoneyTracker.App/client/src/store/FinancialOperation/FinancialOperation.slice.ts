@@ -20,10 +20,16 @@ interface TransferOperation extends Operation {
   toAccountId: string;
 }
 
-interface FetchTransactionsInfo{
+interface FetchTransactionsInfoResponse {
   transactions: Transaction[];
   incomes: number;
   expenses: number;
+}
+
+interface FetchTransactionsInfoVariables {
+  accountId: string | null;
+  fromDate: string | null;
+  toDate: string | null;
 }
 
 export interface CreateTransactionState {
@@ -34,6 +40,7 @@ export interface CreateTransactionState {
   countOfElements: number;
   incomes: number;
   expenses: number;
+  dateRange: { fromDate: string | null; toDate: string | null };
 }
 
 const initialState: CreateTransactionState = {
@@ -44,13 +51,17 @@ const initialState: CreateTransactionState = {
   incomes: 0,
   expenses: 0,
   error: null,
+  dateRange: { fromDate: null, toDate: null },
 };
 
 export const FinancialOperationSlice = createSlice({
   name: "FinancialOperations",
   initialState: initialState,
   reducers: {
-    FETCH_TRANSACTIONS_INFO(state, action: PayloadAction<{ accountId: string | null}>) {
+    FETCH_TRANSACTIONS_INFO(
+      state,
+      action: PayloadAction<FetchTransactionsInfoVariables>
+    ) {
       state.loading = true;
       state.error = null;
       state.transactions = [];
@@ -58,7 +69,7 @@ export const FinancialOperationSlice = createSlice({
     },
     FETCH_TRANSACTIONS_INFO_SUCCESS(
       state,
-      action: PayloadAction<FetchTransactionsInfo>
+      action: PayloadAction<FetchTransactionsInfoResponse>
     ) {
       state.loading = false;
       state.error = null;
@@ -112,6 +123,12 @@ export const FinancialOperationSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    SET_DATE_RANGE(
+      state,
+      action: PayloadAction<{ fromDate: string; toDate: string }>
+    ) {
+      state.dateRange = action.payload;
+    },
   },
 });
 
@@ -125,8 +142,9 @@ export const {
   ADD_FINANCIAL_OPERATION_ERROR,
   ADD_FINANCIAL_OPERATION_SUCCESS,
   CANCEL_FINANCIAL_OPERATION,
-    CANCEL_FINANCIAL_OPERATION_ERROR,
-    CANCEL_FINANCIAL_OPERATION_SUCCESS
+  CANCEL_FINANCIAL_OPERATION_ERROR,
+  CANCEL_FINANCIAL_OPERATION_SUCCESS,
+  SET_DATE_RANGE,
 } = FinancialOperationSlice.actions;
 
 export default FinancialOperationSlice.reducer;

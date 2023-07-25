@@ -13,20 +13,12 @@ const getOnlyDate = (dateString: string) => {
   });
 };
 
+
 const TransactionList = () => {
   const dispatch = useAppDispatch();
   const transactions = useAppSelector(
     (state) => state.FinancialOperation.transactions
   );
-
-  const currentAccountId = useAppSelector(
-    (state) => state.Account.currentAccountId
-  );
-
-  useEffect(() => {
-    dispatch(FETCH_TRANSACTIONS_INFO({ accountId: currentAccountId === "total" ? null : currentAccountId }));
-    dispatch(FETCH_CATEGORIES());
-  }, [currentAccountId, dispatch]);
 
   return (
     <div className={"transaction-list"}>

@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React from "react";
 import {
   TimeScopeInputsType,
   TimeScopes,
@@ -11,8 +11,6 @@ interface TimeScopeInputProps {
 }
 
 const TimeScopeInput = ({ scope, values, setValue }: TimeScopeInputProps) => {
-  var localValues = values;
-
   function renderInput() {
     switch (scope) {
       case TimeScopes.Daily:
@@ -68,7 +66,7 @@ const TimeScopeInput = ({ scope, values, setValue }: TimeScopeInputProps) => {
       case TimeScopes.Custom:
         return (
           <>
-            <input
+            From: <input
               type="date"
               value={values.custom.from}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -79,7 +77,8 @@ const TimeScopeInput = ({ scope, values, setValue }: TimeScopeInputProps) => {
                 setValue(updatedValues);
               }}
             />
-            <input
+            <br/>
+            To: <input
               type="date"
               value={values.custom.to}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {

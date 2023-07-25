@@ -1,22 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TransactionList from "../../components/TransactionList/TransactionList";
 import TransactionCreate from "../../components/TransactionCreate/TransactionCreate";
 import TimeScopePanel from "../../components/TimeScopePanel/TimeScopePanel";
 import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
-import { FETCH_TRANSACTIONS_INFO } from "../../store/FinancialOperation/FinancialOperation.slice";
-
+import {
+  FETCH_TRANSACTIONS_INFO,
+  SET_DATE_RANGE,
+} from "../../store/FinancialOperation/FinancialOperation.slice";
 
 const Transactions = () => {
   const dispatch = useAppDispatch();
   const [defaultTransaction, setDefaultTransaction] = useState<
     "expense" | "income" | "transfer"
   >("expense");
- 
+
   const [isCreatePopupOpen, setIsCreatePopupOpen] = useState<boolean>(false);
-  
+
   const incomes = useAppSelector((state) => state.FinancialOperation.incomes);
   const expenses = useAppSelector((state) => state.FinancialOperation.expenses);
-  const currentAccountId = useAppSelector(state => state.Account.currentAccountId)
+  const currentAccountId = useAppSelector(
+    (state) => state.Account.currentAccountId
+  );
+  const dateRange = useAppSelector(
+    (state) => state.FinancialOperation.dateRange
+  );
 
   const handlePopupOpen = () => {
     document.body.classList.toggle("no-scroll");
@@ -24,18 +31,33 @@ const Transactions = () => {
   };
 
   const handleAddTransaction = () => {
-    dispatch(FETCH_TRANSACTIONS_INFO({accountId: currentAccountId === "total" ? null : currentAccountId }));
+    
+  };
+
+  useEffect(() => {
+    dispatch(FETCH_TRANSACTIONS_INFO({
+      accountId: currentAccountId === "total" ? null : currentAccountId,
+      fromDate: dateRange.fromDate,
+      toDate: dateRange.toDate,
+    }))
+  }, [dispatch, currentAccountId, dateRange])
+
+
+  const onRangeChange = (startDate: string, endDate: string) => {
+    if (startDate && endDate) {
+      dispatch(SET_DATE_RANGE({ fromDate: startDate, toDate: endDate }));
+    }
   };
 
   return (
-    <main className={'transactions'}>
+    <main className={"transactions"}>
       {isCreatePopupOpen && (
         <TransactionCreate
           transactionDefaultType={defaultTransaction}
           openPopupHandle={handlePopupOpen}
         />
       )}
-      <TimeScopePanel />
+      <TimeScopePanel onRangeChange={onRangeChange} />
       <div className={"transaction-sums"}>
         <div
           onClick={() => {
@@ -44,8 +66,8 @@ const Transactions = () => {
           }}
           className={"transaction-sums__income"}
         >
-          Incomes<br/>
-          + {incomes} ₴
+          Incomes
+          <br />+ {incomes} ₴
         </div>
         <div
           onClick={() => {
@@ -54,8 +76,8 @@ const Transactions = () => {
           }}
           className={"transaction-sums__expense"}
         >
-          Expenses<br/>
-          - {-expenses} ₴
+          Expenses
+          <br />- {-expenses} ₴
         </div>
       </div>
 

@@ -33,8 +33,6 @@ function App() {
     };
   }, [accessTokenRefreshing, dispatch, isAuth]);
 
-  console.log(isAuth);
-
   return (
     <BrowserRouter>
       <Routes>
