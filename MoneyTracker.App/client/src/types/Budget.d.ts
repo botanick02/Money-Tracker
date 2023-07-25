@@ -1,17 +1,17 @@
 import { Category } from "./Category";
 
-export interface Budget {
-    // id: number,
-    //
-    category: Category,
-    // limit: number,
-    // spent: number,
-    // dateStart: string,
-    // dateEnd: string
-
+interface BudgetBase{
     id: string,
-    spent: number,
     limit: number,
     endDate: string | null,
     startDate: string | null
+}
+
+export interface Budget extends BudgetBase{
+    category: Category,
+    spent: number,
+}
+
+export interface BudgetWrite extends BudgetBase{
+    categoryId
 }

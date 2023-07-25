@@ -1,5 +1,5 @@
 import {createAction, createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {Budget} from "../../types/Budget";
+import {Budget, BudgetWrite} from "../../types/Budget";
 
 interface BudgetState {
     budgetList: Budget[]
@@ -21,6 +21,7 @@ const BudgetListSlice = createSlice({
 })
 
 
-export const fetchBudgetAction = createAction<string>("fetchUser");
+export const fetchBudgetAction = createAction<string>("fetchBudget");
+export const editBudgetAction = createAction<BudgetWrite>("EditBudget");
 export default BudgetListSlice;
 export const {fetch_budget} = BudgetListSlice.actions

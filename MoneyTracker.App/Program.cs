@@ -79,7 +79,9 @@ builder.Services.AddGraphQL(b => b
     .AddGraphTypes(typeof(MoneyTrackerSchema).Assembly)
     .AddAutoClrMappings()
     .AddSystemTextJson()
-    .AddAuthorizationRule());
+    .AddAuthorizationRule()
+    .AddErrorInfoProvider(options => options.ExposeExceptionStackTrace = true)
+    );
 
 builder.Services.AddSpaStaticFiles(configuration =>
 {

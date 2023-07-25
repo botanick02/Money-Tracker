@@ -18,7 +18,7 @@ function formatDate(dateString: string): string {
 
 
 const CategoryBudgetItem: React.FC<Props> = ({budget}) => {
-    const limitSpent = budget.limit - budget.spent
+    const limitSpent = budget.limit + budget.spent
     const [isExtended, setIsExtended] = React.useState<boolean>(false)
 
     const handleRowClick = () => {

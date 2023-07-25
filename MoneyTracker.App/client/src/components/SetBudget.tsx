@@ -1,7 +1,9 @@
 import React, {FC, useState} from 'react';
 import InputWrapper from "../elements/InputWrapper";
-import {Budget} from "../types/Budget";
+import {Budget, BudgetWrite} from "../types/Budget";
 import Dropdown, {Option} from "../elements/Dropdown/Dropdown";
+import {useAppDispatch} from "../hooks/useAppDispatch";
+import {editBudgetAction} from "../store/Budgets/Budgets.slice";
 
 interface Props {
     budget: Budget
@@ -11,12 +13,12 @@ interface Props {
 
 const timeScopeOptions: Option[] = [
     {
-        value: "week",
-        label: "Weekly"
-    },
-    {
         value: "date",
         label: "Day"
+    },
+    {
+        value: "week",
+        label: "Weekly"
     },
     {
         value: "month",
@@ -24,19 +26,43 @@ const timeScopeOptions: Option[] = [
     },
 ]
 
+function pickBudgetForWrite(budget: Budget): BudgetWrite {
+    const {category, spent, ...budgetWrite} = budget;
+    return {...budgetWrite, categoryId: category.id};
+}
+
 const SetBudget: FC<Props> = ({budget, openPopupHandle}) => {
     const [timeScope, setTimeScope] = useState<"week" | "date" | "month">(timeScopeOptions[0].value)
+    const [editableBudget, setBudget] = useState<BudgetWrite>(pickBudgetForWrite(budget))
+
+    const dispatch = useAppDispatch()
+
+    // console.warn(editableBudget)
 
     const handleTimeScopeChange = (option: Option) => {
         setTimeScope(option.value)
     }
 
+    const handleLimitInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setBudget({...editableBudget, limit: e.target.value.length ? parseInt(e.target.value) : 0})
+    }
+
+    const handleStartDate = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setBudget({...editableBudget, startDate: (e.target.value.concat("T00:00:00.000Z"))})
+    }
+
+    const handleEndDate = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setBudget({...editableBudget, endDate: (e.target.value.concat("T00:00:00.000Z"))})
+    }
+
 
     const handleCancel = () => {
+        setBudget(pickBudgetForWrite(budget))
         openPopupHandle()
     }
 
     const handleSafe = () => {
+        dispatch(editBudgetAction(editableBudget))
         openPopupHandle()
     }
 
@@ -47,14 +73,23 @@ const SetBudget: FC<Props> = ({budget, openPopupHandle}) => {
 
                 <div className={"popup__fields"}>
                     <InputWrapper>
-                        <input type="number" placeholder="Budget"/>
+                        {
+                            editableBudget.limit
+                                ? <input onChange={handleLimitInput} value={editableBudget.limit} type="number"
+                                         placeholder="Budget"/>
+                                : <input onChange={handleLimitInput} type="number" placeholder="Budget"/>
+                        }
                     </InputWrapper>
 
                     {/*<div className={"popup__row"}>*/}
                     <Dropdown selectHandler={handleTimeScopeChange} options={timeScopeOptions}/>
-
+                    Start
                     <InputWrapper>
-                        <input type={timeScope} placeholder="Title"/>
+                        <input onChange={handleStartDate} type={timeScope} placeholder="Title"/>
+                    </InputWrapper>
+                    End
+                    <InputWrapper>
+                        <input onChange={handleEndDate} type={timeScope} placeholder="Title"/>
                     </InputWrapper>
 
                     {/*</div>*/}

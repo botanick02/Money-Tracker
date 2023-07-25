@@ -19,5 +19,17 @@ namespace MoneyTracker.Business.Entities
         public Budget(Guid CategiryId) {
             this.CategoryId = CategiryId;
         }
+
+        public Budget() { }
+
+        public Budget(string id, DateTime? startDate, DateTime? endDate, decimal limit, bool isActive, string categoryId)
+        {
+            this.Id = Guid.Parse(id);
+            this.StartDate = startDate;
+            this.EndDate = endDate;
+            this.Limit = limit;
+            this.IsActive = isActive;
+            this.CategoryId = Guid.Parse(categoryId);
+        }
     }
 }

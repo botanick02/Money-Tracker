@@ -16,3 +16,11 @@ export const GetBudgets = `
         }
   }
 `
+
+export const EditBudget = `
+    mutation editBudget($budget: BudgetInputType!){
+        budget {
+          editBudget(budget: $budget)
+        }
+    }
+`
