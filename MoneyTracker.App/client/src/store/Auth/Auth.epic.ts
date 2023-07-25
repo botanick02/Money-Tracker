@@ -54,8 +54,8 @@ export const SignInEpic: Epic<any, any, any> = (action$) => {
 export const GoogleSignInEpic: Epic<any, any, any> = (action$: any) => {
   return action$.pipe(
     ofType(SIGN_IN_GOOGLE),
-    mergeMap(() =>
-      from(request(GoogleLogin, { loginCredentials: action$.payload })).pipe(
+    mergeMap((action: any) =>
+      from(request(GoogleLogin, { loginCredentials: action.payload })).pipe(
         map((data: any) => {
           if (data.errors) {
             // store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message));

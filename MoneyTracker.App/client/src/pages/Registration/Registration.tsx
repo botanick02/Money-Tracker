@@ -41,7 +41,6 @@ const RegistrationForm = () => {
     //     return;
     //   }
 
-    console.log(data);
     dispatch(
       REGISTRATION({
         name: data.name,
@@ -65,14 +64,14 @@ const RegistrationForm = () => {
         <InputWrapper>
           <input
             type="text"
-            placeholder="Username"
-            {...register("username", {
-              required: "Username is required",
+            placeholder="Name"
+            {...register("name", {
+              required: "Name is required",
             })}
           />
         </InputWrapper>
-        {errors.username && (
-          <p className="error-message">{errors.username.message?.toString()}</p>
+        {errors.name && (
+          <p className="error-message">{errors.name.message?.toString()}</p>
         )}
 
         <InputWrapper>
