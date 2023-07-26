@@ -1,12 +1,12 @@
-import "../../styles/Registration.scss";
-import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
+import "../styles/Registration.scss";
+import { useAppDispatch, useAppSelector } from "../hooks/useAppDispatch";
 import { useForm } from "react-hook-form";
-import { validateEmail, validatePassword } from "../../tools/validator";
-import InputWrapper from "../../elements/InputWrapper";
+import { validateEmail, validatePassword } from "../tools/validator";
+import InputWrapper from "../elements/InputWrapper";
 import { useEffect } from "react";
 import React from "react";
 import { Link } from "react-router-dom";
-import { REGISTRATION } from "../../store/Auth/Auth.slice";
+import { REGISTRATION } from "../store/Auth/Auth.slice";
 
 
 

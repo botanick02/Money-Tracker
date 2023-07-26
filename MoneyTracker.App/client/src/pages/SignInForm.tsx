@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import "../../styles/Registration.scss";
-import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
+import "../styles/Registration.scss";
+import { useAppDispatch, useAppSelector } from "../hooks/useAppDispatch";
 import { useForm } from "react-hook-form";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
-import InputWrapper from "../../elements/InputWrapper";
+import InputWrapper from "../elements/InputWrapper";
 import { Link } from "react-router-dom";
-import { SIGN_IN, SIGN_IN_GOOGLE } from "../../store/Auth/Auth.slice";
+import { SIGN_IN, SIGN_IN_GOOGLE } from "../store/Auth/Auth.slice";
 
 const SignInForm = () => {
 

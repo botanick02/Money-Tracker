@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import SettingsItem from "../../elements/SettingsItem";
-import { useAppDispatch } from "../../hooks/useAppDispatch";
+import SettingsItem from "../elements/SettingsItem";
+import { useAppDispatch } from "../hooks/useAppDispatch";
 import { useNavigate } from "react-router";
-import { SIGN_OUT } from "../../store/Auth/Auth.slice";
+import { SIGN_OUT } from "../store/Auth/Auth.slice";
 
 
 
