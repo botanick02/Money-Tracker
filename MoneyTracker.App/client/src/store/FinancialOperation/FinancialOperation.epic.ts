@@ -103,6 +103,7 @@ export const AddCreditOperationEpic: Epic<any, any, any> = (
               ADD_FINANCIAL_OPERATION_SUCCESS({
                 addTransactionSuccess: true,
               }),
+              FETCH_TRANSACTIONS_INFO()
             ];
           }
         })
@@ -128,6 +129,7 @@ export const AddTransferOperationEpic: Epic<any, any, any> = (
               ADD_FINANCIAL_OPERATION_SUCCESS({
                 addTransactionSuccess: true,
               }),
+              FETCH_TRANSACTIONS_INFO()
             ];
           }
         })
@@ -155,6 +157,7 @@ export const CancelFinancialOperationEpic: Epic<any, any, any> = (
               CANCEL_FINANCIAL_OPERATION_SUCCESS({
                 cancelTransactionSuccess: true,
               }),
+              FETCH_TRANSACTIONS_INFO()
             ];
           }
         })
