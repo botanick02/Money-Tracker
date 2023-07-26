@@ -1,8 +1,8 @@
 import React, {useEffect} from 'react';
-import CategoryBudgetItem from "../../elements/CategoryBudgetItem";
-import TimeScopePanel from "../../components/TimeScopePanel/TimeScopePanel";
-import {useAppDispatch, useAppSelector} from "../../hooks/useAppDispatch";
-import {fetchBudgetAction} from "../../store/Budgets/Budgets.slice";
+import CategoryBudgetItem from "../elements/CategoryBudgetItem";
+import TimeScopePanel from "..//components/TimeScopePanel/TimeScopePanel";
+import {useAppDispatch, useAppSelector} from "..//hooks/useAppDispatch";
+import {fetchBudgetAction} from "..//store/Budgets/Budgets.slice";
 
 
 const Budgets = () => {

@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "./hooks/useAppDispatch";
-import SignInForm from "./pages/SignIn/SignInForm";
+import SignInForm from "./pages/SignInForm";
 import { checkTokenExpire } from "./tools/checkTokenExpire";
-import Registration from "./pages/Registration/Registration";
-import Transactions from "./pages/Transactions/Transactions";
+import Registration from "./pages/Registration";
+import Transactions from "./pages/Transactions";
 import Layout from "./components/common/Layout";
-import Settings from "./pages/Settings/Settings";
+import Settings from "./pages/Settings";
 // import Stats from "./pages/Stats/Stats";
-import Budgets from "./pages/Budgets/Budgets";
+import Budgets from "./pages/Budgets";
 import CategoryList from "./components/CategoryList/CategoryList";
 import { REFRESH_ACCESS_TOKEN } from "./store/Auth/Auth.slice";
 

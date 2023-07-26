@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import TransactionList from "../../components/TransactionList/TransactionList";
-import TransactionCreate from "../../components/TransactionCreate/TransactionCreate";
-import TimeScopePanel from "../../components/TimeScopePanel/TimeScopePanel";
-import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
+import TransactionList from "../components/TransactionList/TransactionList";
+import TransactionCreate from "../components/TransactionCreate/TransactionCreate";
+import TimeScopePanel from "../components/TimeScopePanel/TimeScopePanel";
+import { useAppDispatch, useAppSelector } from "../hooks/useAppDispatch";
 import {
   FETCH_TRANSACTIONS_INFO,
   SET_DATE_RANGE,
-} from "../../store/FinancialOperation/FinancialOperation.slice";
+} from "../store/FinancialOperation/FinancialOperation.slice";
 
 const Transactions = () => {
   const dispatch = useAppDispatch();

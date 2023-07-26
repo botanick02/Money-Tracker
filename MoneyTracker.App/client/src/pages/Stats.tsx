@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import TimeScopePanel from "../../components/TimeScopePanel/TimeScopePanel";
+import TimeScopePanel from "../components/TimeScopePanel/TimeScopePanel";
 // import СhartByCategory from "../../components/СhartByCategory/СhartByCategory";
-import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
+// import { useAppDispatch, useAppSelector } from "../hooks/useAppDispatch";
 
 // const Stats = () => {
 //   const typeOfTransactions = useAppSelector((state) => state.Account.actualTypeBalance)
