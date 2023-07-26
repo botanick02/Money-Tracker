@@ -26,7 +26,7 @@ interface FetchTransactionsInfoResponse {
   expenses: number;
 }
 
-interface FetchTransactionsInfoVariables {
+export interface FetchTransactionsInfoVariables {
   accountId: string | null;
   fromDate: string | null;
   toDate: string | null;
@@ -60,7 +60,6 @@ export const FinancialOperationSlice = createSlice({
   reducers: {
     FETCH_TRANSACTIONS_INFO(
       state,
-      action: PayloadAction<FetchTransactionsInfoVariables>
     ) {
       state.loading = true;
       state.error = null;
@@ -125,7 +124,7 @@ export const FinancialOperationSlice = createSlice({
     },
     SET_DATE_RANGE(
       state,
-      action: PayloadAction<{ fromDate: string; toDate: string }>
+      action: PayloadAction<{ fromDate: string | null; toDate: string | null }>
     ) {
       state.dateRange = action.payload;
     },

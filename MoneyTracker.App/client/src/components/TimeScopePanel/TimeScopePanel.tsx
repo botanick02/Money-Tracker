@@ -8,17 +8,16 @@ import {
 } from "../../tools/Dates/currentIsoDates";
 
 import { useDispatch } from "react-redux";
-import { SET_DATE_TIME } from "../../store/Example/Reducers/DateTimeReducer";
 import { getMondayDateOfWeek, getSundayDateOfWeek } from "../../tools/Dates/datesFromTimeScopes";
 
 interface TimeScopePanel {
-  onRangeChange: (startDate: string, endDate: string) => void;
+  onRangeChange: (startDate: string | null, endDate: string | null) => void;
 }
 
 export enum TimeScopes {
+  Monthly,
   Daily,
   Weekly,
-  Monthly,
   Yearly,
   All,
   Custom,
@@ -38,7 +37,7 @@ export interface TimeScopeInputsType {
 const TimeScopePanel = ({ onRangeChange }: TimeScopePanel) => {
   const dispatch = useDispatch();
 
-  const [currentTimeScope, setCurrentTimeScope] = useState(TimeScopes.Daily);
+  const [currentTimeScope, setCurrentTimeScope] = useState(TimeScopes.Monthly);
   const [timeScopeInputs, setTimeScopeInputs] = useState<TimeScopeInputsType>({
     daily: getCurrentISODateValue(),
     weekly: getCurrentISOWeekValue(),
@@ -62,9 +61,6 @@ const TimeScopePanel = ({ onRangeChange }: TimeScopePanel) => {
     setCurrentTimeScope(timeScope);
   };
 
-
-  
-  
   const getStartAndEndDate = (timeScope: TimeScopes, timeScopeInputs: TimeScopeInputsType) => {
     switch (timeScope) {
       case TimeScopes.Daily:
@@ -99,13 +95,13 @@ const TimeScopePanel = ({ onRangeChange }: TimeScopePanel) => {
         };
       case TimeScopes.All:
       return {
-        startDate: "",
-        endDate: "",
+        startDate: null,
+        endDate: null,
       };
       default:
         return {
-          startDate: "",
-          endDate: "",
+          startDate: null,
+          endDate: null,
         };
     }
   };

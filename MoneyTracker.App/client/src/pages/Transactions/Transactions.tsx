@@ -30,21 +30,13 @@ const Transactions = () => {
     setIsCreatePopupOpen((prevState) => !prevState);
   };
 
-  const handleAddTransaction = () => {
-    
-  };
-
   useEffect(() => {
-    dispatch(FETCH_TRANSACTIONS_INFO({
-      accountId: currentAccountId === "total" ? null : currentAccountId,
-      fromDate: dateRange.fromDate,
-      toDate: dateRange.toDate,
-    }))
+    dispatch(FETCH_TRANSACTIONS_INFO())
   }, [dispatch, currentAccountId, dateRange])
 
 
-  const onRangeChange = (startDate: string, endDate: string) => {
-    if (startDate && endDate) {
+  const onRangeChange = (startDate: string | null, endDate: string | null) => {
+    if ((startDate && endDate) || (!startDate && !endDate)) {
       dispatch(SET_DATE_RANGE({ fromDate: startDate, toDate: endDate }));
     }
   };
@@ -87,7 +79,6 @@ const Transactions = () => {
         <div
           onClick={() => {
             handlePopupOpen();
-            handleAddTransaction();
           }}
           className={"new-transaction button"}
         >
