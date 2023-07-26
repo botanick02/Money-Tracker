@@ -13,24 +13,15 @@ const getOnlyDate = (dateString: string) => {
   });
 };
 
+
 const TransactionList = () => {
-  const dispatch = useAppDispatch();
   const transactions = useAppSelector(
     (state) => state.FinancialOperation.transactions
   );
 
-  const currentAccountId = useAppSelector(
-    (state) => state.Account.currentAccountId
-  );
-
-  useEffect(() => {
-    dispatch(FETCH_TRANSACTIONS_INFO({ accountId: currentAccountId === "total" ? null : currentAccountId }));
-    dispatch(FETCH_CATEGORIES());
-  }, [currentAccountId, dispatch]);
-
   return (
     <div className={"transaction-list"}>
-      {transactions.map((item, index) => {
+      {transactions.length > 0 ? transactions.map((item, index) => {
         if (
           index === 0 ||
           getOnlyDate(transactions[index - 1]?.createdAt) !==
@@ -44,7 +35,7 @@ const TransactionList = () => {
           );
         }
         return <TransactionItem key={index} transaction={item} />;
-      })}
+      }) : <div  className={"transaction-list__message-empty"}>No transactions to show</div>}
     </div>
   );
 };

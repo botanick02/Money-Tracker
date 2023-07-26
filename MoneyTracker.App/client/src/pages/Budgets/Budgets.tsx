@@ -18,7 +18,7 @@ const Budgets = () => {
 
     return (
         <main className={"budgets"}>
-            <TimeScopePanel />
+            <TimeScopePanel onRangeChange={() => {}}/>
             <div className={"row-title"}>Budgeted Categories</div>
             {
                 budgeted.map(item => <CategoryBudgetItem key={item.id} budget={item}/>)

@@ -33,8 +33,6 @@ const CategoryList = () => {
   return (
     <main>
       <div className="transaction-list">
-        <TimeScopePanel />
-
         {isCreatePopupOpen && (
           <CategoryCreate
             transactionDefaultType={defaultTransaction}

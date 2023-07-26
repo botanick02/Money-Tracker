@@ -21,7 +21,6 @@ const Dropdown: FC<SelectPropsType> = ({ selectHandler, options, title }) => {
   const setSelectedThenCloseDropdown = (index: number) => {
     setSelectedOptionId(index);
     selectHandler(options[index]);
-    console.log(options[index])
     setIsOptionsOpen(false);
   };
 
@@ -39,9 +38,6 @@ const Dropdown: FC<SelectPropsType> = ({ selectHandler, options, title }) => {
     window.addEventListener('click', mouseListener);
   }, []);
 
-  const handleSelect = (option: Option) => {
-    console.log(option.value); // Вывод выбранного значения в консоль
-  };
 
   return (
     <div className={'select-wrapper'}>
@@ -81,7 +77,6 @@ const Dropdown: FC<SelectPropsType> = ({ selectHandler, options, title }) => {
               tabIndex={0}
               onClick={() => {
                 setSelectedThenCloseDropdown(index);
-                handleSelect(option); // Вызов функции для вывода значения в консоль
               }}
             >
               {option.icon ? (

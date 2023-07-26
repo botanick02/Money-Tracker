@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InputWrapper from "../../elements/InputWrapper";
 import Dropdown, { Option } from "../../elements/Dropdown/Dropdown";
 import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
 import { ADD_CREDIT_OPERATION, ADD_DEBIT_OPERATION, ADD_TRANSFER_OPERATION } from "../../store/FinancialOperation/FinancialOperation.slice";
+import { FETCH_CATEGORIES } from "../../store/Category/Category.slice";
 interface Props {
   openPopupHandle(): void;
   transactionDefaultType: "expense" | "income" | "transfer";
@@ -30,6 +31,10 @@ const TransactionCreate: React.FC<Props> = ({
       });
     });
 
+
+    useEffect(() => {
+      dispatch(FETCH_CATEGORIES());
+    }, [])
 
     const currentAccountId = useAppSelector(
       (state) => state.Account.currentAccountId
