@@ -27,7 +27,6 @@ import {
 export const TransactionItemsEpic: Epic<any, any, any> = (action$, state$) => {
   return action$.pipe(
     ofType(FETCH_TRANSACTIONS_INFO),
-    // ofType(ADD_FINANCIAL_OPERATION_SUCCESS),
     mergeMap((action) =>
       from(
         request(GetTransactions, {
@@ -146,7 +145,7 @@ export const CancelFinancialOperationEpic: Epic<any, any, any> = (
     ofType(CANCEL_FINANCIAL_OPERATION),
     mergeMap((action) =>
       from(
-        request(CancelOperation, { cancelOperationInput: action.payload })
+        request(CancelOperation, { cancelFinOperationInput: action.payload })
       ).pipe(
         mergeMap((data: any) => {
           if (data.errors) {

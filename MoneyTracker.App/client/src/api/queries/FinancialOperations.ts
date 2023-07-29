@@ -8,7 +8,11 @@ export const GetTransactions = `query getTransactions($input: GetTransactionsFor
         title
         note
         amount
-        categoryId
+        category{
+          id
+          name
+          type
+        }
         createdAt
         accountId
       }

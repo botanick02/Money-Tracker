@@ -1,8 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import TransactionItem from "../../elements/TransactionItem";
-import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
-import { FETCH_TRANSACTIONS_INFO } from "../../store/FinancialOperation/FinancialOperation.slice";
-import { FETCH_CATEGORIES } from "../../store/Category/Category.slice";
+import { useAppSelector } from "../../hooks/useAppDispatch";
+import TransactionInfo from "./TransactionInfo";
 
 const getOnlyDate = (dateString: string) => {
   const date = new Date(dateString);
@@ -13,14 +12,27 @@ const getOnlyDate = (dateString: string) => {
   });
 };
 
-
 const TransactionList = () => {
   const transactions = useAppSelector(
     (state) => state.FinancialOperation.transactions
   );
 
+  const [transactionIdInfoPopup, setTransactionIdInfoPopup] = useState<string | null>(null)
+
+  const handleInfoPopupOpen = (id: string) => {
+    document.body.classList.toggle("no-scroll");
+    setTransactionIdInfoPopup(id);
+  };
+
+  const transactionInPopup = transactions.find(t => t.id === transactionIdInfoPopup);
+
+
   return (
     <div className={"transaction-list"}>
+      {transactionInPopup && (
+        <TransactionInfo closePopupHandle={() => setTransactionIdInfoPopup(null)} transaction={transactionInPopup}
+        />
+      )}
       {transactions.length > 0 ? transactions.map((item, index) => {
         if (
           index === 0 ||
@@ -30,11 +42,11 @@ const TransactionList = () => {
           return (
             <React.Fragment key={index}>
               <div className={"row-title"}>{getOnlyDate(item.createdAt)}</div>
-              <TransactionItem transaction={item} />
+              <TransactionItem transaction={item} onMoreInfoCLick={handleInfoPopupOpen}/>
             </React.Fragment>
           );
         }
-        return <TransactionItem key={index} transaction={item} />;
+        return <TransactionItem key={index} transaction={item} onMoreInfoCLick={handleInfoPopupOpen}/>;
       }) : <div  className={"transaction-list__message-empty"}>No transactions to show</div>}
     </div>
   );

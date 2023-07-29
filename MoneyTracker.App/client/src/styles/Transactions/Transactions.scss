@@ -1,16 +1,15 @@
 @import "src/styles/Variables";
 
-.transactions{
-  .popup__header{
+.transactions {
+  .popup__header {
     $border-radius: 20px;
     $padding: 31px;
-    justify-content: space-between;
     li {
       height: 34px;
       width: 100%;
       text-align: center;
       line-height: 34px;
-      opacity: .4;
+      opacity: 0.4;
       cursor: pointer;
 
       &.current-type {
@@ -31,34 +30,76 @@
         border-top-right-radius: $border-radius;
       }
     }
+    
+  }
+
+  .popup__header.income {
+    background-color: $primary-color;
+  }
+
+  .popup__header.expense {
+    background-color: $secondary-color;
+  }
+
+  .popup__info { 
+    &__amount {
+      font-size: 25px;
+      font-weight: 600;
+      text-align: center;      
+      margin: 25px 0;
+      &.income {
+        color: $primary-color;
+      }
+  
+      &.expense {
+        color: $secondary-color;
+      }
+    }
+
+    &__item {
+      font-size: 16px;
+      margin: 10px;
+      display: flex;
+      
+      &__category{
+        margin-left: 10px;
+        display: flex;
+
+        align-items: center;
+        img{
+          width: 25px;
+          height: 25px;
+          margin-right: 5px;
+        }
+      }
+    }
   }
 }
 
-.transaction-sums{
+.transaction-sums {
   display: flex;
   justify-content: space-between;
   padding: 0 8px;
   margin-top: 20px;
 
-  >div{
+  > div {
     width: 116px;
     border-radius: 10px;
     text-align: center;
     padding: 5px;
     cursor: pointer;
-
   }
-  &__income{
+  &__income {
     border: 2px solid $primary-color;
     color: $primary-color;
   }
-  &__expense{
+  &__expense {
     border: 2px solid $secondary-color;
     color: $secondary-color;
   }
 }
 
-.new-transaction{
+.new-transaction {
   position: fixed;
   border-radius: 50%;
   height: 50px;

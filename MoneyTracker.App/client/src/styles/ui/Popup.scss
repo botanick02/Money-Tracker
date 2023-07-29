@@ -33,6 +33,14 @@
     border-top-right-radius: $border-radius;
     min-height: 34px;
   }
+  
+  .title-single{
+    background-color: $background-light-color;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
 
   &__fields {
     width: 100%;
@@ -52,6 +60,10 @@
 
   .button {
     width: 100%;
+  
+    &.expense {
+      background-color: $secondary-color;
+    }
   }
 
   .select-wrapper {

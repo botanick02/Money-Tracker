@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import TransactionList from "../components/TransactionList/TransactionList";
-import TransactionCreate from "../components/TransactionCreate/TransactionCreate";
 import TimeScopePanel from "../components/TimeScopePanel/TimeScopePanel";
 import { useAppDispatch, useAppSelector } from "../hooks/useAppDispatch";
 import {
   FETCH_TRANSACTIONS_INFO,
   SET_DATE_RANGE,
 } from "../store/FinancialOperation/FinancialOperation.slice";
+import TransactionCreate from "../components/Transaction/TransactionCreate";
+import TransactionList from "../components/Transaction/TransactionList";
 
 const Transactions = () => {
   const dispatch = useAppDispatch();
@@ -25,15 +25,14 @@ const Transactions = () => {
     (state) => state.FinancialOperation.dateRange
   );
 
-  const handlePopupOpen = () => {
+  const handleCreatePopupOpen = () => {
     document.body.classList.toggle("no-scroll");
     setIsCreatePopupOpen((prevState) => !prevState);
   };
 
   useEffect(() => {
-    dispatch(FETCH_TRANSACTIONS_INFO())
-  }, [dispatch, currentAccountId, dateRange])
-
+    dispatch(FETCH_TRANSACTIONS_INFO());
+  }, [dispatch, currentAccountId, dateRange]);
 
   const onRangeChange = (startDate: string | null, endDate: string | null) => {
     if ((startDate && endDate) || (!startDate && !endDate)) {
@@ -46,14 +45,14 @@ const Transactions = () => {
       {isCreatePopupOpen && (
         <TransactionCreate
           transactionDefaultType={defaultTransaction}
-          openPopupHandle={handlePopupOpen}
+          openPopupHandle={handleCreatePopupOpen}
         />
       )}
       <TimeScopePanel onRangeChange={onRangeChange} />
       <div className={"transaction-sums"}>
         <div
           onClick={() => {
-            handlePopupOpen();
+            handleCreatePopupOpen();
             setDefaultTransaction("income");
           }}
           className={"transaction-sums__income"}
@@ -63,7 +62,7 @@ const Transactions = () => {
         </div>
         <div
           onClick={() => {
-            handlePopupOpen();
+            handleCreatePopupOpen();
             setDefaultTransaction("expense");
           }}
           className={"transaction-sums__expense"}
@@ -78,7 +77,7 @@ const Transactions = () => {
       {!isCreatePopupOpen && (
         <div
           onClick={() => {
-            handlePopupOpen();
+            handleCreatePopupOpen();
           }}
           className={"new-transaction button"}
         >

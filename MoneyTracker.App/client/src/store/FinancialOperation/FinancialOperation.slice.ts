@@ -106,7 +106,7 @@ export const FinancialOperationSlice = createSlice({
     },
     CANCEL_FINANCIAL_OPERATION(
       state,
-      action: PayloadAction<{ transactionId: string }>
+      action: PayloadAction<{ operationId: string }>
     ) {
       state.loading = true;
       state.error = null;
