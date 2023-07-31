@@ -3,6 +3,7 @@ import { Transaction } from "../../types/Transaction";
 import DeletePopup from "../DeletePopup";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { CANCEL_FINANCIAL_OPERATION } from "../../store/FinancialOperation/FinancialOperation.slice";
+import { ReactComponent as EditIcon } from "../../assets/icons/Edit-icon.svg";
 
 interface TransactionInfoProps {
   closePopupHandle(): void;
@@ -44,7 +45,7 @@ const TransactionInfo = ({
         ) : (
           <div className={"popup__info"}>
             <div className={`popup__info__amount ${type}`}>
-              {transaction.amount}
+              {transaction.amount} ₴
             </div>
 
             <div className={"popup__info__item"}>
@@ -65,12 +66,11 @@ const TransactionInfo = ({
                 Note: {transaction.note}
               </div>
             )}
+                        <EditIcon onClick={() => setIsEditMode(true)} className={"popup__info__edit-icon"}/>
           </div>
         )}
         <div className={"popup__row"}>
-          {/* <button onClick={() => setIsEditMode(true)} className={"button"}>
-                        Edit
-                    </button> */}
+          
           <button
             onClick={() => setIsDeletePopupOpen(true)}
             className={"button expense"}

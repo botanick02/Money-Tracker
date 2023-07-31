@@ -42,11 +42,17 @@
   }
 
   .popup__info { 
+    &__edit-icon{
+      width: 40px;
+      height: 40px;
+    }
+
     &__amount {
       font-size: 25px;
       font-weight: 600;
       text-align: center;      
       margin: 25px 0;
+
       &.income {
         color: $primary-color;
       }
