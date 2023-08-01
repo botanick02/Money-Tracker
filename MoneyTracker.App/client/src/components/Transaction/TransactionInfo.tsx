@@ -4,6 +4,7 @@ import DeletePopup from "../DeletePopup";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { CANCEL_FINANCIAL_OPERATION } from "../../store/FinancialOperation/FinancialOperation.slice";
 import { ReactComponent as EditIcon } from "../../assets/icons/Edit-icon.svg";
+import InputWrapper from "../../elements/InputWrapper";
 
 interface TransactionInfoProps {
   closePopupHandle(): void;
@@ -37,11 +38,14 @@ const TransactionInfo = ({
       )}
       <div className={"popup"}>
         <div className={`popup__header title-single ${type}`}>
-          {transaction.title}
+          {isEditMode ? "Edit" : transaction.title}
         </div>
 
         {isEditMode ? (
-          <div className={"popup__fields"}></div>
+          <div className={"popup__fields"}>
+            
+          
+          </div>
         ) : (
           <div className={"popup__info"}>
             <div className={`popup__info__amount ${type}`}>
