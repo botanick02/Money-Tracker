@@ -1,4 +1,4 @@
-export const getStatistics = `
+export const GetStats = `
 query getStatistics{
   statistics {
     getStatistics(input: {}) {
