@@ -73,4 +73,93 @@ namespace MoneyTracker.Business.Events.FinancialOperation
             return updatedModel;
         }
     }
+
+    public class FinancialOperationAmountUpdatedEventApplier : IEventApplier<FinancialOperationAmountUpdatedEvent>
+    {
+        public ReadModel Apply(ReadModel currentModel, FinancialOperationAmountUpdatedEvent @event)
+        {
+            var updatedModel = currentModel;
+
+            var operationsToUpdate = updatedModel.Transactions.Where(o => o.OperationId == @event.OperationId).ToList();
+            foreach (var operationToUpdate in operationsToUpdate)
+            {
+                if (operationToUpdate.Amount >= 0)
+                {
+                    operationToUpdate.Amount = @event.Amount >= 0 ? @event.Amount : -@event.Amount;
+                }
+                else
+                {
+                    operationToUpdate.Amount = @event.Amount < 0 ? @event.Amount : -@event.Amount;
+                }
+            }
+
+            return updatedModel;
+        }
+    }
+
+    public class FinancialOperationTitleUpdatedEventApplier : IEventApplier<FinancialOperationTitleUpdatedEvent>
+    {
+        public ReadModel Apply(ReadModel currentModel, FinancialOperationTitleUpdatedEvent @event)
+        {
+            var updatedModel = currentModel;
+
+            var operationsToUpdate = updatedModel.Transactions.Where(o => o.OperationId == @event.OperationId).ToList();
+            foreach (var operationToUpdate in operationsToUpdate)
+            {
+                operationToUpdate.Title = @event.Title;
+            }
+
+            return updatedModel;
+        }
+    }
+
+    public class FinancialOperationCategoryIdUpdatedEventApplier : IEventApplier<FinancialOperationCategoryIdUpdatedEvent>
+    {
+        public ReadModel Apply(ReadModel currentModel, FinancialOperationCategoryIdUpdatedEvent @event)
+        {
+            var updatedModel = currentModel;
+
+            var operationsToUpdate = updatedModel.Transactions.Where(o => o.OperationId == @event.OperationId).ToList();
+            foreach (var operationToUpdate in operationsToUpdate)
+            {
+                operationToUpdate.CategoryId = @event.CategoryId;
+            }
+
+            return updatedModel;
+        }
+    }
+
+    public class FinancialOperationNoteUpdatedEventApplier : IEventApplier<FinancialOperationNoteUpdatedEvent>
+    {
+        public ReadModel Apply(ReadModel currentModel, FinancialOperationNoteUpdatedEvent @event)
+        {
+            var updatedModel = currentModel;
+
+            var operationsToUpdate = updatedModel.Transactions.Where(o => o.OperationId == @event.OperationId).ToList();
+            foreach (var operationToUpdate in operationsToUpdate)
+            {
+                operationToUpdate.Note = @event.Note;
+            }
+
+            return updatedModel;
+        }
+    }
+
+    public class FinancialOperationCreatedAtUpdatedEventApplier : IEventApplier<FinancialOperationCreatedAtUpdatedEvent>
+    {
+        public ReadModel Apply(ReadModel currentModel, FinancialOperationCreatedAtUpdatedEvent @event)
+        {
+            var updatedModel = currentModel;
+
+            var operationsToUpdate = updatedModel.Transactions.Where(o => o.OperationId == @event.OperationId).ToList();
+            foreach (var operationToUpdate in operationsToUpdate)
+            {
+                operationToUpdate.CreatedAt = @event.CreatedAt;
+            }
+
+            return updatedModel;
+        }
+    }
+
+
 }

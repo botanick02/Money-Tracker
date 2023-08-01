@@ -17,4 +17,19 @@
     public record FinancialOperationCanceledEvent(Guid OperationId)
         : Event;
 
+    public record FinancialOperationAmountUpdatedEvent(Guid OperationId, decimal Amount)
+        : Event;
+
+    public record FinancialOperationTitleUpdatedEvent(Guid OperationId, string Title)
+        : Event;
+
+    public record FinancialOperationCategoryIdUpdatedEvent(Guid OperationId, Guid CategoryId)
+        : Event;
+
+    public record FinancialOperationNoteUpdatedEvent(Guid OperationId, string? Note)
+        : Event;
+
+    public record FinancialOperationCreatedAtUpdatedEvent(Guid OperationId, DateTime CreatedAt)
+        : Event;
+
 }
