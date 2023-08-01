@@ -41,7 +41,7 @@ builder.Services.AddTransient<PasswordHashService>();
 builder.Services.AddTransient<AccountService>();
 builder.Services.AddTransient<TransactionService>();
 builder.Services.AddTransient<BudgetService>();
-
+builder.Services.AddTransient<StatisticService>();
 
 builder.Services.AddTransient<IEventStore, EventStore>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
@@ -49,7 +49,7 @@ builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
 builder.Services.AddTransient<ITransactionRepository, TransactionRepository>();
 
 builder.Services.AddTransient<IBudgetRepository, BudgetRepository>();
-
+builder.Services.AddTransient<IAccountRepository, AccountRepository>();
 builder.Services.AddTransient<IAccountRepository, AccountRepository>();
 builder.Services.AddTransient<ICurrencyRepository, CurrencyRepository>();
 

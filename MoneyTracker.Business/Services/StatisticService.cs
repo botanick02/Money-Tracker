@@ -11,37 +11,52 @@ namespace MoneyTracker.Business.Services
     {
         private readonly ITransactionRepository transactionRepository;
         private readonly ICategoryRepository categoryRepository;
+        private readonly IAccountRepository accountRepository;
 
-        public StatisticService(ITransactionRepository transactionRepository, ICategoryRepository categoryRepository)
+        public StatisticService(ITransactionRepository transactionRepository, ICategoryRepository categoryRepository, IAccountRepository accountRepository)
         {
             this.transactionRepository = transactionRepository;
             this.categoryRepository = categoryRepository;
+            this.accountRepository = accountRepository;
+
         }
 
-        public List<GetStatiscicsDto> GetAccountTransactions(Guid userId, DateTime? fromDate = null, DateTime? toDate = null, Guid? accountId = null)
+        public List<GetStatiscicsDto> GetStatistics(Guid userId, DateTime? fromDate = null, DateTime? toDate = null, Guid? accountId = null)
         {
-            var categories = categoryRepository.GetCategories(toDate ?? DateTime.Now); 
+            var transactions = transactionRepository.GetUserTransactions(userId);
+            var categories = categoryRepository.GetCategories(toDate ?? DateTime.Now);
 
-            var statistics = new List<GetStatiscicsDto>();
+           
+            var negativeTransactions = transactions.Where(t => t.Amount < 0);
 
-            var transactions = transactionRepository.GetAccountTransactions(userId);
-
-         
             decimal totalSum = transactions.Sum(t => t.Amount);
+            decimal negativeSum = -negativeTransactions.Sum(t => t.Amount);
 
-            var categorySums = transactions
+            var categorySums = negativeTransactions
                 .GroupBy(t => t.CategoryId)
                 .Select(group => new
                 {
                     CategoryId = group.Key,
-                    Sum = group.Sum(t => t.Amount)
+                    Sum = -group.Sum(t => t.Amount) 
                 })
                 .ToList();
+
+            var statistics = new List<GetStatiscicsDto>();
 
             foreach (var category in categories)
             {
                 decimal categorySum = categorySums.FirstOrDefault(c => c.CategoryId == category.Id)?.Sum ?? 0.0m;
-                decimal percentage = totalSum > 0 ? (categorySum / totalSum) * 100 : 0;
+
+               
+                if (categorySum == 0)
+                {
+                    continue;
+                }
+
+                decimal percentage = negativeSum != 0 ? (categorySum / negativeSum) * 100 : 0;
+
+               
+                percentage = Math.Round(percentage, 2);
 
                 statistics.Add(new GetStatiscicsDto
                 {
@@ -55,5 +70,8 @@ namespace MoneyTracker.Business.Services
 
             return statistics;
         }
+
+
+
     }
 }
