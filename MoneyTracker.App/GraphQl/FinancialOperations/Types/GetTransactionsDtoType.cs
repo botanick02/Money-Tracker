@@ -3,7 +3,7 @@ using MoneyTracker.Business.Services.Dto_s;
 
 namespace MoneyTracker.App.GraphQl.FinancialOperations.Types
 {
-    public class GetTransactionsDtoType : ObjectGraphType<GetTransactionsDto>
+    public class GetTransactionsDtoType : ObjectGraphType<GetTransactionsDataDto>
     {
         public GetTransactionsDtoType()
         {

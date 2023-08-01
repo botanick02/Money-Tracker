@@ -23,11 +23,11 @@ import {
   CancelOperation,
   GetTransactions,
 } from "../../api/queries/FinancialOperations";
+import { FETCH_ACCOUNTS } from "../Account/Account.slice";
 
 export const TransactionItemsEpic: Epic<any, any, any> = (action$, state$) => {
   return action$.pipe(
     ofType(FETCH_TRANSACTIONS_INFO),
-    // ofType(ADD_FINANCIAL_OPERATION_SUCCESS),
     mergeMap((action) =>
       from(
         request(GetTransactions, {
@@ -77,7 +77,8 @@ export const AddDebitOperationEpic: Epic<any, any, any> = (action$, state$) => {
               ADD_FINANCIAL_OPERATION_SUCCESS({
                 addTransactionSuccess: true,
               }),
-              FETCH_TRANSACTIONS_INFO()
+              FETCH_TRANSACTIONS_INFO(),
+              FETCH_ACCOUNTS()
             ];
           }
         })
@@ -103,7 +104,8 @@ export const AddCreditOperationEpic: Epic<any, any, any> = (
               ADD_FINANCIAL_OPERATION_SUCCESS({
                 addTransactionSuccess: true,
               }),
-              FETCH_TRANSACTIONS_INFO()
+              FETCH_TRANSACTIONS_INFO(),
+              FETCH_ACCOUNTS()
             ];
           }
         })
@@ -129,7 +131,8 @@ export const AddTransferOperationEpic: Epic<any, any, any> = (
               ADD_FINANCIAL_OPERATION_SUCCESS({
                 addTransactionSuccess: true,
               }),
-              FETCH_TRANSACTIONS_INFO()
+              FETCH_TRANSACTIONS_INFO(),
+              FETCH_ACCOUNTS()
             ];
           }
         })
@@ -146,7 +149,7 @@ export const CancelFinancialOperationEpic: Epic<any, any, any> = (
     ofType(CANCEL_FINANCIAL_OPERATION),
     mergeMap((action) =>
       from(
-        request(CancelOperation, { cancelOperationInput: action.payload })
+        request(CancelOperation, { cancelFinOperationInput: action.payload })
       ).pipe(
         mergeMap((data: any) => {
           if (data.errors) {
@@ -157,7 +160,8 @@ export const CancelFinancialOperationEpic: Epic<any, any, any> = (
               CANCEL_FINANCIAL_OPERATION_SUCCESS({
                 cancelTransactionSuccess: true,
               }),
-              FETCH_TRANSACTIONS_INFO()
+              FETCH_TRANSACTIONS_INFO(),
+              FETCH_ACCOUNTS()
             ];
           }
         })

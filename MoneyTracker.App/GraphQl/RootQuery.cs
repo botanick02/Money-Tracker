@@ -16,14 +16,15 @@ namespace MoneyTracker.App.GraphQl
         {
             Field<UserQuery>("User")
                      .Resolve(_ => new { });
-            
+
             Field<CategoryQuery>("Category")
                      .Resolve(_ => new { });
 
             Field<FinancialOperationQuery>("FinancialOperation")
                      .Resolve(_ => new { });
 
-            Field<BudgetQuery>("Budget").Resolve(_ => new { });
+            Field<BudgetQuery>("Budget")
+                     .Resolve(_ => new { });
 
             Field<AccountQuery>("Account")
                      .Resolve(_ => new { });

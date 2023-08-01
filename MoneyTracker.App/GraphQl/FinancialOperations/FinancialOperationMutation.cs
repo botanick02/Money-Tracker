@@ -1,6 +1,8 @@
 ﻿using GraphQL;
+using GraphQL.MicrosoftDI;
 using GraphQL.Types;
 using MoneyTracker.App.GraphQl.FinancialOperation.Types.Inputs;
+using MoneyTracker.App.GraphQl.FinancialOperations.Types.Inputs;
 using MoneyTracker.App.Helpers;
 using MoneyTracker.Business.Commands;
 using MoneyTracker.Business.Commands.FinancialOperation;
@@ -34,9 +36,9 @@ namespace MoneyTracker.App.GraphQl.FinancialOperation
 
                     var command = new AddDebitOperationCommand
                     (
-                        UserId: Guid.Parse(context.User.FindFirst(ClaimTypes.NameIdentifier)!.Value), 
-                        Title: transaction.Title!, Note: transaction.Note, Amount: transaction.Amount!, 
-                        CategoryId: Guid.Parse(transaction.CategoryId), 
+                        UserId: Guid.Parse(context.User.FindFirst(ClaimTypes.NameIdentifier)!.Value),
+                        Title: transaction.Title!, Note: transaction.Note, Amount: transaction.Amount!,
+                        CategoryId: Guid.Parse(transaction.CategoryId),
                         ToAccountId: Guid.Parse(transaction.ToAccountId)
                      );
 
@@ -138,6 +140,40 @@ namespace MoneyTracker.App.GraphQl.FinancialOperation
 
                     return true;
                 });
+
+            Field<bool>("UpdateFinancialOperation")
+                    .Argument<UpdateFinancialOperationInputType>("UpdatedFinancialOperaion")
+                    .Resolve(context =>
+                    {
+                        var input = context.GetArgument<UpdateFinancialOperationInput>("UpdatedFinancialOperaion");
+
+                        bool isValid = ModelValidationHelper.ValidateModel(input, out List<ValidationResult> results);
+
+                        if (!isValid)
+                        {
+                            foreach (var result in results)
+                            {
+                                var exception = new ExecutionError($"{result.MemberNames.First()}: {result.ErrorMessage!}");
+                                exception.Code = "VALIDATION_ERROR";
+                                context.Errors.Add(exception);
+                            }
+                            return false;
+                        }
+
+                        var command = new UpdateFinancialOperationCommand(
+                            UserId: Guid.Parse(context.User.FindFirst(ClaimTypes.NameIdentifier)!.Value),
+                            OperationId: Guid.Parse(input.OperationId),
+                            Title: input.Title!, 
+                            Note: input.Note, 
+                            Amount: input.Amount,
+                            CategoryId: Guid.Parse(input.CategoryId),
+                            CreatedAt: input.CreatedAt);
+
+                        commandDispatcher.Dispatch(command);
+
+                        return true;
+                    });
+
         }
     }
 }

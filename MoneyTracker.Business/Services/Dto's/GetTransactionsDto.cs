@@ -2,9 +2,9 @@
 
 namespace MoneyTracker.Business.Services.Dto_s
 {
-    public class GetTransactionsDto
+    public class GetTransactionsDataDto
     {
-        public List<Transaction> Transactions { get; set; } = new List<Transaction>();
+        public List<TransactionDto> Transactions { get; set; } = new List<TransactionDto>();
 
         public decimal Incomes { get; set; }
 
