@@ -8,6 +8,7 @@ import {
   FETCH_STATS_ERROR,
 } from "./Stats.slice";
 import { GetStats } from "../../api/queries/Stats";
+
 const getRandomColor = () => {
   const letters = "0123456789ABCDEF";
   let color = "#";
@@ -16,6 +17,7 @@ const getRandomColor = () => {
   }
   return color;
 };
+
 export const GetStatsEpics: Epic<any, any, any> = (action$, state$) => {
   return action$.pipe(
     ofType(FETCH_STATS),
@@ -25,14 +27,19 @@ export const GetStatsEpics: Epic<any, any, any> = (action$, state$) => {
           if (data.errors) {
             return [FETCH_STATS_ERROR(data.errors[0].message)];
           } else {
-            const stats = data.data.statistics.getStatistics as Stats[];
-            const statsWithColor = stats.map((stat) => ({
+            const { negativeTransactions, positiveTransactions } = data.data.statistics;
+            const negativeStatsWithColor = negativeTransactions.map((stat: Stats) => ({
               ...stat,
               color: getRandomColor(),
             }));
+            const positiveStatsWithColor = positiveTransactions.map((stat: Stats) => ({
+              ...stat,
+              color: getRandomColor(),
+            }));
+
             return [
               FETCH_STATS_SUCCESS({
-                stats: statsWithColor,
+                stats: [...negativeStatsWithColor, ...positiveStatsWithColor],
               }),
             ];
           }
@@ -42,7 +49,4 @@ export const GetStatsEpics: Epic<any, any, any> = (action$, state$) => {
   );
 };
 
-
-export const StatsEpics = combineEpics(
-  GetStatsEpics
-)
+export const StatsEpics = combineEpics(GetStatsEpics);

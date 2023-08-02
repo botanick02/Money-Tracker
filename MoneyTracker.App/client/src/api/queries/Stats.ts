@@ -1,12 +1,18 @@
 export const GetStats = `
 query getStatistics{
   statistics {
-    getStatistics(input: {}) {
+    negativeTransactions(input: {}) {
+      categoryName
+      sum
+      percentage
+    }
+  positiveTransactions(input: {}) {
       categoryName
       sum
       percentage
     }
   }
 }
+
 
 `
