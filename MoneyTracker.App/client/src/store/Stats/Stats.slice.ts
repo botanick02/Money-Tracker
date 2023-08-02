@@ -15,7 +15,7 @@ const initialState: FetchStatsState = {
   editSuccess: false,
 };
 
-export const CategorySlice = createSlice({
+export const StatsSlice = createSlice({
   name: "Stats",
   initialState: initialState,
   reducers: {
@@ -43,6 +43,6 @@ export const {
   FETCH_STATS_SUCCESS,
   FETCH_STATS_ERROR,
 
-} = CategorySlice.actions;
+} = StatsSlice.actions;
 
-export default CategorySlice.reducer;
+export default StatsSlice.reducer;

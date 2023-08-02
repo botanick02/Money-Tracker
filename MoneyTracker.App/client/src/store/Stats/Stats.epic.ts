@@ -9,7 +9,7 @@ import {
 } from "./Stats.slice";
 import { GetStats } from "../../api/queries/Stats";
 
-export const GetCategoriesEpic: Epic<any, any, any> = (action$, state$) => {
+export const GetStatsEpics: Epic<any, any, any> = (action$, state$) => {
   return action$.pipe(
     ofType(FETCH_STATS),
     mergeMap(() =>
@@ -19,7 +19,7 @@ export const GetCategoriesEpic: Epic<any, any, any> = (action$, state$) => {
                 // store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message));
                 return [FETCH_STATS_ERROR(data.errors[0].message)];
               } else {
-                const stats = data.data.category.getCategories as Stats[];
+                const stats = data.data.statistics.getStatistics as Stats[];
                 console.log(stats)
                 return [
                   FETCH_STATS_SUCCESS({
@@ -36,6 +36,6 @@ export const GetCategoriesEpic: Epic<any, any, any> = (action$, state$) => {
 
 
 
-export const CategoriesEpics = combineEpics(
-  GetCategoriesEpic
+export const StatsEpics = combineEpics(
+  GetStatsEpics
 )
