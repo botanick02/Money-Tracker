@@ -25,17 +25,14 @@ namespace MoneyTracker.Business.Services
             var transactions = transactionRepository.GetUserTransactions(userId);
             var categories = categoryRepository.GetCategories(toDate ?? DateTime.Now);
 
-          
             var accounts = accountRepository.GetUserAccounts(userId, AccountType.Personal);
 
-         
             var personalTransactions = transactions.Where(t => accounts.Any(a => a.Id == t.AccountId));
 
-        
             var negativeTransactions = personalTransactions.Where(t => t.Amount < 0);
             var positiveTransactions = personalTransactions.Where(t => t.Amount >= 0);
 
-            decimal totalNegativeSum = negativeTransactions.Sum(t => t.Amount * -1); 
+            decimal totalNegativeSum = negativeTransactions.Sum(t => t.Amount * -1);
             decimal totalPositiveSum = positiveTransactions.Sum(t => t.Amount);
 
             var categorySums = personalTransactions
@@ -91,14 +88,13 @@ namespace MoneyTracker.Business.Services
                 }
             }
 
+            // Sort positiveStatistics by Sum (descending order)
             positiveStatistics = positiveStatistics.OrderByDescending(s => s.Sum).ToList();
-            negativeStatistics = negativeStatistics.OrderByDescending(s => s.Sum).ToList();
+
+            // Sort negativeStatistics by Sum (ascending order)
+            negativeStatistics = negativeStatistics.OrderBy(s => s.Sum).ToList();
 
             return (positiveStatistics, negativeStatistics);
         }
-
-
-
-
     }
 }
