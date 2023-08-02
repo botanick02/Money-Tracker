@@ -1,8 +1,9 @@
-﻿namespace MoneyTracker.Business.Commands.Category
+﻿
+namespace MoneyTracker.Business.Commands.Category
 {
-    public record CreateCategoryCommand(string Name, string Type);
+    public record CreateCategoryCommand(Entities.Category category);
 
     public record UpdateCategoryNameCommand(Guid Id, string Name);
 
-    public record DeactivateCategoryCommand(Guid Id);
+    public record DeleteCategoryCommand(string Id);
 }

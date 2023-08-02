@@ -22,17 +22,19 @@ namespace MoneyTracker.Business.Events.Categories
     {
         public ReadModel Apply(ReadModel currentmodel, CategoryCreatedEvent @event)
         {
-            var newCategory = new Entities.Category()
-            {
-                Id = @event.Id,
-                Name = @event.Name,
-                Type = @event.Type,
-            };
-
             var updatedModel = currentmodel;
-            updatedModel.Categories = updatedModel.Categories.Append(newCategory);
-            updatedModel.Budgets = updatedModel.Budgets.Append(new Entities.Budget(@event.Id));
+            updatedModel.Categories = updatedModel.Categories.Append(@event.category);
 
+            return updatedModel;
+        }
+    }
+
+    public class CategoryDeleteEventApplier : IEventApplier<CategoryDeleteEvent>
+    {
+        public ReadModel Apply(ReadModel currentmodel, CategoryDeleteEvent @event)
+        {
+            var updatedModel = currentmodel;
+            updatedModel.Categories = updatedModel.Categories.Where(item => item.Id != Guid.Parse(@event.id));
             return updatedModel;
         }
     }

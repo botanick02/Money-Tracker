@@ -1,7 +1,9 @@
-export interface Category {
-  id: string;
+export interface CategoryToCreate {
   name: string;
-  // iconUrl: string;
+  iconUrl: string;
   type: "income" | "expense";
-  // color: string;
+  color: string;
+
+}export interface Category extends CategoryToCreate{
+  id: string;
 }
