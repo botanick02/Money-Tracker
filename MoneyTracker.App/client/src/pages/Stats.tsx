@@ -6,6 +6,8 @@ import { CHANGE_STATS_FILTER, FETCH_STATS } from "../store/Stats/Stats.slice";
 const Stats = () => {
 
   const [activeFilter, setActiveFilter] = useState(useAppSelector((state) => state.Stats.filter)); 
+  const incomes = useAppSelector((state) => state.FinancialOperation.incomes);
+  const expenses = useAppSelector((state) => state.FinancialOperation.expenses);
   const dispatch = useAppDispatch();
   const handleFilterChange = (filter: "income" | "expense") => {
     setActiveFilter(filter);
@@ -25,6 +27,7 @@ const Stats = () => {
           style={{ opacity: activeFilter === "income" ? 1 : 0.5 }}
         >
           Income
+          <br />+ {incomes} ₴
         </div>
         <div
           onClick={() => handleFilterChange("expense")}
@@ -32,6 +35,7 @@ const Stats = () => {
           style={{ opacity: activeFilter === "expense" ? 1 : 0.5 }}
         >
           Expense
+          <br />- {-expenses} ₴
         </div>
       </div>
       <СhartByCategory />
