@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
-import TimeScopePanel from "../components/TimeScopePanel/TimeScopePanel";
 import СhartByCategory from "../components/СhartByCategory/СhartByCategory";
 import { useAppDispatch, useAppSelector } from "../hooks/useAppDispatch";
 import { FETCH_STATS } from "../store/Stats/Stats.slice";
 
 const Stats = () => {
-    const stats = useAppSelector((state) => state.Stats.stats)
-    console.log(stats)
+
   const [activeFilter, setActiveFilter] = useState("expense"); 
   const dispatch = useAppDispatch();
   const handleFilterChange = (filter: "income" | "expense") => {

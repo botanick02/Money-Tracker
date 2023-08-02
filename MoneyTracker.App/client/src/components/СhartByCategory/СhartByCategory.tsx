@@ -1,34 +1,35 @@
 import React from 'react';
 import { RadialChart } from 'react-vis';
-
-const data = [
-  {
-    categoryName: 'Авто',
-    sum: 122,
-    percentage: 91.04,
-    color: '#FF5722', // Color for "Авто"
-  },
-  {
-    categoryName: 'My',
-    sum: 12,
-    percentage: 8.96,
-    color: '#002000', // Color for "My"
-  },
-];
+import { useAppSelector } from '../../hooks/useAppDispatch';
+import SetsItem from '../../elements/StatsItem';
 
 const PieChart = () => {
+  const stats = useAppSelector((state) => state.Stats.stats);
+
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '300px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '400px' }}>
       <RadialChart
-        data={data.map((item) => ({
+        data={stats.map((item) => ({
           angle: item.percentage,
           label: `${item.categoryName} (${item.percentage.toFixed(2)}%)`,
-          color: item.color, 
+          color: item.color,
         }))}
         width={300}
         height={300}
-        
+        colorType="literal" 
       />
+
+      <div className="category-list">
+        {stats.map((item) => (
+          <SetsItem
+            key={item.categoryName}
+            name={item.categoryName}
+            sum={item.sum}
+            percentage={item.percentage}
+            color={item.color}
+          />
+        ))}
+      </div>
     </div>
   );
 };
