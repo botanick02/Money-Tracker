@@ -8,6 +8,9 @@
 
     public record AddTransferOperationCommand(Guid UserId, string Title, string? Note,
         decimal Amount, Guid CategoryId, Guid FromAccountId, Guid ToAccountId);
+    
+    public record UpdateFinancialOperationCommand(Guid UserId, Guid OperationId, string Title, string? Note,
+        decimal Amount, Guid CategoryId, DateTime CreatedAt);
 
     public record CancelFinancialOperationCommand(Guid TransactionId);
 }

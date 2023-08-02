@@ -7,12 +7,10 @@ namespace MoneyTracker.App.GraphQl.Category.Types
         public CategoryType()
         {
             Field(c => c.Id);
-
             Field(c => c.Name);
-
             Field(c => c.Type);
-
-            Field(c => c.IsActive);
+            Field(c => c.IconUrl);
+            Field(c => c.Color);
         }
     }
 }

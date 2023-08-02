@@ -20,7 +20,9 @@ namespace MoneyTracker.Business.Commands
             services.AddTransient<ICommandHandler<EditBudgetCommand>, EditBudgetCommandHandler>();
 
             services.AddTransient<ICommandHandler<CreateCategoryCommand>, CreateCategoryCommandHandler>();
+            services.AddTransient<ICommandHandler<DeleteCategoryCommand>, DeleteCategoryCommandHandler>();
             services.AddTransient<ICommandHandler<UpdateCategoryNameCommand>, UpdateCategoryNameCommandHandler>();
+
             services.AddTransient<ICommandHandler<RegisterUserCommand>, RegisterUserCommandHandler>();
             services.AddTransient<ICommandHandler<RegisterGoogleUserCommand>, RegisterGoogleUserCommandHandler>();
             services.AddTransient<ICommandHandler<SetUserRefreshTokenCommand>, SetUserRefreshTokenCommandHandler>();
@@ -28,6 +30,7 @@ namespace MoneyTracker.Business.Commands
             services.AddTransient<ICommandHandler<AddCreditOperationCommand>, AddCreditOperationCommandHandler>();
             services.AddTransient<ICommandHandler<AddTransferOperationCommand>, AddTransferOperationCommandHandler>();
             services.AddTransient<ICommandHandler<CancelFinancialOperationCommand>, CancelFinancialOperationCommandHandler>();
+            services.AddTransient<ICommandHandler<UpdateFinancialOperationCommand>, UpdateFinancialOperationCommandHandler>();
             services.AddTransient<ICommandHandler<CreatePersonalAccountCommand>, CreatePersonalAccountCommandHandler>();
         }
     }

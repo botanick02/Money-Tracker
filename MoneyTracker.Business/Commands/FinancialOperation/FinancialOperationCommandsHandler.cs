@@ -1,4 +1,5 @@
-﻿using MoneyTracker.Business.Events.FinancialOperation;
+﻿using MoneyTracker.Business.Events;
+using MoneyTracker.Business.Events.FinancialOperation;
 using MoneyTracker.Business.Interfaces;
 
 namespace MoneyTracker.Business.Commands.FinancialOperation
@@ -159,7 +160,7 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
 
         public bool Handle(CancelFinancialOperationCommand command)
         {
-            var transactions = transactionRepository.GetTransactionsByTransactionId(command.TransactionId);
+            var transactions = transactionRepository.GetTransactionsByOperationId(command.TransactionId);
             if (transactions.Count < 2)
             {
                 return false;
@@ -171,6 +172,58 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
             );
 
             eventStore.AppendEvent(cancelEvent);
+
+            return true;
+        }
+    }
+
+    public class UpdateFinancialOperationCommandHandler : ICommandHandler<UpdateFinancialOperationCommand>
+    {
+        private readonly IEventStore eventStore;
+        private readonly ITransactionRepository transactionRepository;
+
+
+        public UpdateFinancialOperationCommandHandler(IEventStore eventStore, ITransactionRepository transactionRepository)
+        {
+            this.eventStore = eventStore;
+            this.transactionRepository = transactionRepository;
+        }
+
+        public bool Handle(UpdateFinancialOperationCommand command)
+        {
+            var existingTransaction = transactionRepository.GetTransactionsByOperationId(command.OperationId)[0];
+
+            var eventsToAppend = new List<Event>();
+
+            if (Math.Abs(command.Amount) != Math.Abs(existingTransaction.Amount))
+            {
+                eventsToAppend.Add(new FinancialOperationAmountUpdatedEvent(command.OperationId, command.Amount));
+            }
+
+            if (command.Title != existingTransaction.Title)
+            {
+                eventsToAppend.Add(new FinancialOperationTitleUpdatedEvent(command.OperationId, command.Title));
+            }
+
+            if (command.CategoryId != existingTransaction.CategoryId)
+            {
+                eventsToAppend.Add(new FinancialOperationCategoryIdUpdatedEvent(command.OperationId, command.CategoryId));
+            }
+
+            if (command.Note != existingTransaction.Note)
+            {
+                eventsToAppend.Add(new FinancialOperationNoteUpdatedEvent(command.OperationId, command.Note));
+            }
+
+            if (command.CreatedAt != existingTransaction.CreatedAt)
+            {
+                eventsToAppend.Add(new FinancialOperationCreatedAtUpdatedEvent(command.OperationId, command.CreatedAt));
+            }
+
+            foreach (var @event in eventsToAppend)
+            {
+                eventStore.AppendEvent(@event);
+            }
 
             return true;
         }

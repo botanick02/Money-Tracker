@@ -26,6 +26,15 @@ interface FetchTransactionsInfoResponse {
   expenses: number;
 }
 
+interface UpdateFinancialOperation {
+  operationId: string;
+  title: string;
+  amount: number;
+  note: string | null;
+  createdAt: string;
+  categoryId: string;
+}
+
 export interface FetchTransactionsInfoVariables {
   accountId: string | null;
   fromDate: string | null;
@@ -58,9 +67,7 @@ export const FinancialOperationSlice = createSlice({
   name: "FinancialOperations",
   initialState: initialState,
   reducers: {
-    FETCH_TRANSACTIONS_INFO(
-      state,
-    ) {
+    FETCH_TRANSACTIONS_INFO(state) {
       state.loading = true;
       state.error = null;
       state.transactions = [];
@@ -92,6 +99,21 @@ export const FinancialOperationSlice = createSlice({
     ADD_TRANSFER_OPERATION(state, action: PayloadAction<TransferOperation>) {
       state.loading = true;
       state.error = null;
+    },
+    UPDATE_FINANCIAL_OPERATION(
+      state,
+      action: PayloadAction<UpdateFinancialOperation>
+    ) {
+      state.loading = true;
+      state.error = null;
+    },
+    UPDATE_FINANCIAL_OPERATION_SUCCESS(state) {
+      state.loading = false;
+      state.error = null;
+    },
+    UPDATE_FINANCIAL_OPERATION_ERROR(state, action: PayloadAction<string>) {
+      state.loading = false;
+      state.error = action.payload;
     },
     ADD_FINANCIAL_OPERATION_SUCCESS(
       state,
@@ -143,6 +165,9 @@ export const {
   CANCEL_FINANCIAL_OPERATION,
   CANCEL_FINANCIAL_OPERATION_ERROR,
   CANCEL_FINANCIAL_OPERATION_SUCCESS,
+  UPDATE_FINANCIAL_OPERATION_ERROR,
+  UPDATE_FINANCIAL_OPERATION,
+  UPDATE_FINANCIAL_OPERATION_SUCCESS,
   SET_DATE_RANGE,
 } = FinancialOperationSlice.actions;
 

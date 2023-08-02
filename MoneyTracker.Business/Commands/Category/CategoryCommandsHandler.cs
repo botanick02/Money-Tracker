@@ -17,20 +17,8 @@ namespace MoneyTracker.Business.Commands.Category
         public bool Handle(CreateCategoryCommand command)
         {
 
-            var categoryId = Guid.NewGuid();
-
-            var categoryCreatedEvent = new CategoryCreatedEvent
-            (
-                Id: categoryId,
-                Name: command.Name,
-                Type: command.Type
-            );
-
+            var categoryCreatedEvent = new CategoryCreatedEvent(command.category);
             eventStore.AppendEvent(categoryCreatedEvent);
-
-            var budgetCreateEvent = new BudgetCreateEvent(new Entities.Budget(categoryId));
-            eventStore.AppendEvent(budgetCreateEvent);
-
             return true;
         }
     }
@@ -67,6 +55,25 @@ namespace MoneyTracker.Business.Commands.Category
         }
 
     }
+
+    public class DeleteCategoryCommandHandler : ICommandHandler<DeleteCategoryCommand>
+    {
+        private readonly IEventStore eventStore;
+
+        public DeleteCategoryCommandHandler(IEventStore eventStore)
+        {
+            this.eventStore = eventStore;
+        }
+
+        public bool Handle(DeleteCategoryCommand command)
+        {
+
+            var categoryDeleteEvent = new CategoryDeleteEvent(command.Id);
+            eventStore.AppendEvent(categoryDeleteEvent);
+            return true;
+        }
+    }
+
 
     [Serializable]
     public class CategoryNotFoundException : Exception
