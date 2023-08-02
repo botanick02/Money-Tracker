@@ -17,9 +17,10 @@ const PieChart = () => {
         width={300}
         height={300}
         colorType="literal" 
+        style={{ width: '100%' }} 
       />
 
-      <div className="category-list">
+      <div className="category-list" > 
         {stats.map((item) => (
           <SetsItem
             key={item.categoryName}
