@@ -14,8 +14,8 @@ const PieChart = () => {
           label: `${item.categoryName} (${item.percentage.toFixed(2)}%)`,
           color: item.color,
         }))}
-        width={300}
-        height={300}
+        width={220}
+        height={220}
         colorType="literal" 
         style={{ width: '100%' }} 
       />

@@ -4,14 +4,17 @@
 .category-list {
   display: flex;
   flex-direction: column;
-  align-items: center; /* Align the items at the center horizontally */
-  width: 100%; /* Make the category-list span the full width of the container */
-  margin-top: 20px; /* Add margin at the top for separation from the chart */
+  align-items: center; 
+  width: 100%; 
+  margin-top: 20px; 
+  margin-top: 20px; 
+  max-height: 300px; 
+  overflow-y: auto;
 }
 
 .category-list__date {
   text-align: center;
-  margin-top: 26px; /* Adjust the margin-top as needed */
+  margin-top: 26px; 
 }
 
 .category {
@@ -51,13 +54,12 @@
 }
 
 .chart-container {
-  max-width: 250px; // Adjust the maximum width as needed
-  margin: 0 auto; // Center the chart horizontally
-  padding: 20px; // Add padding around the chart
+  max-width: 250px; 
+  margin: 0 auto; 
+  padding: 20px; 
 
   .chart-wrapper {
-    height: 250px; // Adjust the height as needed
-    width: 100%; // Make the chart take the full width
+    height: 250px; 
     display: flex;
     align-items: center;
     justify-content: center;
