@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Category } from "../../types/Category";
+import {createAction, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {Category, CategoryToCreate} from "../../types/Category";
 
 export interface CreateCategoryState {
   loading: boolean;
@@ -66,5 +66,8 @@ export const {
   EDIT_CATEGORY_ERROR,
   EDIT_CATEGORY_SUCCESS,
 } = CategorySlice.actions;
+
+export const createCategory = createAction<CategoryToCreate>("createCategory")
+export const deleteCategory = createAction<string>("deleteCategory")
 
 export default CategorySlice.reducer;

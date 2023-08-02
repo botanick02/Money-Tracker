@@ -2,11 +2,11 @@
 
 namespace MoneyTracker.App.GraphQl.Category.Types
 {
-    public class CategoryType : ObjectGraphType<Business.Entities.Category>
+    public class CategoryInputType : InputObjectGraphType<Business.Entities.Category>
     {
-        public CategoryType()
+        public CategoryInputType()
         {
-            Field(c => c.Id);
+            Field(c => c.Id, nullable: true);
             Field(c => c.Name);
             Field(c => c.Type);
             Field(c => c.IconUrl);
