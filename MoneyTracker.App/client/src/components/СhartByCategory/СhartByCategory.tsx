@@ -4,12 +4,16 @@ import { useAppSelector } from '../../hooks/useAppDispatch';
 import SetsItem from '../../elements/StatsItem';
 
 const PieChart = () => {
-  const stats = useAppSelector((state) => state.Stats.stats);
+    const filetr =useAppSelector((state) => state.Stats.filter)
 
+   const filteredStats = useAppSelector((state) =>
+  state.Stats.filter === "income" ? state.Stats.positiveStats : state.Stats.negativeStats
+);
+console.log(filteredStats)
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '400px' }}>
       <RadialChart
-        data={stats.map((item) => ({
+        data={filteredStats.map((item) => ({
           angle: item.percentage,
           label: `${item.categoryName} (${item.percentage.toFixed(2)}%)`,
           color: item.color,
@@ -21,7 +25,7 @@ const PieChart = () => {
       />
 
       <div className="category-list" > 
-        {stats.map((item) => (
+        {filteredStats.map((item) => (
           <SetsItem
             key={item.categoryName}
             name={item.categoryName}

@@ -3,23 +3,35 @@ using GraphQL.Types;
 using MoneyTracker.App.GraphQl.FinancialOperations.Types;
 using MoneyTracker.App.GraphQl.FinancialOperations.Types.Inputs;
 using MoneyTracker.Business.Services;
+using MoneyTracker.Business.Services.Dto_s;
 using System.Security.Claims;
 
 namespace MoneyTracker.App.GraphQl.S
 {
+
+
     public class StatisticsQuery : ObjectGraphType
     {
         public StatisticsQuery(StatisticService statisticService)
         {
-            Field<ListGraphType<GetStatisticsDtoType>>("GetStatistics")
-                .Argument<GetStatisticsForAccountsInputType>("Input")
-                .Resolve(context =>
+            Field<ListGraphType<GetStatisticsDtoType>>("positiveTransactions",
+                arguments: new QueryArguments(new QueryArgument<GetStatisticsForAccountsInputType> { Name = "Input" }),
+                resolve: context =>
                 {
                     var input = context.GetArgument<GetStatisticsForAccountsInput>("Input");
                     var userId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+                    var statistics = statisticService.GetStatistics(userId);
+                    return statistics.positiveTransactions;
+                }).Authorize();
 
-              
-                    return statisticService.GetStatistics(userId);
+            Field<ListGraphType<GetStatisticsDtoType>>("negativeTransactions",
+                arguments: new QueryArguments(new QueryArgument<GetStatisticsForAccountsInputType> { Name = "Input" }),
+                resolve: context =>
+                {
+                    var input = context.GetArgument<GetStatisticsForAccountsInput>("Input");
+                    var userId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+                    var statistics = statisticService.GetStatistics(userId);
+                    return statistics.negativeTransactions;
                 }).Authorize();
         }
     }

@@ -2,18 +2,26 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Stats } from "../../types/Stats";
 
 export interface FetchStatsState {
+  filter: "income" | "expense";
   loading: boolean;
   error: null | string;
-  stats: Stats[];
+  positiveStats: Stats[];
+  negativeStats: Stats[];
   editSuccess: boolean;
 }
 
 const initialState: FetchStatsState = {
   error: null,
   loading: false,
-  stats: [],
+  positiveStats: [],
+  negativeStats: [],
   editSuccess: false,
+  filter: "expense",
 };
+
+
+
+
 
 export const StatsSlice = createSlice({
   name: "Stats",
@@ -29,19 +37,31 @@ export const StatsSlice = createSlice({
     ) {
       state.loading = false;
       state.error = null;
-      state.stats = action.payload.stats;
+
+      const { stats } = action.payload;
+      state.positiveStats = stats.filter((stat) => stat.sum >= 0);
+      state.negativeStats = stats.filter((stat) => stat.sum < 0);
     },
     FETCH_STATS_ERROR(state, action: PayloadAction<string>) {
       state.loading = false;
       state.error = action.payload;
-    }
+    },
+    CHANGE_STATS_FILTER(state, action: PayloadAction<"income" | "expense">) {
+      state.filter = action.payload;
+    
+    },
+    
+  
+    
   },
 });
+
 
 export const {
   FETCH_STATS,
   FETCH_STATS_SUCCESS,
   FETCH_STATS_ERROR,
+  CHANGE_STATS_FILTER
 
 } = StatsSlice.actions;
 

@@ -18,58 +18,85 @@ namespace MoneyTracker.Business.Services
             this.transactionRepository = transactionRepository;
             this.categoryRepository = categoryRepository;
             this.accountRepository = accountRepository;
-
         }
 
-        public List<GetStatiscicsDto> GetStatistics(Guid userId, DateTime? fromDate = null, DateTime? toDate = null, Guid? accountId = null)
+        public (List<GetStatiscicsDto> positiveTransactions, List<GetStatiscicsDto> negativeTransactions) GetStatistics(Guid userId, DateTime? fromDate = null, DateTime? toDate = null, Guid? accountId = null)
         {
             var transactions = transactionRepository.GetUserTransactions(userId);
             var categories = categoryRepository.GetCategories(toDate ?? DateTime.Now);
 
-           
-            var negativeTransactions = transactions.Where(t => t.Amount < 0);
+          
+            var accounts = accountRepository.GetUserAccounts(userId, AccountType.Personal);
 
-            decimal totalSum = transactions.Sum(t => t.Amount);
-            decimal negativeSum = -negativeTransactions.Sum(t => t.Amount);
+         
+            var personalTransactions = transactions.Where(t => accounts.Any(a => a.Id == t.AccountId));
 
-            var categorySums = negativeTransactions
+        
+            var negativeTransactions = personalTransactions.Where(t => t.Amount < 0);
+            var positiveTransactions = personalTransactions.Where(t => t.Amount >= 0);
+
+            decimal totalNegativeSum = negativeTransactions.Sum(t => t.Amount * -1); 
+            decimal totalPositiveSum = positiveTransactions.Sum(t => t.Amount);
+
+            var categorySums = personalTransactions
                 .GroupBy(t => t.CategoryId)
                 .Select(group => new
                 {
                     CategoryId = group.Key,
-                    Sum = -group.Sum(t => t.Amount) 
+                    Sum = group.Sum(t => t.Amount)
                 })
                 .ToList();
 
-            var statistics = new List<GetStatiscicsDto>();
+            var negativeSum = categorySums.Where(c => c.Sum < 0).Sum(c => c.Sum);
+            var positiveSum = categorySums.Where(c => c.Sum >= 0).Sum(c => c.Sum);
+
+            var negativeStatistics = new List<GetStatiscicsDto>();
+            var positiveStatistics = new List<GetStatiscicsDto>();
 
             foreach (var category in categories)
             {
                 decimal categorySum = categorySums.FirstOrDefault(c => c.CategoryId == category.Id)?.Sum ?? 0.0m;
 
-               
                 if (categorySum == 0)
                 {
                     continue;
                 }
 
-                decimal percentage = negativeSum != 0 ? (categorySum / negativeSum) * 100 : 0;
+                decimal percentage;
+                if (categorySum < 0)
+                {
+                    percentage = negativeSum != 0 ? (categorySum / negativeSum) * 100 : 0;
+                }
+                else
+                {
+                    percentage = positiveSum != 0 ? (categorySum / positiveSum) * 100 : 0;
+                }
 
-               
                 percentage = Math.Round(percentage, 2);
 
-                statistics.Add(new GetStatiscicsDto
+                var statisticsDto = new GetStatiscicsDto
                 {
                     CategoryName = category.Name,
                     Sum = categorySum,
                     Percentage = percentage
-                });
+                };
+
+                if (categorySum > 0)
+                {
+                    positiveStatistics.Add(statisticsDto);
+                }
+                else
+                {
+                    negativeStatistics.Add(statisticsDto);
+                }
             }
 
-            statistics = statistics.OrderByDescending(s => s.Sum).ToList();
+            positiveStatistics = positiveStatistics.OrderByDescending(s => s.Sum).ToList();
+            negativeStatistics = negativeStatistics.OrderByDescending(s => s.Sum).ToList();
 
-            return statistics;
+            return (positiveStatistics, negativeStatistics);
         }
+
 
 
 
