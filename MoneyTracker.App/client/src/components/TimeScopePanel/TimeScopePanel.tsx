@@ -15,9 +15,9 @@ interface TimeScopePanel {
 }
 
 export enum TimeScopes {
-  Monthly,
   Daily,
   Weekly,
+  Monthly,
   Yearly,
   All,
   Custom,
@@ -35,8 +35,6 @@ export interface TimeScopeInputsType {
 }
 
 const TimeScopePanel = ({ onRangeChange }: TimeScopePanel) => {
-  const dispatch = useDispatch();
-
   const [currentTimeScope, setCurrentTimeScope] = useState(TimeScopes.Monthly);
   const [timeScopeInputs, setTimeScopeInputs] = useState<TimeScopeInputsType>({
     daily: getCurrentISODateValue(),
@@ -111,6 +109,7 @@ const TimeScopePanel = ({ onRangeChange }: TimeScopePanel) => {
     onRangeChange(startDate, endDate);
   }, [timeScopeInputs, currentTimeScope]);
 
+
   return (
     <div className={"time-scope-panel"}>
       <div className={"time-scope-panel__date-picker"}>
@@ -121,7 +120,7 @@ const TimeScopePanel = ({ onRangeChange }: TimeScopePanel) => {
         />
       </div>
       <div className="time-scope-panel__scope-picker">
-        <Dropdown selectHandler={updateTimeScope} options={timeScopeOptions} />
+        <Dropdown selectHandler={updateTimeScope} options={timeScopeOptions} defaultOptionIndex={TimeScopes.Monthly}/>
       </div>
     </div>
   );
