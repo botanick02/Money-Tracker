@@ -44,3 +44,10 @@ export const CancelOperation = `mutation cancelOperation($cancelFinOperationInpu
         cancelFinancialOperation(cancelFinOperationInput: $cancelFinOperationInput)
       }
     } `
+
+export const UpdateOperation = `mutation updT($input: UpdateFinancialOperationInputType!){
+  financialOperation{
+  updateFinancialOperation(
+    updatedFinancialOperaion: $input)
+}
+}`

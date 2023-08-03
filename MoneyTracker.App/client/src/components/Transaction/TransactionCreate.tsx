@@ -31,11 +31,6 @@ const TransactionCreate: React.FC<Props> = ({
       });
     });
 
-
-    useEffect(() => {
-      dispatch(FETCH_CATEGORIES());
-    }, [])
-
     const currentAccountId = useAppSelector(
       (state) => state.Account.currentAccountId
     );

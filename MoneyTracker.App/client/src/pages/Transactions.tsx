@@ -7,6 +7,7 @@ import {
 } from "../store/FinancialOperation/FinancialOperation.slice";
 import TransactionCreate from "../components/Transaction/TransactionCreate";
 import TransactionList from "../components/Transaction/TransactionList";
+import { FETCH_CATEGORIES } from "../store/Category/Category.slice";
 
 const Transactions = () => {
   const dispatch = useAppDispatch();
@@ -33,6 +34,10 @@ const Transactions = () => {
   useEffect(() => {
     dispatch(FETCH_TRANSACTIONS_INFO());
   }, [dispatch, currentAccountId, dateRange]);
+
+  useEffect(() => {
+    dispatch(FETCH_CATEGORIES())
+  }, [dispatch]);
 
   const onRangeChange = (startDate: string | null, endDate: string | null) => {
     if ((startDate && endDate) || (!startDate && !endDate)) {

@@ -1,10 +1,23 @@
 import React, { useState } from "react";
 import { Transaction } from "../../types/Transaction";
 import DeletePopup from "../DeletePopup";
-import { useAppDispatch } from "../../hooks/useAppDispatch";
-import { CANCEL_FINANCIAL_OPERATION } from "../../store/FinancialOperation/FinancialOperation.slice";
+import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
+import {
+  CANCEL_FINANCIAL_OPERATION,
+  UPDATE_FINANCIAL_OPERATION,
+} from "../../store/FinancialOperation/FinancialOperation.slice";
 import { ReactComponent as EditIcon } from "../../assets/icons/Edit-icon.svg";
 import InputWrapper from "../../elements/InputWrapper";
+import { useForm } from "react-hook-form";
+import Dropdown, { Option } from "../../elements/Dropdown/Dropdown";
+
+interface formFields {
+  operationId: string;
+  title: string;
+  amount: number;
+  note: string | null;
+  createdAt: string;
+}
 
 interface TransactionInfoProps {
   closePopupHandle(): void;
@@ -18,13 +31,53 @@ const TransactionInfo = ({
   const [isEditMode, setIsEditMode] = useState(false);
   const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
 
+  const categoryItems = useAppSelector((state) => state.Category.categories);
+
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm<formFields>({
+    defaultValues: {
+      title: transaction.title,
+      amount: Math.abs(transaction.amount),
+      createdAt: transaction.createdAt,
+      note: transaction.note,
+    },
+  });
+
   const type = transaction.amount > 0 ? "income" : "expense";
 
   const dispatch = useAppDispatch();
 
+  const categoryOptions: Option[] = categoryItems.map((category) => ({
+    label: category.name,
+    value: category.id,
+  }));
+
+  const handleCategoryChange = (option: Option) => {
+    setCategoryId(option);
+  };
+
+  const [categoryId, setCategoryId] = useState<Option>(categoryOptions[0]);
+
   const confirmDeletion = () => {
     dispatch(
       CANCEL_FINANCIAL_OPERATION({ operationId: transaction.operationId })
+    );
+  };
+
+  const saveOperation = (data: any) => {
+    console.log(data);
+    dispatch(
+      UPDATE_FINANCIAL_OPERATION({
+        operationId: transaction.operationId,
+        amount: +data.amount,
+        title: data.title,
+        categoryId: categoryId.value,
+        note: data.note,
+        createdAt: data.createdAt,
+      })
     );
   };
 
@@ -43,8 +96,43 @@ const TransactionInfo = ({
 
         {isEditMode ? (
           <div className={"popup__fields"}>
-            
-          
+            <div className={"popup__fields__amount"}>
+              {transaction.amount < 0 && "-"}
+              <InputWrapper>
+                <input
+                  type="number"
+                  placeholder="Amount"
+                  {...register("amount", {
+                    required: "Amount is required",
+                  })}
+                />
+                {errors.amount && <span>{errors.amount.message}</span>}
+              </InputWrapper>
+              ₴
+            </div>
+            <InputWrapper>
+              <input type="text" placeholder="Title" {...register("title")} />
+            </InputWrapper>
+            {/* <InputWrapper>
+             <input
+               type="datetime-local"
+               placeholder="Created at"
+               {...register("createdAt")}
+             />
+           </InputWrapper> */}
+            <Dropdown
+              title={"Category"}
+              selectHandler={handleCategoryChange}
+              options={categoryOptions}
+              defaultOptionIndex={
+                categoryOptions.findIndex(
+                  (o) => o.value === transaction.category.id
+                ) + 1
+              }
+            />
+            <InputWrapper>
+              <input type="text" placeholder="Note" {...register("note")} />
+            </InputWrapper>
           </div>
         ) : (
           <div className={"popup__info"}>
@@ -70,21 +158,34 @@ const TransactionInfo = ({
                 Note: {transaction.note}
               </div>
             )}
-                        <EditIcon onClick={() => setIsEditMode(true)} className={"popup__info__edit-icon"}/>
+            <EditIcon
+              onClick={() => setIsEditMode(true)}
+              className={"popup__info__edit-icon"}
+            />
           </div>
         )}
-        <div className={"popup__row"}>
-          
-          <button
-            onClick={() => setIsDeletePopupOpen(true)}
-            className={"button expense"}
-          >
-            Delete
-          </button>
-          <button onClick={closePopupHandle} className={"button"}>
-            Cancel
-          </button>
-        </div>
+        {isEditMode ? (
+          <div className={"popup__row"}>
+            <button onClick={handleSubmit(saveOperation)} className={"button"}>
+              Save
+            </button>
+            <button onClick={() => setIsEditMode(false)} className={"button"}>
+              Cancel
+            </button>
+          </div>
+        ) : (
+          <div className={"popup__row"}>
+            <button
+              onClick={() => setIsDeletePopupOpen(true)}
+              className={"button expense"}
+            >
+              Delete
+            </button>
+            <button onClick={closePopupHandle} className={"button"}>
+              Close
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
