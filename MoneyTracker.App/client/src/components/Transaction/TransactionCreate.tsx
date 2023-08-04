@@ -2,8 +2,22 @@ import React, { useEffect, useState } from "react";
 import InputWrapper from "../../elements/InputWrapper";
 import Dropdown, { Option } from "../../elements/Dropdown/Dropdown";
 import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
-import { ADD_CREDIT_OPERATION, ADD_DEBIT_OPERATION, ADD_TRANSFER_OPERATION } from "../../store/FinancialOperation/FinancialOperation.slice";
+import {
+  ADD_CREDIT_OPERATION,
+  ADD_DEBIT_OPERATION,
+  ADD_TRANSFER_OPERATION,
+} from "../../store/FinancialOperation/FinancialOperation.slice";
 import { FETCH_CATEGORIES } from "../../store/Category/Category.slice";
+import { useForm } from "react-hook-form";
+import { getCurrentISODateTimeValue } from "../../tools/Dates/currentIsoDates";
+
+interface FormFields {
+  title: string;
+  amount: number;
+  note: string | null;
+  createdAt: string;
+}
+
 interface Props {
   openPopupHandle(): void;
   transactionDefaultType: "expense" | "income" | "transfer";
@@ -14,9 +28,16 @@ const TransactionCreate: React.FC<Props> = ({
   transactionDefaultType,
 }) => {
   const [type, setType] = useState(transactionDefaultType);
-  const [amount, setAmount] = useState(0);
-  const [title, setTitle] = useState("");
-  
+
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm<FormFields>({ defaultValues: {
+    createdAt: getCurrentISODateTimeValue()
+  }});
+
+
   const dispatch = useAppDispatch();
   const categoryItems = useAppSelector((state) => state.Category.categories);
   const accounts = useAppSelector((state) => state.Account.accounts);
@@ -31,28 +52,26 @@ const TransactionCreate: React.FC<Props> = ({
       });
     });
 
-    const currentAccountId = useAppSelector(
-      (state) => state.Account.currentAccountId
-    );
-  
-    const [account, setAccount] = useState<Option>(
-      accountOptions.find((option) => option.value === currentAccountId) ||
-        accountOptions[0]
-    );
-
-    const [transferAccounts, setTransferAccounts] = useState<{
-      fromAccount: Option;
-      toAccount: Option;
-    }>({ fromAccount: accountOptions[0], toAccount: accountOptions[0]});
-
-    const categoryOptions: Option[] = categoryItems.map((category) => ({
-      label: category.name,
-      value: category.id,
-    }));
-
-  const [categoryId, setCategoryId] = useState<Option>(
-    categoryOptions[0]
+  const currentAccountId = useAppSelector(
+    (state) => state.Account.currentAccountId
   );
+
+  const [account, setAccount] = useState<Option>(
+    accountOptions.find((option) => option.value === currentAccountId) ||
+      accountOptions[0]
+  );
+
+  const [transferAccounts, setTransferAccounts] = useState<{
+    fromAccount: Option;
+    toAccount: Option;
+  }>({ fromAccount: accountOptions[0], toAccount: accountOptions[0] });
+
+  const categoryOptions: Option[] = categoryItems.map((category) => ({
+    label: category.name,
+    value: category.id,
+  }));
+
+  const [categoryId, setCategoryId] = useState<Option>(categoryOptions[0]);
 
   const handleCategoryChange = (option: Option) => {
     setCategoryId(option);
@@ -62,40 +81,46 @@ const TransactionCreate: React.FC<Props> = ({
     openPopupHandle();
   };
 
-  const handleFinancialOperation = () => {
-    switch(type){
+  const addFinancialOperation = (data: FormFields) => {
+    console.log(data.createdAt)
+    switch (type) {
       case "income": {
         dispatch(
           ADD_DEBIT_OPERATION({
-            amount,
+            amount: +data.amount,
             categoryId: categoryId.value,
-            title,
-            toAccountId: account.value
-          }));
-          break
+            title: data.title,
+            toAccountId: account.value,
+            createdAt: new Date(data.createdAt).toISOString()
+          })
+        );
+        break;
       }
       case "expense": {
         dispatch(
           ADD_CREDIT_OPERATION({
-            amount,
+            amount: +data.amount,
             categoryId: categoryId.value,
-            title,
-            fromAccountId: account.value
-          }));
-          break
+            title: data.title,
+            fromAccountId: account.value,
+            createdAt: new Date(data.createdAt).toISOString()
+          })
+        );
+        break;
       }
-      case "transfer":{
+      case "transfer": {
         dispatch(
           ADD_TRANSFER_OPERATION({
-            amount,
+            amount: +data.amount,
             categoryId: categoryId.value,
-            title,
+            title: data.title,
             fromAccountId: transferAccounts.fromAccount.value,
-            toAccountId: transferAccounts.toAccount.value
-          }));
+            toAccountId: transferAccounts.toAccount.value,
+            createdAt: new Date(data.createdAt).toISOString()
+          })
+        );
       }
     }
-    
     openPopupHandle();
   };
 
@@ -139,12 +164,22 @@ const TransactionCreate: React.FC<Props> = ({
             <div className={"popup__row"}>
               <Dropdown
                 title={"From"}
-                selectHandler={(option) => setTransferAccounts({fromAccount: option, toAccount: transferAccounts.toAccount})}
+                selectHandler={(option) =>
+                  setTransferAccounts({
+                    fromAccount: option,
+                    toAccount: transferAccounts.toAccount,
+                  })
+                }
                 options={accountOptions}
               />
               <Dropdown
                 title={"To"}
-                selectHandler={(option) => setTransferAccounts({fromAccount: transferAccounts.fromAccount, toAccount: option})}
+                selectHandler={(option) =>
+                  setTransferAccounts({
+                    fromAccount: transferAccounts.fromAccount,
+                    toAccount: option,
+                  })
+                }
                 options={accountOptions}
               />
             </div>
@@ -153,7 +188,9 @@ const TransactionCreate: React.FC<Props> = ({
             <input
               type="number"
               placeholder="Amount"
-              onChange={(e) => setAmount(Number(e.target.value))}
+              {...register("amount", {
+                required: "Amount is required",
+              })}
             />
           </InputWrapper>
           {type !== "transfer" ? (
@@ -171,12 +208,31 @@ const TransactionCreate: React.FC<Props> = ({
             <input
               type="text"
               placeholder="Title"
-              onChange={(e) => setTitle(e.target.value)}
+              {...register("title", {
+                required: "Title is required",
+              })}
+            />
+          </InputWrapper>
+          
+          <InputWrapper>
+            <input
+              type="datetime-local"
+              placeholder="Transaction time"
+              {...register("createdAt", {
+                required: "Transaction time is required",
+              })}
+            />
+          </InputWrapper>
+          <InputWrapper>
+            <input
+              type="text"
+              placeholder="Note"
+              {...register("note")}
             />
           </InputWrapper>
         </div>
         <div className={"popup__row"}>
-          <button onClick={handleFinancialOperation} className={"button"}>
+          <button onClick={handleSubmit(addFinancialOperation)} className={"button"}>
             Save
           </button>
           <button onClick={handleCancel} className={"button"}>

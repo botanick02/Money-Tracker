@@ -5,6 +5,7 @@ interface Operation {
   amount: number;
   categoryId: any;
   title: string;
+  createdAt: string | null;
 }
 
 interface DebitOperation extends Operation {

@@ -21,12 +21,14 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
 
             var usersDebitAccount = accountRepository.GetUserAccounts(command.UserId, Entities.AccountType.Debit).FirstOrDefault();
 
+            var currentTime = DateTime.UtcNow;
+
             var debitTransactionEvent = new DebitTransactionAddedEvent
             (
                 OperationId: transactionId,
                 UserId: command.UserId,
                 CategoryId: command.CategoryId,
-                CreatedAt: DateTime.UtcNow,
+                CreatedAt: command.CreatedAt ?? currentTime,
                 AccountId: command.ToAccountId,
                 Title: command.Title,
                 Note: command.Note,
@@ -38,7 +40,7 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
                 OperationId: transactionId,
                 UserId: command.UserId,
                 CategoryId: command.CategoryId,
-                CreatedAt: DateTime.UtcNow,
+                CreatedAt: command.CreatedAt ?? currentTime,
                 AccountId: usersDebitAccount.Id,
                 Title: command.Title,
                 Note: command.Note,
@@ -69,13 +71,15 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
 
             var usersCreditAccount = accountRepository.GetUserAccounts(command.UserId, Entities.AccountType.Credit).FirstOrDefault();
 
+            var currentTime = DateTime.UtcNow;
+
             var debitTransactionEvent = new DebitTransactionAddedEvent
             (
                 OperationId: transactionId,
                 UserId: command.UserId,
                 CategoryId: command.CategoryId,
-                CreatedAt: DateTime.UtcNow,
                 AccountId: usersCreditAccount.Id,
+                CreatedAt: command.CreatedAt ?? currentTime,
                 Title: command.Title,
                 Note: command.Note,
                 Amount: command.Amount
@@ -86,7 +90,7 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
                 OperationId: transactionId,
                 UserId: command.UserId,
                 CategoryId: command.CategoryId,
-                CreatedAt: DateTime.UtcNow,
+                CreatedAt: command.CreatedAt ?? currentTime,
                 AccountId: command.FromAccountId,
                 Title: command.Title,
                 Note: command.Note,
@@ -103,24 +107,24 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
     public class AddTransferOperationCommandHandler : ICommandHandler<AddTransferOperationCommand>
     {
         private readonly IEventStore eventStore;
-        private readonly IAccountRepository accountRepository;
 
-        public AddTransferOperationCommandHandler(IEventStore eventStore, IAccountRepository accountRepository)
+        public AddTransferOperationCommandHandler(IEventStore eventStore)
         {
             this.eventStore = eventStore;
-            this.accountRepository = accountRepository;
         }
 
         public bool Handle(AddTransferOperationCommand command)
         {
             var transactionId = Guid.NewGuid();
 
+            var currentTime = DateTime.UtcNow;
+
             var debitTransactionEvent = new DebitTransactionAddedEvent
             (
                 OperationId: transactionId,
                 UserId: command.UserId,
                 CategoryId: command.CategoryId,
-                CreatedAt: DateTime.UtcNow,
+                CreatedAt: command.CreatedAt ?? currentTime,
                 AccountId: command.ToAccountId,
                 Title: command.Title,
                 Note: command.Note,
@@ -132,7 +136,7 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
                 OperationId: transactionId,
                 UserId: command.UserId,
                 CategoryId: command.CategoryId,
-                CreatedAt: DateTime.UtcNow,
+                CreatedAt: command.CreatedAt ?? currentTime,
                 AccountId: command.FromAccountId,
                 Title: command.Title,
                 Note: command.Note,

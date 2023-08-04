@@ -18,5 +18,7 @@ namespace MoneyTracker.App.GraphQl.FinancialOperation.Types.Inputs
 
         [GuidValidationAttribute(ErrorMessage = "ToAccountId is invalid")]
         public string ToAccountId { get; set; }
+
+        public DateTime? CreatedAt { get; set; }
     }
 }
