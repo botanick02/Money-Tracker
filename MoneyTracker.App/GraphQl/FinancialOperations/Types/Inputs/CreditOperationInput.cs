@@ -5,7 +5,6 @@ namespace MoneyTracker.App.GraphQl.FinancialOperation.Types.Inputs
 {
     public class CreditOperationInput
     {
-        [Required(ErrorMessage = "Title is required")]
         public string? Title { get; set; }
 
         public string? Note { get; set; }

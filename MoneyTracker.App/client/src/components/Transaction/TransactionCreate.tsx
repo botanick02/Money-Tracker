@@ -207,9 +207,7 @@ const TransactionCreate: React.FC<Props> = ({
             <input
               type="text"
               placeholder="Title"
-              {...register("title", {
-                required: "Title is required",
-              })}
+              {...register("title")}
             />
           </InputWrapper>
           

@@ -108,7 +108,7 @@ const TransactionInfo = ({
       )}
       <div className={"popup"} onClick={(event) => event.stopPropagation()}>
         <div className={`popup__header title-single ${type}`}>
-          {isEditMode ? "Edit" : transaction.title}
+          {isEditMode ? "Edit" : transaction.category.name}
         </div>
 
         {isEditMode ? (
@@ -169,7 +169,7 @@ const TransactionInfo = ({
               {transaction.amount} ₴
             </div>
 
-            <div className={"popup__info__item"}>
+            {/* <div className={"popup__info__item"}>
               Category:
               <div className="popup__info__item__category">
                 <img
@@ -178,7 +178,7 @@ const TransactionInfo = ({
                 />
                 {transaction.category.name}
               </div>
-            </div>
+            </div> */}
             <div className={"popup__info__item"}>
               Created: {new Date(transaction.createdAt).toLocaleString()}
             </div>

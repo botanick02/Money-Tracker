@@ -13,7 +13,7 @@ namespace MoneyTracker.App.GraphQl.FinancialOperation.Types
 
             Field(t => t.UserId);
 
-            Field(t => t.Title);
+            Field(t => t.Title, nullable: true);
             
             Field(t => t.Note, nullable: true);
             

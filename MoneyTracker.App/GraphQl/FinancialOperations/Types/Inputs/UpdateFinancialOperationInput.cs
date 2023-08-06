@@ -8,7 +8,6 @@ namespace MoneyTracker.App.GraphQl.FinancialOperations.Types.Inputs
         [GuidValidationAttribute(ErrorMessage = "OperationId is invalid")]
         public string OperationId { get; set; }
 
-        [Required(ErrorMessage = "Title is required")]
         public string? Title { get; set; }
 
         public string? Note { get; set; }
