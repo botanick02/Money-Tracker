@@ -6,7 +6,7 @@ export const getCurrentISOMonthValue = (): string => {
   return `${year}-${month}`;
 };
 
-export function getCurrentISODateValue(): string {
+export const getCurrentISODateValue = (): string => {
   const currentDate = new Date();
   const year = currentDate.getFullYear();
   const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
@@ -17,14 +17,17 @@ export function getCurrentISODateValue(): string {
 
 export function getCurrentISODateTimeValue(): string {
   const currentDate = new Date();
-  const year = currentDate.getFullYear();
-  const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
-  const day = currentDate.getDate().toString().padStart(2, "0");
-  const hours = currentDate.getHours().toString().padStart(2, "0");
-  const minutes = currentDate.getMinutes().toString().padStart(2, "0");
-
-  return `${year}-${month}-${day}T${hours}:${minutes}`;
+  return getISODateTimeValue(currentDate);
 }
+
+export const getISODateTimeValue = (date: Date): string => {
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const day = date.getDate().toString().padStart(2, "0");
+  const hours = date.getHours().toString().padStart(2, "0");
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  return `${year}-${month}-${day}T${hours}:${minutes}`;
+};
 
 export const getCurrentISOWeekValue = (): string => {
   const today = new Date();

@@ -10,6 +10,7 @@ import { ReactComponent as EditIcon } from "../../assets/icons/Edit-icon.svg";
 import InputWrapper from "../../elements/InputWrapper";
 import { useForm } from "react-hook-form";
 import Dropdown, { Option } from "../../elements/Dropdown/Dropdown";
+import { getISODateTimeValue } from "../../tools/Dates/currentIsoDates";
 
 interface formFields {
   operationId: string;
@@ -41,7 +42,7 @@ const TransactionInfo = ({
     defaultValues: {
       title: transaction.title,
       amount: Math.abs(transaction.amount),
-      createdAt: transaction.createdAt,
+      createdAt: getISODateTimeValue(new Date(transaction.createdAt)),
       note: transaction.note,
     },
   });
@@ -68,7 +69,6 @@ const TransactionInfo = ({
   };
 
   const saveOperation = (data: any) => {
-    console.log(data);
     dispatch(
       UPDATE_FINANCIAL_OPERATION({
         operationId: transaction.operationId,
@@ -76,7 +76,7 @@ const TransactionInfo = ({
         title: data.title,
         categoryId: categoryId.value,
         note: data.note,
-        createdAt: data.createdAt,
+        createdAt: new Date(data.createdAt).toISOString(),
       })
     );
   };
@@ -113,13 +113,15 @@ const TransactionInfo = ({
             <InputWrapper>
               <input type="text" placeholder="Title" {...register("title")} />
             </InputWrapper>
-            {/* <InputWrapper>
-             <input
-               type="datetime-local"
-               placeholder="Created at"
-               {...register("createdAt")}
-             />
-           </InputWrapper> */}
+            <InputWrapper>
+            <input
+              type="datetime-local"
+              placeholder="Transaction time"
+              {...register("createdAt", {
+                required: "Transaction time is required",
+              })}
+            />
+          </InputWrapper>
             <Dropdown
               title={"Category"}
               selectHandler={handleCategoryChange}
