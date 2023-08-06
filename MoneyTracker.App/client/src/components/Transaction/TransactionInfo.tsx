@@ -99,14 +99,14 @@ const TransactionInfo = ({
   };
 
   return (
-    <div className={"popup-bg"}>
+    <div className={"popup-bg"} onClick={closePopupHandle}>
       {isDeletePopupOpen && (
         <DeletePopup
           onDeleteApprove={confirmDeletion}
           closePopupHandle={() => setIsDeletePopupOpen(false)}
         />
       )}
-      <div className={"popup"}>
+      <div className={"popup"} onClick={(event) => event.stopPropagation()}>
         <div className={`popup__header title-single ${type}`}>
           {isEditMode ? "Edit" : transaction.title}
         </div>

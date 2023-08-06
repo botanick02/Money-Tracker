@@ -19,12 +19,12 @@ interface FormFields {
 }
 
 interface Props {
-  openPopupHandle(): void;
+  closePopupHandle(): void;
   transactionDefaultType: "expense" | "income" | "transfer";
 }
 
 const TransactionCreate: React.FC<Props> = ({
-  openPopupHandle,
+  closePopupHandle,
   transactionDefaultType,
 }) => {
   const [type, setType] = useState(transactionDefaultType);
@@ -78,11 +78,10 @@ const TransactionCreate: React.FC<Props> = ({
   };
 
   const handleCancel = () => {
-    openPopupHandle();
+    closePopupHandle();
   };
 
   const addFinancialOperation = (data: FormFields) => {
-    console.log(data.createdAt)
     switch (type) {
       case "income": {
         dispatch(
@@ -121,12 +120,12 @@ const TransactionCreate: React.FC<Props> = ({
         );
       }
     }
-    openPopupHandle();
+    closePopupHandle();
   };
 
   return (
-    <div className={"popup-bg"}>
-      <div className={"popup"}>
+    <div className={"popup-bg"} onClick={closePopupHandle}>
+      <div className={"popup"} onClick={(event) => event.stopPropagation()}>
         <ul className={"popup__header"}>
           <li
             onClick={() => {

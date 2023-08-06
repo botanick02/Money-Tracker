@@ -50,7 +50,7 @@ const Transactions = () => {
       {isCreatePopupOpen && (
         <TransactionCreate
           transactionDefaultType={defaultTransaction}
-          openPopupHandle={handleCreatePopupOpen}
+          closePopupHandle={handleCreatePopupOpen}
         />
       )}
       <TimeScopePanel onRangeChange={onRangeChange} />
