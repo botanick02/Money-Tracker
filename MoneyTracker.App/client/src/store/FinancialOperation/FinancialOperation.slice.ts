@@ -34,6 +34,8 @@ interface UpdateFinancialOperation {
   note: string | null;
   createdAt: string;
   categoryId: string;
+  fromAccountId: string | null;
+  toAccountId: string | null;
 }
 
 export interface FetchTransactionsInfoVariables {

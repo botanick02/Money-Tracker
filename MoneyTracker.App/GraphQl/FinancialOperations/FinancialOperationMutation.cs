@@ -166,11 +166,13 @@ namespace MoneyTracker.App.GraphQl.FinancialOperation
                         var command = new UpdateFinancialOperationCommand(
                             UserId: Guid.Parse(context.User.FindFirst(ClaimTypes.NameIdentifier)!.Value),
                             OperationId: Guid.Parse(input.OperationId),
-                            Title: input.Title!, 
-                            Note: input.Note, 
+                            Title: input.Title!,
+                            Note: input.Note,
                             Amount: input.Amount,
                             CategoryId: Guid.Parse(input.CategoryId),
-                            CreatedAt: input.CreatedAt);
+                            CreatedAt: input.CreatedAt,
+                            FromAccountId: Guid.Parse(input.FromAccountId),
+                            ToAccountId: Guid.Parse(input.ToAccountId));
 
                         commandDispatcher.Dispatch(command);
 

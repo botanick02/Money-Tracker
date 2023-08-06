@@ -10,7 +10,7 @@
         decimal Amount, Guid CategoryId, Guid FromAccountId, Guid ToAccountId, DateTime? CreatedAt);
     
     public record UpdateFinancialOperationCommand(Guid UserId, Guid OperationId, string Title, string? Note,
-        decimal Amount, Guid CategoryId, DateTime CreatedAt);
+        decimal Amount, Guid CategoryId, DateTime CreatedAt, Guid? FromAccountId, Guid? ToAccountId);
 
     public record CancelFinancialOperationCommand(Guid TransactionId);
 }

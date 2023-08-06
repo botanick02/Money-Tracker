@@ -34,6 +34,8 @@ const TransactionInfo = ({
 
   const categoryItems = useAppSelector((state) => state.Category.categories);
 
+  const accounts = useAppSelector((state) => state.Account.accounts).filter(a => a.id !== "total");
+
   const {
     register,
     formState: { errors },
@@ -56,11 +58,24 @@ const TransactionInfo = ({
     value: category.id,
   }));
 
+  const accountOptions: Option[] = accounts.map((account) => ({
+    label: account.name,
+    value: account.id,
+  }));
+
   const handleCategoryChange = (option: Option) => {
     setCategoryId(option);
   };
 
-  const [categoryId, setCategoryId] = useState<Option>(categoryOptions[0]);
+  const handleAccountChange = (option: Option) => {
+    setAccount(option);
+  };
+
+  const [categoryId, setCategoryId] = useState<Option>(categoryOptions.find(o => o.value === transaction.category.id)!);
+
+  const [account, setAccount] = useState<Option>(
+    accountOptions.find((option) => option.value === transaction.accountId) ?? accountOptions[0]
+  );
 
   const confirmDeletion = () => {
     dispatch(
@@ -77,6 +92,8 @@ const TransactionInfo = ({
         categoryId: categoryId.value,
         note: data.note,
         createdAt: new Date(data.createdAt).toISOString(),
+        fromAccountId: account.value,
+        toAccountId: account.value
       })
     );
   };
@@ -132,6 +149,16 @@ const TransactionInfo = ({
                 ) + 1
               }
             />
+             <Dropdown
+              title={"Account"}
+              selectHandler={handleAccountChange}
+              options={accountOptions}
+              defaultOptionIndex={
+                accountOptions.findIndex(
+                  (o) => o.value === transaction.accountId
+                ) + 1
+              }
+            />
             <InputWrapper>
               <input type="text" placeholder="Note" {...register("note")} />
             </InputWrapper>
@@ -154,6 +181,9 @@ const TransactionInfo = ({
             </div>
             <div className={"popup__info__item"}>
               Created: {new Date(transaction.createdAt).toLocaleString()}
+            </div>
+            <div className={"popup__info__item"}>
+              Account: {accounts.find(a => a.id === transaction.accountId)?.name}
             </div>
             {transaction.note && (
               <div className={"popup__info__item"}>
