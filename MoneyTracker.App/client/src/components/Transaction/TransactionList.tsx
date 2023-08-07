@@ -13,9 +13,13 @@ const getOnlyDate = (dateString: string) => {
 };
 
 const TransactionList = () => {
-  const transactions = useAppSelector(
+  let transactions = useAppSelector(
     (state) => state.FinancialOperation.transactions
   );
+  
+  const currentAccountId = useAppSelector(
+    state => state.Account.currentAccountId
+  )
 
   const [transactionIdInfoPopup, setTransactionIdInfoPopup] = useState<string | null>(null)
 
@@ -26,6 +30,9 @@ const TransactionList = () => {
 
   const transactionInPopup = transactions.find(t => t.id === transactionIdInfoPopup);
 
+  if (currentAccountId === "total"){
+    transactions = transactions.filter(t => t.category.name !== "Transfer")
+  }
 
   return (
     <div className={"transaction-list"}>

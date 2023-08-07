@@ -1,5 +1,6 @@
 ﻿using MoneyTracker.Business.Entities;
 using MoneyTracker.Business.Interfaces;
+using System;
 
 namespace MoneyTracker.DataAccess
 {
@@ -16,5 +17,10 @@ namespace MoneyTracker.DataAccess
             return readModel.Categories.ToList();
         }
 
+        public Category GetServiceCategory(string name)
+        {
+            var readModel = readModelExtensions.GetReadModel();
+            return readModel.Categories.Where(c => c.Type == "Service").FirstOrDefault(c => c.Name == name);
+        }
     }
 }

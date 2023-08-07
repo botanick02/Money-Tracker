@@ -108,10 +108,12 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
     public class AddTransferOperationCommandHandler : ICommandHandler<AddTransferOperationCommand>
     {
         private readonly IEventStore eventStore;
+        private readonly ICategoryRepository categoryRepository;
 
-        public AddTransferOperationCommandHandler(IEventStore eventStore)
+        public AddTransferOperationCommandHandler(IEventStore eventStore, ICategoryRepository categoryRepository)
         {
             this.eventStore = eventStore;
+            this.categoryRepository = categoryRepository;
         }
 
         public bool Handle(AddTransferOperationCommand command)
@@ -120,11 +122,13 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
 
             var currentTime = DateTime.UtcNow;
 
+            var transferCategoryId = categoryRepository.GetServiceCategory("Transfer").Id;
+
             var debitTransactionEvent = new DebitTransactionAddedEvent
             (
                 OperationId: transactionId,
                 UserId: command.UserId,
-                CategoryId: command.CategoryId,
+                CategoryId: transferCategoryId,
                 CreatedAt: command.CreatedAt ?? currentTime,
                 AccountId: command.ToAccountId,
                 Title: command.Title,
@@ -136,7 +140,7 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
             (
                 OperationId: transactionId,
                 UserId: command.UserId,
-                CategoryId: command.CategoryId,
+                CategoryId: transferCategoryId,
                 CreatedAt: command.CreatedAt ?? currentTime,
                 AccountId: command.FromAccountId,
                 Title: command.Title,

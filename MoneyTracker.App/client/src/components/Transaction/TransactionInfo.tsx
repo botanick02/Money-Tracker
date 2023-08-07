@@ -168,7 +168,6 @@ const TransactionInfo = ({
             <div className={`popup__info__amount ${type}`}>
               {transaction.amount} ₴
             </div>
-
             {/* <div className={"popup__info__item"}>
               Category:
               <div className="popup__info__item__category">
