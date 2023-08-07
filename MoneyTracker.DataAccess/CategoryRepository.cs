@@ -17,10 +17,10 @@ namespace MoneyTracker.DataAccess
             return readModel.Categories.ToList();
         }
 
-        public Category GetServiceCategory(string name)
+        public Category GetTransferCategory()
         {
             var readModel = readModelExtensions.GetReadModel();
-            return readModel.Categories.Where(c => c.Type == "Service").FirstOrDefault(c => c.Name == name);
+            return readModel.Categories.FirstOrDefault(c => c.Type == "transfer");
         }
     }
 }

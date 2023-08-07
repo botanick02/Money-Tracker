@@ -66,7 +66,7 @@ const TransactionCreate: React.FC<Props> = ({
     toAccount: Option;
   }>({ fromAccount: accountOptions[0], toAccount: accountOptions[0] });
 
-  const categoryOptions: Option[] = categoryItems.map((category) => ({
+  const categoryOptions: Option[] = categoryItems.filter(c => c.type === type).map((category) => ({
     label: category.name,
     value: category.id,
   }));

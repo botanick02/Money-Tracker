@@ -31,7 +31,7 @@ const TransactionList = () => {
   const transactionInPopup = transactions.find(t => t.id === transactionIdInfoPopup);
 
   if (currentAccountId === "total"){
-    transactions = transactions.filter(t => t.category.name !== "Transfer")
+    transactions = transactions.filter(t => t.category.type !== "transfer")
   }
 
   return (

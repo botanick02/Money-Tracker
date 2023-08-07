@@ -50,7 +50,7 @@ namespace MoneyTracker.DataAccess.MsSQL
                     var transferCategoryCommand = new CreateCategoryCommand(new Business.Entities.Category()
                     {
                         Name = "Transfer",
-                        Type = "Service",
+                        Type = "transfer",
                         IconUrl = "./media/icons/transfer.svg",
                         Color = "#d9d9d9",
                     });

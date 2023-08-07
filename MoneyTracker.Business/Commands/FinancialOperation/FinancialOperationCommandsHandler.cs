@@ -122,7 +122,7 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
 
             var currentTime = DateTime.UtcNow;
 
-            var transferCategoryId = categoryRepository.GetServiceCategory("Transfer").Id;
+            var transferCategoryId = categoryRepository.GetTransferCategory().Id;
 
             var debitTransactionEvent = new DebitTransactionAddedEvent
             (
