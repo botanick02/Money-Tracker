@@ -10,8 +10,10 @@ const DeletePopup = ({
   closePopupHandle,
 }: TransactionInfoProps) => {
   return (
-    <div className={"popup-bg"}>
-      <div className={"popup"}>
+    <div className={"popup-bg"} onClick={(event) => {
+      event.stopPropagation()
+      closePopupHandle()}}>
+      <div className={"popup"} onClick={(event) => event.stopPropagation()}>
         <div className={`popup__header title-single`}>Deletion</div>
         <div className={"popup__fields"}>
           <h3>Are you sure you want to delete this item?</h3>

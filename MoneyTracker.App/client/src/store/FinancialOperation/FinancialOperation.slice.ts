@@ -5,6 +5,7 @@ interface Operation {
   amount: number;
   categoryId: any;
   title: string;
+  createdAt: string | null;
 }
 
 interface DebitOperation extends Operation {
@@ -26,13 +27,15 @@ interface FetchTransactionsInfoResponse {
   expenses: number;
 }
 
-interface UpdateFinancialOperation {
+export interface UpdateFinancialOperation {
   operationId: string;
   title: string;
   amount: number;
   note: string | null;
   createdAt: string;
   categoryId: string;
+  fromAccountId: string | null;
+  toAccountId: string | null;
 }
 
 export interface FetchTransactionsInfoVariables {

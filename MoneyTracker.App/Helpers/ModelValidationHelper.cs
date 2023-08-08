@@ -14,8 +14,12 @@ namespace MoneyTracker.App.Helpers
 
     public class GuidValidationAttribute : ValidationAttribute
     {
-        public override bool IsValid(object value)
+        public override bool IsValid(object? value)
         {
+            if (value == null)
+            {
+                return true;
+            }
             if (value is string stringValue)
             {
                 return Guid.TryParse(stringValue, out _);

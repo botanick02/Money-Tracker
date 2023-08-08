@@ -30,7 +30,6 @@
         border-top-right-radius: $border-radius;
       }
     }
-    
   }
 
   .popup__header.income {
@@ -41,8 +40,24 @@
     background-color: $secondary-color;
   }
 
-  .popup__info { 
-    &__edit-icon{
+  .popup__fields {
+    &__amount{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 25px;
+      div{
+      max-width: 50%;
+      margin: 0 5px;
+      input{
+        text-align: center;
+      }
+      }
+    }
+  }
+
+  .popup__info {
+    &__edit-icon {
       width: 40px;
       height: 40px;
     }
@@ -50,13 +65,13 @@
     &__amount {
       font-size: 25px;
       font-weight: 600;
-      text-align: center;      
+      text-align: center;
       margin: 25px 0;
 
       &.income {
         color: $primary-color;
       }
-  
+
       &.expense {
         color: $secondary-color;
       }
@@ -66,13 +81,13 @@
       font-size: 16px;
       margin: 10px;
       display: flex;
-      
-      &__category{
+
+      &__category {
         margin-left: 10px;
         display: flex;
 
         align-items: center;
-        img{
+        img {
           width: 25px;
           height: 25px;
           margin-right: 5px;

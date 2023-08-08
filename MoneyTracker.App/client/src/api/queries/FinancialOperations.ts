@@ -12,6 +12,8 @@ export const GetTransactions = `query getTransactions($input: GetTransactionsFor
           id
           name
           type
+          iconUrl
+          color
         }
         createdAt
         accountId
@@ -44,3 +46,10 @@ export const CancelOperation = `mutation cancelOperation($cancelFinOperationInpu
         cancelFinancialOperation(cancelFinOperationInput: $cancelFinOperationInput)
       }
     } `
+
+export const UpdateOperation = `mutation updT($input: UpdateFinancialOperationInputType!){
+  financialOperation{
+  updateFinancialOperation(
+    updatedFinancialOperaion: $input)
+}
+}`

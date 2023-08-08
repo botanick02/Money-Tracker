@@ -13,41 +13,69 @@ const getOnlyDate = (dateString: string) => {
 };
 
 const TransactionList = () => {
-  const transactions = useAppSelector(
+  let transactions = useAppSelector(
     (state) => state.FinancialOperation.transactions
   );
 
-  const [transactionIdInfoPopup, setTransactionIdInfoPopup] = useState<string | null>(null)
+  const currentAccountId = useAppSelector(
+    (state) => state.Account.currentAccountId
+  );
+
+  const [transactionIdInfoPopup, setTransactionIdInfoPopup] = useState<
+    string | null
+  >(null);
 
   const handleInfoPopupOpen = (id: string) => {
     document.body.classList.toggle("no-scroll");
     setTransactionIdInfoPopup(id);
   };
 
-  const transactionInPopup = transactions.find(t => t.id === transactionIdInfoPopup);
+  const transactionInPopup = transactions.find(
+    (t) => t.id === transactionIdInfoPopup
+  );
 
+  if (currentAccountId === "total") {
+    transactions = transactions.filter((t) => t.category.type !== "transfer");
+  }
 
   return (
     <div className={"transaction-list"}>
       {transactionInPopup && (
-        <TransactionInfo closePopupHandle={() => setTransactionIdInfoPopup(null)} transaction={transactionInPopup}
+        <TransactionInfo
+          closePopupHandle={() => setTransactionIdInfoPopup(null)}
+          transaction={transactionInPopup}
         />
       )}
-      {transactions.length > 0 ? transactions.map((item, index) => {
-        if (
-          index === 0 ||
-          getOnlyDate(transactions[index - 1]?.createdAt) !==
-            getOnlyDate(item.createdAt)
-        ) {
+      {transactions.length > 0 ? (
+        transactions.map((item, index) => {
+          if (
+            index === 0 ||
+            getOnlyDate(transactions[index - 1]?.createdAt) !==
+              getOnlyDate(item.createdAt)
+          ) {
+            return (
+              <React.Fragment key={index}>
+                <div className={"row-title"}>{getOnlyDate(item.createdAt)}</div>
+                <TransactionItem
+                  transaction={item}
+                  onMoreInfoCLick={handleInfoPopupOpen}
+                />
+              </React.Fragment>
+            );
+          }
           return (
-            <React.Fragment key={index}>
-              <div className={"row-title"}>{getOnlyDate(item.createdAt)}</div>
-              <TransactionItem transaction={item} onMoreInfoCLick={handleInfoPopupOpen}/>
-            </React.Fragment>
+            <TransactionItem
+              key={index}
+              transaction={item}
+              onMoreInfoCLick={handleInfoPopupOpen}
+            />
           );
-        }
-        return <TransactionItem key={index} transaction={item} onMoreInfoCLick={handleInfoPopupOpen}/>;
-      }) : <div  className={"transaction-list__message-empty"}>No transactions to show</div>}
+        })
+      ) : (
+        <div className={"transaction-list__message-empty"}>
+          No transactions to show
+        </div>
+      )}
     </div>
   );
 };

@@ -4,7 +4,7 @@ export interface Transaction {
   id: string;
   operationId: string;
   userId: string;
-  title: string;
+  title?: string;
   note?: string;
   amount: number;
   category: Category;
