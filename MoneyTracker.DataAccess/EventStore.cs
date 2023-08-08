@@ -31,16 +31,19 @@ namespace MoneyTracker.Infrastructure.EventStore
 
         public void AppendEvent(Event @event)
         {
-            var newEvent = new StoredEvent
+            AppendEvents(new List<Event> { @event });
+        }
+        public void AppendEvents(List<Event> events)
+        {
+            var storedEvents = events.Select(@event => new StoredEvent
             {
                 Data = JsonConvert.SerializeObject(@event),
                 Type = @event.GetType().AssemblyQualifiedName,
                 CreatedAt = DateTime.Now,
-            };
+            }).ToList();
 
-            eventStoreRepository.AppendEvent(newEvent);
-
-            currentReadModel.Update(@event);
+            eventStoreRepository.AppendEvent(storedEvents);
+            currentReadModel.Update(events);
         }
 
         public List<Event> GetEvents(DateTime dateTimeTo)

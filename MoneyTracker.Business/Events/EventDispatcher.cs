@@ -12,23 +12,25 @@ namespace MoneyTracker.Business.Events
             this.serviceProvider = serviceProvider;
         }
 
-        public ReadModel Apply(ReadModel currentModel, Event @event)
+        public ReadModel Apply(ReadModel currentModel, List<Event> events)
         {
-            var eventType = @event.GetType();
-
-            var applierType = typeof(IEventApplier<>).MakeGenericType(eventType);
-            var applier = serviceProvider.GetRequiredService(applierType);
-
-            var applyMethod = applier.GetType().GetMethod("Apply");
-            var applyResult = applyMethod!.Invoke(applier, new object[] { currentModel, @event });
-
-            if (applyResult is ReadModel result)
+            var updatedModel = currentModel;
+            foreach (var @event in events)
             {
-                return result;
+                var eventType = @event.GetType();
+
+                var applierType = typeof(IEventApplier<>).MakeGenericType(eventType);
+                var applier = serviceProvider.GetRequiredService(applierType);
+
+                var applyMethod = applier.GetType().GetMethod("Apply");
+                var applyResult = applyMethod!.Invoke(applier, new object[] { updatedModel, @event });
+
+                if (applyResult is ReadModel result)
+                {
+                    updatedModel = result;
+                }
             }
-
-            return currentModel;
+            return updatedModel;
         }
-
     }
 }

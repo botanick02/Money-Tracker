@@ -13,9 +13,9 @@ namespace MoneyTracker.Business.ReadStoreModel
             this.eventDispatcher = eventDispatcher;
         }
 
-        public void Update(Event @event)
+        public void Update(List<Event> events)
         {
-            CurrentModel = eventDispatcher.Apply(CurrentModel, @event);
+            CurrentModel = eventDispatcher.Apply(CurrentModel, events);
         }
     }
 }
