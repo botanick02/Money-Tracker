@@ -163,7 +163,7 @@ namespace MoneyTracker.Business.Events.FinancialOperation
 
     public class FinancialOperationAccountUpdatedEventApplier : IEventApplier<FinancialOperationAccountUpdatedEvent>
     {
-        public ReadModel Apply(ReadModel currentModel, FinancialOperationAccountUpdatedEvent @event)
+        public async Task<ReadModel> ApplyAsync(ReadModel currentModel, FinancialOperationAccountUpdatedEvent @event)
         {
             var updatedModel = currentModel;
 

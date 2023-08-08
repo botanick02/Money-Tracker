@@ -26,7 +26,7 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
 
             var currentTime = DateTime.UtcNow;
 
-            var debitTransactionEvent = new DebitTransactionAddedEvent
+            eventsToAppend.Add(new DebitTransactionAddedEvent
             (
                 OperationId: transactionId,
                 UserId: command.UserId,
@@ -74,8 +74,6 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
             var usersCreditAccount = accountRepository.GetUserAccounts(command.UserId, Entities.AccountType.Credit).FirstOrDefault();
 
             var currentTime = DateTime.UtcNow;
-
-            var debitTransactionEvent = new DebitTransactionAddedEvent
 
             var eventsToAppend = new List<Event>();
 
@@ -130,7 +128,7 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
 
             var transferCategoryId = categoryRepository.GetTransferCategory().Id;
 
-            var debitTransactionEvent = new DebitTransactionAddedEvent
+            eventsToAppend.Add(new DebitTransactionAddedEvent
             (
                 OperationId: transactionId,
                 UserId: command.UserId,
@@ -250,12 +248,8 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
                     eventsToAppend.Add(new FinancialOperationAccountUpdatedEvent(transaction.Id, (Guid)command.FromAccountId));
                 }
             }
-            
 
-            foreach (var @event in eventsToAppend)
-            {
-                eventStore.AppendEvent(@event);
-            }
+            await eventStore.AppendEventsAsync(eventsToAppend);
 
             return true;
         }
