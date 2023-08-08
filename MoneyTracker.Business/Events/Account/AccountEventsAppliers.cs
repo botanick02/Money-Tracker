@@ -4,7 +4,7 @@ namespace MoneyTracker.Business.Events.Account
 {
     public class DebitAccountCreatedEventApplier : IEventApplier<DebitAccountCreatedEvent>
     {
-        public ReadModel Apply(ReadModel currentModel, DebitAccountCreatedEvent @event)
+        public async Task<ReadModel> ApplyAsync(ReadModel currentModel, DebitAccountCreatedEvent @event)
         {
             var updatedModel = currentModel;
 
@@ -24,7 +24,7 @@ namespace MoneyTracker.Business.Events.Account
 
     public class CreditAccountCreatedEventApplier : IEventApplier<CreditAccountCreatedEvent>
     {
-        public ReadModel Apply(ReadModel currentModel, CreditAccountCreatedEvent @event)
+        public async Task<ReadModel> ApplyAsync(ReadModel currentModel, CreditAccountCreatedEvent @event)
         {
             var updatedModel = currentModel;
 
@@ -44,11 +44,11 @@ namespace MoneyTracker.Business.Events.Account
 
     public class PersonalAccountCreatedEventApplier : IEventApplier<PersonalAccountCreatedEvent>
     {
-        public ReadModel Apply(ReadModel currentModel, PersonalAccountCreatedEvent @event)
+        public async Task<ReadModel> ApplyAsync(ReadModel currentModel, PersonalAccountCreatedEvent @event)
         {
             var updatedModel = currentModel;
 
-            var newDebitAccount = new Entities.Account()
+            var newPersonalAccount = new Entities.Account()
             {
                 Id = @event.Id,
                 UserId = @event.UserId,
@@ -57,7 +57,7 @@ namespace MoneyTracker.Business.Events.Account
                 Type = Entities.AccountType.Personal
             };
 
-            updatedModel.Accounts = updatedModel.Accounts.Append(newDebitAccount);
+            updatedModel.Accounts = updatedModel.Accounts.Append(newPersonalAccount);
 
             return updatedModel;
         }

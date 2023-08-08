@@ -12,7 +12,7 @@ namespace MoneyTracker.Business.Events
             this.serviceProvider = serviceProvider;
         }
 
-        public ReadModel Apply(ReadModel currentModel, List<Event> events)
+        public async Task<ReadModel> ApplyAsync(ReadModel currentModel, List<Event> events)
         {
             var updatedModel = currentModel;
             foreach (var @event in events)
@@ -22,15 +22,17 @@ namespace MoneyTracker.Business.Events
                 var applierType = typeof(IEventApplier<>).MakeGenericType(eventType);
                 var applier = serviceProvider.GetRequiredService(applierType);
 
-                var applyMethod = applier.GetType().GetMethod("Apply");
-                var applyResult = applyMethod!.Invoke(applier, new object[] { updatedModel, @event });
+                var applyMethod = applier.GetType().GetMethod("ApplyAsync");
+                var applyTask = (Task<ReadModel>)applyMethod!.Invoke(applier, new object[] { updatedModel, @event })!;
 
-                if (applyResult is ReadModel result)
-                {
-                    updatedModel = result;
-                }
+                updatedModel = await applyTask.ConfigureAwait(false);
             }
             return updatedModel;
+        }
+
+        public async Task<ReadModel> ApplyAsync(ReadModel currentModel, Event @event)
+        {
+            return await ApplyAsync(currentModel, new List<Event> { @event });
         }
     }
 }

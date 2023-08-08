@@ -4,7 +4,7 @@ namespace MoneyTracker.Business.Events.FinancialOperation
 {
     public class DebitTransactionAddedEventApplier : IEventApplier<DebitTransactionAddedEvent>
     {
-        public ReadModel Apply(ReadModel currentModel, DebitTransactionAddedEvent @event)
+        public async Task<ReadModel> ApplyAsync(ReadModel currentModel, DebitTransactionAddedEvent @event)
         {
             var updatedModel = currentModel;
 
@@ -29,7 +29,7 @@ namespace MoneyTracker.Business.Events.FinancialOperation
 
     public class CreditTransactionAddedEventApplier : IEventApplier<CreditTransactionAddedEvent>
     {
-        public ReadModel Apply(ReadModel currentModel, CreditTransactionAddedEvent @event)
+        public async Task<ReadModel> ApplyAsync(ReadModel currentModel, CreditTransactionAddedEvent @event)
         {
             var updatedModel = currentModel;
 
@@ -54,7 +54,7 @@ namespace MoneyTracker.Business.Events.FinancialOperation
 
     public class FinancialOperationCanceledEventApplier : IEventApplier<FinancialOperationCanceledEvent>
     {
-        public ReadModel Apply(ReadModel currentModel, FinancialOperationCanceledEvent @event)
+        public async Task<ReadModel> ApplyAsync(ReadModel currentModel, FinancialOperationCanceledEvent @event)
         {
             var updatedModel = currentModel;
 
@@ -76,7 +76,7 @@ namespace MoneyTracker.Business.Events.FinancialOperation
 
     public class FinancialOperationAmountUpdatedEventApplier : IEventApplier<FinancialOperationAmountUpdatedEvent>
     {
-        public ReadModel Apply(ReadModel currentModel, FinancialOperationAmountUpdatedEvent @event)
+        public async Task<ReadModel> ApplyAsync(ReadModel currentModel, FinancialOperationAmountUpdatedEvent @event)
         {
             var updatedModel = currentModel;
 
@@ -99,7 +99,7 @@ namespace MoneyTracker.Business.Events.FinancialOperation
 
     public class FinancialOperationTitleUpdatedEventApplier : IEventApplier<FinancialOperationTitleUpdatedEvent>
     {
-        public ReadModel Apply(ReadModel currentModel, FinancialOperationTitleUpdatedEvent @event)
+        public async Task<ReadModel> ApplyAsync(ReadModel currentModel, FinancialOperationTitleUpdatedEvent @event)
         {
             var updatedModel = currentModel;
 
@@ -115,7 +115,7 @@ namespace MoneyTracker.Business.Events.FinancialOperation
 
     public class FinancialOperationCategoryIdUpdatedEventApplier : IEventApplier<FinancialOperationCategoryIdUpdatedEvent>
     {
-        public ReadModel Apply(ReadModel currentModel, FinancialOperationCategoryIdUpdatedEvent @event)
+        public async Task<ReadModel> ApplyAsync(ReadModel currentModel, FinancialOperationCategoryIdUpdatedEvent @event)
         {
             var updatedModel = currentModel;
 
@@ -131,7 +131,7 @@ namespace MoneyTracker.Business.Events.FinancialOperation
 
     public class FinancialOperationNoteUpdatedEventApplier : IEventApplier<FinancialOperationNoteUpdatedEvent>
     {
-        public ReadModel Apply(ReadModel currentModel, FinancialOperationNoteUpdatedEvent @event)
+        public async Task<ReadModel> ApplyAsync(ReadModel currentModel, FinancialOperationNoteUpdatedEvent @event)
         {
             var updatedModel = currentModel;
 
@@ -147,7 +147,7 @@ namespace MoneyTracker.Business.Events.FinancialOperation
 
     public class FinancialOperationCreatedAtUpdatedEventApplier : IEventApplier<FinancialOperationCreatedAtUpdatedEvent>
     {
-        public ReadModel Apply(ReadModel currentModel, FinancialOperationCreatedAtUpdatedEvent @event)
+        public async Task<ReadModel> ApplyAsync(ReadModel currentModel, FinancialOperationCreatedAtUpdatedEvent @event)
         {
             var updatedModel = currentModel;
 
@@ -160,6 +160,4 @@ namespace MoneyTracker.Business.Events.FinancialOperation
             return updatedModel;
         }
     }
-
-
 }

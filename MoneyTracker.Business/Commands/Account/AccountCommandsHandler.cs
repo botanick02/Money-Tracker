@@ -15,7 +15,7 @@ namespace MoneyTracker.Business.Commands.Account
                 this.eventStore = eventStore;
                 this.currencyRepository = currencyRepository;
             }
-            public bool Handle(CreatePersonalAccountCommand command)
+            public async Task<bool> HandleAsync(CreatePersonalAccountCommand command)
             {
                 var @event = new PersonalAccountCreatedEvent
                 (
@@ -25,7 +25,7 @@ namespace MoneyTracker.Business.Commands.Account
                     Currency: currencyRepository.GetCurrencyByCode("UAH")
                 );
 
-                eventStore.AppendEvent(@event);
+                await eventStore.AppendEventAsync(@event);
 
                 return true;
             }

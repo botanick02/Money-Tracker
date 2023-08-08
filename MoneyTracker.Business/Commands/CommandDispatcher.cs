@@ -12,7 +12,7 @@ namespace MoneyTracker.Business.Commands
             this.serviceProvider = serviceProvider;
         }
 
-        public void Dispatch<TCommand>(TCommand command)
+        public async Task DispatchAsync<TCommand>(TCommand command)
         {
             var handler = serviceProvider.GetService<ICommandHandler<TCommand>>();
             if (handler == null)
@@ -20,7 +20,8 @@ namespace MoneyTracker.Business.Commands
                 throw new InvalidOperationException($"No command handler found for command type {typeof(TCommand).Name}");
             }
 
-            handler.Handle(command);
+            await handler.HandleAsync(command);
         }
+
     }
 }

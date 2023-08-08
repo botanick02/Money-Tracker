@@ -2,6 +2,6 @@
 {
     public interface ICommandHandler<T>
     {
-        bool Handle(T command);
+        Task<bool> HandleAsync(T command);
     }
 }

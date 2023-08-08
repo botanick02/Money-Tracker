@@ -9,7 +9,7 @@ namespace MoneyTracker.Business.Events.Budgets
 {
     public class BudgetCreateEventApplier : IEventApplier<BudgetCreateEvent>
     {
-        public ReadModel Apply(ReadModel currentModel, BudgetCreateEvent @event)
+        public async Task<ReadModel> ApplyAsync(ReadModel currentModel, BudgetCreateEvent @event)
         {
             var updatedModel = currentModel;
 
@@ -22,7 +22,7 @@ namespace MoneyTracker.Business.Events.Budgets
     }
     public class BudgetEditEventApplier : IEventApplier<BudgetEditEvent>
     {
-        public ReadModel Apply(ReadModel currentModel, BudgetEditEvent @event)
+        public async Task<ReadModel> ApplyAsync(ReadModel currentModel, BudgetEditEvent @event)
         {
             var updatedModel = currentModel;
 

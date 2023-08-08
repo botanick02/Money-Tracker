@@ -17,7 +17,7 @@ namespace MoneyTracker.App.GraphQl.FinancialOperation
         {
             Field<bool>("AddDebitOperation")
                 .Argument<DebitOperationInputType>("DebitOperation")
-                .Resolve(context =>
+                .ResolveAsync( async context =>
                 {
                     var transaction = context.GetArgument<DebitOperationInput>("DebitOperation");
 
@@ -42,14 +42,14 @@ namespace MoneyTracker.App.GraphQl.FinancialOperation
                         ToAccountId: Guid.Parse(transaction.ToAccountId)
                      );
 
-                    commandDispatcher.Dispatch(command);
+                    await commandDispatcher.DispatchAsync(command);
 
                     return true;
                 }).Authorize();
 
             Field<bool>("AddCreditOperation")
                 .Argument<CreditOperationInputType>("CreditOperation")
-                .Resolve(context =>
+                .ResolveAsync(async context =>
                 {
                     var transaction = context.GetArgument<CreditOperationInput>("CreditOperation");
 
@@ -74,14 +74,14 @@ namespace MoneyTracker.App.GraphQl.FinancialOperation
                         FromAccountId: Guid.Parse(transaction.FromAccountId)
                      );
 
-                    commandDispatcher.Dispatch(command);
+                    await commandDispatcher.DispatchAsync(command);
 
                     return true;
                 }).Authorize();
 
             Field<bool>("AddTransferOperation")
                 .Argument<TransferOperationInputType>("TransferOperation")
-                .Resolve(context =>
+                .ResolveAsync(async context =>
                 {
                     var transaction = context.GetArgument<TransferOperationInput>("TransferOperation");
 
@@ -107,14 +107,14 @@ namespace MoneyTracker.App.GraphQl.FinancialOperation
                         ToAccountId: Guid.Parse(transaction.ToAccountId)
                      );
 
-                    commandDispatcher.Dispatch(command);
+                    await commandDispatcher.DispatchAsync(command);
 
                     return true;
                 }).Authorize();
 
             Field<bool>("CancelFinancialOperation")
                 .Argument<CancelFinancialOperationInputType>("CancelFinOperationInput")
-                .Resolve(context =>
+                .ResolveAsync(async context =>
                 {
                     var input = context.GetArgument<CancelFinancialOperationInput>("CancelFinOperationInput");
 
@@ -136,14 +136,14 @@ namespace MoneyTracker.App.GraphQl.FinancialOperation
                         TransactionId: Guid.Parse(input.OperationId)
                     );
 
-                    commandDispatcher.Dispatch(command);
+                    await commandDispatcher.DispatchAsync(command);
 
                     return true;
                 });
 
             Field<bool>("UpdateFinancialOperation")
                     .Argument<UpdateFinancialOperationInputType>("UpdatedFinancialOperaion")
-                    .Resolve(context =>
+                    .ResolveAsync(async context =>
                     {
                         var input = context.GetArgument<UpdateFinancialOperationInput>("UpdatedFinancialOperaion");
 
@@ -169,7 +169,7 @@ namespace MoneyTracker.App.GraphQl.FinancialOperation
                             CategoryId: Guid.Parse(input.CategoryId),
                             CreatedAt: input.CreatedAt);
 
-                        commandDispatcher.Dispatch(command);
+                        await commandDispatcher.DispatchAsync(command);
 
                         return true;
                     });

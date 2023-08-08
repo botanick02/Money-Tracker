@@ -14,7 +14,7 @@ namespace MoneyTracker.DataAccess.MsSQL
             connectionString = configuration.GetConnectionString("MsSQL")!;
         }
 
-        public void AppendEvent(List<StoredEvent> events)
+        public async Task AppendEventsAsync(List<StoredEvent> events)
         {
             const string insertQuery = @"
             INSERT INTO Events (Type, CreatedAt, Data)
@@ -29,7 +29,7 @@ namespace MoneyTracker.DataAccess.MsSQL
                     {
                         foreach (var @event in events)
                         {
-                            conn.Execute(insertQuery, new
+                            await conn.ExecuteAsync(insertQuery, new
                             {
                                 @event.Type,
                                 @event.CreatedAt,

@@ -29,11 +29,11 @@ namespace MoneyTracker.Infrastructure.EventStore
             return aggregate;
         }
 
-        public void AppendEvent(Event @event)
+        public async Task AppendEventAsync(Event @event)
         {
-            AppendEvents(new List<Event> { @event });
+            await AppendEventsAsync(new List<Event> { @event });
         }
-        public void AppendEvents(List<Event> events)
+        public async Task AppendEventsAsync(List<Event> events)
         {
             var storedEvents = events.Select(@event => new StoredEvent
             {
@@ -42,8 +42,8 @@ namespace MoneyTracker.Infrastructure.EventStore
                 CreatedAt = DateTime.Now,
             }).ToList();
 
-            eventStoreRepository.AppendEvent(storedEvents);
-            currentReadModel.Update(events);
+            await eventStoreRepository.AppendEventsAsync(storedEvents);
+            await currentReadModel.UpdateAsync(events);
         }
 
         public List<Event> GetEvents(DateTime dateTimeTo)

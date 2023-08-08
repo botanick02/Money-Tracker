@@ -122,6 +122,4 @@ app.UseSpa(spa =>
 });
 
 
-//app.MapGet("/", () => "Hello World!");
-
 app.Run();

@@ -18,7 +18,7 @@ namespace MoneyTracker.Business.Commands.Auth
                 this.currencyRepository = currencyRepository;
             }
 
-            public bool Handle(RegisterUserCommand command)
+            public async Task<bool> HandleAsync(RegisterUserCommand command)
             {
                 var events = new List<Event>();
 
@@ -36,10 +36,7 @@ namespace MoneyTracker.Business.Commands.Auth
 
                 AddInitAccountsEvents(newUserId, currency, ref events);
 
-                foreach (var @event in events)
-                {
-                    eventStore.AppendEvent(@event);
-                }
+                eventStore.AppendEventsAsync(events);
                 return true;
             }
         }
@@ -55,7 +52,7 @@ namespace MoneyTracker.Business.Commands.Auth
                 this.currencyRepository = currencyRepository;
             }
 
-            public bool Handle(RegisterGoogleUserCommand command)
+            public async Task<bool> HandleAsync(RegisterGoogleUserCommand command)
             {
                 var events = new List<Event>();
 
@@ -71,10 +68,8 @@ namespace MoneyTracker.Business.Commands.Auth
 
                 AddInitAccountsEvents(newUserId, currency, ref events);
 
-                foreach (var @event in events)
-                {
-                    eventStore.AppendEvent(@event);
-                }
+                await eventStore.AppendEventsAsync(events);
+
                 return true;
             }
         }
@@ -100,12 +95,12 @@ namespace MoneyTracker.Business.Commands.Auth
                 this.eventStore = eventStore;
             }
 
-            public bool Handle(SetUserRefreshTokenCommand command)
+            public async Task<bool> HandleAsync(SetUserRefreshTokenCommand command)
             {
                 var userRefreshTokenSetEvent = new UserRefreshTokenSetEvent(UserId: command.UserId,
                     RefreshToken: command.RefreshToken);
 
-                eventStore.AppendEvent(userRefreshTokenSetEvent);
+                await eventStore.AppendEventAsync(userRefreshTokenSetEvent);
 
                 return true;
             }

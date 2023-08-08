@@ -15,13 +15,15 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
             this.accountRepository = accountRepository;
         }
 
-        public bool Handle(AddDebitOperationCommand command)
+        public async Task<bool> HandleAsync(AddDebitOperationCommand command)
         {
+            var eventsToAppend = new List<Event>();
+
             var transactionId = Guid.NewGuid();
 
             var usersDebitAccount = accountRepository.GetUserAccounts(command.UserId, Entities.AccountType.Debit).FirstOrDefault();
 
-            var debitTransactionEvent = new DebitTransactionAddedEvent
+            eventsToAppend.Add(new DebitTransactionAddedEvent
             (
                 OperationId: transactionId,
                 UserId: command.UserId,
@@ -31,9 +33,9 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
                 Title: command.Title,
                 Note: command.Note,
                 Amount : command.Amount
-            );
+            ));
 
-            var creditTransactionEvent = new CreditTransactionAddedEvent
+            eventsToAppend.Add(new CreditTransactionAddedEvent
             (
                 OperationId: transactionId,
                 UserId: command.UserId,
@@ -43,10 +45,9 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
                 Title: command.Title,
                 Note: command.Note,
                 Amount: command.Amount
-            );
+            ));
 
-            eventStore.AppendEvent(debitTransactionEvent); //TODO: implement simultaneous event append with sql transactions
-            eventStore.AppendEvent(creditTransactionEvent);
+            await eventStore.AppendEventsAsync(eventsToAppend);
 
             return true;
         }
@@ -63,13 +64,16 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
             this.accountRepository = accountRepository;
         }
 
-        public bool Handle(AddCreditOperationCommand command)
+        public async Task<bool> HandleAsync(AddCreditOperationCommand command)
         {
             var transactionId = Guid.NewGuid();
 
             var usersCreditAccount = accountRepository.GetUserAccounts(command.UserId, Entities.AccountType.Credit).FirstOrDefault();
 
-            var debitTransactionEvent = new DebitTransactionAddedEvent
+
+            var eventsToAppend = new List<Event>();
+
+            eventsToAppend.Add(new DebitTransactionAddedEvent
             (
                 OperationId: transactionId,
                 UserId: command.UserId,
@@ -79,9 +83,9 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
                 Title: command.Title,
                 Note: command.Note,
                 Amount: command.Amount
-            );
+            ));
 
-            var creditTransactionEvent = new CreditTransactionAddedEvent
+            eventsToAppend.Add(new CreditTransactionAddedEvent
             (
                 OperationId: transactionId,
                 UserId: command.UserId,
@@ -91,10 +95,9 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
                 Title: command.Title,
                 Note: command.Note,
                 Amount: command.Amount
-            );
+            ));
 
-            eventStore.AppendEvent(debitTransactionEvent); //TODO: implement simultaneous event append with sql transactions
-            eventStore.AppendEvent(creditTransactionEvent);
+            await eventStore.AppendEventsAsync(eventsToAppend);
 
             return true;
         }
@@ -111,11 +114,13 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
             this.accountRepository = accountRepository;
         }
 
-        public bool Handle(AddTransferOperationCommand command)
+        public async Task<bool> HandleAsync(AddTransferOperationCommand command)
         {
+            var eventsToAppend = new List<Event>();
+
             var transactionId = Guid.NewGuid();
 
-            var debitTransactionEvent = new DebitTransactionAddedEvent
+            eventsToAppend.Add(new DebitTransactionAddedEvent
             (
                 OperationId: transactionId,
                 UserId: command.UserId,
@@ -125,9 +130,9 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
                 Title: command.Title,
                 Note: command.Note,
                 Amount: command.Amount
-            );
+            ));
 
-            var creditTransactionEvent = new CreditTransactionAddedEvent
+            eventsToAppend.Add(new CreditTransactionAddedEvent
             (
                 OperationId: transactionId,
                 UserId: command.UserId,
@@ -137,10 +142,9 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
                 Title: command.Title,
                 Note: command.Note,
                 Amount: command.Amount
-            );
+            ));
 
-            eventStore.AppendEvent(debitTransactionEvent); //TODO: implement simultaneous event append with sql transactions
-            eventStore.AppendEvent(creditTransactionEvent);
+            await eventStore.AppendEventsAsync(eventsToAppend);
 
             return true;
         }
@@ -158,7 +162,7 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
             this.transactionRepository = transactionRepository;
         }
 
-        public bool Handle(CancelFinancialOperationCommand command)
+        public async Task<bool> HandleAsync(CancelFinancialOperationCommand command)
         {
             var transactions = transactionRepository.GetTransactionsByOperationId(command.TransactionId);
             if (transactions.Count < 2)
@@ -171,7 +175,7 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
                 OperationId: command.TransactionId
             );
 
-            eventStore.AppendEvent(cancelEvent);
+            await eventStore.AppendEventAsync(cancelEvent);
 
             return true;
         }
@@ -189,7 +193,7 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
             this.transactionRepository = transactionRepository;
         }
 
-        public bool Handle(UpdateFinancialOperationCommand command)
+        public async Task<bool> HandleAsync(UpdateFinancialOperationCommand command)
         {
             var existingTransaction = transactionRepository.GetTransactionsByOperationId(command.OperationId)[0];
 
@@ -220,10 +224,7 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
                 eventsToAppend.Add(new FinancialOperationCreatedAtUpdatedEvent(command.OperationId, command.CreatedAt));
             }
 
-            foreach (var @event in eventsToAppend)
-            {
-                eventStore.AppendEvent(@event);
-            }
+            await eventStore.AppendEventsAsync(eventsToAppend);
 
             return true;
         }
