@@ -27,7 +27,7 @@ interface FetchTransactionsInfoResponse {
   expenses: number;
 }
 
-interface UpdateFinancialOperation {
+export interface UpdateFinancialOperation {
   operationId: string;
   title: string;
   amount: number;

@@ -33,10 +33,11 @@ const TransactionCreate: React.FC<Props> = ({
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm<FormFields>({ defaultValues: {
-    createdAt: getCurrentISODateTimeValue()
-  }});
-
+  } = useForm<FormFields>({
+    defaultValues: {
+      createdAt: getCurrentISODateTimeValue(),
+    },
+  });
 
   const dispatch = useAppDispatch();
   const categoryItems = useAppSelector((state) => state.Category.categories);
@@ -66,10 +67,12 @@ const TransactionCreate: React.FC<Props> = ({
     toAccount: Option;
   }>({ fromAccount: accountOptions[0], toAccount: accountOptions[0] });
 
-  const categoryOptions: Option[] = categoryItems.filter(c => c.type === type).map((category) => ({
-    label: category.name,
-    value: category.id,
-  }));
+  const categoryOptions: Option[] = categoryItems
+    .filter((c) => c.type === type)
+    .map((category) => ({
+      label: category.name,
+      value: category.id,
+    }));
 
   const [categoryId, setCategoryId] = useState<Option>(categoryOptions[0]);
 
@@ -90,7 +93,7 @@ const TransactionCreate: React.FC<Props> = ({
             categoryId: categoryId.value,
             title: data.title,
             toAccountId: account.value,
-            createdAt: new Date(data.createdAt).toISOString()
+            createdAt: new Date(data.createdAt).toISOString(),
           })
         );
         break;
@@ -102,7 +105,7 @@ const TransactionCreate: React.FC<Props> = ({
             categoryId: categoryId.value,
             title: data.title,
             fromAccountId: account.value,
-            createdAt: new Date(data.createdAt).toISOString()
+            createdAt: new Date(data.createdAt).toISOString(),
           })
         );
         break;
@@ -115,7 +118,7 @@ const TransactionCreate: React.FC<Props> = ({
             title: data.title,
             fromAccountId: transferAccounts.fromAccount.value,
             toAccountId: transferAccounts.toAccount.value,
-            createdAt: new Date(data.createdAt).toISOString()
+            createdAt: new Date(data.createdAt).toISOString(),
           })
         );
       }
@@ -204,13 +207,9 @@ const TransactionCreate: React.FC<Props> = ({
             </InputWrapper>
           )}
           <InputWrapper>
-            <input
-              type="text"
-              placeholder="Title"
-              {...register("title")}
-            />
+            <input type="text" placeholder="Title" {...register("title")} />
           </InputWrapper>
-          
+
           <InputWrapper>
             <input
               type="datetime-local"
@@ -221,15 +220,14 @@ const TransactionCreate: React.FC<Props> = ({
             />
           </InputWrapper>
           <InputWrapper>
-            <input
-              type="text"
-              placeholder="Note"
-              {...register("note")}
-            />
+            <input type="text" placeholder="Note" {...register("note")} />
           </InputWrapper>
         </div>
         <div className={"popup__row"}>
-          <button onClick={handleSubmit(addFinancialOperation)} className={"button"}>
+          <button
+            onClick={handleSubmit(addFinancialOperation)}
+            className={"button"}
+          >
             Save
           </button>
           <button onClick={handleCancel} className={"button"}>
