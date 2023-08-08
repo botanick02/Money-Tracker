@@ -160,4 +160,19 @@ namespace MoneyTracker.Business.Events.FinancialOperation
             return updatedModel;
         }
     }
+
+    public class FinancialOperationAccountUpdatedEventApplier : IEventApplier<FinancialOperationAccountUpdatedEvent>
+    {
+        public ReadModel Apply(ReadModel currentModel, FinancialOperationAccountUpdatedEvent @event)
+        {
+            var updatedModel = currentModel;
+
+            var operationToUpdate = updatedModel.Transactions.Where(o => o.Id == @event.TransactionId).FirstOrDefault();
+
+            operationToUpdate.AccountId = @event.AccountId;
+
+            return updatedModel;
+        }
+    }
+
 }

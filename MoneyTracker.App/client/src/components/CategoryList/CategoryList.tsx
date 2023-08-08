@@ -6,7 +6,7 @@ import TimeScopePanel from "../TimeScopePanel/TimeScopePanel";
 import {FETCH_CATEGORIES} from "../../store/Category/Category.slice";
 
 const CategoryList = () => {
-  const items = useAppSelector((state) => state.Category.categories);
+  const items = useAppSelector((state) => state.Category.categories).filter(c => c.type !== "transfer");
   const editSuccess = useAppSelector((state) => state.Category.editSuccess);
 
   const [defaultTransaction, setDefaultTransaction] = useState<"expense" | "income">("expense");

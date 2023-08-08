@@ -39,7 +39,8 @@ namespace MoneyTracker.App.GraphQl.FinancialOperation
                         UserId: Guid.Parse(context.User.FindFirst(ClaimTypes.NameIdentifier)!.Value),
                         Title: transaction.Title!, Note: transaction.Note, Amount: transaction.Amount!,
                         CategoryId: Guid.Parse(transaction.CategoryId),
-                        ToAccountId: Guid.Parse(transaction.ToAccountId)
+                        ToAccountId: Guid.Parse(transaction.ToAccountId),
+                        CreatedAt: transaction.CreatedAt
                      );
 
                     await commandDispatcher.DispatchAsync(command);
@@ -71,7 +72,8 @@ namespace MoneyTracker.App.GraphQl.FinancialOperation
                         UserId: Guid.Parse(context.User.FindFirst(ClaimTypes.NameIdentifier)!.Value),
                         Title: transaction.Title!, Note: transaction.Note, Amount: transaction.Amount!,
                         CategoryId: Guid.Parse(transaction.CategoryId),
-                        FromAccountId: Guid.Parse(transaction.FromAccountId)
+                        FromAccountId: Guid.Parse(transaction.FromAccountId),
+                        CreatedAt: transaction.CreatedAt
                      );
 
                     await commandDispatcher.DispatchAsync(command);
@@ -104,7 +106,8 @@ namespace MoneyTracker.App.GraphQl.FinancialOperation
                         Title: transaction.Title!, Note: transaction.Note, Amount: transaction.Amount!,
                         CategoryId: Guid.Parse(transaction.CategoryId),
                         FromAccountId: Guid.Parse(transaction.FromAccountId),
-                        ToAccountId: Guid.Parse(transaction.ToAccountId)
+                        ToAccountId: Guid.Parse(transaction.ToAccountId),
+                        CreatedAt: transaction.CreatedAt
                      );
 
                     await commandDispatcher.DispatchAsync(command);
@@ -163,11 +166,13 @@ namespace MoneyTracker.App.GraphQl.FinancialOperation
                         var command = new UpdateFinancialOperationCommand(
                             UserId: Guid.Parse(context.User.FindFirst(ClaimTypes.NameIdentifier)!.Value),
                             OperationId: Guid.Parse(input.OperationId),
-                            Title: input.Title!, 
-                            Note: input.Note, 
+                            Title: input.Title!,
+                            Note: input.Note,
                             Amount: input.Amount,
                             CategoryId: Guid.Parse(input.CategoryId),
-                            CreatedAt: input.CreatedAt);
+                            CreatedAt: input.CreatedAt,
+                            FromAccountId: Guid.Parse(input.FromAccountId),
+                            ToAccountId: Guid.Parse(input.ToAccountId));
 
                         await commandDispatcher.DispatchAsync(command);
 

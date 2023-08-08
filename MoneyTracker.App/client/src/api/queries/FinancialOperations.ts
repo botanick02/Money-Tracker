@@ -12,6 +12,8 @@ export const GetTransactions = `query getTransactions($input: GetTransactionsFor
           id
           name
           type
+          iconUrl
+          color
         }
         createdAt
         accountId
