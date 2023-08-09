@@ -1,7 +1,7 @@
 ﻿using MoneyTracker.Business.Entities;
 using MoneyTracker.Business.Interfaces;
 
-namespace MoneyTracker.DataAccess
+namespace MoneyTracker.DataAccess.Repositories
 {
     public class TransactionRepository : ITransactionRepository
     {
@@ -11,10 +11,10 @@ namespace MoneyTracker.DataAccess
             this.readModelExtensions = readModelExtensions;
         }
 
-        public List<Transaction> GetTransactionsByTransactionId(Guid transactionId, DateTime? dateTimeTo = null)
+        public List<Transaction> GetTransactionsByOperationId(Guid operationId, DateTime? dateTimeTo = null)
         {
             var readModel = readModelExtensions.GetReadModel(dateTimeTo);
-            return readModel.Transactions.Where(t => t.OperationId == transactionId).ToList();
+            return readModel.Transactions.Where(t => t.OperationId == operationId).ToList();
         }
 
         public List<Transaction> GetUserTransactions(Guid userId, DateTime? dateTimeTo = null)

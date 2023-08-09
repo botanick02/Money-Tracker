@@ -12,23 +12,27 @@ namespace MoneyTracker.Business.Events
             this.serviceProvider = serviceProvider;
         }
 
-        public ReadModel Apply(ReadModel currentModel, Event @event)
+        public async Task<ReadModel> ApplyAsync(ReadModel currentModel, List<Event> events)
         {
-            var eventType = @event.GetType();
-
-            var applierType = typeof(IEventApplier<>).MakeGenericType(eventType);
-            var applier = serviceProvider.GetRequiredService(applierType);
-
-            var applyMethod = applier.GetType().GetMethod("Apply");
-            var applyResult = applyMethod!.Invoke(applier, new object[] { currentModel, @event });
-
-            if (applyResult is ReadModel result)
+            var updatedModel = currentModel;
+            foreach (var @event in events)
             {
-                return result;
-            }
+                var eventType = @event.GetType();
 
-            return currentModel;
+                var applierType = typeof(IEventApplier<>).MakeGenericType(eventType);
+                var applier = serviceProvider.GetRequiredService(applierType);
+
+                var applyMethod = applier.GetType().GetMethod("ApplyAsync");
+                var applyTask = (Task<ReadModel>)applyMethod!.Invoke(applier, new object[] { updatedModel, @event })!;
+
+                updatedModel = await applyTask.ConfigureAwait(false);
+            }
+            return updatedModel;
         }
 
+        public async Task<ReadModel> ApplyAsync(ReadModel currentModel, Event @event)
+        {
+            return await ApplyAsync(currentModel, new List<Event> { @event });
+        }
     }
 }

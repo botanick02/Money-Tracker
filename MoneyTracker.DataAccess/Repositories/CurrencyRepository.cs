@@ -2,7 +2,7 @@
 using MoneyTracker.Business.Interfaces;
 using Newtonsoft.Json;
 
-namespace MoneyTracker.DataAccess
+namespace MoneyTracker.DataAccess.Repositories
 {
     public class CurrencyRepository : ICurrencyRepository
     {
@@ -16,7 +16,7 @@ namespace MoneyTracker.DataAccess
             {
                 throw new FileNotFoundException("Currencies were failed to receive");
             }
-            this.currencies = readCurrencies;
+            currencies = readCurrencies;
         }
 
         public Currency GetCurrencyByCode(string code)

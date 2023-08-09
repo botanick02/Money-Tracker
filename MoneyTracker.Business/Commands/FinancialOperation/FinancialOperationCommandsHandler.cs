@@ -1,4 +1,7 @@
-﻿using MoneyTracker.Business.Events.FinancialOperation;
+﻿using MoneyTracker.Business.Commands.Category;
+using MoneyTracker.Business.Entities;
+using MoneyTracker.Business.Events;
+using MoneyTracker.Business.Events.FinancialOperation;
 using MoneyTracker.Business.Interfaces;
 
 namespace MoneyTracker.Business.Commands.FinancialOperation
@@ -7,45 +10,60 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
     {
         private readonly IEventStore eventStore;
         private readonly IAccountRepository accountRepository;
+        private readonly ICategoryRepository categoryRepository;
 
-        public AddDebitOperationCommandHandler(IEventStore eventStore, IAccountRepository accountRepository)
+        public AddDebitOperationCommandHandler(IEventStore eventStore, IAccountRepository accountRepository, ICategoryRepository categoryRepository)
         {
             this.eventStore = eventStore;
             this.accountRepository = accountRepository;
+            this.categoryRepository = categoryRepository;
         }
 
-        public bool Handle(AddDebitOperationCommand command)
+        public async Task<bool> HandleAsync(AddDebitOperationCommand command)
         {
+            if (categoryRepository.GetCategoryById(command.CategoryId) == null)
+            {
+                throw new ArgumentException("CategoryId: CategoryId is invalid");
+            }
+
+            if (accountRepository.GetUserAccountById(command.ToAccountId) == null)
+            {
+                throw new ArgumentException("ToAccountId: ToAccountId is invalid");
+            }
+
+            var eventsToAppend = new List<Event>();
+
             var transactionId = Guid.NewGuid();
 
             var usersDebitAccount = accountRepository.GetUserAccounts(command.UserId, Entities.AccountType.Debit).FirstOrDefault();
 
-            var debitTransactionEvent = new DebitTransactionAddedEvent
+            var currentTime = DateTime.UtcNow;
+
+            eventsToAppend.Add(new DebitTransactionAddedEvent
             (
                 OperationId: transactionId,
                 UserId: command.UserId,
                 CategoryId: command.CategoryId,
-                CreatedAt: DateTime.UtcNow,
+                CreatedAt: command.CreatedAt ?? currentTime,
                 AccountId: command.ToAccountId,
                 Title: command.Title,
                 Note: command.Note,
                 Amount : command.Amount
-            );
+            ));
 
-            var creditTransactionEvent = new CreditTransactionAddedEvent
+            eventsToAppend.Add(new CreditTransactionAddedEvent
             (
                 OperationId: transactionId,
                 UserId: command.UserId,
                 CategoryId: command.CategoryId,
-                CreatedAt: DateTime.UtcNow,
+                CreatedAt: command.CreatedAt ?? currentTime,
                 AccountId: usersDebitAccount.Id,
                 Title: command.Title,
                 Note: command.Note,
                 Amount: command.Amount
-            );
+            ));
 
-            eventStore.AppendEvent(debitTransactionEvent); //TODO: implement simultaneous event append with sql transactions
-            eventStore.AppendEvent(creditTransactionEvent);
+            await eventStore.AppendEventsAsync(eventsToAppend);
 
             return true;
         }
@@ -55,45 +73,60 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
     {
         private readonly IEventStore eventStore;
         private readonly IAccountRepository accountRepository;
+        private readonly ICategoryRepository categoryRepository;
 
-        public AddCreditOperationCommandHandler(IEventStore eventStore, IAccountRepository accountRepository)
+        public AddCreditOperationCommandHandler(IEventStore eventStore, IAccountRepository accountRepository, ICategoryRepository categoryRepository)
         {
             this.eventStore = eventStore;
             this.accountRepository = accountRepository;
+            this.categoryRepository = categoryRepository;
         }
 
-        public bool Handle(AddCreditOperationCommand command)
+        public async Task<bool> HandleAsync(AddCreditOperationCommand command)
         {
+            if (accountRepository.GetUserAccountById(command.FromAccountId) == null)
+            {
+                throw new ArgumentException("FromAccountId: FromAccountId is invalid");
+            }
+
+            if (categoryRepository.GetCategoryById(command.CategoryId) == null)
+            {
+                throw new ArgumentException("CategoryId: CategoryId is invalid");
+            }
+
             var transactionId = Guid.NewGuid();
 
             var usersCreditAccount = accountRepository.GetUserAccounts(command.UserId, Entities.AccountType.Credit).FirstOrDefault();
 
-            var debitTransactionEvent = new DebitTransactionAddedEvent
+            var currentTime = DateTime.UtcNow;
+
+            var eventsToAppend = new List<Event>();
+
+            eventsToAppend.Add(new DebitTransactionAddedEvent
             (
                 OperationId: transactionId,
                 UserId: command.UserId,
                 CategoryId: command.CategoryId,
-                CreatedAt: DateTime.UtcNow,
                 AccountId: usersCreditAccount.Id,
+                CreatedAt: command.CreatedAt ?? currentTime,
                 Title: command.Title,
                 Note: command.Note,
                 Amount: command.Amount
-            );
+            ));
 
-            var creditTransactionEvent = new CreditTransactionAddedEvent
+            eventsToAppend.Add(new CreditTransactionAddedEvent
             (
                 OperationId: transactionId,
                 UserId: command.UserId,
                 CategoryId: command.CategoryId,
-                CreatedAt: DateTime.UtcNow,
+                CreatedAt: command.CreatedAt ?? currentTime,
                 AccountId: command.FromAccountId,
                 Title: command.Title,
                 Note: command.Note,
                 Amount: command.Amount
-            );
+            ));
 
-            eventStore.AppendEvent(debitTransactionEvent); //TODO: implement simultaneous event append with sql transactions
-            eventStore.AppendEvent(creditTransactionEvent);
+            await eventStore.AppendEventsAsync(eventsToAppend);
 
             return true;
         }
@@ -103,47 +136,70 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
     {
         private readonly IEventStore eventStore;
         private readonly IAccountRepository accountRepository;
+        private readonly ICategoryRepository categoryRepository;
 
-        public AddTransferOperationCommandHandler(IEventStore eventStore, IAccountRepository accountRepository)
+        public AddTransferOperationCommandHandler(IEventStore eventStore, IAccountRepository accountRepository, ICategoryRepository categoryRepository)
         {
             this.eventStore = eventStore;
             this.accountRepository = accountRepository;
+            this.categoryRepository = categoryRepository;
         }
 
-        public bool Handle(AddTransferOperationCommand command)
+        public async Task<bool> HandleAsync(AddTransferOperationCommand command)
         {
+            if (accountRepository.GetUserAccountById(command.FromAccountId) == null)
+            {
+                throw new ArgumentException("FromAccountId: FromAccountId is invalid");
+            }
+
+            if (accountRepository.GetUserAccountById(command.ToAccountId) == null)
+            {
+                throw new ArgumentException("ToAccountId: ToAccountId is invalid");
+            }
+
+            if (categoryRepository.GetCategoryById(command.CategoryId) == null)
+            {
+                throw new ArgumentException("CategoryId: CategoryId is invalid");
+            }
+
+            var eventsToAppend = new List<Event>();
+
             var transactionId = Guid.NewGuid();
 
-            var debitTransactionEvent = new DebitTransactionAddedEvent
+            var currentTime = DateTime.UtcNow;
+
+            var transferCategoryId = categoryRepository.GetTransferCategory().Id;
+
+            eventsToAppend.Add(new DebitTransactionAddedEvent
             (
                 OperationId: transactionId,
                 UserId: command.UserId,
-                CategoryId: command.CategoryId,
-                CreatedAt: DateTime.UtcNow,
+                CategoryId: transferCategoryId,
+                CreatedAt: command.CreatedAt ?? currentTime,
                 AccountId: command.ToAccountId,
                 Title: command.Title,
                 Note: command.Note,
                 Amount: command.Amount
-            );
+            ));
 
-            var creditTransactionEvent = new CreditTransactionAddedEvent
+            eventsToAppend.Add(new CreditTransactionAddedEvent
             (
                 OperationId: transactionId,
                 UserId: command.UserId,
-                CategoryId: command.CategoryId,
-                CreatedAt: DateTime.UtcNow,
+                CategoryId: transferCategoryId,
+                CreatedAt: command.CreatedAt ?? currentTime,
                 AccountId: command.FromAccountId,
                 Title: command.Title,
                 Note: command.Note,
                 Amount: command.Amount
-            );
+            ));
 
-            eventStore.AppendEvent(debitTransactionEvent); //TODO: implement simultaneous event append with sql transactions
-            eventStore.AppendEvent(creditTransactionEvent);
+            await eventStore.AppendEventsAsync(eventsToAppend);
 
             return true;
         }
     }
+
 
     public class CancelFinancialOperationCommandHandler : ICommandHandler<CancelFinancialOperationCommand>
     {
@@ -157,12 +213,12 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
             this.transactionRepository = transactionRepository;
         }
 
-        public bool Handle(CancelFinancialOperationCommand command)
+        public async Task<bool> HandleAsync(CancelFinancialOperationCommand command)
         {
-            var transactions = transactionRepository.GetTransactionsByTransactionId(command.TransactionId);
+            var transactions = transactionRepository.GetTransactionsByOperationId(command.TransactionId);
             if (transactions.Count < 2)
             {
-                return false;
+                throw new ArgumentException("OperationId: OperationId is invalid");
             }
 
             var cancelEvent = new FinancialOperationCanceledEvent
@@ -170,7 +226,79 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
                 OperationId: command.TransactionId
             );
 
-            eventStore.AppendEvent(cancelEvent);
+            await eventStore.AppendEventAsync(cancelEvent);
+
+            return true;
+        }
+    }
+
+    public class UpdateFinancialOperationCommandHandler : ICommandHandler<UpdateFinancialOperationCommand>
+    {
+        private readonly IEventStore eventStore;
+        private readonly ITransactionRepository transactionRepository;
+        private readonly IAccountRepository accountRepository;
+        private readonly ICategoryRepository categoryRepository;
+
+
+        public UpdateFinancialOperationCommandHandler(IEventStore eventStore, ITransactionRepository transactionRepository, IAccountRepository accountRepository, ICategoryRepository categoryRepository)
+        {
+            this.eventStore = eventStore;
+            this.transactionRepository = transactionRepository;
+            this.accountRepository = accountRepository;
+            this.categoryRepository = categoryRepository;
+        }
+
+        public async Task<bool> HandleAsync(UpdateFinancialOperationCommand command)
+        {
+            var existingTransactions = transactionRepository.GetTransactionsByOperationId(command.OperationId);
+
+            var eventsToAppend = new List<Event>();
+
+            var userIncomeAccountId = accountRepository.GetUserAccounts(command.UserId, AccountType.Debit).FirstOrDefault().Id;
+            var userExpenseAccountId = accountRepository.GetUserAccounts(command.UserId, AccountType.Credit).FirstOrDefault().Id;
+
+            if (Math.Abs(command.Amount) != Math.Abs(existingTransactions[0].Amount))
+            {
+                eventsToAppend.Add(new FinancialOperationAmountUpdatedEvent(command.OperationId, command.Amount));
+            }
+
+            if (command.Title != existingTransactions[0].Title)
+            {
+                eventsToAppend.Add(new FinancialOperationTitleUpdatedEvent(command.OperationId, command.Title));
+            }
+
+            if (command.CategoryId != existingTransactions[0].CategoryId)
+            {
+                if (categoryRepository.GetCategoryById(command.CategoryId) == null)
+                {
+                    throw new ArgumentException("CategoryId: CategoryId is invalid");
+                }
+                eventsToAppend.Add(new FinancialOperationCategoryIdUpdatedEvent(command.OperationId, command.CategoryId));
+            }
+
+            if (command.Note != existingTransactions[0].Note)
+            {
+                eventsToAppend.Add(new FinancialOperationNoteUpdatedEvent(command.OperationId, command.Note));
+            }
+
+            if (command.CreatedAt != existingTransactions[0].CreatedAt)
+            {
+                eventsToAppend.Add(new FinancialOperationCreatedAtUpdatedEvent(command.OperationId, command.CreatedAt));
+            }
+
+            foreach (var transaction in existingTransactions)
+            {
+                if (transaction.Amount > 0 && transaction.AccountId != userExpenseAccountId && command.ToAccountId.HasValue && command.ToAccountId != transaction.AccountId)
+                {
+                    eventsToAppend.Add(new FinancialOperationAccountUpdatedEvent(transaction.Id, (Guid)command.ToAccountId));
+                }
+                if (transaction.Amount < 0 && transaction.AccountId != userIncomeAccountId && command.FromAccountId.HasValue && command.ToAccountId != transaction.AccountId)
+                {
+                    eventsToAppend.Add(new FinancialOperationAccountUpdatedEvent(transaction.Id, (Guid)command.FromAccountId));
+                }
+            }
+
+            await eventStore.AppendEventsAsync(eventsToAppend);
 
             return true;
         }

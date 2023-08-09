@@ -4,70 +4,67 @@
 .category-list {
   display: flex;
   flex-direction: column;
-  margin-left: 20px; /* Задайте нужное значение отступа слева */
-  margin-right: 20px; /* Задайте нужное значение отступа справа */
+  align-items: center; 
+  width: 100%; 
+  margin-top: 20px; 
+  margin-top: 20px; 
+  max-height: 300px; 
+  overflow-y: auto;
 }
 
 .category-list__date {
-  width: 100%;
   text-align: center;
-  margin-top: calc(40px - 14px);
+  margin-top: 26px; 
 }
 
-
-.category{
+.category {
   display: flex;
   align-items: center;
   height: 50px;
   width: 100%;
   padding-right: 8px;
- 
 }
 
 .category__indicator {
   width: 25px;
-  height: 25px; 
-  border-radius: 50%; 
-  margin-right: 10px; 
+  height: 25px;
+  border-radius: 50%;
+  margin-right: 10px;
 }
 
-
-
-
-.category__amount{
+.category__amount {
   margin-left: auto;
 
-  &__expense{
+  &__expense {
     color: $secondary-color;
   }
 
-  &__income{
+  &__income {
     color: $primary-color;
   }
 }
 
-.category__title{
+.category__title {
   font-size: 16px;
 }
 
-.category__category-name{
+.category__category-name {
   font-size: 14px;
   font-weight: 300;
 }
 
 .chart-container {
-  max-width: 250px; // Adjust the maximum width as needed
-  margin: 0 auto; // Center the chart horizontally
-  padding: 20px; // Add padding around the chart
+  max-width: 250px; 
+  margin: 0 auto; 
+  padding: 20px; 
 
   .chart-wrapper {
-    height: 250px; // Adjust the height as needed
+    height: 250px; 
     display: flex;
     align-items: center;
     justify-content: center;
 
     border-radius: 8px;
-    overflow: hidden; 
-    
+    overflow: hidden;
   }
 }

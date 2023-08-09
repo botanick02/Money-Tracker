@@ -6,6 +6,9 @@ export interface AccountState {
   currentAccountId: string | null;
   loading: boolean;
   error: string | null;
+  currentCategoryId: string | null;
+  currentCategoryName: string | null;
+  currentCategoryColor: string | null;
 }
 
 const initialState: AccountState = {
@@ -13,8 +16,15 @@ const initialState: AccountState = {
   currentAccountId: "total",
   loading: false,
   error: null,
+  currentCategoryId: null,
+  currentCategoryName: null,
+  currentCategoryColor: null
 };
-
+interface CategoryPayload {
+  id: string | null;
+  name: string | null;
+  color: string | null;
+}
 export const AccountSlice = createSlice({
   name: "Accounts",
   initialState: initialState,
@@ -46,11 +56,19 @@ export const AccountSlice = createSlice({
     SET_CURRENT_ACCOUNT_ID(state, action: PayloadAction<string>) {
       state.currentAccountId = action.payload;
     },
+    
+    SET_CURRENT_CATEGORY(state, action: PayloadAction<CategoryPayload>) {
+      const { id, name, color } = action.payload;
+      
+      state.currentCategoryId = id;
+      state.currentCategoryName = name;
+      state.currentCategoryColor = color;
+    }
   },
 });
 
 export const {
-  FETCH_ACCOUNTS, FETCH_ACCOUNTS_ERROR, FETCH_ACCOUNTS_SUCCESS, SET_CURRENT_ACCOUNT_ID
+  FETCH_ACCOUNTS, FETCH_ACCOUNTS_ERROR, FETCH_ACCOUNTS_SUCCESS, SET_CURRENT_ACCOUNT_ID,SET_CURRENT_CATEGORY
 } = AccountSlice.actions;
 
 export default AccountSlice.reducer;

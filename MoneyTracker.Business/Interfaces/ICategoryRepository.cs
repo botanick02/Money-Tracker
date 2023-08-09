@@ -5,5 +5,9 @@ namespace MoneyTracker.Business.Interfaces
     public interface ICategoryRepository
     {
         public List<Category> GetCategories(DateTime? dateTimeTo = null);
+
+        public Category? GetCategoryById(Guid id);
+
+        public Category GetTransferCategory();
     }
 }

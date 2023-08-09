@@ -1,7 +1,8 @@
 ﻿using MoneyTracker.Business.Entities;
 using MoneyTracker.Business.Interfaces;
+using System;
 
-namespace MoneyTracker.DataAccess
+namespace MoneyTracker.DataAccess.Repositories
 {
     public class AccountRepository : IAccountRepository
     {
@@ -10,6 +11,13 @@ namespace MoneyTracker.DataAccess
         {
             this.readModelExtensions = readModelExtensions;
         }
+
+        public Account? GetUserAccountById(Guid accountId)
+        {
+            var readModel = readModelExtensions.GetReadModel();
+            return readModel.Accounts.FirstOrDefault(a => a.Id == accountId);
+        }
+
         public List<Account> GetUserAccounts(Guid userId, AccountType type, DateTime? dateTimeTo = null)
         {
             var readModel = readModelExtensions.GetReadModel(dateTimeTo);

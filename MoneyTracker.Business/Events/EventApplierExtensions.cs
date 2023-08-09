@@ -24,6 +24,13 @@ namespace MoneyTracker.Business.Events
             services.AddTransient<IEventApplier<DebitTransactionAddedEvent>, DebitTransactionAddedEventApplier>();
             services.AddTransient<IEventApplier<CreditTransactionAddedEvent>, CreditTransactionAddedEventApplier>();
             services.AddTransient<IEventApplier<FinancialOperationCanceledEvent>, FinancialOperationCanceledEventApplier>();
+            services.AddTransient<IEventApplier<FinancialOperationCreatedAtUpdatedEvent>, FinancialOperationCreatedAtUpdatedEventApplier>();
+            services.AddTransient<IEventApplier<FinancialOperationAmountUpdatedEvent>, FinancialOperationAmountUpdatedEventApplier>();
+            services.AddTransient<IEventApplier<FinancialOperationTitleUpdatedEvent>, FinancialOperationTitleUpdatedEventApplier>();
+            services.AddTransient<IEventApplier<FinancialOperationCategoryIdUpdatedEvent>, FinancialOperationCategoryIdUpdatedEventApplier>();
+            services.AddTransient<IEventApplier<FinancialOperationNoteUpdatedEvent>, FinancialOperationNoteUpdatedEventApplier>();
+            services.AddTransient<IEventApplier<FinancialOperationAccountUpdatedEvent>, FinancialOperationAccountUpdatedEventApplier>();
+
 
             services.AddTransient<IEventApplier<BudgetCreateEvent>, BudgetCreateEventApplier>();
             services.AddTransient<IEventApplier<BudgetDeleteEvent>, BudgetDeleteEventApplier>();

@@ -7,7 +7,8 @@ import {FETCH_CATEGORIES} from "../../store/Category/Category.slice";
 import {Category} from "../../types/Category";
 
 const CategoryList = () => {
-  const {categories} = useAppSelector((state) => state.Category);
+  const categories = useAppSelector((state) => state.Category.categories).filter(c => c.type !== "transfer");
+
   const editSuccess = useAppSelector((state) => state.Category.editSuccess);
 
   const [defaultTransaction, setDefaultTransaction] = useState<"expense" | "income">("expense");

@@ -10,11 +10,12 @@ interface SelectPropsType {
   selectHandler(option: Option): void;
   options: Option[];
   title?: string;
+  defaultOptionIndex?: number;
 }
 
-const Dropdown: FC<SelectPropsType> = ({ selectHandler, options, title }) => {
+const Dropdown: FC<SelectPropsType> = ({ selectHandler, options, title, defaultOptionIndex }) => {
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
-  const [selectedOptionId, setSelectedOptionId] = useState(0);
+  const [selectedOptionId, setSelectedOptionId] = useState(defaultOptionIndex ?? 0);
 
   options = title ? [{ label: title, value: null }, ...options] : options;
 

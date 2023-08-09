@@ -5,6 +5,7 @@ interface Operation {
   amount: number;
   categoryId: any;
   title: string;
+  createdAt: string | null;
 }
 
 interface DebitOperation extends Operation {
@@ -26,8 +27,20 @@ interface FetchTransactionsInfoResponse {
   expenses: number;
 }
 
+export interface UpdateFinancialOperation {
+  operationId: string;
+  title: string;
+  amount: number;
+  note: string | null;
+  createdAt: string;
+  categoryId: string;
+  fromAccountId: string | null;
+  toAccountId: string | null;
+}
+
 export interface FetchTransactionsInfoVariables {
   accountId: string | null;
+  categoryId: string | null;
   fromDate: string | null;
   toDate: string | null;
 }
@@ -41,6 +54,7 @@ export interface CreateTransactionState {
   incomes: number;
   expenses: number;
   dateRange: { fromDate: string | null; toDate: string | null };
+
 }
 
 const initialState: CreateTransactionState = {
@@ -52,15 +66,14 @@ const initialState: CreateTransactionState = {
   expenses: 0,
   error: null,
   dateRange: { fromDate: null, toDate: null },
+
 };
 
 export const FinancialOperationSlice = createSlice({
   name: "FinancialOperations",
   initialState: initialState,
   reducers: {
-    FETCH_TRANSACTIONS_INFO(
-      state,
-    ) {
+    FETCH_TRANSACTIONS_INFO(state) {
       state.loading = true;
       state.error = null;
       state.transactions = [];
@@ -93,6 +106,21 @@ export const FinancialOperationSlice = createSlice({
       state.loading = true;
       state.error = null;
     },
+    UPDATE_FINANCIAL_OPERATION(
+      state,
+      action: PayloadAction<UpdateFinancialOperation>
+    ) {
+      state.loading = true;
+      state.error = null;
+    },
+    UPDATE_FINANCIAL_OPERATION_SUCCESS(state) {
+      state.loading = false;
+      state.error = null;
+    },
+    UPDATE_FINANCIAL_OPERATION_ERROR(state, action: PayloadAction<string>) {
+      state.loading = false;
+      state.error = action.payload;
+    },
     ADD_FINANCIAL_OPERATION_SUCCESS(
       state,
       action: PayloadAction<{ addTransactionSuccess: boolean }>
@@ -106,7 +134,7 @@ export const FinancialOperationSlice = createSlice({
     },
     CANCEL_FINANCIAL_OPERATION(
       state,
-      action: PayloadAction<{ transactionId: string }>
+      action: PayloadAction<{ operationId: string }>
     ) {
       state.loading = true;
       state.error = null;
@@ -127,7 +155,7 @@ export const FinancialOperationSlice = createSlice({
       action: PayloadAction<{ fromDate: string | null; toDate: string | null }>
     ) {
       state.dateRange = action.payload;
-    },
+    }
   },
 });
 
@@ -143,6 +171,9 @@ export const {
   CANCEL_FINANCIAL_OPERATION,
   CANCEL_FINANCIAL_OPERATION_ERROR,
   CANCEL_FINANCIAL_OPERATION_SUCCESS,
+  UPDATE_FINANCIAL_OPERATION_ERROR,
+  UPDATE_FINANCIAL_OPERATION,
+  UPDATE_FINANCIAL_OPERATION_SUCCESS,
   SET_DATE_RANGE,
 } = FinancialOperationSlice.actions;
 

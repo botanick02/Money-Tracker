@@ -11,6 +11,6 @@ namespace MoneyTracker.Business.Interfaces
     {
         List<StoredEvent> GetEvents(DateTime? dateTimeTo = null);
 
-        void AppendEvent(StoredEvent @event);
+        Task AppendEventsAsync(List<StoredEvent> events);
     }
 }

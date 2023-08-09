@@ -5,7 +5,7 @@ namespace MoneyTracker.Business.Events.Auth
 {
     public class UserRegisteredEventApplier : IEventApplier<UserRegisteredEvent>
     {
-        public ReadModel Apply(ReadModel currentModel, UserRegisteredEvent @event)
+        public async Task<ReadModel> ApplyAsync(ReadModel currentModel, UserRegisteredEvent @event)
         {
             var newUser = new User(@event.Email, @event.Name)
             {
@@ -24,7 +24,7 @@ namespace MoneyTracker.Business.Events.Auth
 
     public class GoogleUserRegisteredEventApplier : IEventApplier<GoogleUserRegisteredEvent>
     {
-        public ReadModel Apply(ReadModel currentModel, GoogleUserRegisteredEvent @event)
+        public async Task<ReadModel> ApplyAsync(ReadModel currentModel, GoogleUserRegisteredEvent @event)
         {
             var newUser = new User(@event.Email, @event.Name)
             {
@@ -41,7 +41,7 @@ namespace MoneyTracker.Business.Events.Auth
 
     public class UserRefreshTokenSetEventApplier : IEventApplier<UserRefreshTokenSetEvent>
     {
-        public ReadModel Apply(ReadModel currentModel, UserRefreshTokenSetEvent @event)
+        public async Task<ReadModel> ApplyAsync(ReadModel currentModel, UserRefreshTokenSetEvent @event)
         {
             var userToUpdate = currentModel.Users.FirstOrDefault(u => u.Id == @event.UserId);
             if (userToUpdate != null)

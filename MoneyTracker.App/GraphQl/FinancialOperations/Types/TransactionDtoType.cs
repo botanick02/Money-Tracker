@@ -1,10 +1,11 @@
 ﻿using GraphQL.Types;
+using MoneyTracker.Business.Services.Dto_s;
 
 namespace MoneyTracker.App.GraphQl.FinancialOperation.Types
 {
-    public class TransactionType : ObjectGraphType<Business.Entities.Transaction>
+    public class TransactionDtoType : ObjectGraphType<TransactionDto>
     {
-        public TransactionType()
+        public TransactionDtoType()
         {
             Field(t => t.Id);
 
@@ -12,13 +13,13 @@ namespace MoneyTracker.App.GraphQl.FinancialOperation.Types
 
             Field(t => t.UserId);
 
-            Field(t => t.Title);
+            Field(t => t.Title, nullable: true);
             
             Field(t => t.Note, nullable: true);
             
             Field(t => t.Amount);
             
-            Field(t => t.CategoryId);
+            Field(t => t.Category);
             
             Field(t => t.CreatedAt);
             

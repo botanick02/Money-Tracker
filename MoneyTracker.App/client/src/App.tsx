@@ -7,7 +7,7 @@ import Registration from "./pages/Registration";
 import Transactions from "./pages/Transactions";
 import Layout from "./components/common/Layout";
 import Settings from "./pages/Settings";
-// import Stats from "./pages/Stats/Stats";
+import Stats from "./pages/Stats";
 import Budgets from "./pages/Budgets";
 import CategoryList from "./components/CategoryList/CategoryList";
 import { REFRESH_ACCESS_TOKEN } from "./store/Auth/Auth.slice";
@@ -40,7 +40,7 @@ function App() {
           <Route path={"/"} element={<Layout />}>
             <Route index element={<Transactions />} />
             <Route path="/budgets" element={<Budgets/>} />
-            {/* <Route path="/stats" element={<Stats/>} /> */}
+            <Route path="/stats" element={<Stats/>} />
             <Route path="/settings" element={<Settings/>}/>
             <Route path="/CategoryList" element={<CategoryList/>}/>
             <Route path="*" element={<Navigate to="/" />} />

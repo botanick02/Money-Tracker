@@ -12,6 +12,7 @@ using MoneyTracker.Infrastructure.EventStore;
 using MoneyTracker.DataAccess;
 using MoneyTracker.DataAccess.MsSQL;
 using MoneyTracker.Business.ReadStoreModel;
+using MoneyTracker.DataAccess.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,7 +42,7 @@ builder.Services.AddTransient<PasswordHashService>();
 builder.Services.AddTransient<AccountService>();
 builder.Services.AddTransient<TransactionService>();
 builder.Services.AddTransient<BudgetService>();
-
+builder.Services.AddTransient<StatisticService>();
 
 builder.Services.AddTransient<IEventStore, EventStore>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
@@ -49,7 +50,7 @@ builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
 builder.Services.AddTransient<ITransactionRepository, TransactionRepository>();
 
 builder.Services.AddTransient<IBudgetRepository, BudgetRepository>();
-
+builder.Services.AddTransient<IAccountRepository, AccountRepository>();
 builder.Services.AddTransient<IAccountRepository, AccountRepository>();
 builder.Services.AddTransient<ICurrencyRepository, CurrencyRepository>();
 
@@ -121,7 +122,5 @@ app.UseSpa(spa =>
     }
 });
 
-
-//app.MapGet("/", () => "Hello World!");
 
 app.Run();
