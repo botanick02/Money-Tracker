@@ -19,15 +19,16 @@ namespace MoneyTracker.Business.Services
             this.mapper = mapper;
         }
 
-        public GetTransactionsDataDto GetTransactionsData(Guid userId, DateTime? fromDate = null, DateTime? toDate = null, Guid? accountId = null)
+        public GetTransactionsDataDto GetTransactionsData(Guid userId, DateTime? fromDate = null, DateTime? toDate = null, Guid? accountId = null, Guid? categoryId = null)
         {
             var res = new GetTransactionsDataDto();
 
             var transactions = new List<Transaction>();
 
-            if (accountId == null) {
+            if (accountId == null)
+            {
                 var userPersonalAccounts = accountRepository!.GetUserAccounts(userId, Entities.AccountType.Personal);
-                foreach ( var account in userPersonalAccounts )
+                foreach (var account in userPersonalAccounts)
                 {
                     transactions.AddRange(transactionRepository!.GetAccountTransactions(account.Id));
                 }
@@ -35,6 +36,11 @@ namespace MoneyTracker.Business.Services
             else
             {
                 transactions.AddRange(transactionRepository!.GetAccountTransactions((Guid)accountId));
+            }
+
+            if (categoryId != null)
+            {
+                transactions = transactions.Where(t => t.CategoryId == categoryId).ToList();
             }
 
             if (fromDate != null)
