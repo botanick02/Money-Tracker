@@ -13,7 +13,7 @@ namespace MoneyTracker.App.GraphQl.Category
         public CategoryMutation(CommandDispatcher commandDispatcher)
         {
             Field<bool>("CreateCategoryTest")
-                .Resolve(context =>
+                .ResolveAsync(async context =>
                 {
                     var command = new CreateCategoryCommand
                     (
@@ -26,7 +26,7 @@ namespace MoneyTracker.App.GraphQl.Category
                         }
                     );
 
-                    commandDispatcher.Dispatch(command);
+                    await commandDispatcher.DispatchAsync(command);
                     return true;
                 });
 
@@ -34,7 +34,7 @@ namespace MoneyTracker.App.GraphQl.Category
             Field<bool>("RenameCategoryTest")
                 .Argument<string>("CategoryId")
                 .Argument<string>("Name")
-                .Resolve(context =>
+                .ResolveAsync(async context =>
                 {
                     var id = context.GetArgument<string>("CategoryId");
                     var name = context.GetArgument<string>("Name");
@@ -55,7 +55,7 @@ namespace MoneyTracker.App.GraphQl.Category
 
                     try
                     {
-                        commandDispatcher.Dispatch(command);
+                        await commandDispatcher.DispatchAsync(command);
                     }
                     catch (CategoryNotFoundException ex)
                     {
@@ -72,22 +72,22 @@ namespace MoneyTracker.App.GraphQl.Category
 
             Field<bool>("CreateCategory")
                 .Argument<CategoryInputType>("Category")
-                .Resolve(context =>
+                .ResolveAsync(async context =>
                 {
                     var category = context.GetArgument<Business.Entities.Category>("Category");
                     var command = new CreateCategoryCommand(category);
-                    commandDispatcher.Dispatch(command);
+                    await commandDispatcher.DispatchAsync(command);
                     return true;
                 });
 
 
             Field<bool>("DeleteCategory")
                 .Argument<StringGraphType>("id")
-                .Resolve(context =>
+                .ResolveAsync(async context =>
                 {
                     var id = context.GetArgument<string>("id");
                     var command = new DeleteCategoryCommand(id);
-                    commandDispatcher.Dispatch(command);
+                    await commandDispatcher.DispatchAsync(command);
                     return true;
                 });
         }

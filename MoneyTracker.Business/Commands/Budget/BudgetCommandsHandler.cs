@@ -1,12 +1,5 @@
-﻿using MoneyTracker.Business.Commands.Category;
-using MoneyTracker.Business.Events.Budgets;
-using MoneyTracker.Business.Events.Categories;
+﻿using MoneyTracker.Business.Events.Budgets;
 using MoneyTracker.Business.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MoneyTracker.Business.Commands.Budget
 {
@@ -19,10 +12,10 @@ namespace MoneyTracker.Business.Commands.Budget
             this.eventStore = eventStore;
         }
 
-        public bool Handle(CreateBudgetCommand command)
+        public async Task<bool> HandleAsync(CreateBudgetCommand command)
         {
             var budgetCreateEvent = new BudgetCreateEvent(command.Budget);
-            eventStore.AppendEvent(budgetCreateEvent);
+            await eventStore.AppendEventAsync(budgetCreateEvent);
             return true;
         }
     }
@@ -36,10 +29,10 @@ namespace MoneyTracker.Business.Commands.Budget
             this.eventStore = eventStore;
         }
 
-        public bool Handle(EditBudgetCommand command)
+        public async Task<bool> HandleAsync(EditBudgetCommand command)
         {
             var budgetEditEvent = new BudgetEditEvent(command.Budget);
-            eventStore.AppendEvent(budgetEditEvent);
+            await eventStore.AppendEventAsync(budgetEditEvent);
             return true;
         }
     }

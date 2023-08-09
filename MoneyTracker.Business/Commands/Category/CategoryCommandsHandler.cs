@@ -14,11 +14,11 @@ namespace MoneyTracker.Business.Commands.Category
             this.eventStore = eventStore;
         }
 
-        public bool Handle(CreateCategoryCommand command)
+        public async Task<bool> HandleAsync(CreateCategoryCommand command)
         {
 
             var categoryCreatedEvent = new CategoryCreatedEvent(command.category);
-            eventStore.AppendEvent(categoryCreatedEvent);
+            await eventStore.AppendEventAsync(categoryCreatedEvent);
             return true;
         }
     }
@@ -34,7 +34,7 @@ namespace MoneyTracker.Business.Commands.Category
             this.eventStore = eventStore;
         }
 
-        public bool Handle(UpdateCategoryNameCommand command)
+        public async Task<bool> HandleAsync(UpdateCategoryNameCommand command)
         {
             var existingCategory = categoryRepository.GetCategories().Find(c => c.Id == command.Id);
 
@@ -49,7 +49,7 @@ namespace MoneyTracker.Business.Commands.Category
                 Name: command.Name
             );
 
-            eventStore.AppendEvent(categoryCreatedEvent);
+            await eventStore.AppendEventAsync(categoryCreatedEvent);
 
             return true;
         }
@@ -65,11 +65,11 @@ namespace MoneyTracker.Business.Commands.Category
             this.eventStore = eventStore;
         }
 
-        public bool Handle(DeleteCategoryCommand command)
+        public async Task<bool> HandleAsync(DeleteCategoryCommand command)
         {
 
             var categoryDeleteEvent = new CategoryDeleteEvent(command.Id);
-            eventStore.AppendEvent(categoryDeleteEvent);
+            await eventStore.AppendEventAsync(categoryDeleteEvent);
             return true;
         }
     }

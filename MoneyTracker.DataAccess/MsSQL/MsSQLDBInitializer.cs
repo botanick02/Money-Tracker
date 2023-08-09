@@ -55,7 +55,7 @@ namespace MoneyTracker.DataAccess.MsSQL
                         Color = "#d9d9d9",
                     });
 
-                    commandDispatcher.Dispatch(transferCategoryCommand);
+                    commandDispatcher.DispatchAsync(transferCategoryCommand);
                 }
             }
         }

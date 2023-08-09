@@ -2,7 +2,7 @@
 using MoneyTracker.Business.Interfaces;
 
 
-namespace MoneyTracker.DataAccess
+namespace MoneyTracker.DataAccess.Repositories
 {
     public class BudgetRepository : IBudgetRepository
     {

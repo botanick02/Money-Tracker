@@ -14,19 +14,39 @@ namespace MoneyTracker.DataAccess.MsSQL
             connectionString = configuration.GetConnectionString("MsSQL")!;
         }
 
-        public void AppendEvent(StoredEvent @event)
+        public async Task AppendEventsAsync(List<StoredEvent> events)
         {
-            const string query = @"
+            const string insertQuery = @"
             INSERT INTO Events (Type, CreatedAt, Data)
             VALUES (@Type, @CreatedAt, @Data)";
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
-                conn.Execute(query, new { @event.Type, @event.CreatedAt, @event.Data });
+                using (var transaction = conn.BeginTransaction())
+                {
+                    try
+                    {
+                        foreach (var @event in events)
+                        {
+                            await conn.ExecuteAsync(insertQuery, new
+                            {
+                                @event.Type,
+                                @event.CreatedAt,
+                                @event.Data
+                            }, transaction);
+                        }
+
+                        transaction.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
+                }
             }
         }
-
         public List<StoredEvent> GetEvents(DateTime? dateTimeTo = null)
         {
 

@@ -107,9 +107,9 @@ namespace MoneyTracker.Business.Services
                 PasswordSalt: salt
             );
 
-            commandDispatcher.Dispatch(command);
+            await commandDispatcher.DispatchAsync(command);
 
-            var createdUser = await TryGetCreatedUser(newUser.Email);
+            var createdUser = userRepository.GetUserByEmail(command.Email);
 
             if (createdUser == null)
             {
@@ -132,9 +132,9 @@ namespace MoneyTracker.Business.Services
                 Name: name
             );
 
-            commandDispatcher.Dispatch(command);
+            await commandDispatcher.DispatchAsync(command);
 
-            var createdUser = await TryGetCreatedUser(email);
+            var createdUser = userRepository.GetUserByEmail(email);
 
             if (createdUser == null)
             {
@@ -184,24 +184,9 @@ namespace MoneyTracker.Business.Services
                 RefreshToken: refreshToken
             );
 
-            commandDispatcher.Dispatch(command);
+            await commandDispatcher.DispatchAsync(command);
 
             return true;
-        }
-
-        private async Task<User?> TryGetCreatedUser(string email)
-        {
-            for (int attempts = 0; attempts < 5; attempts++)
-            {
-                var user = userRepository.GetUserByEmail(email);
-                if (user != null)
-                {
-                    return user;
-                }
-
-                Thread.Sleep(1000); 
-            }
-            return null;
         }
     }
 

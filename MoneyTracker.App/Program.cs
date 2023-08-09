@@ -12,6 +12,7 @@ using MoneyTracker.Infrastructure.EventStore;
 using MoneyTracker.DataAccess;
 using MoneyTracker.DataAccess.MsSQL;
 using MoneyTracker.Business.ReadStoreModel;
+using MoneyTracker.DataAccess.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -121,7 +122,5 @@ app.UseSpa(spa =>
     }
 });
 
-
-//app.MapGet("/", () => "Hello World!");
 
 app.Run();

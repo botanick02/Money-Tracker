@@ -4,8 +4,10 @@ namespace MoneyTracker.Business.Interfaces
 {
     public interface IEventStore
     {
-        public void AppendEvent(Event @event);
+        Task AppendEventsAsync(List<Event> events);
 
-        public T AggregateModel<T>(DateTime dateTimeTo, T @default, Func<T, Event, T> evolve);
+        Task AppendEventAsync(Event @event);
+
+        T AggregateModel<T>(DateTime dateTimeTo, T @default, Func<T, Event, T> evolve);
     }
 }

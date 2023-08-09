@@ -13,7 +13,7 @@ namespace MoneyTracker.App.GraphQl.Budget
 
             Field<bool>("editBudget")
                 .Argument<BudgetInputType>("Budget")
-                .Resolve(context =>
+                .ResolveAsync(async context =>
                 {
                     var budget = context.GetArgument<Business.Entities.Budget>("Budget");
 
@@ -21,7 +21,7 @@ namespace MoneyTracker.App.GraphQl.Budget
 
                     try
                     {
-                        commandDispatcher.Dispatch(command);
+                        await commandDispatcher.DispatchAsync(command);
                     }
                     catch (Exception ex)
                     {

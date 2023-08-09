@@ -4,6 +4,6 @@ namespace MoneyTracker.Business.Events
 {
     public interface IEventApplier<T>
     {
-        ReadModel Apply(ReadModel currentModel, T @event);
+        Task<ReadModel> ApplyAsync(ReadModel currentModel, T @event);
     }
 }
