@@ -1,4 +1,6 @@
-﻿using MoneyTracker.Business.ReadStoreModel;
+﻿using MoneyTracker.Business.Entities;
+using MoneyTracker.Business.ReadStoreModel;
+using MoneyTracker.Business.Services;
 
 namespace MoneyTracker.Business.Events.Categories
 {
@@ -24,6 +26,23 @@ namespace MoneyTracker.Business.Events.Categories
         {
             var updatedModel = currentmodel;
             updatedModel.Categories = updatedModel.Categories.Append(@event.category);
+
+            return updatedModel;
+        }
+    }
+
+    public class CategoryEditEventApplier : IEventApplier<CategoryEditEvent>
+    {
+        public ReadModel Apply(ReadModel currentmodel, CategoryEditEvent @event)
+        {
+            var updatedModel = currentmodel;
+
+
+            var categoryToUpdate = updatedModel.Categories.FirstOrDefault(c => c.Id == @event.category.Id);
+            if (categoryToUpdate != null)
+            {
+                ObjectValueChangeService.ObjectValueChange(@event.category, ref categoryToUpdate);
+            }
 
             return updatedModel;
         }

@@ -10,10 +10,8 @@ namespace MoneyTracker.Business.Entities
     public class Budget
     {
         public Guid Id { get; set; } = Guid.NewGuid();
-        public DateTime? StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
         public decimal Limit { get; set; } = 0;
-        public bool IsActive { get; set; } = true;
+        public string? Title { get; set; }
         public Guid CategoryId { get; set; }
 
         public Budget(Guid CategiryId) {
@@ -22,13 +20,10 @@ namespace MoneyTracker.Business.Entities
 
         public Budget() { }
 
-        public Budget(string id, DateTime? startDate, DateTime? endDate, decimal limit, bool isActive, string categoryId)
+        public Budget(string id, decimal limit, string categoryId)
         {
             this.Id = Guid.Parse(id);
-            this.StartDate = startDate;
-            this.EndDate = endDate;
             this.Limit = limit;
-            this.IsActive = isActive;
             this.CategoryId = Guid.Parse(categoryId);
         }
     }

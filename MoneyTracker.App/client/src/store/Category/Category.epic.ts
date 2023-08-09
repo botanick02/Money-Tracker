@@ -6,15 +6,14 @@ import {
   FETCH_CATEGORIES,
   FETCH_CATEGORIES_ERROR,
   FETCH_CATEGORIES_SUCCESS,
-  EDIT_CATEGORY,
   EDIT_CATEGORY_ERROR,
-  EDIT_CATEGORY_SUCCESS, createCategory, deleteCategory,
+  EDIT_CATEGORY_SUCCESS, createCategory, deleteCategory, editCategory,
 } from "./Category.slice";
 import {CreateCategory, DeleteCategory, EditCategory, GetCategories} from "../../api/queries/Categories";
 
-export const GetCategoriesEpic: Epic<any, any, any> = (action$, state$) => {
+export const GetCategoriesEpic: Epic = (action$: Observable<ReturnType<typeof FETCH_CATEGORIES>>) => {
   return action$.pipe(
-    ofType(FETCH_CATEGORIES),
+    ofType(FETCH_CATEGORIES.type),
     mergeMap(() =>
       from(request(GetCategories)).pipe(
         mergeMap(((data: any) => {
@@ -36,10 +35,10 @@ export const GetCategoriesEpic: Epic<any, any, any> = (action$, state$) => {
   )
 };
 
-export const EditCategoryEpic: Epic<any, any, any> = (action$, state$) => {
+export const EditCategoryEpic: Epic = (action$: Observable<ReturnType<typeof editCategory>>) => {
   return action$.pipe(
-    ofType(EDIT_CATEGORY),
-    mergeMap((action) => from(request(EditCategory, action.payload)).pipe(
+    ofType(editCategory.type),
+    mergeMap((action) => from(request(EditCategory,{category: action.payload})).pipe(
       mergeMap((data: any) => {
         if (data.errors) {
           // store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message));

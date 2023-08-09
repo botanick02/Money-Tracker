@@ -4,21 +4,29 @@ import CategorySetsItemItem from "../../elements/CategorySetsItemItem";
 import CategoryCreate from "../CategoryCreate/CategoryCreate";
 import TimeScopePanel from "../TimeScopePanel/TimeScopePanel";
 import {FETCH_CATEGORIES} from "../../store/Category/Category.slice";
+import {Category} from "../../types/Category";
 
 const CategoryList = () => {
-  const items = useAppSelector((state) => state.Category.categories);
+  const {categories} = useAppSelector((state) => state.Category);
   const editSuccess = useAppSelector((state) => state.Category.editSuccess);
 
   const [defaultTransaction, setDefaultTransaction] = useState<"expense" | "income">("expense");
+  const [categoryToEdit, setCategoryToEdit] = useState<undefined | Category>()
   const [isCreatePopupOpen, setIsCreatePopupOpen] = useState<boolean>(false);
 
   const handlePopupOpen = () => {
     document.body.classList.toggle("no-scroll");
-    setIsCreatePopupOpen((prevState) => !prevState);
+    setIsCreatePopupOpen((prevState) => {
+      if (prevState)
+        setCategoryToEdit(undefined)
+      return !prevState
+    });
   };
 
-  const handleCategoryItemClick = (item: any) => {
-    setDefaultTransaction(item.type.toLowerCase());
+  const handleCategoryItemClick = (item: Category) => {
+    setDefaultTransaction(item.type);
+    setCategoryToEdit(item)
+    handlePopupOpen();
   };
 
   const dispatch = useAppDispatch();
@@ -34,15 +42,15 @@ const CategoryList = () => {
           <CategoryCreate
             transactionDefaultType={defaultTransaction}
             openPopupHandle={handlePopupOpen}
+            categoryToEdit={categoryToEdit}
           />
         )}
-        {items.map((item, index) => (
+        {categories.map((item, index) => (
           <CategorySetsItemItem
-            key={index}
+            key={item.id}
             category={item}
             onClick={() => {
               handleCategoryItemClick(item);
-              handlePopupOpen();
             }}
           />
         ))}

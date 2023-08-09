@@ -17,9 +17,11 @@ namespace MoneyTracker.Business.Commands
             services.AddTransient<CommandDispatcher>();
 
             services.AddTransient<ICommandHandler<CreateBudgetCommand>, CreateBudgetCommandHandler>();
+            services.AddTransient<ICommandHandler<DeleteBudgetCommand>, DeleteBudgetCommandHandler>();
             services.AddTransient<ICommandHandler<EditBudgetCommand>, EditBudgetCommandHandler>();
 
             services.AddTransient<ICommandHandler<CreateCategoryCommand>, CreateCategoryCommandHandler>();
+            services.AddTransient<ICommandHandler<EditCategoryCommand>, EditCategoryCommandHandler>();
             services.AddTransient<ICommandHandler<DeleteCategoryCommand>, DeleteCategoryCommandHandler>();
             services.AddTransient<ICommandHandler<UpdateCategoryNameCommand>, UpdateCategoryNameCommandHandler>();
 

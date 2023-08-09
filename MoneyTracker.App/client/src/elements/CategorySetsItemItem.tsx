@@ -3,6 +3,7 @@ import { Category } from '../types/Category';
 import SvgFromPath from "./SvgFromPath";
 import {useAppDispatch} from "../hooks/useAppDispatch";
 import {deleteCategory} from "../store/Category/Category.slice";
+import { ReactComponent as DeleteIcon } from "../assets/icons/Delete-icon.svg";
 
 interface CategorySetsItemProps {
   category: Category;
@@ -26,8 +27,8 @@ const CategorySetsItem: FC<CategorySetsItemProps> = ({ category, onClick }) => {
         <div className="row-item__title">{category.name}</div>
         <div className="row-item__sub-title">{category.id}</div>
       </div>
-      <div onClick={handleDelete} style={{background: "red", width: 25, height: 25}} className={"row-item__amount"}>
-        X
+      <div onClick={handleDelete} className={"row-item__amount delete-category"}>
+        <DeleteIcon/>
       </div>
     </div>
   );

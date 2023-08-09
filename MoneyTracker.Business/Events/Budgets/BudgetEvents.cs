@@ -8,5 +8,6 @@ using System.Threading.Tasks;
 namespace MoneyTracker.Business.Events.Budgets
 {
     public record BudgetCreateEvent(Budget Budget) : Event;
+    public record BudgetDeleteEvent(string id) : Event;
     public record BudgetEditEvent(Budget Budget) : Event;
 }

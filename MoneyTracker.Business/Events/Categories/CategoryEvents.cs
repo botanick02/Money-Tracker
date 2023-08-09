@@ -6,6 +6,8 @@ namespace MoneyTracker.Business.Events.Categories
         : Event;
     public record CategoryDeleteEvent(string id)
         : Event;
+    public record CategoryEditEvent(Category category)
+        : Event;
 
     public record CategoryNameUpdatedEvent(Guid Id, string Name)
         : Event;

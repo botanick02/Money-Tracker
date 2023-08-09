@@ -68,6 +68,7 @@ export const {
 } = CategorySlice.actions;
 
 export const createCategory = createAction<CategoryToCreate>("createCategory")
+export const editCategory = createAction<Category>("editCategory")
 export const deleteCategory = createAction<string>("deleteCategory")
 
 export default CategorySlice.reducer;

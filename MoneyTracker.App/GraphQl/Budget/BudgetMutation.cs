@@ -11,6 +11,49 @@ namespace MoneyTracker.App.GraphQl.Budget
         public BudgetMutation(CommandDispatcher commandDispatcher)
         {
 
+            Field<bool>("createBudget")
+                .Argument<BudgetInputType>("Budget")
+                .Resolve(context =>
+                {
+                    var budget = context.GetArgument<Business.Entities.Budget>("Budget");
+
+                    var command = new CreateBudgetCommand(budget);
+
+                    try
+                    {
+                        commandDispatcher.Dispatch(command);
+                    }
+                    catch (Exception ex)
+                    {
+                        var exception = new ExecutionError(ex.Message);
+                        context.Errors.Add(exception);
+                        return false;
+                    }
+                    return true;
+                });
+
+            Field<bool>("deleteBudget")
+                .Argument<StringGraphType>("id")
+                .Resolve(context =>
+                {
+                    var id = context.GetArgument<string>("id");
+
+                    var command = new DeleteBudgetCommand(id);
+
+                    try
+                    {
+                        commandDispatcher.Dispatch(command);
+                    }
+                    catch (Exception ex)
+                    {
+                        var exception = new ExecutionError(ex.Message);
+                        context.Errors.Add(exception);
+                        return false;
+                    }
+                    return true;
+                });
+
+
             Field<bool>("editBudget")
                 .Argument<BudgetInputType>("Budget")
                 .Resolve(context =>
