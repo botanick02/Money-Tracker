@@ -2,7 +2,7 @@ import React from 'react';
 import { RadialChart } from 'react-vis';
 import { useAppSelector, useAppDispatch } from '../../hooks/useAppDispatch'; // Обратите внимание на useAppDispatch
 import SetsItem from '../../elements/StatsItem';
-import { SET_CURRENT_CATEGORY_ID } from '../../store/Account/Account.slice';
+import { SET_CURRENT_CATEGORY } from '../../store/Account/Account.slice';
 import { Link } from 'react-router-dom';
 
 
@@ -13,7 +13,7 @@ const PieChart = () => {
     const filteredStats = useAppSelector((state) =>
       state.Stats.filter === 'income' ? state.Stats.positiveStats : state.Stats.negativeStats
     );
-    const currentCategory = useAppSelector((state) => state.Account.currentCategoryId);
+
   
     return (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '400px' }}>
@@ -43,8 +43,17 @@ const PieChart = () => {
                 percentage={item.percentage}
                 color={item.color}
                 onClick={() => {
-                  dispatch(SET_CURRENT_CATEGORY_ID(item.categoryId)); 
-                }}
+                    dispatch({
+                        type: SET_CURRENT_CATEGORY,
+                        payload: {
+                          id: item.categoryId,
+                          name: item.categoryName,
+                          color: item.color,
+                        },
+                      });
+                    }
+                 
+                }
               />
             ))}
           </div>
