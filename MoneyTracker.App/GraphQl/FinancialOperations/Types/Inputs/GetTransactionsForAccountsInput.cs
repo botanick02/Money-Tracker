@@ -11,5 +11,7 @@ namespace MoneyTracker.App.GraphQl.FinancialOperations.Types.Inputs
         public DateTime? FromDate { get; set; }
 
         public DateTime? ToDate { get; set; }
+
+        public Guid? CategoryId { get; set; }
     }
 }

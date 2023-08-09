@@ -75,7 +75,9 @@ namespace MoneyTracker.Business.Services
                 {
                     CategoryName = category.Name,
                     Sum = categorySum,
-                    Percentage = percentage
+                    Percentage = percentage,
+                    CategoryId= category.Id,
+                    Color = category.Color,
                 };
 
                 if (categorySum > 0)

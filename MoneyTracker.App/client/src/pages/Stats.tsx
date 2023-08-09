@@ -9,7 +9,7 @@ const Stats = () => {
   const incomes = useAppSelector((state) => state.FinancialOperation.incomes);
   const expenses = useAppSelector((state) => state.FinancialOperation.expenses);
   const actualAccount = useAppSelector((state) => state.Account.currentAccountId);
-  console.log(actualAccount)
+
   const dispatch = useAppDispatch();
   const handleFilterChange = (filter: "income" | "expense") => {
     setActiveFilter(filter);

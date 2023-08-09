@@ -10,14 +10,7 @@ import {
 } from "./Stats.slice";
 import { GetStats } from "../../api/queries/Stats";
 
-const getRandomColor = () => {
-  const letters = "0123456789ABCDEF";
-  let color = "#";
-  for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
-};
+
 
 export const GetStatsEpics: Epic<any, any, any> = (action$, state$) => {
   return action$.pipe(
@@ -36,12 +29,10 @@ export const GetStatsEpics: Epic<any, any, any> = (action$, state$) => {
           } else {
             const { negativeTransactions, positiveTransactions } = data.data.statistics;
             const negativeStatsWithColor = negativeTransactions.map((stat: Stats) => ({
-              ...stat,
-              color: getRandomColor(),
+              ...stat
             }));
             const positiveStatsWithColor = positiveTransactions.map((stat: Stats) => ({
-              ...stat,
-              color: getRandomColor(),
+              ...stat
             }));
 
             return [
