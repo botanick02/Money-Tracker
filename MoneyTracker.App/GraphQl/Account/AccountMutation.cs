@@ -1,10 +1,7 @@
 ﻿using GraphQL;
 using GraphQL.Types;
-using MoneyTracker.App.GraphQl.Account.Types;
 using MoneyTracker.Business.Commands;
 using MoneyTracker.Business.Commands.Account;
-using MoneyTracker.Business.Commands.Category;
-using MoneyTracker.Business.Services;
 using System.Security.Claims;
 
 namespace MoneyTracker.App.GraphQl.Account

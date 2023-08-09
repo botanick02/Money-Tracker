@@ -1,4 +1,5 @@
-﻿using MoneyTracker.Business.Entities;
+﻿using MoneyTracker.Business.Commands.Category;
+using MoneyTracker.Business.Entities;
 using MoneyTracker.Business.Events;
 using MoneyTracker.Business.Events.FinancialOperation;
 using MoneyTracker.Business.Interfaces;
@@ -9,15 +10,27 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
     {
         private readonly IEventStore eventStore;
         private readonly IAccountRepository accountRepository;
+        private readonly ICategoryRepository categoryRepository;
 
-        public AddDebitOperationCommandHandler(IEventStore eventStore, IAccountRepository accountRepository)
+        public AddDebitOperationCommandHandler(IEventStore eventStore, IAccountRepository accountRepository, ICategoryRepository categoryRepository)
         {
             this.eventStore = eventStore;
             this.accountRepository = accountRepository;
+            this.categoryRepository = categoryRepository;
         }
 
         public async Task<bool> HandleAsync(AddDebitOperationCommand command)
         {
+            if (categoryRepository.GetCategoryById(command.CategoryId) == null)
+            {
+                throw new ArgumentException("CategoryId: CategoryId is invalid");
+            }
+
+            if (accountRepository.GetUserAccountById(command.ToAccountId) == null)
+            {
+                throw new ArgumentException("ToAccountId: ToAccountId is invalid");
+            }
+
             var eventsToAppend = new List<Event>();
 
             var transactionId = Guid.NewGuid();
@@ -60,15 +73,27 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
     {
         private readonly IEventStore eventStore;
         private readonly IAccountRepository accountRepository;
+        private readonly ICategoryRepository categoryRepository;
 
-        public AddCreditOperationCommandHandler(IEventStore eventStore, IAccountRepository accountRepository)
+        public AddCreditOperationCommandHandler(IEventStore eventStore, IAccountRepository accountRepository, ICategoryRepository categoryRepository)
         {
             this.eventStore = eventStore;
             this.accountRepository = accountRepository;
+            this.categoryRepository = categoryRepository;
         }
 
         public async Task<bool> HandleAsync(AddCreditOperationCommand command)
         {
+            if (accountRepository.GetUserAccountById(command.FromAccountId) == null)
+            {
+                throw new ArgumentException("FromAccountId: FromAccountId is invalid");
+            }
+
+            if (categoryRepository.GetCategoryById(command.CategoryId) == null)
+            {
+                throw new ArgumentException("CategoryId: CategoryId is invalid");
+            }
+
             var transactionId = Guid.NewGuid();
 
             var usersCreditAccount = accountRepository.GetUserAccounts(command.UserId, Entities.AccountType.Credit).FirstOrDefault();
@@ -110,16 +135,33 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
     public class AddTransferOperationCommandHandler : ICommandHandler<AddTransferOperationCommand>
     {
         private readonly IEventStore eventStore;
+        private readonly IAccountRepository accountRepository;
         private readonly ICategoryRepository categoryRepository;
 
-        public AddTransferOperationCommandHandler(IEventStore eventStore, ICategoryRepository categoryRepository)
+        public AddTransferOperationCommandHandler(IEventStore eventStore, IAccountRepository accountRepository, ICategoryRepository categoryRepository)
         {
             this.eventStore = eventStore;
+            this.accountRepository = accountRepository;
             this.categoryRepository = categoryRepository;
         }
 
         public async Task<bool> HandleAsync(AddTransferOperationCommand command)
         {
+            if (accountRepository.GetUserAccountById(command.FromAccountId) == null)
+            {
+                throw new ArgumentException("FromAccountId: FromAccountId is invalid");
+            }
+
+            if (accountRepository.GetUserAccountById(command.ToAccountId) == null)
+            {
+                throw new ArgumentException("ToAccountId: ToAccountId is invalid");
+            }
+
+            if (categoryRepository.GetCategoryById(command.CategoryId) == null)
+            {
+                throw new ArgumentException("CategoryId: CategoryId is invalid");
+            }
+
             var eventsToAppend = new List<Event>();
 
             var transactionId = Guid.NewGuid();
@@ -158,6 +200,7 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
         }
     }
 
+
     public class CancelFinancialOperationCommandHandler : ICommandHandler<CancelFinancialOperationCommand>
     {
         private readonly IEventStore eventStore;
@@ -175,7 +218,7 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
             var transactions = transactionRepository.GetTransactionsByOperationId(command.TransactionId);
             if (transactions.Count < 2)
             {
-                return false;
+                throw new ArgumentException("OperationId: OperationId is invalid");
             }
 
             var cancelEvent = new FinancialOperationCanceledEvent
@@ -194,13 +237,15 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
         private readonly IEventStore eventStore;
         private readonly ITransactionRepository transactionRepository;
         private readonly IAccountRepository accountRepository;
+        private readonly ICategoryRepository categoryRepository;
 
 
-        public UpdateFinancialOperationCommandHandler(IEventStore eventStore, ITransactionRepository transactionRepository, IAccountRepository accountRepository)
+        public UpdateFinancialOperationCommandHandler(IEventStore eventStore, ITransactionRepository transactionRepository, IAccountRepository accountRepository, ICategoryRepository categoryRepository)
         {
             this.eventStore = eventStore;
             this.transactionRepository = transactionRepository;
             this.accountRepository = accountRepository;
+            this.categoryRepository = categoryRepository;
         }
 
         public async Task<bool> HandleAsync(UpdateFinancialOperationCommand command)
@@ -224,6 +269,10 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
 
             if (command.CategoryId != existingTransactions[0].CategoryId)
             {
+                if (categoryRepository.GetCategoryById(command.CategoryId) == null)
+                {
+                    throw new ArgumentException("CategoryId: CategoryId is invalid");
+                }
                 eventsToAppend.Add(new FinancialOperationCategoryIdUpdatedEvent(command.OperationId, command.CategoryId));
             }
 
