@@ -28,6 +28,10 @@ namespace MoneyTracker.Business.Services
             var accounts = accountRepository.GetUserAccounts(userId, AccountType.Personal);
 
             var personalTransactions = transactions.Where(t => accounts.Any(a => a.Id == t.AccountId));
+            if (accountId.HasValue)
+            {
+                personalTransactions = personalTransactions.Where(t => t.AccountId == accountId.Value);
+            }
 
             var negativeTransactions = personalTransactions.Where(t => t.Amount < 0);
             var positiveTransactions = personalTransactions.Where(t => t.Amount >= 0);
@@ -76,7 +80,7 @@ namespace MoneyTracker.Business.Services
                     CategoryName = category.Name,
                     Sum = categorySum,
                     Percentage = percentage,
-                    CategoryId= category.Id,
+                    CategoryId = category.Id,
                     Color = category.Color,
                 };
 
@@ -90,9 +94,7 @@ namespace MoneyTracker.Business.Services
                 }
             }
 
-
             positiveStatistics = positiveStatistics.OrderByDescending(s => s.Sum).ToList();
-
             negativeStatistics = negativeStatistics.OrderBy(s => s.Sum).ToList();
 
             return (positiveStatistics, negativeStatistics);
