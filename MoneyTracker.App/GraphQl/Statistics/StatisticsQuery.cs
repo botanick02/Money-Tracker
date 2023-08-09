@@ -20,7 +20,9 @@ namespace MoneyTracker.App.GraphQl.S
                 {
                     var input = context.GetArgument<GetStatisticsForAccountsInput>("Input");
                     var userId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-                    var statistics = statisticService.GetStatistics(userId);
+
+                    var statistics = statisticService.GetStatistics(userId, accountId: input.AccountId);
+
                     return statistics.positiveTransactions;
                 }).Authorize();
 
@@ -30,7 +32,8 @@ namespace MoneyTracker.App.GraphQl.S
                 {
                     var input = context.GetArgument<GetStatisticsForAccountsInput>("Input");
                     var userId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-                    var statistics = statisticService.GetStatistics(userId);
+                    var statistics = statisticService.GetStatistics(userId, accountId: input.AccountId);
+
                     return statistics.negativeTransactions;
                 }).Authorize();
         }
