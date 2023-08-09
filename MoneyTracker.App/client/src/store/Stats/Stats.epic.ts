@@ -6,6 +6,7 @@ import {
   FETCH_STATS,
   FETCH_STATS_SUCCESS,
   FETCH_STATS_ERROR,
+  FetchStatsVariables,
 } from "./Stats.slice";
 import { GetStats } from "../../api/queries/Stats";
 
@@ -22,7 +23,13 @@ export const GetStatsEpics: Epic<any, any, any> = (action$, state$) => {
   return action$.pipe(
     ofType(FETCH_STATS),
     mergeMap(() =>
-      from(request(GetStats)).pipe(
+      from(request(GetStats,{
+        input: {
+          accountId: state$.value.Account.currentAccountId !== "total" ? state$.value.Account.currentAccountId : null,
+          fromDate: state$.value.FinancialOperation.dateRange.fromDate,
+          toDate: state$.value.FinancialOperation.dateRange.toDate,
+        } as FetchStatsVariables
+      })).pipe(
         mergeMap((data: any) => {
           if (data.errors) {
             return [FETCH_STATS_ERROR(data.errors[0].message)];

@@ -1,18 +1,16 @@
 export const GetStats = `
-query getStatistics{
+query getStatistics($input: GetStatisticsForAccountsInputType!) {
   statistics {
-    negativeTransactions(input: {}) {
+    negativeTransactions(input: $input) {
       categoryName
       sum
       percentage
     }
-  positiveTransactions(input: {}) {
+    positiveTransactions(input: $input) {
       categoryName
       sum
       percentage
     }
   }
 }
-
-
-`
+`;

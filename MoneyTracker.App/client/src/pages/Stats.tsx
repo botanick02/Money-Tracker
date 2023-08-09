@@ -8,6 +8,8 @@ const Stats = () => {
   const [activeFilter, setActiveFilter] = useState(useAppSelector((state) => state.Stats.filter)); 
   const incomes = useAppSelector((state) => state.FinancialOperation.incomes);
   const expenses = useAppSelector((state) => state.FinancialOperation.expenses);
+  const actualAccount = useAppSelector((state) => state.Account.currentAccountId);
+  console.log(actualAccount)
   const dispatch = useAppDispatch();
   const handleFilterChange = (filter: "income" | "expense") => {
     setActiveFilter(filter);
@@ -16,7 +18,7 @@ const Stats = () => {
   console.log(activeFilter)
   useEffect(() => {
     dispatch(FETCH_STATS());
-  }, []);
+  }, [dispatch]);
   return (
     <main>
    
