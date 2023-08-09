@@ -18,13 +18,14 @@ const SetsItem: FC<SetsItemProps> = ({ name, percentage, color, sum, onClick }) 
       <div className={`category__indicator`} style={{ backgroundColor: color }} />
 
       <div>
-        <div className="category__title">{name}</div>
+        <div className="category__title">{name} </div>
       </div>
       <div className="category__amount">
-        {sum} $ | {percentage} %
+         {sum} $ | {percentage} % 
       </div>
-      <Link to={"/"}></Link>
+     
     </div>
+   
   );
 };
 

@@ -37,7 +37,7 @@ export const TransactionItemsEpic: Epic<any, any, any> = (action$, state$) => {
         request(GetTransactions, {
           input: {
             accountId: state$.value.Account.currentAccountId !== "total" ? state$.value.Account.currentAccountId : null,
-            categoryId: state$.value.Account.currentCategoryId !== "total" ? state$.value.Account.currentCategoryId : null,
+            categoryId: state$.value.Account.currentCategoryId,
             fromDate: state$.value.FinancialOperation.dateRange.fromDate,
             toDate: state$.value.FinancialOperation.dateRange.toDate,
           } as FetchTransactionsInfoVariables
