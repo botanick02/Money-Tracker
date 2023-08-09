@@ -6,12 +6,14 @@ query getStatistics($input: GetStatisticsForAccountsInputType!) {
       categoryId
       sum
       percentage
+      color
     }
     positiveTransactions(input: $input) {
       categoryName
       categoryId
       sum
       percentage
+      color
     }
   }
 }

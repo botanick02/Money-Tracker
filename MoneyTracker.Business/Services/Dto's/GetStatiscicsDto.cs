@@ -10,6 +10,7 @@ namespace MoneyTracker.Business.Services.Dto_s
         public decimal Sum { get; set; }
         public decimal Percentage { get; set; }
 
+        public string Color { get; set; }
 
     }
 }

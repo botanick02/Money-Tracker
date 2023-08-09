@@ -14,7 +14,10 @@ namespace MoneyTracker.App.GraphQl.FinancialOperations.Types
             Field(g => g.Sum);
 
             Field(g => g.Percentage);
-           
+
+            Field(g => g.Color);
+
+
         }
     }
 }

@@ -1,15 +1,20 @@
 import React, { FC } from "react";
+import { Link } from "react-router-dom";
 
 interface SetsItemProps {
   name: string;
   sum: number;
   percentage: number;
   color: string | undefined;
+  categoryId: string;
+  onClick: () => void;
 }
 
-const SetsItem: FC<SetsItemProps> = ({ name, percentage, color, sum }) => {
+
+const SetsItem: FC<SetsItemProps> = ({ name, percentage, color, sum, onClick }) => {
   return (
-    <div className="category">
+    <div className="category" onClick={onClick}> 
+    
       <div className={`category__indicator`} style={{ backgroundColor: color }} />
 
       <div>
@@ -18,8 +23,10 @@ const SetsItem: FC<SetsItemProps> = ({ name, percentage, color, sum }) => {
       <div className="category__amount">
         {sum} $ | {percentage} %
       </div>
+      <Link to={"/"}></Link>
     </div>
   );
 };
+
 
 export default SetsItem;

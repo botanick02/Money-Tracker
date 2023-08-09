@@ -178,6 +178,7 @@ export const {
   UPDATE_FINANCIAL_OPERATION,
   UPDATE_FINANCIAL_OPERATION_SUCCESS,
   SET_DATE_RANGE,
+  SET_CURRENT_CATEGORY_ID,
 } = FinancialOperationSlice.actions;
 
 export default FinancialOperationSlice.reducer;
