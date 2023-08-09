@@ -1,4 +1,5 @@
-﻿using MoneyTracker.Business.Events;
+﻿using MoneyTracker.Business.Entities;
+using MoneyTracker.Business.Events;
 using MoneyTracker.Business.Events.FinancialOperation;
 using MoneyTracker.Business.Interfaces;
 
@@ -21,12 +22,14 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
 
             var usersDebitAccount = accountRepository.GetUserAccounts(command.UserId, Entities.AccountType.Debit).FirstOrDefault();
 
+            var currentTime = DateTime.UtcNow;
+
             var debitTransactionEvent = new DebitTransactionAddedEvent
             (
                 OperationId: transactionId,
                 UserId: command.UserId,
                 CategoryId: command.CategoryId,
-                CreatedAt: DateTime.UtcNow,
+                CreatedAt: command.CreatedAt ?? currentTime,
                 AccountId: command.ToAccountId,
                 Title: command.Title,
                 Note: command.Note,
@@ -38,7 +41,7 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
                 OperationId: transactionId,
                 UserId: command.UserId,
                 CategoryId: command.CategoryId,
-                CreatedAt: DateTime.UtcNow,
+                CreatedAt: command.CreatedAt ?? currentTime,
                 AccountId: usersDebitAccount.Id,
                 Title: command.Title,
                 Note: command.Note,
@@ -69,13 +72,15 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
 
             var usersCreditAccount = accountRepository.GetUserAccounts(command.UserId, Entities.AccountType.Credit).FirstOrDefault();
 
+            var currentTime = DateTime.UtcNow;
+
             var debitTransactionEvent = new DebitTransactionAddedEvent
             (
                 OperationId: transactionId,
                 UserId: command.UserId,
                 CategoryId: command.CategoryId,
-                CreatedAt: DateTime.UtcNow,
                 AccountId: usersCreditAccount.Id,
+                CreatedAt: command.CreatedAt ?? currentTime,
                 Title: command.Title,
                 Note: command.Note,
                 Amount: command.Amount
@@ -86,7 +91,7 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
                 OperationId: transactionId,
                 UserId: command.UserId,
                 CategoryId: command.CategoryId,
-                CreatedAt: DateTime.UtcNow,
+                CreatedAt: command.CreatedAt ?? currentTime,
                 AccountId: command.FromAccountId,
                 Title: command.Title,
                 Note: command.Note,
@@ -103,24 +108,28 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
     public class AddTransferOperationCommandHandler : ICommandHandler<AddTransferOperationCommand>
     {
         private readonly IEventStore eventStore;
-        private readonly IAccountRepository accountRepository;
+        private readonly ICategoryRepository categoryRepository;
 
-        public AddTransferOperationCommandHandler(IEventStore eventStore, IAccountRepository accountRepository)
+        public AddTransferOperationCommandHandler(IEventStore eventStore, ICategoryRepository categoryRepository)
         {
             this.eventStore = eventStore;
-            this.accountRepository = accountRepository;
+            this.categoryRepository = categoryRepository;
         }
 
         public bool Handle(AddTransferOperationCommand command)
         {
             var transactionId = Guid.NewGuid();
 
+            var currentTime = DateTime.UtcNow;
+
+            var transferCategoryId = categoryRepository.GetTransferCategory().Id;
+
             var debitTransactionEvent = new DebitTransactionAddedEvent
             (
                 OperationId: transactionId,
                 UserId: command.UserId,
-                CategoryId: command.CategoryId,
-                CreatedAt: DateTime.UtcNow,
+                CategoryId: transferCategoryId,
+                CreatedAt: command.CreatedAt ?? currentTime,
                 AccountId: command.ToAccountId,
                 Title: command.Title,
                 Note: command.Note,
@@ -131,8 +140,8 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
             (
                 OperationId: transactionId,
                 UserId: command.UserId,
-                CategoryId: command.CategoryId,
-                CreatedAt: DateTime.UtcNow,
+                CategoryId: transferCategoryId,
+                CreatedAt: command.CreatedAt ?? currentTime,
                 AccountId: command.FromAccountId,
                 Title: command.Title,
                 Note: command.Note,
@@ -181,44 +190,62 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
     {
         private readonly IEventStore eventStore;
         private readonly ITransactionRepository transactionRepository;
+        private readonly IAccountRepository accountRepository;
 
 
-        public UpdateFinancialOperationCommandHandler(IEventStore eventStore, ITransactionRepository transactionRepository)
+        public UpdateFinancialOperationCommandHandler(IEventStore eventStore, ITransactionRepository transactionRepository, IAccountRepository accountRepository)
         {
             this.eventStore = eventStore;
             this.transactionRepository = transactionRepository;
+            this.accountRepository = accountRepository;
         }
 
         public bool Handle(UpdateFinancialOperationCommand command)
         {
-            var existingTransaction = transactionRepository.GetTransactionsByOperationId(command.OperationId)[0];
+            var existingTransactions = transactionRepository.GetTransactionsByOperationId(command.OperationId);
 
             var eventsToAppend = new List<Event>();
 
-            if (Math.Abs(command.Amount) != Math.Abs(existingTransaction.Amount))
+            var userIncomeAccountId = accountRepository.GetUserAccounts(command.UserId, AccountType.Debit).FirstOrDefault().Id;
+            var userExpenseAccountId = accountRepository.GetUserAccounts(command.UserId, AccountType.Credit).FirstOrDefault().Id;
+
+            if (Math.Abs(command.Amount) != Math.Abs(existingTransactions[0].Amount))
             {
                 eventsToAppend.Add(new FinancialOperationAmountUpdatedEvent(command.OperationId, command.Amount));
             }
 
-            if (command.Title != existingTransaction.Title)
+            if (command.Title != existingTransactions[0].Title)
             {
                 eventsToAppend.Add(new FinancialOperationTitleUpdatedEvent(command.OperationId, command.Title));
             }
 
-            if (command.CategoryId != existingTransaction.CategoryId)
+            if (command.CategoryId != existingTransactions[0].CategoryId)
             {
                 eventsToAppend.Add(new FinancialOperationCategoryIdUpdatedEvent(command.OperationId, command.CategoryId));
             }
 
-            if (command.Note != existingTransaction.Note)
+            if (command.Note != existingTransactions[0].Note)
             {
                 eventsToAppend.Add(new FinancialOperationNoteUpdatedEvent(command.OperationId, command.Note));
             }
 
-            if (command.CreatedAt != existingTransaction.CreatedAt)
+            if (command.CreatedAt != existingTransactions[0].CreatedAt)
             {
                 eventsToAppend.Add(new FinancialOperationCreatedAtUpdatedEvent(command.OperationId, command.CreatedAt));
             }
+
+            foreach (var transaction in existingTransactions)
+            {
+                if (transaction.Amount > 0 && transaction.AccountId != userExpenseAccountId && command.ToAccountId.HasValue && command.ToAccountId != transaction.AccountId)
+                {
+                    eventsToAppend.Add(new FinancialOperationAccountUpdatedEvent(transaction.Id, (Guid)command.ToAccountId));
+                }
+                if (transaction.Amount < 0 && transaction.AccountId != userIncomeAccountId && command.FromAccountId.HasValue && command.ToAccountId != transaction.AccountId)
+                {
+                    eventsToAppend.Add(new FinancialOperationAccountUpdatedEvent(transaction.Id, (Guid)command.FromAccountId));
+                }
+            }
+            
 
             foreach (var @event in eventsToAppend)
             {

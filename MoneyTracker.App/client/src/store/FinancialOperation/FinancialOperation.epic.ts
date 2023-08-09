@@ -14,6 +14,9 @@ import {
   FETCH_TRANSACTIONS_INFO_ERROR,
   FETCH_TRANSACTIONS_INFO_SUCCESS,
   FetchTransactionsInfoVariables,
+  UPDATE_FINANCIAL_OPERATION,
+  UPDATE_FINANCIAL_OPERATION_ERROR,
+  UPDATE_FINANCIAL_OPERATION_SUCCESS,
 } from "./FinancialOperation.slice";
 import { request } from "../../api/core";
 import {
@@ -22,6 +25,7 @@ import {
   AddTransfer,
   CancelOperation,
   GetTransactions,
+  UpdateOperation,
 } from "../../api/queries/FinancialOperations";
 import { FETCH_ACCOUNTS } from "../Account/Account.slice";
 
@@ -170,10 +174,38 @@ export const CancelFinancialOperationEpic: Epic<any, any, any> = (
   );
 };
 
+export const UpdateFinancialOperationEpic: Epic<any, any, any> = (
+  action$,
+  state$
+) => {
+  return action$.pipe(
+    ofType(UPDATE_FINANCIAL_OPERATION),
+    mergeMap((action) =>
+      from(
+        request(UpdateOperation, { input: action.payload })
+      ).pipe(
+        mergeMap((data: any) => {
+          if (data.errors) {
+            // store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message));
+            return [UPDATE_FINANCIAL_OPERATION_ERROR(data.errors[0].message)];
+          } else {
+            return [
+              UPDATE_FINANCIAL_OPERATION_SUCCESS(),
+              FETCH_TRANSACTIONS_INFO(),
+              FETCH_ACCOUNTS()
+            ];
+          }
+        })
+      )
+    )
+  );
+};
+
 export const FinancialOperationEpics = combineEpics(
   TransactionItemsEpic,
   AddDebitOperationEpic,
   AddCreditOperationEpic,
   AddTransferOperationEpic,
-  CancelFinancialOperationEpic
+  CancelFinancialOperationEpic,
+  UpdateFinancialOperationEpic
 );

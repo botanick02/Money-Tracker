@@ -1,128 +1,101 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import InputWrapper from "../../elements/InputWrapper";
-import Dropdown, { Option } from "../../elements/Dropdown/Dropdown";
-import { useAppDispatch } from '../../hooks/useAppDispatch';
-import { EDIT_CATEGORY } from '../../store/Category/Category.slice';
+import {useAppDispatch} from '../../hooks/useAppDispatch';
+import {createCategory, EDIT_CATEGORY} from '../../store/Category/Category.slice';
+import categoryIcons from './categoryIconsPath.json'
+import SvgFromPath from "../../elements/SvgFromPath";
+import {Category, CategoryToCreate} from "../../types/Category";
 
 interface Props {
   openPopupHandle(): void;
-  transactionDefaultType: string;
-  name: string;
-id: string;
+  transactionDefaultType: "income" | "expense";
 }
 
+const defaultBackground = "#02dbff"
+
+
 const CategoryCreate: React.FC<Props> = ({
-  openPopupHandle,
-  transactionDefaultType,
-  name,
-  id
-  
-}) => {
-  const [type, setType] = useState(transactionDefaultType);
+                                           openPopupHandle,
+                                           transactionDefaultType
+                                         }) => {
+  const [category, setCategory] = useState<CategoryToCreate>({
+    color: defaultBackground,
+    iconUrl: "",
+    name: "",
+    type: transactionDefaultType
+  })
+  const dispatch = useAppDispatch();
 
-  const colorOptions: Option[] = [
-    {
-      label: "Blue",
-      value: 0
-    },
-    {
-      label: "Red",
-      value: 1
-    },
-    {
-      label: "Green",
-      value: 2
-    },
-    {
-      label: "Purple",
-      value: 3
-    }
-  ];
+  const handleTypeChange = (type: "income" | "expense") => {
+    setCategory({...category, type})
+  }
 
-  const imageOptions: any[] = [
-    {
-      icon: "https://picsum.photos/50",
-      value: 0
-    },
-    {
-      icon: "https://picsum.photos/51",
-      value: 1
-    },
-    {
-      icon: "https://picsum.photos/52",
-      value: 2
-    },
-    {
-      icon: "https://picsum.photos/53",
-      value: 3
-    }
-  ];
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCategory({...category, name: event.target.value});
+  };
 
-  // const [color, setColor] = useState<Option>(colorOptions[0]);
-  // const handleColorChange = (option: Option) => {
-  //   setColor(option);
-  // };
+  const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCategory({...category, color: e.target.value})
+  }
 
-  // const [image, setImage] = useState<Option>(imageOptions[0]);
-  // const handleImageChange = (option: Option) => {
-  //   setImage(option);
-  // };
+  const handleIconChange = (path: string) => {
+    setCategory({...category, iconUrl: path})
+  }
+
+  const handleSave = () => {
+    dispatch(createCategory(category));
+    openPopupHandle();
+  };
 
   const handleCancel = () => {
     openPopupHandle();
   };
-  const dispatch = useAppDispatch();
-  const handleSave = () => {
-    dispatch(EDIT_CATEGORY({categoryId: id, name: inputValue}));
-    openPopupHandle();
-  };
-  const [inputValue, setInputValue] = useState(name);
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value);
-  };
-  
+  console.log(category)
   return (
-    <div className="transaction-create-bg">
-      <div className="transaction-create">
-        <ul className="transaction-create__type">
+    <div className="popup-bg category-create">
+      <div className="popup">
+        <ul className="popup__header">
           <li
             onClick={() => {
-              setType("income");
+              handleTypeChange("income");
             }}
-            className={type === "income" ? "current-type" : ""}
+            className={category.type === "income" ? "current-type" : ""}
           >
             Income
           </li>
           <li
             onClick={() => {
-              setType("expense");
+              handleTypeChange("expense");
             }}
-            className={type === "expense" ? "current-type" : ""}
+            className={category.type === "expense" ? "current-type" : ""}
           >
             Expense
           </li>
         </ul>
-        <div className="transaction-create__fields">
+        <div className="popup__fields">
           <InputWrapper>
-            <input type="text" placeholder="Name of category" value={inputValue} 
-            onChange={handleInputChange}
+            <input type="text" placeholder="Name of category" value={category.name}
+                   onChange={handleInputChange}
             />
           </InputWrapper>
-          <Dropdown
-            title="Image"
-            // selectHandler={handleImageChange}
-            selectHandler={() => {}}
-            options={imageOptions}
-          />
-          <Dropdown
-            title="Color"
-            // selectHandler={handleColorChange}
-            selectHandler={() => {}}
-            options={colorOptions}
-          />
+
+          <div className="popup__row popup__row__center">
+            <label htmlFor="color-change">Icon Background</label>
+            <input value={category.color} onChange={handleColorChange} id="color-change" type="color"/>
+          </div>
+
+          <div className={'icon-area'}>
+            {
+              categoryIcons.map(item => <div key={item} onClick={() => handleIconChange(item)}>
+                <SvgFromPath styles={{background: category.color}} path={item}/>
+              </div>)
+            }
+          </div>
         </div>
-        <div className="transaction-create__row">
+
+
+        <div className="popup__row">
           <button
             onClick={() => {
               handleSave();

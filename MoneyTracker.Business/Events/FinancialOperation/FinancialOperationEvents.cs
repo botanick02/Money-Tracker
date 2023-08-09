@@ -31,5 +31,8 @@
 
     public record FinancialOperationCreatedAtUpdatedEvent(Guid OperationId, DateTime CreatedAt)
         : Event;
+    
+    public record FinancialOperationAccountUpdatedEvent(Guid TransactionId, Guid AccountId)
+        : Event;
 
 }

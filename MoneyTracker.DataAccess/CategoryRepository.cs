@@ -1,5 +1,6 @@
 ﻿using MoneyTracker.Business.Entities;
 using MoneyTracker.Business.Interfaces;
+using System;
 
 namespace MoneyTracker.DataAccess
 {
@@ -16,5 +17,10 @@ namespace MoneyTracker.DataAccess
             return readModel.Categories.ToList();
         }
 
+        public Category GetTransferCategory()
+        {
+            var readModel = readModelExtensions.GetReadModel();
+            return readModel.Categories.FirstOrDefault(c => c.Type == "transfer");
+        }
     }
 }

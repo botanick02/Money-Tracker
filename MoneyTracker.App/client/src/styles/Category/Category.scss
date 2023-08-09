@@ -35,5 +35,60 @@
   bottom: $layout-panel_height + 15px;
 }
 
+.category-create{
+  .popup__header{
+    $border-radius: 20px;
+    $padding: 31px;
+    justify-content: space-between;
+    li {
+      height: 34px;
+      width: 100%;
+      text-align: center;
+      line-height: 34px;
+      opacity: .4;
+      cursor: pointer;
+
+      &.current-type {
+        opacity: 1;
+      }
+
+      &:nth-child(1) {
+        background: $primary-color;
+        border-top-left-radius: $border-radius;
+      }
+
+      &:nth-child(2) {
+        background: $secondary-color;
+        border-top-right-radius: $border-radius;
+      }
+    }
+  }
+}
+
+.icon-area{
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  max-height: 10em;
+  overflow-y: auto;
+  .svg-icon{
+    padding: 5px;
+    width: 3em;
+    height: 3em;
+  }
+
+}
+
+
+.svg-icon{
+  padding: 5px;
+  width: 100%;
+  height: 100%;
+  svg{
+    width: 100%;
+    height: 100%;
+  }
+}
+
 @import "CategoryList";
-@import "CategoryCreate";

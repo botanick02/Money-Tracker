@@ -1,8 +1,10 @@
 ﻿using GraphQL;
 using GraphQL.Types;
+using MoneyTracker.App.GraphQl.Category.Types;
 using MoneyTracker.Business.Commands;
 using MoneyTracker.Business.Commands.Budget;
 using MoneyTracker.Business.Commands.Category;
+using MoneyTracker.Business.Entities;
 
 namespace MoneyTracker.App.GraphQl.Category
 {
@@ -15,14 +17,18 @@ namespace MoneyTracker.App.GraphQl.Category
                 {
                     var command = new CreateCategoryCommand
                     (
-                        Name: "testCat",
-                        Type: "income"
+                        new Business.Entities.Category()
+                        {
+                            Name = "Test Cat",
+                            Type = "Expence",
+                            IconUrl = "./media/icons/basket.svg",
+                            Color = "#74fdd8"
+                        }
                     );
 
                     commandDispatcher.Dispatch(command);
                     return true;
                 });
-
 
 
             Field<bool>("RenameCategoryTest")
@@ -58,6 +64,30 @@ namespace MoneyTracker.App.GraphQl.Category
                         context.Errors.Add(exception);
                         return false;
                     }
+                    return true;
+                });
+
+
+
+
+            Field<bool>("CreateCategory")
+                .Argument<CategoryInputType>("Category")
+                .Resolve(context =>
+                {
+                    var category = context.GetArgument<Business.Entities.Category>("Category");
+                    var command = new CreateCategoryCommand(category);
+                    commandDispatcher.Dispatch(command);
+                    return true;
+                });
+
+
+            Field<bool>("DeleteCategory")
+                .Argument<StringGraphType>("id")
+                .Resolve(context =>
+                {
+                    var id = context.GetArgument<string>("id");
+                    var command = new DeleteCategoryCommand(id);
+                    commandDispatcher.Dispatch(command);
                     return true;
                 });
         }
