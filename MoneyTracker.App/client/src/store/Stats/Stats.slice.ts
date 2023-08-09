@@ -18,7 +18,11 @@ const initialState: FetchStatsState = {
   editSuccess: false,
   filter: "expense",
 };
-
+export interface FetchStatsVariables {
+  accountId: string | null;
+  fromDate: string | null;
+  toDate: string | null;
+}
 
 
 

@@ -88,10 +88,9 @@ namespace MoneyTracker.Business.Services
                 }
             }
 
-            // Sort positiveStatistics by Sum (descending order)
+
             positiveStatistics = positiveStatistics.OrderByDescending(s => s.Sum).ToList();
 
-            // Sort negativeStatistics by Sum (ascending order)
             negativeStatistics = negativeStatistics.OrderBy(s => s.Sum).ToList();
 
             return (positiveStatistics, negativeStatistics);
