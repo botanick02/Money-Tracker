@@ -54,7 +54,7 @@ export interface CreateTransactionState {
   incomes: number;
   expenses: number;
   dateRange: { fromDate: string | null; toDate: string | null };
-  currentCategoryID: string | null;
+
 }
 
 const initialState: CreateTransactionState = {
@@ -66,7 +66,7 @@ const initialState: CreateTransactionState = {
   expenses: 0,
   error: null,
   dateRange: { fromDate: null, toDate: null },
-  currentCategoryID: "total"
+
 };
 
 export const FinancialOperationSlice = createSlice({
@@ -155,9 +155,6 @@ export const FinancialOperationSlice = createSlice({
       action: PayloadAction<{ fromDate: string | null; toDate: string | null }>
     ) {
       state.dateRange = action.payload;
-    },
-    SET_CURRENT_CATEGORY_ID(state, action: PayloadAction<string | null>) {
-      state.currentCategoryID = action.payload;
     }
   },
 });
@@ -178,7 +175,6 @@ export const {
   UPDATE_FINANCIAL_OPERATION,
   UPDATE_FINANCIAL_OPERATION_SUCCESS,
   SET_DATE_RANGE,
-  SET_CURRENT_CATEGORY_ID,
 } = FinancialOperationSlice.actions;
 
 export default FinancialOperationSlice.reducer;
