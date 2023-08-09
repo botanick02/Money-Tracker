@@ -118,6 +118,10 @@
     border: 2px solid $secondary-color;
     color: $secondary-color;
   }
+  &__filter {
+    border: 2px solid $filter-color;
+    color: $filter-color;
+  }
 }
 
 .new-transaction {
