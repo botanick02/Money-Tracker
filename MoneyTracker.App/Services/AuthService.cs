@@ -1,11 +1,13 @@
-﻿using MoneyTracker.Business.IRepositories;
-using MoneyTracker.Business.Entities;
+﻿using MoneyTracker.Business.Entities;
 using System.Security.Claims;
 using MoneyTracker.App.GraphQl.Auth.Types.Inputs;
 using MoneyTracker.App.GraphQl.Auth.Types;
-using AutoMapper;
-using System.ComponentModel.DataAnnotations;
 using MoneyTracker.App.Helpers;
+using Google.Apis.Auth;
+using System.Runtime.Serialization;
+using MoneyTracker.Business.Interfaces;
+using MoneyTracker.Business.Commands;
+using MoneyTracker.Business.Commands.Auth;
 
 namespace MoneyTracker.Business.Services
 {
@@ -14,30 +16,23 @@ namespace MoneyTracker.Business.Services
         private readonly IUserRepository userRepository;
         private readonly TokenService tokenService;
         private readonly PasswordHashService passwordHashService;
-        private readonly IMapper mapper;
-        public AuthService(IUserRepository userRepository, TokenService tokenService, PasswordHashService passwordHashService, IMapper mapper)
+        private readonly CommandDispatcher commandDispatcher;
+        public AuthService(IUserRepository userRepository, TokenService tokenService, PasswordHashService passwordHashService, CommandDispatcher commandDispatcher)
         {
             this.userRepository = userRepository;
             this.tokenService = tokenService;
             this.passwordHashService = passwordHashService;
-            this.mapper = mapper;
+            this.commandDispatcher = commandDispatcher;
         }
-        public LoginResponse AuthenticateUser(string email, string password, HttpContext context)
+        public async Task<LoginResponse> AuthenticateUser(string email, string password, HttpContext context)
         {
             var user = userRepository.GetUserByEmail(email);
 
-            if (user == null || !passwordHashService.VerifyPassword(password, user.PasswordHash, user.PasswordSalt))
+            if (user == null || !passwordHashService.VerifyPassword(password, user.PasswordHash!, user.PasswordSalt!))
             {
-                throw new InvalidDataException("Invalid username or password.");
+                throw new UnauthorizedAccessException("Invalid username or password.");
             }
-
-            var accessToken = tokenService.GenerateAccessToken(user);
-            var refreshToken = tokenService.GenerateRefreshToken(user);
-
-            CookiesHelper.SetRefrshTokenCookie(refreshToken, context);
-
-            user.RefreshToken = refreshToken;
-            userRepository.UpdateUser(user);
+            var accessToken = await GenerateTokensAndSetCookiesAsync(user, context);
 
             return new LoginResponse
             {
@@ -45,27 +40,50 @@ namespace MoneyTracker.Business.Services
             };
         }
 
-        public LoginResponse RefreshAccessToken(HttpContext context)
+        public async Task<LoginResponse> AuthenticateGoogleUser(string googleToken, HttpContext context)
+        {
+            try
+            {
+                var payload = await GoogleJsonWebSignature.ValidateAsync(googleToken);
+
+                var user = userRepository.GetUserByEmail(payload.Email);
+
+                if (user == null)
+                {
+                    return await RegisterGoogleUser(payload.Email, payload.Name, context);
+                }
+
+                var accessToken = await GenerateTokensAndSetCookiesAsync(user, context);
+
+                return new LoginResponse
+                {
+                    AccessToken = accessToken,
+                };
+            }
+            catch (InvalidJwtException)
+            {
+                throw new InvalidJwtException($"Invalid token");
+            }
+        }
+
+        public async Task<LoginResponse> RefreshAccessToken(HttpContext context)
         {
             var oldRefreshToken = CookiesHelper.GetRefreshTokenCookie(context);
 
             if (oldRefreshToken == null || !tokenService.ValidateRefreshToken(oldRefreshToken))
             {
-                throw new InvalidRefreshTokenException();
+                throw new InvalidJwtException("Refresh token is invalid");
             }
 
             var claimPrincipal = tokenService.GetPrincipalFromToken(oldRefreshToken);
 
-            var user = userRepository.GetUserById(int.Parse(claimPrincipal.FindFirst(ClaimTypes.NameIdentifier)!.Value));
+            var user = userRepository.GetUserById(Guid.Parse(claimPrincipal.FindFirst(ClaimTypes.NameIdentifier)!.Value));
             
+            if (user == null) {
+                throw new InvalidJwtException("User doesn't not exist any more");
+            }
 
-            var accessToken = tokenService.GenerateAccessToken(user);
-            var refreshToken = tokenService.GenerateRefreshToken(user);
-
-            CookiesHelper.SetRefrshTokenCookie(refreshToken, context);
-
-            user.RefreshToken = refreshToken;
-            userRepository.UpdateUser(user);
+            var accessToken = await GenerateTokensAndSetCookiesAsync(user, context);
 
             return new LoginResponse
             {
@@ -73,28 +91,32 @@ namespace MoneyTracker.Business.Services
             };
         }
 
-        public LoginResponse RegisterUser(UserCreateInput newUser, HttpContext context)
+        public async Task<LoginResponse> RegisterUser(UserCreateInput newUser, HttpContext context)
         {
-            var user = mapper.Map<User>(newUser);
-
-            if (userRepository.GetUserByEmail(user.Email) != null)
+            if (userRepository.GetUserByEmail(newUser.Email) != null)
             {
                 throw new UserAlreadyExistsException();
             }
 
 
-            user.PasswordHash = passwordHashService.HashPassword(newUser.Password, out string salt);
-            user.PasswordSalt = salt;
-            
-            var createdUser = userRepository.CreateUser(user);
+            var command = new RegisterUserCommand
+            (
+                Email: newUser.Email,
+                Name: newUser.Name,
+                PasswordHash: passwordHashService.HashPassword(newUser.Password, out string salt),
+                PasswordSalt: salt
+            );
 
-            var accessToken = tokenService.GenerateAccessToken(createdUser);
-            var refreshToken = tokenService.GenerateRefreshToken(createdUser);
+            await commandDispatcher.DispatchAsync(command);
 
-            CookiesHelper.SetRefrshTokenCookie(refreshToken, context);
-            user.RefreshToken = refreshToken;
+            var createdUser = userRepository.GetUserByEmail(command.Email);
 
-            userRepository.UpdateUser(createdUser);
+            if (createdUser == null)
+            {
+                throw new UserNotFoundException("User was not created or created incorrectly");
+            }
+
+            var accessToken = await GenerateTokensAndSetCookiesAsync(createdUser, context);
 
             return new LoginResponse
             {
@@ -102,29 +124,94 @@ namespace MoneyTracker.Business.Services
             };
         }
 
-        public bool LogUserOut(HttpContext context)
+        public async Task<LoginResponse> RegisterGoogleUser(string email, string name, HttpContext context)
         {
-            var existingUser = userRepository.GetUserById(int.Parse(context.User.FindFirst(ClaimTypes.NameIdentifier)!.Value));
+            var command = new RegisterGoogleUserCommand
+            (
+                Email: email, 
+                Name: name
+            );
 
-            existingUser.RefreshToken = "";
+            await commandDispatcher.DispatchAsync(command);
 
-            userRepository.UpdateUser(existingUser);
+            var createdUser = userRepository.GetUserByEmail(email);
+
+            if (createdUser == null)
+            {
+                throw new UserNotFoundException("User was not created or created incorrectly");
+            }
+
+            var accessToken = await GenerateTokensAndSetCookiesAsync(createdUser, context);
+
+            return new LoginResponse
+            {
+                AccessToken = accessToken
+            };
+        }
+
+        public async Task<bool> LogUserOut(HttpContext context)
+        {
+            var existingUser = userRepository.GetUserById(Guid.Parse(context.User.FindFirst(ClaimTypes.NameIdentifier)!.Value));
+
+            if (existingUser == null)
+            {
+                return true;
+            }
 
             CookiesHelper.ClearRefreshTokenCookie(context);
+            await SetUserRefreshToken(existingUser.Id, null);
+
+            return true;
+        }
+
+        private async Task<string> GenerateTokensAndSetCookiesAsync(User user, HttpContext context)
+        {
+            var accessToken = tokenService.GenerateAccessToken(user);
+            var refreshToken = tokenService.GenerateRefreshToken(user);
+
+            CookiesHelper.SetRefrshTokenCookie(refreshToken, context);
+
+            await SetUserRefreshToken(user.Id, refreshToken);
+
+            return accessToken;
+        }
+
+        private async Task<bool> SetUserRefreshToken(Guid userId, string? refreshToken)
+        {
+            var command = new SetUserRefreshTokenCommand
+            (
+                UserId: userId,
+                RefreshToken: refreshToken
+            );
+
+            await commandDispatcher.DispatchAsync(command);
 
             return true;
         }
     }
 
+
+
+    [Serializable]
     public class UserAlreadyExistsException : Exception
     {
         public UserAlreadyExistsException()
         {
         }
-    } 
-    public class InvalidRefreshTokenException : Exception
+
+        protected UserAlreadyExistsException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+        }
+    }
+
+    [Serializable]
+    public class UserNotFoundException : Exception
     {
-        public InvalidRefreshTokenException()
+        public UserNotFoundException(string message)
+        {
+        }
+
+        protected UserNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
     }

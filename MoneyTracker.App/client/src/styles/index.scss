@@ -1,4 +1,6 @@
 @import "Variables";
+@import "ui/ui";
+
 
 *{
   margin: 0;
@@ -22,6 +24,18 @@ img{
   object-fit: cover;
 }
 
+ul, ol{
+  list-style-type: none;
+}
 
-@import "ui";
-@import "Transactions";
+a{
+  color: inherit;
+  text-decoration: none;
+}
+
+
+@import "Layout";
+@import "TimeScopePanel";
+@import "Transactions/Transactions";
+@import "Category/Category";
+@import "Budgets";

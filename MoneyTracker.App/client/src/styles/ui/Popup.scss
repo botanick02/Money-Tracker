@@ -1,0 +1,119 @@
+@import "src/styles/Variables";
+
+.popup-bg{
+  overflow-y: hidden;
+  z-index: 4;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, .7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+}
+
+.popup{
+  $border-radius: 20px;
+  $padding: 31px;
+
+  width: 100%;
+  border-radius: $border-radius;
+  background: $background-color;
+  padding: $padding;
+
+  &__header{
+    display: flex;
+    margin: -$padding;
+    margin-bottom: 0;
+    font-size: 16px;
+    border-radius: 0;
+    border-top-left-radius: $border-radius;
+    border-top-right-radius: $border-radius;
+    min-height: 34px;
+  }
+  
+  .title-single{
+    background-color: $background-light-color;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+
+  &__fields {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    margin: 40px 0;
+  }
+
+  &__info {
+    margin: 40px 0;
+  }
+
+  &__row {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1em;
+    &__center{
+      justify-content: center;
+    }
+  }
+
+  .button {
+    width: 100%;
+  
+    &.expense {
+      background-color: $secondary-color;
+    }
+  }
+
+  .select-wrapper {
+    font-size: 16px;
+    width: 100%;
+    padding: 3.5px 16px;
+    background: $primary-light-color;
+    border-radius: 13px;
+    color: $primary-dark-color;
+
+    .select-button {
+      height: 32px;
+      width: 100%;
+      text-align: left;
+
+      &:after {
+        font-size: 16px;
+        top: 0;
+      }
+    }
+
+    ul {
+      border: 1px solid black;
+      //margin-top: 8px;
+      text-align: left;
+      background: $primary-light-color;
+      border-radius: 13px;
+
+      li {
+        height: 39px;
+        padding: 10px 16px;
+        cursor: pointer;
+        border-bottom: 1px solid black;
+
+        &:last-child {
+          border: none;
+        }
+      }
+
+      &.show {
+        display: block;
+      }
+    }
+  }
+
+}

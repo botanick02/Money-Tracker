@@ -5,7 +5,7 @@ VisualStudioVersion = 17.5.33502.453
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyTracker.App", "MoneyTracker.App\MoneyTracker.App.csproj", "{73EF14FC-C9D4-4600-AE4A-47FE779B42ED}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyTracker.MsSQL", "MoneyTracker.MsSQL\MoneyTracker.MsSQL.csproj", "{5676C2F8-5DEA-404E-8DD4-9D5D7208BD85}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyTracker.DataAccess", "MoneyTracker.DataAccess\MoneyTracker.DataAccess.csproj", "{5676C2F8-5DEA-404E-8DD4-9D5D7208BD85}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyTracker.Business", "MoneyTracker.Business\MoneyTracker.Business.csproj", "{6E0E67A5-7C86-45CF-889E-5627819465C5}"
 EndProject

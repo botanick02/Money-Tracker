@@ -1,0 +1,70 @@
+@import "src/styles/Variables";
+
+
+.category-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  width: 100%; 
+  margin-top: 20px; 
+  margin-top: 20px; 
+  max-height: 300px; 
+  overflow-y: auto;
+}
+
+.category-list__date {
+  text-align: center;
+  margin-top: 26px; 
+}
+
+.category {
+  display: flex;
+  align-items: center;
+  height: 50px;
+  width: 100%;
+  padding-right: 8px;
+}
+
+.category__indicator {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.category__amount {
+  margin-left: auto;
+
+  &__expense {
+    color: $secondary-color;
+  }
+
+  &__income {
+    color: $primary-color;
+  }
+}
+
+.category__title {
+  font-size: 16px;
+}
+
+.category__category-name {
+  font-size: 14px;
+  font-weight: 300;
+}
+
+.chart-container {
+  max-width: 250px; 
+  margin: 0 auto; 
+  padding: 20px; 
+
+  .chart-wrapper {
+    height: 250px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 8px;
+    overflow: hidden;
+  }
+}

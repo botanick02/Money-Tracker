@@ -1,7 +1,7 @@
 ﻿using GraphQL;
 using GraphQL.Types;
 using MoneyTracker.App.GraphQl.User.Types;
-using MoneyTracker.Business.IRepositories;
+using MoneyTracker.Business.Interfaces;
 using System.Security.Claims;
 
 namespace MoneyTracker.App.GraphQl.User
@@ -14,8 +14,17 @@ namespace MoneyTracker.App.GraphQl.User
                 .Resolve(context =>
                 {
 
-                    var userId = int.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-                    var user = userRepository.GetUserById(userId);
+                    var userId = context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+
+                    if (!Guid.TryParse(userId, out var userGuidId))
+                    {
+                        var exception = new ExecutionError($"Invalid user id");
+                        exception.Code = "VALIDATION_ERROR";
+                        context.Errors.Add(exception);
+                        return false;
+                    }
+
+                    var user = userRepository.GetUserById(userGuidId);
 
                     return user;
                 }).Authorize();

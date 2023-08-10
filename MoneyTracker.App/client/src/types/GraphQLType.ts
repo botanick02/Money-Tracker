@@ -1,97 +1,39 @@
-import { IUserType } from "./IUserType";
-
-export interface IAuthResponse {
-  auth: IAuthData;
+export interface LoginQuery {
+  errors?: Error[];
+  data: LoginData;
 }
 
-interface IAuthData {
-  login: ILoginResponse;
+export interface GoogleLoginQuery {
+  errors?: Error[];
+  data: GoogleLoginData;
 }
 
-interface ILoginResponse {
-  accessToken: string;
-}
-
-export interface IUserQuery {
-  errors: IError[] | null;
-  data: IUserData
-}
-export interface IError {
+export interface Error {
   message: string;
   extensions: {
     code: string;
     codes: string[];
   };
 }
-export interface IUserData {
+export interface LoginData {
   auth: {
     createUser: boolean;
-    login: {
+    login?: {
       accessToken: string;
-    } | null;
-  };
-}
-
-interface IUser {
-  login: ILoginResponse;
-}
-
-interface ILoginResponse {
-  statusCode: number;
-  token: string;
-  refreshToken: string;
-  user: QueryUserType;
-}
-
-export interface QueryUserType {
-  id: number;
-  name: string;
-  email: string;
-}
-
-export interface AccessToken {
-  UserId: string;
-  nbf: number;
-  exp: number;
-  iat: number;
-}
-
-export interface IRefreshTokenQuery {
-  data: ITokenRefreshData;
-}
-
-interface ITokenRefreshData {
-  user: IRefreshTokenUser;
-}
-
-interface IRefreshTokenUser {
-  refreshToken: IRefreshToken;
-}
-
-export interface IRefreshToken {
-  token: string;
-  statusCode: number;
-}
-
-export interface ICreateUserQuery {
-  data: {
-    user: {
-      create: {
-        statusCode: number;
-        errors: any[];
-        user: IUserType;
-      };
     };
   };
 }
 
-
-interface ICreateUserResponse {
-  statusCode: number;
-  errors: any[];
-  user: IUserType;
+export interface GoogleLoginData {
+  auth: {
+    createUser: boolean;
+    googleLogin?: {
+      accessToken: string;
+    };
+  };
 }
-export interface accessTokenType {
+
+export interface AccessToken {
   UserId: string;
   nbf: number;
   exp: number;

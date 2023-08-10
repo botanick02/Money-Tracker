@@ -1,39 +1,47 @@
-import {combineReducers, configureStore} from "@reduxjs/toolkit";
-import {combineEpics, createEpicMiddleware} from "redux-observable";
-import {RegistrationEpic } from "./Example/RegistrationEpic";
-import { AuthorizationEpic, GetAccessTokenEpic, SignOutEpic } from "./Example/AuthorizationEpic";
-import UserReducer from "./Example/Reducers/UserReducer";
-import NotificationReducer from "./Example/Reducers/NotificationReducer";
-import AuthorizationReducer from "./Example/Reducers/AuthorizationReducer";
-import RefreshTokenReducer from "./Example/Reducers/RefreshTokenReducer";
-import RegistrationReducer from "./Example/Reducers/RegistrationReducer";
+import { FinancialOperationSlice } from './FinancialOperation/FinancialOperation.slice';
+import { CategoriesEpics } from './Category/Category.epic';
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { combineEpics, createEpicMiddleware } from "redux-observable";
+import { FinancialOperationEpics } from './FinancialOperation/FinancialOperation.epic';
+import { AuthEpics } from './Auth/Auth.epic';
+import { AccountEpics } from './Account/Account.epic';
+import { CategorySlice } from './Category/Category.slice';
+import { AccountSlice }  from './Account/Account.slice'
+import { AuthSlice } from './Auth/Auth.slice';
+import {BudgetEpics} from "./Budgets/Budgets.epic";
+import BudgetListSlice from "./Budgets/Budgets.slice";
+import {GetStatsEpics} from "./Stats/Stats.epic";
+import {StatsSlice} from "./Stats/Stats.slice";
 
-const epicMiddleware = createEpicMiddleware()
+const epicMiddleware = createEpicMiddleware();
 
 const rootEpic = combineEpics(
-    AuthorizationEpic,
-    SignOutEpic,
-    GetAccessTokenEpic,
-    RegistrationEpic
-)
+  CategoriesEpics,
+  FinancialOperationEpics,
+  AuthEpics,
+  AccountEpics,
+  BudgetEpics,
+  GetStatsEpics
+);
 
 const rootReducer = combineReducers({
-    Authorization: AuthorizationReducer,
-    User: UserReducer,
-    Notifications: NotificationReducer,
-    RefreshToken: RefreshTokenReducer,
-    Registration:RegistrationReducer
-})
+  Category: CategorySlice.reducer,
+  FinancialOperation: FinancialOperationSlice.reducer,
+  Account: AccountSlice.reducer,
+  Auth: AuthSlice.reducer,
+  Budgets: BudgetListSlice.reducer,
+  Stats: StatsSlice.reducer
+
+});
 
 export const store = configureStore({
-    reducer: rootReducer
-    ,
-    middleware: getDefaultMiddleware =>
-        getDefaultMiddleware({
-            serializableCheck: false,
-        }).concat(epicMiddleware)
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }).concat(epicMiddleware),
 });
 
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;
-epicMiddleware.run(rootEpic)
+epicMiddleware.run(rootEpic);

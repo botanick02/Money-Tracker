@@ -1,18 +1,18 @@
-import { accessTokenType } from "../types/GraphQLType";
+import { AccessToken } from "../types/GraphQLType";
 
 
 export const checkTokenExpire = (): boolean => {
     let token = localStorage.getItem("accessToken");
-    if (!token || token == "null") {
+    if (!token) {
         return true;
     }
     let dateExp = new Date(timeConverter(parseJwt(token).exp));
-    console.log(dateExp)
+  
     return dateExp.valueOf() < new Date().valueOf();
 };
 
-export const parseJwt = (token: string): accessTokenType => {
-    if (token == "" || token == null) {
+export const parseJwt = (token: string): AccessToken => {
+    if (!token) {
         return { exp: 0, iat: 0, nbf: 0, UserId: "" };
     }
     let base64Url = token.split(".")[1];
