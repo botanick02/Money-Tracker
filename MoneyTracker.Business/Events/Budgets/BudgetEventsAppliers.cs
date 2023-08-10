@@ -23,7 +23,7 @@ namespace MoneyTracker.Business.Events.Budgets
     }
     public class BudgetDeleteEventApplier : IEventApplier<BudgetDeleteEvent>
     {
-        public ReadModel Apply(ReadModel currentModel, BudgetDeleteEvent @event)
+        public async Task<ReadModel> ApplyAsync(ReadModel currentModel, BudgetDeleteEvent @event)
         {
             var updatedModel = currentModel;
 

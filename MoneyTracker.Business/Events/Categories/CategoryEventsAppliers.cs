@@ -33,10 +33,9 @@ namespace MoneyTracker.Business.Events.Categories
 
     public class CategoryEditEventApplier : IEventApplier<CategoryEditEvent>
     {
-        public ReadModel Apply(ReadModel currentmodel, CategoryEditEvent @event)
+        public async Task<ReadModel> ApplyAsync(ReadModel currentmodel, CategoryEditEvent @event)
         {
             var updatedModel = currentmodel;
-
 
             var categoryToUpdate = updatedModel.Categories.FirstOrDefault(c => c.Id == @event.category.Id);
             if (categoryToUpdate != null)

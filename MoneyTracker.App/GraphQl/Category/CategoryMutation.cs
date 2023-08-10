@@ -83,11 +83,11 @@ namespace MoneyTracker.App.GraphQl.Category
 
             Field<bool>("EditCategory")
                 .Argument<CategoryInputType>("Category")
-                .Resolve(context =>
+                .ResolveAsync(async context =>
                 {
                     var category = context.GetArgument<Business.Entities.Category>("Category");
                     var command = new EditCategoryCommand(category);
-                    commandDispatcher.Dispatch(command);
+                    await commandDispatcher.DispatchAsync(command);
                     return true;
                 });
 

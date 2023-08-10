@@ -32,10 +32,10 @@ namespace MoneyTracker.Business.Commands.Category
             this.eventStore = eventStore;
         }
 
-        public bool Handle(EditCategoryCommand command)
+        public async Task<bool> HandleAsync(EditCategoryCommand command)
         {
             var categoryCreatedEvent = new CategoryEditEvent(command.category);
-            eventStore.AppendEvent(categoryCreatedEvent);
+            await eventStore.AppendEventAsync(categoryCreatedEvent);
             return true;
         }
     }

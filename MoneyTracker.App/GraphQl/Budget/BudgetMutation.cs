@@ -13,7 +13,7 @@ namespace MoneyTracker.App.GraphQl.Budget
 
             Field<bool>("createBudget")
                 .Argument<BudgetInputType>("Budget")
-                .Resolve(context =>
+                .ResolveAsync(async context =>
                 {
                     var budget = context.GetArgument<Business.Entities.Budget>("Budget");
 
@@ -21,7 +21,7 @@ namespace MoneyTracker.App.GraphQl.Budget
 
                     try
                     {
-                        commandDispatcher.Dispatch(command);
+                        await commandDispatcher.DispatchAsync(command);
                     }
                     catch (Exception ex)
                     {
@@ -34,7 +34,7 @@ namespace MoneyTracker.App.GraphQl.Budget
 
             Field<bool>("deleteBudget")
                 .Argument<StringGraphType>("id")
-                .Resolve(context =>
+                .ResolveAsync(async context =>
                 {
                     var id = context.GetArgument<string>("id");
 
@@ -42,7 +42,7 @@ namespace MoneyTracker.App.GraphQl.Budget
 
                     try
                     {
-                        commandDispatcher.Dispatch(command);
+                        await commandDispatcher.DispatchAsync(command);
                     }
                     catch (Exception ex)
                     {

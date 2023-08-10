@@ -29,10 +29,10 @@ namespace MoneyTracker.Business.Commands.Budget
             this.eventStore = eventStore;
         }
 
-        public bool Handle(DeleteBudgetCommand command)
+        public  async Task<bool> HandleAsync(DeleteBudgetCommand command)
         {
             var budgetCreateEvent = new BudgetDeleteEvent(command.id);
-            eventStore.AppendEvent(budgetCreateEvent);
+            await eventStore.AppendEventAsync(budgetCreateEvent);
             return true;
         }
     }
