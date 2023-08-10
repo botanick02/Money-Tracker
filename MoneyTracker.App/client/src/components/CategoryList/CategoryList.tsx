@@ -11,7 +11,7 @@ const CategoryList = () => {
 
   const editSuccess = useAppSelector((state) => state.Category.editSuccess);
 
-  const [defaultTransaction, setDefaultTransaction] = useState<"expense" | "income">("expense");
+  const [defaultTransaction, setDefaultTransaction] = useState<"expense" | "income" | "transfer">("expense");
   const [categoryToEdit, setCategoryToEdit] = useState<undefined | Category>()
   const [isCreatePopupOpen, setIsCreatePopupOpen] = useState<boolean>(false);
 
