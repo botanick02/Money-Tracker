@@ -1,6 +1,6 @@
 import { useState } from "react";
 import InputWrapper from "../../elements/InputWrapper";
-import Dropdown, { Option } from "../../elements/Dropdown/Dropdown";
+import Dropdown, { Option } from "../../elements/Dropdown";
 import { Transaction } from "../../types/Transaction";
 import { useForm } from "react-hook-form";
 import { getISODateTimeValue } from "../../tools/Dates/currentIsoDates";

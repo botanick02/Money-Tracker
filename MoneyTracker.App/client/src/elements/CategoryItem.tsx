@@ -5,12 +5,12 @@ import {useAppDispatch} from "../hooks/useAppDispatch";
 import {deleteCategory} from "../store/Category/Category.slice";
 import { ReactComponent as DeleteIcon } from "../assets/icons/Delete-icon.svg";
 
-interface CategorySetsItemProps {
+interface CategoryItemProps {
   category: Category;
   onClick: () => void;
 }
 
-const CategorySetsItem: FC<CategorySetsItemProps> = ({ category, onClick }) => {
+const CategoryItem: FC<CategoryItemProps> = ({ category, onClick }) => {
 
   const dispatch = useAppDispatch()
   const handleDelete = () => {
@@ -34,4 +34,4 @@ const CategorySetsItem: FC<CategorySetsItemProps> = ({ category, onClick }) => {
   );
 };
 
-export default CategorySetsItem;
+export default CategoryItem;

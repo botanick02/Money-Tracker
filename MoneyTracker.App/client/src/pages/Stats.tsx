@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import СhartByCategory from "../components/СhartByCategory/СhartByCategory";
+import СhartByCategory from "../components/СhartByCategory";
 import { useAppDispatch, useAppSelector } from "../hooks/useAppDispatch";
 import { CHANGE_STATS_FILTER, FETCH_STATS } from "../store/Stats/Stats.slice";
 

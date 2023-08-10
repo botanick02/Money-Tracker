@@ -51348,7 +51348,7 @@ E:.
 |   |       |           TransactionList.tsx
 |   |       |           
 |   |       +---elements
-|   |       |   |   CategoryBudgetItem.tsx
+|   |       |   |   BudgetItem.tsx
 |   |       |   |   CategoryItem.tsx
 |   |       |   |   InputWrapper.tsx
 |   |       |   |   TransactionItem.tsx

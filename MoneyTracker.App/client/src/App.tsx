@@ -9,7 +9,7 @@ import Layout from "./components/common/Layout";
 import Settings from "./pages/Settings";
 import Stats from "./pages/Stats";
 import Budgets from "./pages/Budgets";
-import CategoryList from "./components/CategoryList/CategoryList";
+import CategoryList from "./components/Category/CategoryList";
 import { REFRESH_ACCESS_TOKEN } from "./store/Auth/Auth.slice";
 
 function App() {

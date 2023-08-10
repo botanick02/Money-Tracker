@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from "react";
 import {useAppDispatch, useAppSelector} from "../../hooks/useAppDispatch";
-import CategorySetsItemItem from "../../elements/CategorySetsItemItem";
-import CategoryCreate from "../CategoryCreate/CategoryCreate";
-import TimeScopePanel from "../TimeScopePanel/TimeScopePanel";
+import CategorySetsItemItem from "../../elements/CategoryItem";
+import CategoryCreate from "./CategoryCreate";
+import TimeScopePanel from "../TimeScopePanel";
 import {FETCH_CATEGORIES} from "../../store/Category/Category.slice";
 import {Category} from "../../types/Category";
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import TimeScopePanel from "../components/TimeScopePanel/TimeScopePanel";
+import TimeScopePanel from "../components/TimeScopePanel";
 import { useAppDispatch, useAppSelector } from "../hooks/useAppDispatch";
 import {
   FETCH_TRANSACTIONS_INFO,

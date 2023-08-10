@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import InputWrapper from "../../elements/InputWrapper";
-import Dropdown, { Option } from "../../elements/Dropdown/Dropdown";
+import Dropdown, { Option } from "../../elements/Dropdown";
 import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
 import {
   ADD_CREDIT_OPERATION,

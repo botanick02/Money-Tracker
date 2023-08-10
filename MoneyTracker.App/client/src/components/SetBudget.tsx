@@ -1,7 +1,7 @@
 import React, {FC, useEffect, useState} from 'react';
 import InputWrapper from "../elements/InputWrapper";
 import {Budget, BudgetToCreate, BudgetToEdit} from "../types/Budget";
-import Dropdown, {Option} from "../elements/Dropdown/Dropdown";
+import Dropdown, {Option} from "../elements/Dropdown";
 import {useAppDispatch, useAppSelector} from "../hooks/useAppDispatch";
 import {createBudgetAction, deleteBudgetAction, editBudgetAction} from "../store/Budgets/Budgets.slice";
 import {FETCH_CATEGORIES} from "../store/Category/Category.slice";

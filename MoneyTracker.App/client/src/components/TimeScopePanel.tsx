@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
-import Dropdown, { Option } from "../../elements/Dropdown/Dropdown";
-import TimeScopeInput from "../../elements/TimeScopePanel/TimeScopeInput";
+import Dropdown, { Option } from "../elements/Dropdown";
+import TimeScopeInput from "../elements/TimeScopeInput";
 import {
   getCurrentISODateValue,
   getCurrentISOMonthValue,
   getCurrentISOWeekValue,
-} from "../../tools/Dates/currentIsoDates";
+} from "../tools/Dates/currentIsoDates";
 
 import { useDispatch } from "react-redux";
-import { getMondayDateOfWeek, getSundayDateOfWeek } from "../../tools/Dates/datesFromTimeScopes";
+import { getMondayDateOfWeek, getSundayDateOfWeek } from "../tools/Dates/datesFromTimeScopes";
 
 interface TimeScopePanel {
   onRangeChange: (startDate: string | null, endDate: string | null) => void;
