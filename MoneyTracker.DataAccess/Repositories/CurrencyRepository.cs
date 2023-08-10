@@ -10,13 +10,17 @@ namespace MoneyTracker.DataAccess.Repositories
 
         public CurrencyRepository()
         {
-            var path = @"../MoneyTracker.DataAccess/Resources/Currencies.json";
-            var readCurrencies = JsonConvert.DeserializeObject<List<Currency>>(File.ReadAllText(path));
-            if (readCurrencies == null)
+            //var path = @"../MoneyTracker.DataAccess/Resources/Currencies.json";
+            //var readCurrencies = JsonConvert.DeserializeObject<List<Currency>>(File.ReadAllText(path));
+            //if (readCurrencies == null)
+            //{
+            //    throw new FileNotFoundException("Currencies were failed to receive");
+            //}
+            //currencies = readCurrencies;
+            currencies = new List<Currency>
             {
-                throw new FileNotFoundException("Currencies were failed to receive");
-            }
-            currencies = readCurrencies;
+                new Currency { Code = "UAH", Symbol = "₴" }
+            };
         }
 
         public Currency GetCurrencyByCode(string code)
