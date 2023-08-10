@@ -1,64 +1,60 @@
-import React, {useEffect} from "react";
-
-import {BrowserRouter, Routes, Route} from "react-router-dom";
-import {useAppDispatch, useAppSelector} from "./hooks/useAppDispatch";
-import SignInForm from "./pages/SignIn/SignInForm";
-import BalanceComponent from "./pages/Balance/BalanceComponent";
-import { RefreshTokenReducer } from "./store/Example/Reducers/RefreshTokenReducer";
-import { UserReducer } from "./store/Example/Reducers/UserReducer";
+import React, { useEffect } from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "./hooks/useAppDispatch";
+import SignInForm from "./pages/SignInForm";
 import { checkTokenExpire } from "./tools/checkTokenExpire";
-import Registration from "./pages/Registration/Registration";
-import Transactions from "./pages/Transactions/Transactions";
-
-const {GET_ACCESS_TOKEN} = RefreshTokenReducer.actions;
-const {GET_USER_INFO} = UserReducer.actions;
+import Registration from "./pages/Registration";
+import Transactions from "./pages/Transactions";
+import Layout from "./components/common/Layout";
+import Settings from "./pages/Settings";
+import Stats from "./pages/Stats";
+import Budgets from "./pages/Budgets";
+import CategoryList from "./components/CategoryList/CategoryList";
+import { REFRESH_ACCESS_TOKEN } from "./store/Auth/Auth.slice";
 
 function App() {
-  const isAuth = useAppSelector((state) => state.Authorization.isAuth);
+  const isAuth = useAppSelector((state) => state.Auth.isAuth);
   const accessTokenRefreshing = useAppSelector(
-    (state) => state.RefreshToken.loading
+    (state) => state.Auth.loading
   );
-  console.log(accessTokenRefreshing);
   const dispatch = useAppDispatch();
-  useEffect(() => {
-    if (checkTokenExpire()) {
-      if (!accessTokenRefreshing && isAuth) {
-        dispatch(GET_ACCESS_TOKEN());
-      }
-    }
-  }, []);
 
   useEffect(() => {
-    
-    if (isAuth) {
-      dispatch(GET_USER_INFO());
-    }
-  }, [isAuth]);
-  console.log(isAuth);
+    const interval = setInterval(() => {
+      if (checkTokenExpire()) {
+        if (!accessTokenRefreshing && isAuth) {
+          dispatch(REFRESH_ACCESS_TOKEN());
+        }
+      }
+    }, 120000); 
+
+    return () => {
+      clearInterval(interval); 
+    };
+  }, [accessTokenRefreshing, dispatch, isAuth]);
+
   return (
     <BrowserRouter>
-    <Routes>
-      <Route
-        path="/"
-        element={isAuth ? <BalanceComponent /> : <SignInForm />}
-      />
-      <Route
-        path="/registration"
-        element={isAuth ? <BalanceComponent /> : <Registration />}
-      />
-      <Route
-        path="/SignInForm"
-        element={isAuth ? <BalanceComponent /> : <SignInForm />}
-      />
-      
-      <Route path={"/home"} element={<Transactions/>}/>
-    </Routes>
-  </BrowserRouter>
+      <Routes>
+        {isAuth ? (
+          <Route path={"/"} element={<Layout />}>
+            <Route index element={<Transactions />} />
+            <Route path="/budgets" element={<Budgets/>} />
+            <Route path="/stats" element={<Stats/>} />
+            <Route path="/settings" element={<Settings/>}/>
+            <Route path="/CategoryList" element={<CategoryList/>}/>
+            <Route path="*" element={<Navigate to="/" />} />
+          </Route>
+        ) : (
+          <>
+            <Route path="SignInForm" element={<SignInForm />} />
+            <Route path="/registration" element={<Registration />} />
+            <Route path="*" element={<Navigate to="/SignInForm" />} />
+          </>
+        )}
+      </Routes>
+    </BrowserRouter>
   );
 }
 
 export default App;
-
-// How to use Dropdown
-//<Dropdown selectHandler={()=>{}} options={Option[]}/>
-

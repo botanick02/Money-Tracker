@@ -4,21 +4,26 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+	<DockerfileFastModeStage>base</DockerfileFastModeStage>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Google.Apis.Auth" Version="1.60.0" />
     <PackageReference Include="GraphQL.Server.All" Version="7.4.0" />
     <PackageReference Include="GraphQL.Server.Ui.Altair" Version="7.4.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="7.0.7" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="7.0.5" />
+    <PackageReference Include="Microsoft.NET.Build.Containers" Version="7.0.400" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="client\" />
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\MoneyTracker.Business\MoneyTracker.Business.csproj" />
-    <ProjectReference Include="..\MoneyTracker.MsSQL\MoneyTracker.MsSQL.csproj" />
+    <ProjectReference Include="..\MoneyTracker.DataAccess\MoneyTracker.DataAccess.csproj" />
   </ItemGroup>
 
 </Project>

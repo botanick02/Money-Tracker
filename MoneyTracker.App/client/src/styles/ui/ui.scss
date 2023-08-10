@@ -1,0 +1,26 @@
+@import "src/styles/Variables";
+
+@import "Select";
+@import "Input";
+@import "RowItem";
+@import "Popup";
+
+.button{
+  outline: none;
+  border: none;
+  padding: 1em;
+  border-radius: 16px;
+  color: $primary-light-color;
+  background: $primary-color;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 18px;
+
+  &:hover{
+    background: #2ca163;
+  }
+}
+
+.no-scroll{
+  overflow: hidden;
+}

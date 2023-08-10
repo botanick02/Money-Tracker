@@ -1,4 +1,5 @@
-﻿using GraphQL;
+﻿using Google.Apis.Auth;
+using GraphQL;
 using GraphQL.Types;
 using MoneyTracker.App.GraphQl.Auth.Types;
 using MoneyTracker.App.GraphQl.Auth.Types.Inputs;
@@ -15,37 +16,98 @@ namespace MoneyTracker.App.GraphQl.Auth
         {
             Field<LoginResponseType>("Login")
                 .Argument<LoginInputType>("LoginCredentials")
-                .Resolve(context =>
+                .ResolveAsync(async context =>
                 {
                     var loginCredentials = context.GetArgument<LoginInput>("LoginCredentials");
 
+                    bool isValid = ModelValidationHelper.ValidateModel(loginCredentials, out List<ValidationResult> results);
+
+                    if (!isValid)
+                    {
+                        foreach (var result in results)
+                        {
+                            var exception = new ExecutionError($"{result.MemberNames.First()}: {result.ErrorMessage!}");
+                            exception.Code = "VALIDATION_ERROR";
+                            context.Errors.Add(exception);
+                        }
+                        return null;
+                    }
+
                     try
                     {
-                        return authService.AuthenticateUser(loginCredentials.Email, loginCredentials.Password, httpContextAccessor.HttpContext!);
+                        return await authService.AuthenticateUser(loginCredentials.Email!, loginCredentials.Password!, httpContextAccessor.HttpContext!);
                     }
-                    catch (Exception ex)
+                    catch (UnauthorizedAccessException ex)
                     {
                         var exception = new ExecutionError(ex.Message);
                         exception.Code = "UNAUTHORIZED";
                         context.Errors.Add(exception);
                         return null;
                     }
+                    catch (Exception ex)
+                    {
+                        var exception = new ExecutionError($"Internal Server Error");
+                        exception.Code = "SERVER_ERROR";
+                        context.Errors.Add(exception);
+                        Debug.Write(ex);
+                        return null;
+                    }
+                });
+
+            Field<LoginResponseType>("GoogleLogin")
+                .Argument<GoogleLoginInputType>("LoginCredentials")
+                .ResolveAsync(async context =>
+                {
+                    var loginCredentials = context.GetArgument<GoogleLoginInput>("LoginCredentials");
+
+                    bool isValid = ModelValidationHelper.ValidateModel(loginCredentials, out List<ValidationResult> results);
+
+                    if (!isValid)
+                    {
+                        foreach (var result in results)
+                        {
+                            var exception = new ExecutionError($"{result.MemberNames.First()}: {result.ErrorMessage!}");
+                            exception.Code = "VALIDATION_ERROR";
+                            context.Errors.Add(exception);
+                        }
+                        return null;
+                    }
+
+                    try
+                    {
+                        return await authService.AuthenticateGoogleUser(loginCredentials.Token!, httpContextAccessor.HttpContext!);
+                    }
+                    catch (InvalidJwtException)
+                    {
+                        var exception = new ExecutionError($"Token validation error");
+                        exception.Code = "INVALID_TOKEN";
+                        context.Errors.Add(exception);
+                        return null;
+                    }
+                    catch (Exception ex)
+                    {
+                        var exception = new ExecutionError($"Internal Server Error");
+                        exception.Code = "SERVER_ERROR";
+                        context.Errors.Add(exception);
+                        Debug.Write(ex);
+                        return null;
+                    }
                 });
 
             Field<bool>("LogOut")
-               .Resolve(context =>
+               .ResolveAsync(async context =>
                {
-                   return authService.LogUserOut(httpContextAccessor.HttpContext!);
+                   return await authService.LogUserOut(httpContextAccessor.HttpContext!);
                }).Authorize();
 
             Field<LoginResponseType>("RefreshToken")
-                .Resolve(context =>
+                .ResolveAsync(async context =>
                 {
                     try
                     {
-                        return authService.RefreshAccessToken(httpContextAccessor.HttpContext!);
+                        return await authService.RefreshAccessToken(httpContextAccessor.HttpContext!);
                     }
-                    catch (InvalidRefreshTokenException)
+                    catch (InvalidJwtException)
                     {
                         var exception = new ExecutionError($"Refresh token validation error");
                         exception.Code = "INVALID_TOKEN";
@@ -64,7 +126,7 @@ namespace MoneyTracker.App.GraphQl.Auth
 
             Field<LoginResponseType>("CreateUser")
                 .Argument<UserCreateInputType>("CreateUser")
-                .Resolve(context =>
+                .ResolveAsync(async context =>
                 {
                     var newUser = context.GetArgument<UserCreateInput>("CreateUser");
 
@@ -83,7 +145,7 @@ namespace MoneyTracker.App.GraphQl.Auth
                     }
                     try
                     {
-                        return authService.RegisterUser(newUser, httpContextAccessor.HttpContext!);
+                        return await authService.RegisterUser(newUser, httpContextAccessor.HttpContext!);
                     }
                     catch (UserAlreadyExistsException)
                     {

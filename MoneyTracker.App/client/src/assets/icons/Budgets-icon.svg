@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="1000" height="1000" viewBox="0 0 1000 1000" xml:space="preserve">
+<desc>Created with Fabric.js 3.5.0</desc>
+<defs>
+</defs>
+<g transform="matrix(58.1262 0 0 58.1262 401.7699 498.7279)" id="299254">
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; is-custom-font: none; font-file-url: none; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1;" vector-effect="non-scaling-stroke" transform=" translate(-6.1341, -9)" d="M 1.92558 14.9092 C 1.46621 14.1369 1.44804 13.2043 1.87714 12.4149 L 6.06015 4.71427 H 8.54531 L 10.8785 8.97697 L 12.1312 8.29122 L 10.1734 4.71427 H 10.8574 V 3.28575 H 10.2053 L 11.5715 0.428528 H 3 L 4.49082 3.28575 H 3.71425 V 4.71427 H 4.43379 L 0.621286 11.7326 C -0.0503939 12.9697 -0.0218785 14.4301 0.697653 15.6397 C 1.41718 16.8492 2.68711 17.5715 4.09433 17.5715 H 5.83847 V 16.143 H 4.09433 C 3.19589 16.1428 2.38496 15.6818 1.92558 14.9092 Z M 5.35683 1.85724 H 9.30488 L 8.62168 3.28575 H 6.10234 L 5.35683 1.85724 Z" stroke-linecap="round"/>
+</g>
+<g transform="matrix(56.9913 0 0 56.9913 653.0856 773.0638)" id="554195">
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; is-custom-font: none; font-file-url: none; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1;" vector-effect="non-scaling-stroke" transform=" translate(-5.8573, -4.6428)" d="M 10.8572 4.28575 V 0.714264 H 2.28594 V 2.85704 H 0.857422 V 6.42852 H 2.28594 V 8.57129 H 10.8572 V 5.00001 H 9.42871 V 4.28575 H 10.8572 Z M 9.42871 2.14278 V 2.85704 H 8.71445 V 2.14278 H 9.42871 Z M 3.71445 2.14278 H 7.28594 V 2.85704 H 3.71445 V 2.14278 Z M 2.28594 4.28575 H 5.85742 V 5.00001 H 2.28594 V 4.28575 Z M 3.71445 7.14278 V 6.42852 H 7.28574 V 7.14278 H 3.71445 Z M 9.42871 7.14278 H 8.71445 V 6.42852 H 9.42871 V 7.14278 Z M 7.28594 5.00001 V 4.28575 H 8.0002 V 5.00001 H 7.28594 Z" stroke-linecap="round"/>
+</g>
+</svg>

@@ -1,17 +1,27 @@
-﻿namespace MoneyTracker.Business.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace MoneyTracker.Business.Entities
 {
     public class User
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
 
-        public string Name { get; set; } = string.Empty;
+        public string Name { get; set; }
 
-        public string Email { get; set; } = string.Empty;
+        public string Email { get; set; }
 
-        public string PasswordHash { get; set; } = string.Empty;
+        public bool GoogleAuth { get; set; }
 
-        public string PasswordSalt { get; set; } = string.Empty;
+        public string? PasswordHash { get; set; }
 
-        public string RefreshToken { get; set; } = string.Empty;
+        public string? PasswordSalt { get; set; }
+
+        public string? RefreshToken { get; set; }
+
+        public User(string email, string name)
+        {
+            Name = name;
+            Email = email;
+        }
     }
 }

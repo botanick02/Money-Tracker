@@ -1,0 +1,15 @@
+@import "src/styles/Variables";
+
+
+.transaction-list{
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  .row-title{
+    text-align: center;
+  }
+
+  &__message-empty{
+    margin: 20px auto 0;
+  }
+}

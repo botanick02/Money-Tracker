@@ -1,0 +1,286 @@
+﻿[
+  {
+    "code": "USD",
+    "symbol": "$"
+  },
+  {
+    "code": "EUR",
+    "symbol": "€"
+  },
+  {
+    "code": "GBP",
+    "symbol": "£"
+  },
+  {
+    "code": "JPY",
+    "symbol": "¥"
+  },
+  {
+    "code": "CAD",
+    "symbol": "CA$"
+  },
+  {
+    "code": "AUD",
+    "symbol": "A$"
+  },
+  {
+    "code": "CHF",
+    "symbol": "CHF"
+  },
+  {
+    "code": "CNY",
+    "symbol": "CN¥"
+  },
+  {
+    "code": "SEK",
+    "symbol": "kr"
+  },
+  {
+    "code": "NZD",
+    "symbol": "NZ$"
+  },
+  {
+    "code": "MXN",
+    "symbol": "MX$"
+  },
+  {
+    "code": "SGD",
+    "symbol": "S$"
+  },
+  {
+    "code": "HKD",
+    "symbol": "HK$"
+  },
+  {
+    "code": "NOK",
+    "symbol": "kr"
+  },
+  {
+    "code": "KRW",
+    "symbol": "₩"
+  },
+  {
+    "code": "TRY",
+    "symbol": "₺"
+  },
+  {
+    "code": "RUB",
+    "symbol": "₽"
+  },
+  {
+    "code": "BRL",
+    "symbol": "R$"
+  },
+  {
+    "code": "INR",
+    "symbol": "₹"
+  },
+  {
+    "code": "ZAR",
+    "symbol": "R"
+  },
+  {
+    "code": "DKK",
+    "symbol": "kr"
+  },
+  {
+    "code": "PLN",
+    "symbol": "zł"
+  },
+  {
+    "code": "THB",
+    "symbol": "฿"
+  },
+  {
+    "code": "IDR",
+    "symbol": "Rp"
+  },
+  {
+    "code": "ILS",
+    "symbol": "₪"
+  },
+  {
+    "code": "SAR",
+    "symbol": "﷼"
+  },
+  {
+    "code": "AED",
+    "symbol": "د.إ"
+  },
+  {
+    "code": "COP",
+    "symbol": "COL$"
+  },
+  {
+    "code": "CZK",
+    "symbol": "Kč"
+  },
+  {
+    "code": "MYR",
+    "symbol": "RM"
+  },
+  {
+    "code": "PHP",
+    "symbol": "₱"
+  },
+  {
+    "code": "ARS",
+    "symbol": "AR$"
+  },
+  {
+    "code": "CLP",
+    "symbol": "CLP$"
+  },
+  {
+    "code": "EGP",
+    "symbol": "EGP"
+  },
+  {
+    "code": "HUF",
+    "symbol": "Ft"
+  },
+  {
+    "code": "KWD",
+    "symbol": "د.ك"
+  },
+  {
+    "code": "PEN",
+    "symbol": "S/."
+  },
+  {
+    "code": "RON",
+    "symbol": "RON"
+  },
+  {
+    "code": "TWD",
+    "symbol": "NT$"
+  },
+  {
+    "code": "UAH",
+    "symbol": "₴"
+  },
+  {
+    "code": "VND",
+    "symbol": "₫"
+  },
+  {
+    "code": "BGN",
+    "symbol": "лв"
+  },
+  {
+    "code": "HRK",
+    "symbol": "kn"
+  },
+  {
+    "code": "ISK",
+    "symbol": "kr"
+  },
+  {
+    "code": "NGN",
+    "symbol": "₦"
+  },
+  {
+    "code": "PKR",
+    "symbol": "₨"
+  },
+  {
+    "code": "QAR",
+    "symbol": "﷼"
+  },
+  {
+    "code": "UYU",
+    "symbol": "$U"
+  },
+  {
+    "code": "KZT",
+    "symbol": "₸"
+  },
+  {
+    "code": "JMD",
+    "symbol": "J$"
+  },
+  {
+    "code": "JOD",
+    "symbol": "JD"
+  },
+  {
+    "code": "KES",
+    "symbol": "KSh"
+  },
+  {
+    "code": "LBP",
+    "symbol": "LBP"
+  },
+  {
+    "code": "LKR",
+    "symbol": "Rs"
+  },
+  {
+    "code": "MAD",
+    "symbol": "MAD"
+  },
+  {
+    "code": "MDL",
+    "symbol": "MDL"
+  },
+  {
+    "code": "MKD",
+    "symbol": "MKD"
+  },
+  {
+    "code": "MUR",
+    "symbol": "MURs"
+  },
+  {
+    "code": "NAD",
+    "symbol": "N$"
+  },
+  {
+    "code": "NIO",
+    "symbol": "C$"
+  },
+  {
+    "code": "PAB",
+    "symbol": "B/."
+  },
+  {
+    "code": "PYG",
+    "symbol": "₲"
+  },
+  {
+    "code": "SCR",
+    "symbol": "SCR"
+  },
+  {
+    "code": "SVC",
+    "symbol": "$"
+  },
+  {
+    "code": "TND",
+    "symbol": "DT"
+  },
+  {
+    "code": "TZS",
+    "symbol": "TSh"
+  },
+  {
+    "code": "UGX",
+    "symbol": "USh"
+  },
+  {
+    "code": "UZS",
+    "symbol": "UZS"
+  },
+  {
+    "code": "VUV",
+    "symbol": "VT"
+  },
+  {
+    "code": "YER",
+    "symbol": "﷼"
+  },
+  {
+    "code": "ZMW",
+    "symbol": "ZK"
+  }
+]
