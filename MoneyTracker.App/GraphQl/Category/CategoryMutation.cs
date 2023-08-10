@@ -81,6 +81,17 @@ namespace MoneyTracker.App.GraphQl.Category
                 });
 
 
+            Field<bool>("EditCategory")
+                .Argument<CategoryInputType>("Category")
+                .Resolve(context =>
+                {
+                    var category = context.GetArgument<Business.Entities.Category>("Category");
+                    var command = new EditCategoryCommand(category);
+                    commandDispatcher.Dispatch(command);
+                    return true;
+                });
+
+
             Field<bool>("DeleteCategory")
                 .Argument<StringGraphType>("id")
                 .ResolveAsync(async context =>

@@ -1,28 +1,26 @@
 import React, {useEffect, useState} from 'react';
 import InputWrapper from "../../elements/InputWrapper";
 import {useAppDispatch} from '../../hooks/useAppDispatch';
-import {createCategory, EDIT_CATEGORY} from '../../store/Category/Category.slice';
+import {createCategory, EDIT_CATEGORY, editCategory} from '../../store/Category/Category.slice';
 import categoryIcons from './categoryIconsPath.json'
 import SvgFromPath from "../../elements/SvgFromPath";
 import {Category, CategoryToCreate} from "../../types/Category";
 
 interface Props {
   openPopupHandle(): void;
-  transactionDefaultType: "income" | "expense";
+  transactionDefaultType?: "income" | "expense";
+  categoryToEdit?: Category
 }
 
 const defaultBackground = "#02dbff"
 
 
-const CategoryCreate: React.FC<Props> = ({
-                                           openPopupHandle,
-                                           transactionDefaultType
-                                         }) => {
-  const [category, setCategory] = useState<CategoryToCreate>({
+const CategoryCreate: React.FC<Props> = ({openPopupHandle, transactionDefaultType, categoryToEdit}) => {
+  const [category, setCategory] = useState<CategoryToCreate | Category>(categoryToEdit ?? {
     color: defaultBackground,
     iconUrl: "",
     name: "",
-    type: transactionDefaultType
+    type: transactionDefaultType ?? 'expense'
   })
   const dispatch = useAppDispatch();
 
@@ -43,7 +41,13 @@ const CategoryCreate: React.FC<Props> = ({
   }
 
   const handleSave = () => {
-    dispatch(createCategory(category));
+    if (!!categoryToEdit) {
+      console.log(category)
+      dispatch(editCategory(category as Category));
+    } else {
+      dispatch(createCategory(category));
+    }
+
     openPopupHandle();
   };
 
@@ -51,7 +55,7 @@ const CategoryCreate: React.FC<Props> = ({
     openPopupHandle();
   };
 
-  console.log(category)
+  // console.log(category)
   return (
     <div className="popup-bg category-create">
       <div className="popup">
@@ -87,8 +91,9 @@ const CategoryCreate: React.FC<Props> = ({
 
           <div className={'icon-area'}>
             {
-              categoryIcons.map(item => <div key={item} onClick={() => handleIconChange(item)}>
-                <SvgFromPath styles={{background: category.color}} path={item}/>
+              categoryIcons.map(item => <div key={item}
+                                             onClick={() => handleIconChange(item)}>
+                <SvgFromPath isActive={item === category.iconUrl} styles={{background: category.color}} path={item}/>
               </div>)
             }
           </div>
@@ -97,17 +102,13 @@ const CategoryCreate: React.FC<Props> = ({
 
         <div className="popup__row">
           <button
-            onClick={() => {
-              handleSave();
-            }}
+            onClick={handleSave}
             className="button"
           >
             Save
           </button>
           <button
-            onClick={() => {
-              handleCancel();
-            }}
+            onClick={handleCancel}
             className="button"
           >
             Cancel

@@ -12,17 +12,19 @@ query getCategories{
   }
   `
 
-export const EditCategory = `
-  mutation editCategory($categoryId: String!, $name: String!){
-    category {
-      renameCategoryTest(categoryId: $categoryId, name: $name)
-    }
-  }`
-
 export const CreateCategory = `
   mutation createCategory($category: CategoryInputType!){
     category{
       createCategory(category: $category)
+    }
+  }
+`
+
+
+export const EditCategory = `
+  mutation createCategory($category: CategoryInputType!){
+    category{
+      editCategory(category: $category)
     }
   }
 `

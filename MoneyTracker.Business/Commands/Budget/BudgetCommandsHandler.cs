@@ -20,6 +20,23 @@ namespace MoneyTracker.Business.Commands.Budget
         }
     }
 
+    public class DeleteBudgetCommandHandler : ICommandHandler<DeleteBudgetCommand>
+    {
+        private readonly IEventStore eventStore;
+
+        public DeleteBudgetCommandHandler(IEventStore eventStore)
+        {
+            this.eventStore = eventStore;
+        }
+
+        public bool Handle(DeleteBudgetCommand command)
+        {
+            var budgetCreateEvent = new BudgetDeleteEvent(command.id);
+            eventStore.AppendEvent(budgetCreateEvent);
+            return true;
+        }
+    }
+
     public class EditBudgetCommandHandler : ICommandHandler<EditBudgetCommand>
     {
         private readonly IEventStore eventStore;

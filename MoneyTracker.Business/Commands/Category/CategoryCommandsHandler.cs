@@ -23,6 +23,23 @@ namespace MoneyTracker.Business.Commands.Category
         }
     }
 
+    public class EditCategoryCommandHandler : ICommandHandler<EditCategoryCommand>
+    {
+        private readonly IEventStore eventStore;
+
+        public EditCategoryCommandHandler(IEventStore eventStore)
+        {
+            this.eventStore = eventStore;
+        }
+
+        public bool Handle(EditCategoryCommand command)
+        {
+            var categoryCreatedEvent = new CategoryEditEvent(command.category);
+            eventStore.AppendEvent(categoryCreatedEvent);
+            return true;
+        }
+    }
+
     public class UpdateCategoryNameCommandHandler : ICommandHandler<UpdateCategoryNameCommand>
     {
         private readonly ICategoryRepository categoryRepository;

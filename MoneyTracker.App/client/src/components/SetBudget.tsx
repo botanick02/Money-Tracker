@@ -1,117 +1,118 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import InputWrapper from "../elements/InputWrapper";
-import {Budget, BudgetWrite} from "../types/Budget";
+import {Budget, BudgetToCreate, BudgetToEdit} from "../types/Budget";
 import Dropdown, {Option} from "../elements/Dropdown/Dropdown";
-import {useAppDispatch} from "../hooks/useAppDispatch";
-import {editBudgetAction} from "../store/Budgets/Budgets.slice";
+import {useAppDispatch, useAppSelector} from "../hooks/useAppDispatch";
+import {createBudgetAction, deleteBudgetAction, editBudgetAction} from "../store/Budgets/Budgets.slice";
+import {FETCH_CATEGORIES} from "../store/Category/Category.slice";
+import {ReactComponent as DeleteIcon} from "../assets/icons/Delete-icon.svg";
 
 interface Props {
-    budget: Budget
-
-    openPopupHandle(): void
+  budget?: Budget
+  openPopupHandle(): void
 }
 
-const timeScopeOptions: Option[] = [
-    {
-        value: "date",
-        label: "Day"
-    },
-    {
-        value: "week",
-        label: "Weekly"
-    },
-    {
-        value: "month",
-        label: "Monthly"
-    },
-]
-
-function pickBudgetForWrite(budget: Budget): BudgetWrite {
-    const {category, spent, ...budgetWrite} = budget;
-    return {...budgetWrite, categoryId: category.id};
+function pickBudgetForWrite(budget: Budget): BudgetToEdit {
+  const {category, spent, ...budgetWrite} = budget;
+  return {...budgetWrite, categoryId: category.id};
 }
+
+const emptyCreateBudget: BudgetToCreate = {limit: 0, title: "", categoryId: ""}
 
 const SetBudget: FC<Props> = ({budget, openPopupHandle}) => {
-    const [timeScope, setTimeScope] = useState<"week" | "date" | "month">(timeScopeOptions[0].value)
-    const [editableBudget, setBudget] = useState<BudgetWrite>(pickBudgetForWrite(budget))
+  const [editableBudget, setBudget] = useState<BudgetToEdit | BudgetToCreate>(budget
+    ? pickBudgetForWrite(budget)
+    : emptyCreateBudget)
 
-    const dispatch = useAppDispatch()
+  const categoryItems = useAppSelector((state) => state.Category.categories);
+  const categoryOptions: Option[] = categoryItems.map((category) => ({
+    label: category.name,
+    value: category.id,
+  }));
 
-    // console.warn(editableBudget)
+  const dispatch = useAppDispatch()
 
-    const handleTimeScopeChange = (option: Option) => {
-        setTimeScope(option.value)
-    }
+  const handleDelete = () => {
+    openPopupHandle()
+    if (budget?.id)
+      dispatch(deleteBudgetAction(budget.id))
+  }
 
-    const handleLimitInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setBudget({...editableBudget, limit: e.target.value.length ? parseInt(e.target.value) : 0})
-    }
+  const handleLimitInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setBudget({...editableBudget, limit: e.target.value.length ? parseInt(e.target.value) : 0})
+  }
+  const handleTitleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setBudget({...editableBudget, title: e.target.value})
+  }
 
-    const handleStartDate = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setBudget({...editableBudget, startDate: (e.target.value.concat("T00:00:00.000Z"))})
-    }
+  const handleCancel = () => {
+    setBudget(budget ? pickBudgetForWrite(budget) : emptyCreateBudget)
+    openPopupHandle()
+  }
 
-    const handleEndDate = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setBudget({...editableBudget, endDate: (e.target.value.concat("T00:00:00.000Z"))})
-    }
+  const handleSafe = () => {
+    if (!!budget)
+      dispatch(editBudgetAction(editableBudget as BudgetToEdit))
+    else
+      dispatch(createBudgetAction(editableBudget as BudgetToCreate))
+    openPopupHandle()
+  }
 
+  const handleCategoryChange = (option: Option) => {
+    setBudget({...editableBudget, categoryId: option.value});
+  };
 
-    const handleCancel = () => {
-        setBudget(pickBudgetForWrite(budget))
-        openPopupHandle()
-    }
+  useEffect(() => {
+    dispatch(FETCH_CATEGORIES());
+  }, [])
 
-    const handleSafe = () => {
-        dispatch(editBudgetAction(editableBudget))
-        openPopupHandle()
-    }
-
-    return (
-        <div className={'popup-bg'}>
-            <div className={"popup"}>
-                <div style={{background: "red"}} className={"popup__header"}>{budget.category.name}</div>
-
-                <div className={"popup__fields"}>
-                    <InputWrapper>
-                        {
-                            editableBudget.limit
-                                ? <input onChange={handleLimitInput} value={editableBudget.limit} type="number"
-                                         placeholder="Budget"/>
-                                : <input onChange={handleLimitInput} type="number" placeholder="Budget"/>
-                        }
-                    </InputWrapper>
-
-                    {/*<div className={"popup__row"}>*/}
-                    <Dropdown selectHandler={handleTimeScopeChange} options={timeScopeOptions}/>
-                    Start
-                    <InputWrapper>
-                        <input onChange={handleStartDate} type={timeScope} placeholder="Title"/>
-                    </InputWrapper>
-                    End
-                    <InputWrapper>
-                        <input onChange={handleEndDate} type={timeScope} placeholder="Title"/>
-                    </InputWrapper>
-
-                    {/*</div>*/}
-
-                </div>
-
-                <div className={"popup__row"}>
-                    <button onClick={() => {
-                        handleSafe()
-                    }} className={"button"}>
-                        Save
-                    </button>
-                    <button onClick={() => {
-                        handleCancel()
-                    }} className={"button"}>
-                        Cancel
-                    </button>
-                </div>
+  return (
+    <div className={'popup-bg'}>
+      <div className={"popup"}>
+        <div style={{background: budget?.category.color}} className={"popup__header"}>{budget?.category.name}</div>
+        <div className={"popup__fields"}>
+          {
+            !!budget?.id &&
+            <div onClick={handleDelete} className={"row-item__amount delete-category"}>
+              <DeleteIcon/>
             </div>
+          }
+          Budget
+          <InputWrapper>
+            <input onChange={handleLimitInput} value={editableBudget.limit} type="text"
+                   placeholder="Budget"/>
+          </InputWrapper>
 
+          Title
+          <InputWrapper>
+            <input onChange={handleTitleInput} value={editableBudget.title ?? ""} type="text"
+                   placeholder="Title"/>
+          </InputWrapper>
+
+          Category
+          <Dropdown
+            title={"Category"}
+            selectHandler={handleCategoryChange}
+            options={categoryOptions}
+          />
         </div>
-    );
+
+        <div className={"popup__row"}>
+          <button onClick={() => {
+            handleSafe()
+          }} className={"button"}>
+            Save
+          </button>
+          <button onClick={() => {
+            handleCancel()
+          }} className={"button"}>
+            Cancel
+          </button>
+        </div>
+      </div>
+
+    </div>
+  );
 };
 
 export default SetBudget;

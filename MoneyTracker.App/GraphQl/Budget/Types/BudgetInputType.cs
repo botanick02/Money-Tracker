@@ -6,12 +6,10 @@ namespace MoneyTracker.App.GraphQl.Budget.Types
     {
         public BudgetInputType()
         {
-            Field(x => x.Id);
+            Field(x => x.Id, nullable: true);
+            Field(x => x.Title, nullable: true);
             Field(x => x.Limit);
-            Field(x => x.IsActive);
             Field(x => x.CategoryId);
-            Field(x => x.EndDate, nullable: true);
-            Field(x => x.StartDate, nullable: true);
         }
     }
 }
