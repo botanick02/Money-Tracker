@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import BudgetItem from "../elements/BudgetItem";
-import TimeScopePanel from "..//components/TimeScopePanel/TimeScopePanel";
 import {useAppDispatch, useAppSelector} from "../hooks/useAppDispatch";
 import {fetchBudgetAction} from "../store/Budgets/Budgets.slice";
 import SetBudget from "../components/SetBudget";
 import {Budget} from "../types/Budget";
+import TimeScopePanel from '../components/TimeScopePanel';
 
 
 const Budgets = () => {
