@@ -1,15 +1,17 @@
-﻿using MoneyTracker.Business.Entities;
-
-namespace MoneyTracker.Business.Events.Categories
+﻿namespace MoneyTracker.Business.Events.Categories
 {
-    public record CategoryCreatedEvent(Category category)
+    public record CategoryCreatedEvent(Guid UserId, string Name, string Type, string IconUrl, string Color)
         : Event;
 
-    public record CategoryDeleteEvent(string id)
-        : Event;
-    public record CategoryEditEvent(Category category)
+    public record CategoryDeleteEvent(Guid id)
         : Event;
 
-    public record CategoryNameUpdatedEvent(Guid Id, string Name)
+    public record CategoryNameUpdatedEvent(Guid CategoryId, string Name)
+        : Event;
+    
+    public record CategoryColorUpdatedEvent(Guid CategoryId, string Color)
+        : Event;
+    
+    public record CategoryIconUrlUpdatedEvent(Guid CategoryId, string IconUrl)
         : Event;
 }

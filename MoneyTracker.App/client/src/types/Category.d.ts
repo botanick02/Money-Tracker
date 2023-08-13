@@ -3,7 +3,7 @@ export interface CategoryToCreate {
   iconUrl: string;
   type: "income" | "expense" | "transfer";
   color: string;
-
-}export interface Category extends CategoryToCreate{
+}
+export interface Category extends CategoryToCreate{
   id: string;
 }

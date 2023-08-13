@@ -1,0 +1,56 @@
+{
+  "expenseCategories": [
+    {
+      "name": "Food",
+      "iconUrl": "./media/icons/foodAndDrink.svg",
+      "color": "#E57373"
+    },
+    {
+      "name": "Health",
+      "iconUrl": "./media/icons/medicineBox.svg",
+      "color": "#64B5F6"
+    },
+    {
+      "name": "Transport",
+      "iconUrl": "./media/icons/transport.svg",
+      "color": "#F06292"
+    },
+    {
+      "name": "Gifts",
+      "iconUrl": "./media/icons/gift.svg",
+      "color": "#81C784"
+    },
+    {
+      "name": "Education",
+      "iconUrl": "./media/icons/education.svg",
+      "color": "#FFD54F"
+    },
+    {
+      "name": "Entertainment",
+      "iconUrl": "./media/icons/party.svg",
+      "color": "#FF8A65"
+    },
+    {
+      "name": "Donates",
+      "iconUrl": "./media/icons/donate.svg",
+      "color": "#CE93D8"
+    }
+  ],
+  "incomeCategories": [
+    {
+      "name": "Salary",
+      "iconUrl": "./media/icons/bills.svg",
+      "color": "#4DB6AC"
+    },
+    {
+      "name": "Freelance",
+      "iconUrl": "./media/icons/bills.svg",
+      "color": "#64B5F6"
+    },
+    {
+      "name": "Gift",
+      "iconUrl": "./media/icons/gift.svg",
+      "color": "#81C784"
+    }
+  ]
+}

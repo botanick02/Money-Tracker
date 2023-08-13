@@ -1,6 +1,5 @@
 ﻿using MoneyTracker.Business.Entities;
 using MoneyTracker.Business.ReadStoreModel;
-using MoneyTracker.Business.Services;
 
 namespace MoneyTracker.Business.Events.Categories
 {
@@ -10,10 +9,42 @@ namespace MoneyTracker.Business.Events.Categories
         {
             var updatedModel = currentmodel;
 
-            var categoryToUpdate = updatedModel.Categories.FirstOrDefault(c => c.Id == @event.Id);
+            var categoryToUpdate = updatedModel.Categories.FirstOrDefault(c => c.Id == @event.CategoryId);
             if (categoryToUpdate != null)
             {
                 categoryToUpdate.Name = @event.Name;
+            }
+
+            return updatedModel;
+        }
+    }
+
+    public class CategoryColorUpdatedEventApplier : IEventApplier<CategoryColorUpdatedEvent>
+    {
+        public async Task<ReadModel> ApplyAsync(ReadModel currentmodel, CategoryColorUpdatedEvent @event)
+        {
+            var updatedModel = currentmodel;
+
+            var categoryToUpdate = updatedModel.Categories.FirstOrDefault(c => c.Id == @event.CategoryId);
+            if (categoryToUpdate != null)
+            {
+                categoryToUpdate.Color = @event.Color;
+            }
+
+            return updatedModel;
+        }
+    }
+
+    public class CategoryIconUrlUpdatedEventApplier : IEventApplier<CategoryIconUrlUpdatedEvent>
+    {
+        public async Task<ReadModel> ApplyAsync(ReadModel currentmodel, CategoryIconUrlUpdatedEvent @event)
+        {
+            var updatedModel = currentmodel;
+
+            var categoryToUpdate = updatedModel.Categories.FirstOrDefault(c => c.Id == @event.CategoryId);
+            if (categoryToUpdate != null)
+            {
+                categoryToUpdate.IconUrl = @event.IconUrl;
             }
 
             return updatedModel;
@@ -25,23 +56,14 @@ namespace MoneyTracker.Business.Events.Categories
         public async Task<ReadModel> ApplyAsync(ReadModel currentmodel, CategoryCreatedEvent @event)
         {
             var updatedModel = currentmodel;
-            updatedModel.Categories = updatedModel.Categories.Append(@event.category);
-
-            return updatedModel;
-        }
-    }
-
-    public class CategoryEditEventApplier : IEventApplier<CategoryEditEvent>
-    {
-        public async Task<ReadModel> ApplyAsync(ReadModel currentmodel, CategoryEditEvent @event)
-        {
-            var updatedModel = currentmodel;
-
-            var categoryToUpdate = updatedModel.Categories.FirstOrDefault(c => c.Id == @event.category.Id);
-            if (categoryToUpdate != null)
-            {
-                ObjectValueChangeService.ObjectValueChange(@event.category, ref categoryToUpdate);
-            }
+            updatedModel.Categories = updatedModel.Categories.Append(
+                new Category { 
+                    UserId = @event.UserId,
+                    Name = @event.Name,
+                    Color = @event.Color,
+                    IconUrl = @event.IconUrl,
+                    Type = @event.Type
+                });
 
             return updatedModel;
         }
@@ -52,7 +74,7 @@ namespace MoneyTracker.Business.Events.Categories
         public async Task<ReadModel> ApplyAsync(ReadModel currentmodel, CategoryDeleteEvent @event)
         {
             var updatedModel = currentmodel;
-            updatedModel.Categories = updatedModel.Categories.Where(item => item.Id != Guid.Parse(@event.id));
+            updatedModel.Categories = updatedModel.Categories.Where(item => item.Id != @event.id);
             return updatedModel;
         }
     }

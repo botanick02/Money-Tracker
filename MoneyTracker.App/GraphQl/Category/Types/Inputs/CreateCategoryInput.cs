@@ -1,11 +1,7 @@
-﻿namespace MoneyTracker.Business.Entities
+﻿namespace MoneyTracker.App.GraphQl.Category.Types.Inputs
 {
-    public class Category
+    public class CreateCategoryInput
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
-
-        public Guid UserId { get; set; }
-
         public string Name { get; set; }
 
         public string Type { get; set; }

@@ -1,7 +1,9 @@
-﻿using MoneyTracker.Business.Entities;
+﻿using MoneyTracker.Business.Commands.Category;
+using MoneyTracker.Business.Entities;
 using MoneyTracker.Business.Events;
 using MoneyTracker.Business.Events.Account;
 using MoneyTracker.Business.Events.Auth;
+using MoneyTracker.Business.Events.Categories;
 using MoneyTracker.Business.Interfaces;
 
 namespace MoneyTracker.Business.Commands.Auth
@@ -11,11 +13,13 @@ namespace MoneyTracker.Business.Commands.Auth
         {
             private readonly IEventStore eventStore;
             private readonly ICurrencyRepository currencyRepository;
+            private readonly ICategoryRepository categoryRepository;
 
-            public RegisterUserCommandHandler(IEventStore eventStore, ICurrencyRepository currencyRepository)
+            public RegisterUserCommandHandler(IEventStore eventStore, ICurrencyRepository currencyRepository, ICategoryRepository categoryRepository)
             {
                 this.eventStore = eventStore;
                 this.currencyRepository = currencyRepository;
+                this.categoryRepository = categoryRepository;
             }
 
             public async Task<bool> HandleAsync(RegisterUserCommand command)
@@ -45,11 +49,13 @@ namespace MoneyTracker.Business.Commands.Auth
         {
             private readonly IEventStore eventStore;
             private readonly ICurrencyRepository currencyRepository;
+            private readonly ICategoryRepository categoryRepository;
 
-            public RegisterGoogleUserCommandHandler(IEventStore eventStore, ICurrencyRepository currencyRepository)
+            public RegisterGoogleUserCommandHandler(IEventStore eventStore, ICurrencyRepository currencyRepository, ICategoryRepository categoryRepository)
             {
                 this.eventStore = eventStore;
                 this.currencyRepository = currencyRepository;
+                this.categoryRepository = categoryRepository;
             }
 
             public async Task<bool> HandleAsync(RegisterGoogleUserCommand command)
@@ -67,6 +73,21 @@ namespace MoneyTracker.Business.Commands.Auth
                 var currency = currencyRepository.GetCurrencyByCode("UAH");
 
                 AddInitAccountsEvents(newUserId, currency, ref events);
+
+                var defaultCategories = categoryRepository.GetDefaultCategories();
+
+                events.AddRange(defaultCategories.IncomeCategories
+                    .Select(category => new CategoryCreatedEvent(newUserId, category.Name, "income", category.IconUrl, category.Color))
+                    .Concat(defaultCategories.ExpenseCategories
+                        .Select(category => new CategoryCreatedEvent(newUserId, category.Name, "expense", category.IconUrl, category.Color))));
+
+                events.Add(new CategoryCreatedEvent(
+                       UserId: newUserId,
+                       Name: "Transfer",
+                       Type: "transfer",
+                       IconUrl: "./media/icons/transfer.svg",
+                       Color: "#d9d9d9"
+                   ));
 
                 await eventStore.AppendEventsAsync(events);
 

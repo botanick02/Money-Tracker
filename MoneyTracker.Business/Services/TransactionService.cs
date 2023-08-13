@@ -54,7 +54,7 @@ namespace MoneyTracker.Business.Services
             }
             transactions = transactions.OrderBy(t => t.CreatedAt).ToList();
 
-            var categories = categoryRepository.GetCategories();
+            var categories = categoryRepository.GetCategories(userId);
 
             res.Transactions = mapper.Map<List<TransactionDto>>(transactions);
 
