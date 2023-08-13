@@ -13,7 +13,7 @@ namespace MoneyTracker.Business.Events
         {
             services.AddTransient<EventDispatcher>();
             services.AddTransient<IEventApplier<CategoryCreatedEvent>, CategoryCreatedEventApplier>();
-            services.AddTransient<IEventApplier<CategoryDeleteEvent>, CategoryDeleteEventApplier>();
+            services.AddTransient<IEventApplier<CategoryDeactivatedEvent>, CategoryDeactivatedEventApplier>();
             services.AddTransient<IEventApplier<CategoryNameUpdatedEvent>, CategoryNameUpdatedEventApplier>();
             services.AddTransient<IEventApplier<CategoryColorUpdatedEvent>, CategoryColorUpdatedEventApplier>();
             services.AddTransient<IEventApplier<CategoryIconUrlUpdatedEvent>, CategoryIconUrlUpdatedEventApplier>();

@@ -7,7 +7,7 @@ import {FETCH_CATEGORIES} from "../../store/Category/Category.slice";
 import {Category} from "../../types/Category";
 
 const CategoryList = () => {
-  const categories = useAppSelector((state) => state.Category.categories).filter(c => c.type !== "transfer");
+  const categories = useAppSelector((state) => state.Category.categories).filter(c => c.type !== "transfer").filter(c => c.isActive == true);
 
   const editSuccess = useAppSelector((state) => state.Category.editSuccess);
 

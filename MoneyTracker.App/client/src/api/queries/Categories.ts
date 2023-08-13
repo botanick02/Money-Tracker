@@ -7,6 +7,7 @@ query getCategories{
         type
         color
         iconUrl
+        isActive
       }
     }
   }

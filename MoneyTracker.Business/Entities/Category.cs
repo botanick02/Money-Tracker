@@ -13,5 +13,7 @@
         public string IconUrl { get; set; }
 
         public string Color { get; set; }
+
+        public bool IsActive { get; set; } = true;
     }
 }

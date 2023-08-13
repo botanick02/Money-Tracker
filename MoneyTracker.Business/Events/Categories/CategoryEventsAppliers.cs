@@ -70,12 +70,18 @@ namespace MoneyTracker.Business.Events.Categories
         }
     }
 
-    public class CategoryDeleteEventApplier : IEventApplier<CategoryDeleteEvent>
+    public class CategoryDeactivatedEventApplier : IEventApplier<CategoryDeactivatedEvent>
     {
-        public async Task<ReadModel> ApplyAsync(ReadModel currentmodel, CategoryDeleteEvent @event)
+        public async Task<ReadModel> ApplyAsync(ReadModel currentmodel, CategoryDeactivatedEvent @event)
         {
             var updatedModel = currentmodel;
-            updatedModel.Categories = updatedModel.Categories.Where(item => item.Id != @event.id);
+
+            var categoryToUpdate = updatedModel.Categories.FirstOrDefault(c => c.Id == @event.CategoryId);
+            if (categoryToUpdate != null)
+            {
+                categoryToUpdate.IsActive = false;
+            }
+
             return updatedModel;
         }
     }

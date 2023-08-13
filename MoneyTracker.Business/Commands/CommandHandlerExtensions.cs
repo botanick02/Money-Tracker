@@ -22,7 +22,7 @@ namespace MoneyTracker.Business.Commands
 
             services.AddTransient<ICommandHandler<CreateCategoryCommand>, CreateCategoryCommandHandler>();
             services.AddTransient<ICommandHandler<UpdateCategoryCommand>, UpdateCategoryCommandHandler>();
-            services.AddTransient<ICommandHandler<DeleteCategoryCommand>, DeleteCategoryCommandHandler>();
+            services.AddTransient<ICommandHandler<DeactivateCategoryCommand>, DeactivateCategoryCommandHandler>();
 
             services.AddTransient<ICommandHandler<RegisterUserCommand>, RegisterUserCommandHandler>();
             services.AddTransient<ICommandHandler<RegisterGoogleUserCommand>, RegisterGoogleUserCommandHandler>();

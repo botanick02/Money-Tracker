@@ -73,18 +73,18 @@ namespace MoneyTracker.Business.Commands.Category
     }
 
 
-    public class DeleteCategoryCommandHandler : ICommandHandler<DeleteCategoryCommand>
+    public class DeactivateCategoryCommandHandler : ICommandHandler<DeactivateCategoryCommand>
     {
         private readonly IEventStore eventStore;
 
-        public DeleteCategoryCommandHandler(IEventStore eventStore)
+        public DeactivateCategoryCommandHandler(IEventStore eventStore)
         {
             this.eventStore = eventStore;
         }
 
-        public async Task<bool> HandleAsync(DeleteCategoryCommand command)
+        public async Task<bool> HandleAsync(DeactivateCategoryCommand command)
         {
-            var categoryDeleteEvent = new CategoryDeleteEvent(command.CategoryId);
+            var categoryDeleteEvent = new CategoryDeactivatedEvent(command.CategoryId);
             await eventStore.AppendEventAsync(categoryDeleteEvent);
             return true;
         }

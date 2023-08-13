@@ -5,5 +5,5 @@ namespace MoneyTracker.Business.Commands.Category
 
     public record UpdateCategoryCommand(Guid CategoryId, Guid UserId, string Name, string IconUrl, string Color);
 
-    public record DeleteCategoryCommand(Guid CategoryId, Guid userId);
+    public record DeactivateCategoryCommand(Guid CategoryId, Guid userId);
 }

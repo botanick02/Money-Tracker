@@ -3,7 +3,7 @@
     public record CategoryCreatedEvent(Guid CategoryId, Guid UserId, string Name, string Type, string IconUrl, string Color)
         : Event;
 
-    public record CategoryDeleteEvent(Guid id)
+    public record CategoryDeactivatedEvent(Guid CategoryId)
         : Event;
 
     public record CategoryNameUpdatedEvent(Guid CategoryId, string Name)

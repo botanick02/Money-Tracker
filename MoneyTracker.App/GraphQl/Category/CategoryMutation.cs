@@ -44,7 +44,7 @@ namespace MoneyTracker.App.GraphQl.Category
                     var id = context.GetArgument<string>("id");
                     var userId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-                    var command = new DeleteCategoryCommand(Guid.Parse(id), userId);
+                    var command = new DeactivateCategoryCommand(Guid.Parse(id), userId);
                     await commandDispatcher.DispatchAsync(command);
                     return true;
                 }).Authorize();

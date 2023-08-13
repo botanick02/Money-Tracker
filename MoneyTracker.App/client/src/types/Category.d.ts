@@ -6,4 +6,5 @@ export interface CategoryToCreate {
 }
 export interface Category extends CategoryToCreate{
   id: string;
+  isActive: boolean;
 }
