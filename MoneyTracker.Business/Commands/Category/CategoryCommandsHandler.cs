@@ -17,6 +17,7 @@ namespace MoneyTracker.Business.Commands.Category
         {
 
             var categoryCreatedEvent = new CategoryCreatedEvent(
+                CategoryId: Guid.NewGuid(),
                 UserId: command.UserId,
                 Name: command.Name,
                 Type: command.Type,

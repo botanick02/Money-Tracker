@@ -58,6 +58,7 @@ namespace MoneyTracker.Business.Events.Categories
             var updatedModel = currentmodel;
             updatedModel.Categories = updatedModel.Categories.Append(
                 new Category { 
+                    Id = @event.CategoryId,
                     UserId = @event.UserId,
                     Name = @event.Name,
                     Color = @event.Color,

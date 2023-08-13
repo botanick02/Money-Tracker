@@ -19,7 +19,7 @@ namespace MoneyTracker.Business.Commands.Account
             {
                 var @event = new PersonalAccountCreatedEvent
                 (
-                    Id: Guid.NewGuid(),
+                    AccountId: Guid.NewGuid(),
                     UserId: command.UserId,
                     Name: command.Name,
                     Currency: currencyRepository.GetCurrencyByCode("UAH")

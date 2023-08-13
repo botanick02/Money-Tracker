@@ -1,6 +1,6 @@
 ﻿namespace MoneyTracker.Business.Events.Categories
 {
-    public record CategoryCreatedEvent(Guid UserId, string Name, string Type, string IconUrl, string Color)
+    public record CategoryCreatedEvent(Guid CategoryId, Guid UserId, string Name, string Type, string IconUrl, string Color)
         : Event;
 
     public record CategoryDeleteEvent(Guid id)

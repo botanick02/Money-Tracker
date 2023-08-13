@@ -28,10 +28,7 @@ namespace MoneyTracker.Business.Services
             if (accountId == null)
             {
                 var userPersonalAccounts = accountRepository!.GetUserAccounts(userId, Entities.AccountType.Personal);
-                foreach (var account in userPersonalAccounts)
-                {
-                    transactions.AddRange(transactionRepository!.GetAccountTransactions(account.Id));
-                }
+                transactions.AddRange(userPersonalAccounts.SelectMany(account => transactionRepository!.GetAccountTransactions(account.Id)));
             }
             else
             {
@@ -52,10 +49,10 @@ namespace MoneyTracker.Business.Services
             {
                 transactions = transactions.Where(t => t.CreatedAt < toDate).ToList();
             }
-            transactions = transactions.OrderBy(t => t.CreatedAt).ToList();
+
+            transactions.Sort((t1, t2) => t1.CreatedAt.CompareTo(t2.CreatedAt));
 
             var categories = categoryRepository.GetCategories(userId);
-
             res.Transactions = mapper.Map<List<TransactionDto>>(transactions);
 
             foreach (var transaction in res.Transactions)
@@ -63,8 +60,15 @@ namespace MoneyTracker.Business.Services
                 transaction.Category = categories.FirstOrDefault(c => c.Id == transaction.CategoryId)!;
             }
 
-            res.Expenses = res.Transactions.Where(t => t.Amount < 0).Sum(t => t.Amount);
-            res.Incomes = res.Transactions.Where(t => t.Amount > 0).Sum(t => t.Amount);
+            res.Expenses = res.Transactions.Where(t => t.Category.Type == "expense").Sum(t => t.Amount);
+            res.Incomes = res.Transactions.Where(t => t.Category.Type == "income").Sum(t => t.Amount);
+
+            if (accountId != null)
+            {
+                var transferTransactions = res.Transactions.Where(t => t.Category.Type == "transfer");
+                res.Expenses += transferTransactions.Where(t => t.Amount < 0).Sum(t => t.Amount);
+                res.Incomes += transferTransactions.Where(t => t.Amount > 0).Sum(t => t.Amount);
+            }
 
             return res;
         }

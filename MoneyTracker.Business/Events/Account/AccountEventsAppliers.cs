@@ -10,7 +10,7 @@ namespace MoneyTracker.Business.Events.Account
 
             var newDebitAccount = new Entities.Account()
             {
-                Id = @event.Id,
+                Id = @event.AccountId,
                 UserId = @event.UserId,
                 Currency = @event.Currency,
                 Type = Entities.AccountType.Debit 
@@ -30,7 +30,7 @@ namespace MoneyTracker.Business.Events.Account
 
             var newDebitAccount = new Entities.Account()
             {
-                Id = @event.Id,
+                Id = @event.AccountId,
                 UserId = @event.UserId,
                 Currency = @event.Currency,
                 Type = Entities.AccountType.Credit
@@ -50,7 +50,7 @@ namespace MoneyTracker.Business.Events.Account
 
             var newPersonalAccount = new Entities.Account()
             {
-                Id = @event.Id,
+                Id = @event.AccountId,
                 UserId = @event.UserId,
                 Currency = @event.Currency,
                 Name = @event.Name,
