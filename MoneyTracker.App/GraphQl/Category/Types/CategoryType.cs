@@ -11,6 +11,7 @@ namespace MoneyTracker.App.GraphQl.Category.Types
             Field(c => c.Type);
             Field(c => c.IconUrl);
             Field(c => c.Color);
+            Field(c => c.IsActive);
         }
     }
 }

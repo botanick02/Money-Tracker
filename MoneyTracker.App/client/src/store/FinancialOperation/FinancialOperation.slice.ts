@@ -43,7 +43,7 @@ export interface FetchTransactionsInfoVariables {
   categoryId: string | null;
   fromDate: string | null;
   toDate: string | null;
-  type: "expense" | "income" | null;
+  transactionType: "expense" | "income" | null;
 }
 
 export interface CreateTransactionState {
@@ -157,7 +157,7 @@ export const FinancialOperationSlice = createSlice({
     ) {
       state.dateRange = action.payload;
     },
-    SET_TRANSACTION_TYPE(state, action: PayloadAction<"expense" | "income">) {
+    SET_TRANSACTION_TYPE(state, action: PayloadAction<"expense" | "income" | null>) {
       state.transactionType = action.payload;
     },
   },
@@ -179,6 +179,7 @@ export const {
   UPDATE_FINANCIAL_OPERATION,
   UPDATE_FINANCIAL_OPERATION_SUCCESS,
   SET_DATE_RANGE,
+  SET_TRANSACTION_TYPE
 } = FinancialOperationSlice.actions;
 
 export default FinancialOperationSlice.reducer;

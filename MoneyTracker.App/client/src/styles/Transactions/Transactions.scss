@@ -41,17 +41,17 @@
   }
 
   .popup__fields {
-    &__amount{
+    &__amount {
       display: flex;
       justify-content: center;
       align-items: center;
       font-size: 25px;
-      div{
-      max-width: 50%;
-      margin: 0 5px;
-      input{
-        text-align: center;
-      }
+      div {
+        max-width: 50%;
+        margin: 0 5px;
+        input {
+          text-align: center;
+        }
       }
     }
   }
@@ -113,10 +113,18 @@
   &__income {
     border: 2px solid $primary-color;
     color: $primary-color;
+    &.active {
+      background-color: $primary-color;
+      color: $primary-light-color;
+    }
   }
   &__expense {
     border: 2px solid $secondary-color;
     color: $secondary-color;
+    &.active {
+      background-color: $secondary-color;
+      color: $primary-light-color;
+    }
   }
   &__filter {
     border: 2px solid $filter-color;

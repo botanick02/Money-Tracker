@@ -21,7 +21,9 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
 
         public async Task<bool> HandleAsync(AddDebitOperationCommand command)
         {
-            if (categoryRepository.GetCategoryById(command.CategoryId) == null)
+            var category = categoryRepository.GetCategoryById(command.CategoryId);
+
+            if (category == null || category.Type != "income")
             {
                 throw new ArgumentException("CategoryId: CategoryId is invalid");
             }
@@ -89,7 +91,10 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
                 throw new ArgumentException("FromAccountId: FromAccountId is invalid");
             }
 
-            if (categoryRepository.GetCategoryById(command.CategoryId) == null)
+
+            var category = categoryRepository.GetCategoryById(command.CategoryId);
+
+            if (category == null || category.Type != "expense")
             {
                 throw new ArgumentException("CategoryId: CategoryId is invalid");
             }
@@ -168,7 +173,7 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
 
             var currentTime = DateTime.UtcNow;
 
-            var transferCategoryId = categoryRepository.GetTransferCategory().Id;
+            var transferCategoryId = categoryRepository.GetTransferCategory(command.UserId).Id;
 
             eventsToAppend.Add(new DebitTransactionAddedEvent
             (

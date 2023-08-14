@@ -40,6 +40,7 @@ export const TransactionItemsEpic: Epic<any, any, any> = (action$, state$) => {
             categoryId: state$.value.Account.currentCategoryId,
             fromDate: state$.value.FinancialOperation.dateRange.fromDate,
             toDate: state$.value.FinancialOperation.dateRange.toDate,
+            transactionType: state$.value.FinancialOperation.transactionType,
           } as FetchTransactionsInfoVariables
         })
       ).pipe(
