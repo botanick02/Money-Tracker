@@ -19,7 +19,7 @@ namespace MoneyTracker.Business.Services
             this.mapper = mapper;
         }
 
-        public GetTransactionsDataDto GetTransactionsData(Guid userId, DateTime? fromDate = null, DateTime? toDate = null, Guid? accountId = null, Guid? categoryId = null)
+        public GetTransactionsDataDto GetTransactionsData(Guid userId, DateTime? fromDate = null, DateTime? toDate = null, Guid? accountId = null, Guid? categoryId = null, string? transactionType = null)
         {
             var res = new GetTransactionsDataDto();
 
@@ -52,6 +52,7 @@ namespace MoneyTracker.Business.Services
             {
                 transactions = transactions.Where(t => t.CreatedAt < toDate).ToList();
             }
+
             transactions = transactions.OrderBy(t => t.CreatedAt).ToList();
 
             var categories = categoryRepository.GetCategories();
@@ -60,7 +61,15 @@ namespace MoneyTracker.Business.Services
 
             foreach (var transaction in res.Transactions)
             {
-                transaction.Category = categories.FirstOrDefault(c => c.Id == transaction.CategoryId)!;
+                var category = categories.FirstOrDefault(c => c.Id == transaction.CategoryId)!;
+                if (transactionType == null || category.Type == transactionType)
+                {
+                    transaction.Category = category;
+                }
+                else
+                {
+                    res.Transactions.Remove(transaction);
+                }
             }
 
             res.Expenses = res.Transactions.Where(t => t.Amount < 0).Sum(t => t.Amount);

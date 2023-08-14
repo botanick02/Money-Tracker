@@ -43,6 +43,7 @@ export interface FetchTransactionsInfoVariables {
   categoryId: string | null;
   fromDate: string | null;
   toDate: string | null;
+  type: "expense" | "income" | null;
 }
 
 export interface CreateTransactionState {
@@ -54,7 +55,7 @@ export interface CreateTransactionState {
   incomes: number;
   expenses: number;
   dateRange: { fromDate: string | null; toDate: string | null };
-
+  transactionType: "expense" | "income" | null;
 }
 
 const initialState: CreateTransactionState = {
@@ -66,7 +67,7 @@ const initialState: CreateTransactionState = {
   expenses: 0,
   error: null,
   dateRange: { fromDate: null, toDate: null },
-
+  transactionType: null,
 };
 
 export const FinancialOperationSlice = createSlice({
@@ -155,7 +156,10 @@ export const FinancialOperationSlice = createSlice({
       action: PayloadAction<{ fromDate: string | null; toDate: string | null }>
     ) {
       state.dateRange = action.payload;
-    }
+    },
+    SET_TRANSACTION_TYPE(state, action: PayloadAction<"expense" | "income">) {
+      state.transactionType = action.payload;
+    },
   },
 });
 

@@ -13,6 +13,8 @@ namespace MoneyTracker.App.GraphQl.FinancialOperations.Types.Inputs
             Field(g => g.ToDate, nullable: true);
 
             Field(g => g.CategoryId, nullable: true);
+
+            Field(g => g.TransactionType, nullable: true);
         }
     }
 }
