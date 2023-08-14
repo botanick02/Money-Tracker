@@ -1,7 +1,6 @@
-﻿using MoneyTracker.Business.Events.Budgets;
+﻿using MoneyTracker.Business.Events;
 using MoneyTracker.Business.Events.Categories;
 using MoneyTracker.Business.Interfaces;
-using System.Runtime.Serialization;
 
 namespace MoneyTracker.Business.Commands.Category
 {
@@ -17,90 +16,77 @@ namespace MoneyTracker.Business.Commands.Category
         public async Task<bool> HandleAsync(CreateCategoryCommand command)
         {
 
-            var categoryCreatedEvent = new CategoryCreatedEvent(command.category);
+            var categoryCreatedEvent = new CategoryCreatedEvent(
+                CategoryId: Guid.NewGuid(),
+                UserId: command.UserId,
+                Name: command.Name,
+                Type: command.Type,
+                IconUrl: command.IconUrl,
+                Color: command.Color
+                );
             await eventStore.AppendEventAsync(categoryCreatedEvent);
             return true;
         }
     }
 
-    public class EditCategoryCommandHandler : ICommandHandler<EditCategoryCommand>
+    public class UpdateCategoryCommandHandler : ICommandHandler<UpdateCategoryCommand>
     {
         private readonly IEventStore eventStore;
-
-        public EditCategoryCommandHandler(IEventStore eventStore)
-        {
-            this.eventStore = eventStore;
-        }
-
-        public async Task<bool> HandleAsync(EditCategoryCommand command)
-        {
-            var categoryCreatedEvent = new CategoryEditEvent(command.category);
-            await eventStore.AppendEventAsync(categoryCreatedEvent);
-            return true;
-        }
-    }
-
-    public class UpdateCategoryNameCommandHandler : ICommandHandler<UpdateCategoryNameCommand>
-    {
         private readonly ICategoryRepository categoryRepository;
-        private readonly IEventStore eventStore;
 
-        public UpdateCategoryNameCommandHandler(ICategoryRepository categoryRepository, IEventStore eventStore)
+        public UpdateCategoryCommandHandler(IEventStore eventStore, ICategoryRepository categoryRepository)
         {
-            this.categoryRepository = categoryRepository;
             this.eventStore = eventStore;
+            this.categoryRepository = categoryRepository;
         }
 
-        public async Task<bool> HandleAsync(UpdateCategoryNameCommand command)
+        public async Task<bool> HandleAsync(UpdateCategoryCommand command)
         {
-            var existingCategory = categoryRepository.GetCategories().Find(c => c.Id == command.Id);
+            var existingCategory = categoryRepository.GetCategoryById(command.CategoryId);
 
             if (existingCategory == null)
             {
-                throw new CategoryNotFoundException("Category to update was not found");
+                throw new ArgumentException($"CategoryId: {command.CategoryId} does not exist");
             }
 
-            var categoryCreatedEvent = new CategoryNameUpdatedEvent
-            (
-                Id: command.Id,
-                Name: command.Name
-            );
+            var eventsToAppend = new List<Event>();
 
-            await eventStore.AppendEventAsync(categoryCreatedEvent);
+            if (existingCategory.Name != command.Name)
+            {
+                eventsToAppend.Add(new CategoryNameUpdatedEvent(command.CategoryId, command.Name));
+            }
+
+            if (existingCategory.IconUrl != command.IconUrl)
+            {
+                eventsToAppend.Add(new CategoryIconUrlUpdatedEvent(command.CategoryId, command.IconUrl));
+            }
+
+            if (existingCategory.Color != command.Color)
+            {
+                eventsToAppend.Add(new CategoryColorUpdatedEvent(command.CategoryId, command.Color));
+            }
+
+            await eventStore.AppendEventsAsync(eventsToAppend);
 
             return true;
         }
-
     }
 
-    public class DeleteCategoryCommandHandler : ICommandHandler<DeleteCategoryCommand>
+
+    public class DeactivateCategoryCommandHandler : ICommandHandler<DeactivateCategoryCommand>
     {
         private readonly IEventStore eventStore;
 
-        public DeleteCategoryCommandHandler(IEventStore eventStore)
+        public DeactivateCategoryCommandHandler(IEventStore eventStore)
         {
             this.eventStore = eventStore;
         }
 
-        public async Task<bool> HandleAsync(DeleteCategoryCommand command)
+        public async Task<bool> HandleAsync(DeactivateCategoryCommand command)
         {
-
-            var categoryDeleteEvent = new CategoryDeleteEvent(command.Id);
+            var categoryDeleteEvent = new CategoryDeactivatedEvent(command.CategoryId);
             await eventStore.AppendEventAsync(categoryDeleteEvent);
             return true;
-        }
-    }
-
-
-    [Serializable]
-    public class CategoryNotFoundException : Exception
-    {
-        public CategoryNotFoundException(string message)
-        {
-        }
-
-        protected CategoryNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
         }
     }
 }

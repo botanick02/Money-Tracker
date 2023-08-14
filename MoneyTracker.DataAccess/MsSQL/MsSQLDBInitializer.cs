@@ -46,16 +46,6 @@ namespace MoneyTracker.DataAccess.MsSQL
                 if (tableExists != 1)
                 {
                     conn.Execute(createTableQuery);
-
-                    var transferCategoryCommand = new CreateCategoryCommand(new Business.Entities.Category()
-                    {
-                        Name = "Transfer",
-                        Type = "transfer",
-                        IconUrl = "./media/icons/transfer.svg",
-                        Color = "#d9d9d9",
-                    });
-
-                    commandDispatcher.DispatchAsync(transferCategoryCommand);
                 }
             }
         }

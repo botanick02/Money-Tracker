@@ -23,7 +23,7 @@ namespace MoneyTracker.Business.Services
         public (List<GetStatiscicsDto> positiveTransactions, List<GetStatiscicsDto> negativeTransactions) GetStatistics(Guid userId, DateTime? fromDate = null, DateTime? toDate = null, Guid? accountId = null)
         {
             var transactions = transactionRepository.GetUserTransactions(userId);
-            var categories = categoryRepository.GetCategories(toDate ?? DateTime.Now);
+            var categories = categoryRepository.GetCategories(userId, toDate ?? DateTime.Now);
 
             var accounts = accountRepository.GetUserAccounts(userId, AccountType.Personal);
 
