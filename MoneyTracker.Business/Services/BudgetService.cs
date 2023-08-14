@@ -22,7 +22,7 @@ namespace MoneyTracker.Business.Services
 
         public IEnumerable<BudgetDto> GetBudgets(Guid userId, DateTime? dateTimeTo = null) { 
             var budgets = budgetRepository.GetBudgets(dateTimeTo);
-            var categories = categoryRepository.GetCategories(dateTimeTo);
+            var categories = categoryRepository.GetCategories(userId, dateTimeTo);
             var transactions = transactionRepository.GetUserTransactions(userId, dateTimeTo);
 
             var res = budgets.Select((item) => {

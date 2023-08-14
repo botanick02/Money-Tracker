@@ -20,14 +20,14 @@ interface FormFields {
 
 interface Props {
   closePopupHandle(): void;
-  transactionDefaultType: "expense" | "income" | "transfer";
 }
 
 const TransactionCreate: React.FC<Props> = ({
   closePopupHandle,
-  transactionDefaultType,
 }) => {
-  const [type, setType] = useState(transactionDefaultType);
+  const transactionType = useAppSelector(state => state.FinancialOperation.transactionType);
+
+  const [type, setType] = useState<"expense" | "income" | "transfer">(transactionType ?? "expense");
 
   const {
     register,
@@ -40,7 +40,7 @@ const TransactionCreate: React.FC<Props> = ({
   });
 
   const dispatch = useAppDispatch();
-  const categoryItems = useAppSelector((state) => state.Category.categories);
+  const categoryItems = useAppSelector((state) => state.Category.categories).filter(t => t.isActive == true);
   const accounts = useAppSelector((state) => state.Account.accounts);
 
   const accountOptions: Option[] = [];

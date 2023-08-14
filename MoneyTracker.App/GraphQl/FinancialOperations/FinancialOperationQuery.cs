@@ -22,7 +22,7 @@ namespace MoneyTracker.App.GraphQl.FinancialOperation
 
                     var userId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-                    return transactionService.GetTransactionsData(userId, input?.FromDate, input?.ToDate, input?.AccountId, input?.CategoryId);
+                    return transactionService.GetTransactionsData(userId, input?.FromDate, input?.ToDate, input?.AccountId, input?.CategoryId, input?.TransactionType);
                 }).Authorize();
         }
     }
