@@ -3,6 +3,7 @@ using GraphQL.Types;
 using MoneyTracker.App.GraphQl.Category.Types;
 using MoneyTracker.Business.Interfaces;
 using System;
+using System.Security.Claims;
 
 namespace MoneyTracker.App.GraphQl.Category
 {
@@ -14,8 +15,11 @@ namespace MoneyTracker.App.GraphQl.Category
                 .Resolve(context =>
                 {
                     var dateTimeTo = context.GetArgument<DateTime?>("DateTimeTo");
-                    return categoryRepository.GetCategories(dateTimeTo);
-                });
+
+                    var userId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+                    return categoryRepository.GetCategories(userId, dateTimeTo);
+                }).Authorize();
         }
     }
 }

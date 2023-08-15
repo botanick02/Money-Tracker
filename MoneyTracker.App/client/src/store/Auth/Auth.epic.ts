@@ -13,6 +13,7 @@ import {
   SIGN_OUT,
   SIGN_OUT_ERROR,
   SIGN_OUT_SUCCESS,
+  REFRESH_ACCESS_TOKEN_ERROR,
 } from "./Auth.slice";
 import { request } from "../../api/core";
 import {
@@ -84,11 +85,18 @@ export const RefreshAccessTokenEpic: Epic<any, any, any> = (action$) => {
     mergeMap(() =>
       from(request(RefreshAccessToken)).pipe(
         map((data: any) => {
+          if (data.data.auth.refreshToken?.accessToken){
+          console.log(data)
           localStorage.setItem(
             "accessToken",
             data.data.auth.refreshToken.accessToken
           );
           return REFRESH_ACCESS_TOKEN_SUCCESS();
+        } else {
+          localStorage.removeItem('accessToken');
+
+        return REFRESH_ACCESS_TOKEN_ERROR();
+        }
         })
       )
     )

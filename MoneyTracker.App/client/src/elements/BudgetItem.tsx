@@ -9,7 +9,7 @@ interface Props {
   setBudgetToEdit(item: Budget): void
 }
 
-const CategoryBudgetItem: React.FC<Props> = ({budget, setBudgetToEdit}) => {
+const BudgetItem: React.FC<Props> = ({budget, setBudgetToEdit}) => {
   const limitSpent = budget.limit + budget.spent
   const [isExtended, setIsExtended] = React.useState<boolean>(false)
 
@@ -53,4 +53,4 @@ const CategoryBudgetItem: React.FC<Props> = ({budget, setBudgetToEdit}) => {
   );
 };
 
-export default CategoryBudgetItem
+export default BudgetItem

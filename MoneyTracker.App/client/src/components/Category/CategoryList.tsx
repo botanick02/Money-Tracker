@@ -1,17 +1,17 @@
 import React, {useEffect, useState} from "react";
 import {useAppDispatch, useAppSelector} from "../../hooks/useAppDispatch";
-import CategorySetsItemItem from "../../elements/CategorySetsItemItem";
-import CategoryCreate from "../CategoryCreate/CategoryCreate";
-import TimeScopePanel from "../TimeScopePanel/TimeScopePanel";
+import CategorySetsItemItem from "../../elements/CategoryItem";
+import CategoryCreate from "./CategoryCreate";
+import TimeScopePanel from "../TimeScopePanel";
 import {FETCH_CATEGORIES} from "../../store/Category/Category.slice";
 import {Category} from "../../types/Category";
 
 const CategoryList = () => {
-  const categories = useAppSelector((state) => state.Category.categories).filter(c => c.type !== "transfer");
+  const categories = useAppSelector((state) => state.Category.categories).filter(c => c.type !== "transfer").filter(c => c.isActive == true);
 
   const editSuccess = useAppSelector((state) => state.Category.editSuccess);
 
-  const [defaultTransaction, setDefaultTransaction] = useState<"expense" | "income">("expense");
+  const [defaultTransaction, setDefaultTransaction] = useState<"expense" | "income" | "transfer">("expense");
   const [categoryToEdit, setCategoryToEdit] = useState<undefined | Category>()
   const [isCreatePopupOpen, setIsCreatePopupOpen] = useState<boolean>(false);
 

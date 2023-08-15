@@ -26,8 +26,13 @@ const TransactionList = () => {
   >(null);
 
   const handleInfoPopupOpen = (id: string) => {
-    document.body.classList.toggle("no-scroll");
+    document.body.classList.add("no-scroll");
     setTransactionIdInfoPopup(id);
+  };
+
+  const handleInfoPopupClose = () => {
+    document.body.classList.remove("no-scroll");
+    setTransactionIdInfoPopup(null);
   };
 
   const transactionInPopup = transactions.find(
@@ -42,7 +47,7 @@ const TransactionList = () => {
     <div className={"transaction-list"}>
       {transactionInPopup && (
         <TransactionInfo
-          closePopupHandle={() => setTransactionIdInfoPopup(null)}
+          closePopupHandle={handleInfoPopupClose}
           transaction={transactionInPopup}
         />
       )}

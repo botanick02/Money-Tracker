@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import TimeScopePanel from "../components/TimeScopePanel/TimeScopePanel";
+import TimeScopePanel from "../components/TimeScopePanel";
 import { useAppDispatch, useAppSelector } from "../hooks/useAppDispatch";
 import {
   FETCH_TRANSACTIONS_INFO,
   SET_DATE_RANGE,
+  SET_TRANSACTION_TYPE,
 } from "../store/FinancialOperation/FinancialOperation.slice";
 import TransactionCreate from "../components/Transaction/TransactionCreate";
 import TransactionList from "../components/Transaction/TransactionList";
@@ -20,8 +21,23 @@ const Transactions = () => {
 
   const incomes = useAppSelector((state) => state.FinancialOperation.incomes);
   const expenses = useAppSelector((state) => state.FinancialOperation.expenses);
-  const { currentCategoryId, currentCategoryName, currentCategoryColor } = useAppSelector(state => state.Account);
+  const { currentCategoryId, currentCategoryName, currentCategoryColor } =
+    useAppSelector((state) => state.Account);
 
+  const transactionType = useAppSelector((state) => state.FinancialOperation.transactionType);
+
+  const changeTransactionTypeFilter = (type: "expense" | "income") => {
+    if (transactionType !== type){
+      dispatch(SET_TRANSACTION_TYPE(type));
+    }
+    else{
+      dispatch(SET_TRANSACTION_TYPE(null));
+    }
+  }
+
+  useEffect(() => {
+    dispatch(FETCH_TRANSACTIONS_INFO());
+  }, [transactionType, dispatch])
 
   const currentAccountId = useAppSelector(
     (state) => state.Account.currentAccountId
@@ -37,10 +53,10 @@ const Transactions = () => {
 
   useEffect(() => {
     dispatch(FETCH_TRANSACTIONS_INFO());
-  }, [dispatch, currentAccountId, dateRange,currentCategoryId]);
+  }, [dispatch, currentAccountId, dateRange, currentCategoryId]);
 
   useEffect(() => {
-    dispatch(FETCH_CATEGORIES())
+    dispatch(FETCH_CATEGORIES());
   }, [dispatch]);
 
   const onRangeChange = (startDate: string | null, endDate: string | null) => {
@@ -53,7 +69,6 @@ const Transactions = () => {
     <main className={"transactions"}>
       {isCreatePopupOpen && (
         <TransactionCreate
-          transactionDefaultType={defaultTransaction}
           closePopupHandle={handleCreatePopupOpen}
         />
       )}
@@ -61,10 +76,9 @@ const Transactions = () => {
       <div className={"transaction-sums"}>
         <div
           onClick={() => {
-            handleCreatePopupOpen();
-            setDefaultTransaction("income");
+            changeTransactionTypeFilter("income");
           }}
-          className={"transaction-sums__income"}
+          className={`transaction-sums__income ${transactionType == "income" && "active"}`}
         >
           Incomes
           <br />+ {incomes} ₴
@@ -88,15 +102,14 @@ const Transactions = () => {
                 : undefined
             }
           >
-             Remove {currentCategoryName} filter ❌
+            Remove {currentCategoryName} filter ❌
           </div>
         )}
         <div
           onClick={() => {
-            handleCreatePopupOpen();
-            setDefaultTransaction("expense");
+            changeTransactionTypeFilter("expense");
           }}
-          className={"transaction-sums__expense"}
+          className={`transaction-sums__expense ${transactionType == "expense" && "active"}`}
         >
           Expenses
           <br />- {-expenses} ₴

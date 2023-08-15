@@ -9,7 +9,7 @@ import Layout from "./components/common/Layout";
 import Settings from "./pages/Settings";
 import Stats from "./pages/Stats";
 import Budgets from "./pages/Budgets";
-import CategoryList from "./components/CategoryList/CategoryList";
+import CategoryList from "./components/Category/CategoryList";
 import { REFRESH_ACCESS_TOKEN } from "./store/Auth/Auth.slice";
 
 function App() {
@@ -18,20 +18,16 @@ function App() {
     (state) => state.Auth.loading
   );
   const dispatch = useAppDispatch();
-
+console.log(isAuth)
   useEffect(() => {
-    const interval = setInterval(() => {
+    console.log(checkTokenExpire())
       if (checkTokenExpire()) {
-        if (!accessTokenRefreshing && isAuth) {
+       
+        if (!accessTokenRefreshing ) {
           dispatch(REFRESH_ACCESS_TOKEN());
         }
       }
-    }, 120000); 
-
-    return () => {
-      clearInterval(interval); 
-    };
-  }, [accessTokenRefreshing, dispatch, isAuth]);
+  }, []);
 
   return (
     <BrowserRouter>

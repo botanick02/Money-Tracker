@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import CurrentAccount from "../../elements/Accounts/CurrentAccount";
-import AccountListItem from "../../elements/Accounts/AccountListItem";
-import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
+import CurrentAccount from "../elements/Accounts/CurrentAccount";
+import AccountListItem from "../elements/Accounts/AccountListItem";
+import { useAppDispatch, useAppSelector } from "../hooks/useAppDispatch";
 import {
   FETCH_ACCOUNTS,
   SET_CURRENT_ACCOUNT_ID,
-} from "../../store/Account/Account.slice";
+} from "../store/Account/Account.slice";
 
 const AccountSelector = () => {
   const dispatch = useAppDispatch();

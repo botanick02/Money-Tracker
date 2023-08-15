@@ -2,7 +2,7 @@ import React from "react";
 import {
   TimeScopeInputsType,
   TimeScopes,
-} from "../../components/TimeScopePanel/TimeScopePanel";
+} from "../components/TimeScopePanel";
 
 interface TimeScopeInputProps {
   scope: TimeScopes;

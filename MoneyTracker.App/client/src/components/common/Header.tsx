@@ -1,5 +1,5 @@
 import React from "react";
-import AccountSelector from "../AccountSelector/AccountSelector";
+import AccountSelector from "../AccountSelector";
 
 const Header = () => {
   return (

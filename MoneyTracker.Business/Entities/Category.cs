@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MoneyTracker.Business.Entities
+﻿namespace MoneyTracker.Business.Entities
 {
     public class Category
     {
         public Guid Id { get; set; } = Guid.NewGuid();
+
+        public Guid UserId { get; set; }
 
         public string Name { get; set; }
 
@@ -17,5 +13,7 @@ namespace MoneyTracker.Business.Entities
         public string IconUrl { get; set; }
 
         public string Color { get; set; }
+
+        public bool IsActive { get; set; } = true;
     }
 }

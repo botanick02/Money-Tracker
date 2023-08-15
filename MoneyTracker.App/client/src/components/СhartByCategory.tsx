@@ -1,8 +1,8 @@
 import React from 'react';
 import { RadialChart } from 'react-vis';
-import { useAppSelector, useAppDispatch } from '../../hooks/useAppDispatch';
-import SetsItem from '../../elements/StatsItem';
-import { SET_CURRENT_CATEGORY } from '../../store/Account/Account.slice';
+import { useAppSelector, useAppDispatch } from '../hooks/useAppDispatch';
+import SetsItem from '../elements/StatsItem';
+import { SET_CURRENT_CATEGORY } from '../store/Account/Account.slice';
 import { Link } from 'react-router-dom';
 
 const PieChart = () => {

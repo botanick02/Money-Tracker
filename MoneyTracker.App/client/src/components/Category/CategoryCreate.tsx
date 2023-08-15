@@ -8,7 +8,7 @@ import {Category, CategoryToCreate} from "../../types/Category";
 
 interface Props {
   openPopupHandle(): void;
-  transactionDefaultType?: "income" | "expense";
+  transactionDefaultType?: "income" | "expense" | "transfer";
   categoryToEdit?: Category
 }
 
