@@ -40,7 +40,7 @@ export const createAccountEpic: Epic<any, any, any> = (action$, state$) => {
   return action$.pipe(
     ofType(CREATE_ACCOUNT),
     mergeMap((action) =>
-      from(request(CreateAccount, { inputData: action.payload })).pipe(
+      from(request(CreateAccount, { accountName: action.payload })).pipe(
         mergeMap((data) => {
           if (data.errors) {
             return of(CREATE_ACCOUNT_ERROR(data.errors[0].message));

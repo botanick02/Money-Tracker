@@ -20,7 +20,7 @@ const Settings = () => {
       title: "Accounts",
       description: "You can create, edit, delete your accounts",
       iconUrl: "https://picsum.photos/51",
-      pageUrl: "/AccountList",
+      pageUrl: "/AccountsList",
     },
   ];
 

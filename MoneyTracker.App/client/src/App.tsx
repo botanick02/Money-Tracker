@@ -11,6 +11,7 @@ import Stats from "./pages/Stats";
 import Budgets from "./pages/Budgets";
 import { REFRESH_ACCESS_TOKEN } from "./store/Auth/Auth.slice";
 import CategoryList from "./components/Category/CategoryList";
+import AccountsList from "./components/Accounts/AccountsList";
 
 function App() {
   const isAuth = useAppSelector((state) => state.Auth.isAuth);
@@ -38,6 +39,7 @@ console.log(isAuth)
             <Route path="/budgets" element={<Budgets/>} />
             <Route path="/stats" element={<Stats/>} />
             <Route path="/settings" element={<Settings/>}/>
+            <Route path="/AccountsList" element={<AccountsList/>}/>
             <Route path="/CategoryList" element={<CategoryList/>}/>
             <Route path="*" element={<Navigate to="/" />} />
           </Route>
