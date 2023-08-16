@@ -16,3 +16,11 @@ query getPersonalAccounts{
     }
   }
   `
+
+  export const CreateAccount = `
+  mutation createAccount($accountName: String!) {
+    account {
+      createAccount(accountName: $accountName)
+    }
+  }
+`;

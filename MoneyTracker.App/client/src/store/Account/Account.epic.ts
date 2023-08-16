@@ -1,32 +1,58 @@
 import { Epic, combineEpics, ofType } from "redux-observable";
-import { from, mergeMap } from "rxjs";
-import { FETCH_ACCOUNTS, FETCH_ACCOUNTS_ERROR, FETCH_ACCOUNTS_SUCCESS } from "./Account.slice";
-import { request } from "../../api/core"
-import { GetAccounts } from "../../api/queries/Accounts";
+import { from, mergeMap, catchError } from "rxjs"; 
+import { of } from "rxjs"; 
+import {
+  CREATE_ACCOUNT,
+  CREATE_ACCOUNT_ERROR,
+  CREATE_ACCOUNT_SUCCESS,
+  FETCH_ACCOUNTS,
+  FETCH_ACCOUNTS_ERROR,
+  FETCH_ACCOUNTS_SUCCESS,
+} from "./Account.slice";
+import { request } from "../../api/core";
+import { CreateAccount, GetAccounts } from "../../api/queries/Accounts";
 
 export const fetchAccountsEpic: Epic<any, any, any> = (action$, state$) => {
   return action$.pipe(
     ofType(FETCH_ACCOUNTS),
-    mergeMap(() => from(request(GetAccounts)
-      ).pipe(
+    mergeMap(() =>
+      from(request(GetAccounts)).pipe(
         mergeMap((data: any) => {
-              if (data.errors) {
-                // store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message));
-                return [FETCH_ACCOUNTS_ERROR(data.errors[0].message)];
-              } else {
-                const accounts = data.data.account.getUserAccounts.accounts;
-                const total = data.data.account.getUserAccounts.total;
-                return [
-                  FETCH_ACCOUNTS_SUCCESS({
-                    accounts: accounts,
-                    total: total
-                  }),
-                ];
-              }
-            })
-          )
-        )
+          if (data.errors) {
+            return [FETCH_ACCOUNTS_ERROR(data.errors[0].message)];
+          } else {
+            const accounts = data.data.account.getUserAccounts.accounts;
+            const total = data.data.account.getUserAccounts.total;
+            return [
+              FETCH_ACCOUNTS_SUCCESS({
+                accounts: accounts,
+                total: total,
+              }),
+            ];
+          }
+        })
       )
+    )
+  );
 };
 
-export const AccountEpics = combineEpics(fetchAccountsEpic)
+export const createAccountEpic: Epic<any, any, any> = (action$, state$) => {
+  return action$.pipe(
+    ofType(CREATE_ACCOUNT),
+    mergeMap((action) =>
+      from(request(CreateAccount, { inputData: action.payload })).pipe(
+        mergeMap((data) => {
+          if (data.errors) {
+            return of(CREATE_ACCOUNT_ERROR(data.errors[0].message));
+          } else {
+            const newAccount = data.data.createAccount;
+            return of(CREATE_ACCOUNT_SUCCESS(newAccount));
+          }
+        }),
+        catchError((error) => of(CREATE_ACCOUNT_ERROR("An error occurred")))
+      )
+    )
+  );
+};
+
+export const AccountEpics = combineEpics(fetchAccountsEpic, createAccountEpic); // Добавляем createAccountEpic
