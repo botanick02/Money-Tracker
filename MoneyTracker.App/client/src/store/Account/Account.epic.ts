@@ -1,5 +1,5 @@
 import { Epic, combineEpics, ofType } from "redux-observable";
-import { from, mergeMap, catchError } from "rxjs"; 
+import { from, mergeMap, catchError, concatMap } from "rxjs"; 
 import { of } from "rxjs"; 
 import {
   CREATE_ACCOUNT,
@@ -46,7 +46,10 @@ export const createAccountEpic: Epic<any, any, any> = (action$, state$) => {
             return of(CREATE_ACCOUNT_ERROR(data.errors[0].message));
           } else {
             const newAccount = data.data.createAccount;
-            return of(CREATE_ACCOUNT_SUCCESS(newAccount));
+            return of(
+              CREATE_ACCOUNT_SUCCESS(newAccount),
+              { type: FETCH_ACCOUNTS } // Dispatching FETCH_ACCOUNTS action here
+            );
           }
         }),
         catchError((error) => of(CREATE_ACCOUNT_ERROR("An error occurred")))
@@ -55,4 +58,4 @@ export const createAccountEpic: Epic<any, any, any> = (action$, state$) => {
   );
 };
 
-export const AccountEpics = combineEpics(fetchAccountsEpic, createAccountEpic); // Добавляем createAccountEpic
+export const AccountEpics = combineEpics(fetchAccountsEpic, createAccountEpic);
