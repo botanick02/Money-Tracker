@@ -14,9 +14,9 @@ namespace MoneyTracker.App.GraphQl.S
     {
         public StatisticsQuery(StatisticService statisticService)
         {
-            Field<ListGraphType<GetStatisticsDtoType>>("positiveTransactions",
-                arguments: new QueryArguments(new QueryArgument<GetStatisticsForAccountsInputType> { Name = "Input" }),
-                resolve: context =>
+            Field<ListGraphType<GetStatisticsDtoType>>("PositiveTransactions")
+                 .Argument<GetStatisticsForAccountsInputType>("Input")
+                .Resolve(context =>
                 {
                     var input = context.GetArgument<GetStatisticsForAccountsInput>("Input");
                     var userId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
@@ -26,9 +26,9 @@ namespace MoneyTracker.App.GraphQl.S
                     return statistics.positiveTransactions;
                 }).Authorize();
 
-            Field<ListGraphType<GetStatisticsDtoType>>("negativeTransactions",
-                arguments: new QueryArguments(new QueryArgument<GetStatisticsForAccountsInputType> { Name = "Input" }),
-                resolve: context =>
+            Field<ListGraphType<GetStatisticsDtoType>>("NegativeTransactions")
+                .Argument<GetStatisticsForAccountsInputType>("Input")
+                .Resolve(context =>
                 {
                     var input = context.GetArgument<GetStatisticsForAccountsInput>("Input");
                     var userId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);

@@ -217,7 +217,7 @@ namespace MoneyTracker.App.GraphQl.FinancialOperation
                     }
 
                     return true;
-                });
+                }).Authorize();
 
             Field<bool>("UpdateFinancialOperation")
                     .Argument<UpdateFinancialOperationInputType>("UpdatedFinancialOperaion")
@@ -270,7 +270,7 @@ namespace MoneyTracker.App.GraphQl.FinancialOperation
                         }
 
                         return true;
-                    });
+                    }).Authorize();
 
         }
     }

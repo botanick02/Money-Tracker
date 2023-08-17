@@ -30,7 +30,7 @@ namespace MoneyTracker.App.GraphQl.Budget
                         return false;
                     }
                     return true;
-                });
+                }).Authorize();
 
             Field<bool>("deleteBudget")
                 .Argument<StringGraphType>("id")
@@ -51,7 +51,7 @@ namespace MoneyTracker.App.GraphQl.Budget
                         return false;
                     }
                     return true;
-                });
+                }).Authorize();
 
 
             Field<bool>("editBudget")
@@ -73,7 +73,7 @@ namespace MoneyTracker.App.GraphQl.Budget
                         return false;
                     }
                     return true;
-                });
+                }).Authorize();
         }
     }
 }
