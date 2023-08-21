@@ -105,9 +105,9 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
 
             var currentTime = DateTime.UtcNow;
 
-            var eventsToAppend = new List<Event>();
-
-            eventsToAppend.Add(new DebitTransactionAddedEvent
+            var eventsToAppend = new List<Event>
+            {
+                new DebitTransactionAddedEvent
             (
                 OperationId: transactionId,
                 UserId: command.UserId,
@@ -117,9 +117,9 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
                 Title: command.Title,
                 Note: command.Note,
                 Amount: command.Amount
-            ));
+            ),
 
-            eventsToAppend.Add(new CreditTransactionAddedEvent
+                new CreditTransactionAddedEvent
             (
                 OperationId: transactionId,
                 UserId: command.UserId,
@@ -129,7 +129,8 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
                 Title: command.Title,
                 Note: command.Note,
                 Amount: command.Amount
-            ));
+            )
+            };
 
             await eventStore.AppendEventsAsync(eventsToAppend);
 
@@ -259,8 +260,8 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
 
             var eventsToAppend = new List<Event>();
 
-            var userIncomeAccountId = accountRepository.GetUserAccounts(command.UserId, AccountType.Debit).FirstOrDefault().Id;
-            var userExpenseAccountId = accountRepository.GetUserAccounts(command.UserId, AccountType.Credit).FirstOrDefault().Id;
+            var userIncomeAccountId = accountRepository.GetUserAccounts(command.UserId, AccountType.Debit).FirstOrDefault()!.Id;
+            var userExpenseAccountId = accountRepository.GetUserAccounts(command.UserId, AccountType.Credit).FirstOrDefault()!.Id;
 
             if (Math.Abs(command.Amount) != Math.Abs(existingTransactions[0].Amount))
             {
@@ -293,11 +294,25 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
 
             foreach (var transaction in existingTransactions)
             {
-                if (transaction.Amount > 0 && transaction.AccountId != userExpenseAccountId && command.ToAccountId.HasValue && command.ToAccountId != transaction.AccountId)
+                var categories = categoryRepository.GetCategories(transaction.UserId);
+                var category = categories.FirstOrDefault(c => c.Id == transaction.CategoryId);
+
+                bool isTransfer = category!.Type == "transfer";
+                bool isPositiveAmount = transaction.Amount > 0;
+                bool isNegativeAmount = transaction.Amount < 0;
+
+                if ((isTransfer && isPositiveAmount && command.ToAccountId.HasValue && command.ToAccountId != transaction.AccountId) ||
+                    (!isTransfer && isPositiveAmount && transaction.AccountId != userExpenseAccountId && command.ToAccountId.HasValue && command.ToAccountId != transaction.AccountId))
                 {
                     eventsToAppend.Add(new FinancialOperationAccountUpdatedEvent(transaction.Id, (Guid)command.ToAccountId));
                 }
-                if (transaction.Amount < 0 && transaction.AccountId != userIncomeAccountId && command.FromAccountId.HasValue && command.ToAccountId != transaction.AccountId)
+
+                if (!isTransfer && isNegativeAmount && transaction.AccountId != userIncomeAccountId && command.ToAccountId.HasValue && command.ToAccountId != transaction.AccountId)
+                {
+                    eventsToAppend.Add(new FinancialOperationAccountUpdatedEvent(transaction.Id, (Guid)command.ToAccountId));
+                }
+
+                if (isTransfer && isNegativeAmount && command.FromAccountId.HasValue && command.FromAccountId != transaction.AccountId)
                 {
                     eventsToAppend.Add(new FinancialOperationAccountUpdatedEvent(transaction.Id, (Guid)command.FromAccountId));
                 }
