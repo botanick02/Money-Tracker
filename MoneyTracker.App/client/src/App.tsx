@@ -24,11 +24,10 @@ console.log(isAuth)
     console.log(checkTokenExpire())
       if (checkTokenExpire()) {
        
-        if (!accessTokenRefreshing ) {
           dispatch(REFRESH_ACCESS_TOKEN());
-        }
+        
       }
-  }, []);
+  }, [isAuth]);
 
   return (
     <BrowserRouter>

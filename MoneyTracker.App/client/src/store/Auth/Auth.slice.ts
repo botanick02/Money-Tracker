@@ -66,9 +66,11 @@ export const AuthSlice = createSlice({
     },
     REFRESH_ACCESS_TOKEN_SUCCESS(state) {
       state.loading = false;
+      state.isAuth = true;
     },
     REFRESH_ACCESS_TOKEN_ERROR(state) {
       state.loading = false;
+      state.isAuth = false;
     },
     REGISTRATION(state, action: PayloadAction<RegistrationVariables>) {
       state.loading = true;
