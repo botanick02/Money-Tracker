@@ -129,7 +129,6 @@ export const RegistrationEpic: Epic<any, any, any> = (action$: any) => {
       from(request(Register, { createUser: action.payload })).pipe(
         map((data: any) => {
           if (data.errors) {
-            // store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].extensions.code));
             return REGISTRATION_ERROR(data.errors[0].extensions.code);
           } else {
             localStorage.setItem(
