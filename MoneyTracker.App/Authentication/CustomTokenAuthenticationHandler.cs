@@ -18,7 +18,7 @@ namespace MoneyTracker.App.Authentication
         {
             if (!Request.Headers.ContainsKey("Authorization"))
             {
-                return AuthenticateResult.Fail("Missing authorization header");
+                return AuthenticateResult.NoResult();
             }
 
             string token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
@@ -31,7 +31,7 @@ namespace MoneyTracker.App.Authentication
             }
             catch
             {
-                return AuthenticateResult.Fail("Token validation failed");
+                return AuthenticateResult.NoResult();
             }
         }
     }
