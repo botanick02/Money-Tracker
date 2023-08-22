@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { RadialChart } from 'react-vis';
 import { useAppSelector, useAppDispatch } from '../hooks/useAppDispatch';
 import SetsItem from '../elements/StatsItem';
+
 import { SET_CURRENT_CATEGORY } from '../store/Account/Account.slice';
-import { Link } from 'react-router-dom';
+import { FETCH_TRANSACTIONS_INFO, } from '../store/FinancialOperation/FinancialOperation.slice';
+import TransactionList from './Transaction/TransactionList';
 
 const PieChart = () => {
     const dispatch = useAppDispatch();
@@ -12,10 +14,18 @@ const PieChart = () => {
     );
     const loading = useAppSelector((state) => state.Stats.loading);
 
+    const selectedCategory = useAppSelector((state) => state.Account.currentCategoryId)
+    const [showTransactionList, setShowTransactionList] = useState(false);
+
+    const resetCurrentCategory = () => {
+        dispatch({
+            type: SET_CURRENT_CATEGORY,
+            payload: { id: null, name: null, color: null },
+        });
+    };
+
     if (loading) {
-        return <div
-        className="category-list"
-        >Loading...</div>;
+        return <div className="category-list">Loading...</div>;
     }
 
     return (
@@ -35,17 +45,18 @@ const PieChart = () => {
                 }}
             />
 
-            <Link to="/" className="category-list">
-                <div className="category-list">
-                    {filteredStats.map((item) => (
-                        <SetsItem
-                            key={item.categoryName}
-                            name={item.categoryName}
-                            categoryId={item.categoryId}
-                            sum={item.sum}
-                            percentage={item.percentage}
-                            color={item.color}
-                            onClick={() => {
+            <div className="category-list">
+                {filteredStats.map((item) => (
+                    <SetsItem
+                        key={item.categoryName}
+                        name={item.categoryName}
+                        categoryId={item.categoryId}
+                        sum={item.sum}
+                        percentage={item.percentage}
+                        color={item.color}
+                        onClick={() => {
+                            if (selectedCategory !== item.categoryId) {
+                         
                                 dispatch({
                                     type: SET_CURRENT_CATEGORY,
                                     payload: {
@@ -54,11 +65,32 @@ const PieChart = () => {
                                         color: item.color,
                                     },
                                 });
-                            }}
-                        />
-                    ))}
-                </div>
-            </Link>
+                                dispatch({
+                                    type: FETCH_TRANSACTIONS_INFO,
+                                });
+                                setShowTransactionList(true);
+                            } else {
+                                dispatch({
+                                    type: SET_CURRENT_CATEGORY,
+                                    payload: {
+                                        id: null,
+                                        name: null,
+                                        color: null,
+                                    },
+                                });
+                                dispatch({
+                                    type: FETCH_TRANSACTIONS_INFO,
+                                });
+                              
+                                setShowTransactionList(false);
+                                resetCurrentCategory(); 
+                            }
+                        }}
+                    />
+                ))}
+            </div >
+
+            {selectedCategory !== null && showTransactionList && <TransactionList />}
         </div>
     );
 };
