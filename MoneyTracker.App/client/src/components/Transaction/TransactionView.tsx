@@ -31,9 +31,24 @@ const TransactionView = ({
         <div className={"popup__info__item"}>
           Created: {new Date(transaction.createdAt).toLocaleString()}
         </div>
-        <div className={"popup__info__item"}>
-          Account: {accounts.find((a) => a.id === transaction.accountId)?.name}
-        </div>
+        {transaction.category.type == "transfer" ? (
+          <>
+            <div className={"popup__info__item"}>
+              From account:{" "}
+              {accounts.find((a) => a.id === transaction.fromAccountId)?.name}
+            </div>
+            <div className={"popup__info__item"}>
+              To account:{" "}
+              {accounts.find((a) => a.id === transaction.accountId)?.name}
+            </div>
+          </>
+        ) : (
+          <div className={"popup__info__item"}>
+            Account:{" "}
+            {accounts.find((a) => a.id === transaction.accountId)?.name}
+          </div>
+        )}
+
         {transaction.note && (
           <div className={"popup__info__item"}>Note: {transaction.note}</div>
         )}

@@ -9,5 +9,6 @@ export interface Transaction {
   amount: number;
   category: Category;
   createdAt: string;
-  accountId: string;
+  accountId?: string;
+  fromAccountId?: string;
 }

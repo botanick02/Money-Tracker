@@ -39,7 +39,6 @@ const Dropdown: FC<SelectPropsType> = ({ selectHandler, options, title, defaultO
     window.addEventListener('click', mouseListener);
   }, []);
 
-
   return (
     <div className={'select-wrapper'}>
       <button
@@ -61,7 +60,6 @@ const Dropdown: FC<SelectPropsType> = ({ selectHandler, options, title, defaultO
           options[selectedOptionId].label
         )}
       </button>
-
       <ul
         className={`options ${isOptionsOpen ? 'show' : ''}`}
         role={'listbox'}
