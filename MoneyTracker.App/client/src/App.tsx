@@ -15,19 +15,14 @@ import AccountsList from "./components/Accounts/AccountsList";
 
 function App() {
   const isAuth = useAppSelector((state) => state.Auth.isAuth);
-  const accessTokenRefreshing = useAppSelector(
-    (state) => state.Auth.loading
-  );
+  const tokenExpire = useAppSelector((state) => state.Auth.tokenExpire);
+
   const dispatch = useAppDispatch();
-console.log(isAuth)
-  useEffect(() => {
-    console.log(checkTokenExpire())
-      if (checkTokenExpire()) {
-       
+  useEffect(() => {    
           dispatch(REFRESH_ACCESS_TOKEN());
         
-      }
-  }, [isAuth]);
+      
+  }, [tokenExpire,isAuth]);
 
   return (
     <BrowserRouter>

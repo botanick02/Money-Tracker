@@ -85,8 +85,9 @@ export const RefreshAccessTokenEpic: Epic<any, any, any> = (action$) => {
     mergeMap(() =>
       from(request(RefreshAccessToken)).pipe(
         map((data: any) => {
-          if (data.data.auth.refreshToken?.accessToken){
           console.log(data)
+          if (data.data.auth.refreshToken?.accessToken){
+          
           localStorage.setItem(
             "accessToken",
             data.data.auth.refreshToken.accessToken

@@ -15,12 +15,14 @@ export interface AuthState {
   loading: boolean;
   error: null | string;
   isAuth: boolean;
+  tokenExpire: boolean;
 }
 
 const initialState: AuthState = {
   error: null,
   loading: false,
   isAuth: localStorage.getItem("accessToken") ? true : false,
+  tokenExpire:false
 };
 
 export const AuthSlice = createSlice({
@@ -31,6 +33,7 @@ export const AuthSlice = createSlice({
       state.loading = true;
       state.error = null;
       state.isAuth = false;
+      state.tokenExpire= false;
     },
     SIGN_IN_GOOGLE(state, action: PayloadAction<{ token: string }>) {
       state.loading = true;
@@ -71,6 +74,7 @@ export const AuthSlice = createSlice({
     REFRESH_ACCESS_TOKEN_ERROR(state) {
       state.loading = false;
       state.isAuth = false;
+     
     },
     REGISTRATION(state, action: PayloadAction<RegistrationVariables>) {
       state.loading = true;
@@ -85,6 +89,10 @@ export const AuthSlice = createSlice({
     REGISTRATION_ERROR(state, action: PayloadAction<string>) {
       state.error = action.payload;
       state.isAuth = false;
+      state.loading = false;
+    },
+    TOKEN_EXPIRE(state, action: PayloadAction<boolean>) {
+      state.tokenExpire = action.payload;
       state.loading = false;
     },
   },
@@ -104,6 +112,7 @@ export const {
   REGISTRATION,
   REGISTRATION_ERROR,
   REGISTRATION_SUCCESS,
+  TOKEN_EXPIRE
 } = AuthSlice.actions;
 
 export default AuthSlice.reducer;
