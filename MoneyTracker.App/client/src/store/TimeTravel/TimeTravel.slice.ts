@@ -13,7 +13,9 @@ export const TimeTravelSlice = createSlice({
   name: "TimeTravel",
   initialState: initialState,
   reducers: {
-    SET_DATETIME(state, action: PayloadAction<string>) {},
+    SET_DATETIME(state, action: PayloadAction<string | null>) {
+        state.datetime = action.payload;
+    },
   },
 });
 

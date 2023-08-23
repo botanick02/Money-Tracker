@@ -14,7 +14,7 @@ namespace MoneyTracker.Business.Services
             this.transactionRepository = transactionRepository;
         }
 
-        public GetAccountsDto GetUserPersonalAccounts(Guid userId, DateTime? travelDateTime)
+        public GetAccountsDto GetUserPersonalAccounts(Guid userId, DateTime? travelDateTime = null)
         {
             var resultDto = new GetAccountsDto();
 

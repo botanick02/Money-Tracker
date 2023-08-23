@@ -12,6 +12,7 @@ import {BudgetEpics} from "./Budgets/Budgets.epic";
 import BudgetListSlice from "./Budgets/Budgets.slice";
 import {GetStatsEpics} from "./Stats/Stats.epic";
 import {StatsSlice} from "./Stats/Stats.slice";
+import {TimeTravelSlice} from './TimeTravel/TimeTravel.slice';
 
 const epicMiddleware = createEpicMiddleware();
 
@@ -30,8 +31,8 @@ const rootReducer = combineReducers({
   Account: AccountSlice.reducer,
   Auth: AuthSlice.reducer,
   Budgets: BudgetListSlice.reducer,
-  Stats: StatsSlice.reducer
-
+  Stats: StatsSlice.reducer,
+  TimeTravel: TimeTravelSlice.reducer
 });
 
 export const store = configureStore({

@@ -4,6 +4,7 @@ import SettingsItem from "../elements/SettingsItem";
 import {useAppDispatch} from "../hooks/useAppDispatch";
 import {useNavigate} from "react-router";
 import {SIGN_OUT} from "../store/Auth/Auth.slice";
+import TimeTravelPicker from "../elements/TimeTravelPicker";
 
 
 const Settings = () => {
@@ -21,6 +22,9 @@ const Settings = () => {
       <Link to="/CategoryList">
         <SettingsItem item={item}/>
       </Link>
+      
+      <TimeTravelPicker/>
+      
       <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
         <button
           className="button"

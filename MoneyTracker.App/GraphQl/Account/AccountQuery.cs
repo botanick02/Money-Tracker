@@ -9,16 +9,16 @@ namespace MoneyTracker.App.GraphQl.Account
 {
     public class AccountQuery : ObjectGraphType
     {
-        public AccountQuery(AccountService accountService, HeaderTimeTravelProviderParser timeTravel, HttpContent context)
+        public AccountQuery(AccountService accountService, HeaderTimeTravelProviderParser timeTravelParser)
         {
             Field<GetAccountsDtoType>("GetUserAccounts")
                 .Resolve(context =>
                 {
                     var userId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-                    var travelDateTime = timeTravel.ParseTravelDateTime(context);
+                    var travelDateTime = timeTravelParser.ParseTravelDateTime(context);
 
-                    return accountService.GetUserPersonalAccounts(userId);
+                    return accountService.GetUserPersonalAccounts(userId, travelDateTime);
                 }).Authorize();
         }
     }

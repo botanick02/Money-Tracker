@@ -13,10 +13,12 @@ const AccountSelector = () => {
   const currentAccountId = useAppSelector(
     (state) => state.Account.currentAccountId
   );
+  const timeTravelTime = useAppSelector(state => state.TimeTravel.datetime);
+
   const [isListOpen, setIsListOpen] = useState(false);
   useEffect(() => {
     dispatch(FETCH_ACCOUNTS());
-  }, [dispatch]);
+  }, [dispatch, timeTravelTime]);
 
   const switchListState = () => {
     setIsListOpen(!isListOpen);
