@@ -8,6 +8,7 @@ namespace MoneyTracker.App.GraphQl.Account.Types
         public GetAccountsDtoType()
         {
             Field(a => a.Accounts);
+
             Field(a => a.Total);
         }
     }

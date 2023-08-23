@@ -19,18 +19,18 @@ namespace MoneyTracker.Business.Services
             this.mapper = mapper;
         }
 
-        public GetTransactionsDataDto GetTransactionsData(Guid userId, DateTime? fromDate = null, DateTime? toDate = null, Guid? accountId = null, Guid? categoryId = null, string? transactionType = null)
+        public GetTransactionsDataDto GetTransactionsData(Guid userId, DateTime? fromDate = null, DateTime? toDate = null, Guid? accountId = null, Guid? categoryId = null, string? transactionType = null, DateTime? timeTravelDateTime = null)
         {
             var res = new GetTransactionsDataDto();
 
             var transactions = accountId == null
-                ? GetPersonalAccountTransactions(userId)
-                : transactionRepository!.GetAccountTransactions((Guid)accountId);
+                ? GetPersonalAccountTransactions(userId, timeTravelDateTime)
+                : transactionRepository!.GetAccountTransactions((Guid)accountId, timeTravelDateTime);
 
             transactions = FilterTransactionsByCatAndDate(transactions, categoryId, fromDate, toDate);
             transactions.Sort((t1, t2) => t1.CreatedAt.CompareTo(t2.CreatedAt));
 
-            var categories = categoryRepository.GetCategories(userId);
+            var categories = categoryRepository.GetCategories(userId, timeTravelDateTime);
 
             foreach (var transaction in transactions)
             {
@@ -42,12 +42,12 @@ namespace MoneyTracker.Business.Services
                 {
                     if (transaction.Amount > 0)
                     {
-                        transactionDto.FromAccountId = transactionRepository.GetTransactionsByOperationId(transaction.OperationId).FirstOrDefault(t => t.Amount < 0)!.AccountId;
+                        transactionDto.FromAccountId = transactionRepository.GetTransactionsByOperationId(transaction.OperationId, timeTravelDateTime).FirstOrDefault(t => t.Amount < 0)!.AccountId;
                     }
                     else
                     {
                         transactionDto.FromAccountId = transactionDto.AccountId;
-                        transactionDto.AccountId = transactionRepository.GetTransactionsByOperationId(transaction.OperationId).FirstOrDefault(t => t.Amount > 0)!.AccountId;
+                        transactionDto.AccountId = transactionRepository.GetTransactionsByOperationId(transaction.OperationId, timeTravelDateTime).FirstOrDefault(t => t.Amount > 0)!.AccountId;
                     }
                 }
                 res.Transactions.Add(transactionDto);
@@ -62,10 +62,10 @@ namespace MoneyTracker.Business.Services
             return res;
         }
 
-        private List<Transaction> GetPersonalAccountTransactions(Guid userId)
+        private List<Transaction> GetPersonalAccountTransactions(Guid userId, DateTime? dateTime = null)
         {
-            var userPersonalAccounts = accountRepository!.GetUserAccounts(userId, Entities.AccountType.Personal);
-            return userPersonalAccounts.SelectMany(account => transactionRepository!.GetAccountTransactions(account.Id)).ToList();
+            var userPersonalAccounts = accountRepository!.GetUserAccounts(userId, Entities.AccountType.Personal, dateTime);
+            return userPersonalAccounts.SelectMany(account => transactionRepository!.GetAccountTransactions(account.Id, dateTime)).ToList();
         }
 
         private List<Transaction> FilterTransactionsByCatAndDate(List<Transaction> transactions, Guid? categoryId, DateTime? fromDate, DateTime? toDate)

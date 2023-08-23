@@ -13,6 +13,7 @@ using MoneyTracker.DataAccess;
 using MoneyTracker.DataAccess.MsSQL;
 using MoneyTracker.Business.ReadStoreModel;
 using MoneyTracker.DataAccess.Repositories;
+using MoneyTracker.App.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,10 +28,12 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddSingleton<CurrencyRepository>();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddTransient<IDBInitializer, MsSQLDBInitializer>();
 builder.Services.AddTransient<IEventStoreRepository, EventStoreMsSqlRepository>();
+
+builder.Services.AddSingleton<HeaderTimeTravelProviderParser>();
 
 builder.Services.Configure<AuthTokenSettings>(builder.Configuration.GetSection("AuthTokenSettings"));
 
@@ -96,8 +99,6 @@ dbInitializer.InitializeDatabase();
 var currentReadModel = app.Services.GetRequiredService<CurrentReadModel>();
 var readModelExtensions = app.Services.GetRequiredService<ReadModelExtensions>();
 currentReadModel.CurrentModel = readModelExtensions.GetReadModel(DateTime.Now);
-
-app.Services.GetRequiredService<CurrencyRepository>();
 
 app.UseAuthentication();
 app.UseAuthorization();

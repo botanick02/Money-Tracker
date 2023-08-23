@@ -14,16 +14,15 @@ namespace MoneyTracker.Business.Services
             this.transactionRepository = transactionRepository;
         }
 
-        public GetAccountsDto GetUserPersonalAccounts(Guid userId)
+        public GetAccountsDto GetUserPersonalAccounts(Guid userId, DateTime? travelDateTime = null)
         {
-
             var resultDto = new GetAccountsDto();
 
-            var userAccounts = accountRepository.GetUserAccounts(userId, AccountType.Personal);
+            var userAccounts = accountRepository.GetUserAccounts(userId, AccountType.Personal, travelDateTime);
 
             foreach (var account in userAccounts)
             {
-                var accountTransactions = transactionRepository.GetAccountTransactions(account.Id);
+                var accountTransactions = transactionRepository.GetAccountTransactions(account.Id, travelDateTime);
 
                 decimal accountBalance = accountTransactions.Sum(t => t.Amount);
 
