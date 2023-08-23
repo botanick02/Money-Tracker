@@ -17,6 +17,7 @@ export const GetTransactions = `query getTransactions($input: GetTransactionsFor
         }
         createdAt
         accountId
+        fromAccountId
         categoryId
       }
       expenses

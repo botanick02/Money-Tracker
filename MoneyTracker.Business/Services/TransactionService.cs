@@ -31,11 +31,28 @@ namespace MoneyTracker.Business.Services
             transactions.Sort((t1, t2) => t1.CreatedAt.CompareTo(t2.CreatedAt));
 
             var categories = categoryRepository.GetCategories(userId);
-            res.Transactions = mapper.Map<List<TransactionDto>>(transactions);
 
-            foreach (var transaction in res.Transactions)
+            foreach (var transaction in transactions)
             {
-                transaction.Category = categories.FirstOrDefault(c => c.Id == transaction.CategoryId)!;
+                var category = categories.FirstOrDefault(c => c.Id == transaction.CategoryId);
+
+                TransactionDto transactionDto = mapper.Map<TransactionDto>(transaction);
+
+                if (category!.Type == "transfer")
+                {
+                    if (transaction.Amount > 0)
+                    {
+                        transactionDto.FromAccountId = transactionRepository.GetTransactionsByOperationId(transaction.OperationId).FirstOrDefault(t => t.Amount < 0)!.AccountId;
+                    }
+                    else
+                    {
+                        transactionDto.FromAccountId = transactionDto.AccountId;
+                        transactionDto.AccountId = transactionRepository.GetTransactionsByOperationId(transaction.OperationId).FirstOrDefault(t => t.Amount > 0)!.AccountId;
+                    }
+                }
+                res.Transactions.Add(transactionDto);
+
+                transactionDto.Category = category;
             }
 
             CalculateExpensesAndIncomes(res, accountId);
@@ -69,8 +86,6 @@ namespace MoneyTracker.Business.Services
             {
                 filteredTransactions = filteredTransactions.Where(t => t.CreatedAt < toDate).ToList();
             }
-
-           
 
             return filteredTransactions;
         }

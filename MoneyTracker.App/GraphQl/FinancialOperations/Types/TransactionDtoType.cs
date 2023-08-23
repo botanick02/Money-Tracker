@@ -23,7 +23,9 @@ namespace MoneyTracker.App.GraphQl.FinancialOperation.Types
             
             Field(t => t.CreatedAt);
             
-            Field(t => t.AccountId);
+            Field(t => t.AccountId, nullable: true);
+
+            Field(t => t.FromAccountId, nullable: true);
         }
     }
 }
