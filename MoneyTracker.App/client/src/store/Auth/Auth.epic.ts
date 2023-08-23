@@ -14,6 +14,7 @@ import {
   SIGN_OUT_ERROR,
   SIGN_OUT_SUCCESS,
   REFRESH_ACCESS_TOKEN_ERROR,
+  TOKEN_EXPIRE,
 } from "./Auth.slice";
 import { request } from "../../api/core";
 import {
@@ -85,8 +86,9 @@ export const RefreshAccessTokenEpic: Epic<any, any, any> = (action$) => {
     mergeMap(() =>
       from(request(RefreshAccessToken)).pipe(
         map((data: any) => {
-          if (data.data.auth.refreshToken?.accessToken){
           console.log(data)
+          if (data.data.auth.refreshToken?.accessToken){
+          
           localStorage.setItem(
             "accessToken",
             data.data.auth.refreshToken.accessToken
@@ -129,7 +131,6 @@ export const RegistrationEpic: Epic<any, any, any> = (action$: any) => {
       from(request(Register, { createUser: action.payload })).pipe(
         map((data: any) => {
           if (data.errors) {
-            // store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].extensions.code));
             return REGISTRATION_ERROR(data.errors[0].extensions.code);
           } else {
             localStorage.setItem(
@@ -146,10 +147,14 @@ export const RegistrationEpic: Epic<any, any, any> = (action$: any) => {
   );
 };
 
+
 export const AuthEpics = combineEpics(
   SignInEpic,
   GoogleSignInEpic,
   RegistrationEpic,
   RefreshAccessTokenEpic,
-  SignOutEpic
+  SignOutEpic,
+  
 );
+
+
