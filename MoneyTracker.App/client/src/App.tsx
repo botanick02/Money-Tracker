@@ -15,8 +15,7 @@ import AccountsList from "./components/Accounts/AccountsList";
 
 function App() {
   const isAuth = useAppSelector((state) => state.Auth.isAuth);
-  const tokenExpire = useAppSelector((state) => state.Auth.tokenExpire);
-
+  const tokenExpire = useAppSelector((state) => state);
   const dispatch = useAppDispatch();
   useEffect(() => {    
           dispatch(REFRESH_ACCESS_TOKEN());
