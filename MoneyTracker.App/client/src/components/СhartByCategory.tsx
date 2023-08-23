@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { RadialChart } from 'react-vis';
 import { useAppSelector, useAppDispatch } from '../hooks/useAppDispatch';
 import SetsItem from '../elements/StatsItem';
-
 import { SET_CURRENT_CATEGORY } from '../store/Account/Account.slice';
 import { FETCH_TRANSACTIONS_INFO } from '../store/FinancialOperation/FinancialOperation.slice';
 import TransactionList from './Transaction/TransactionList';
@@ -16,7 +15,11 @@ const PieChart = () => {
 
     const selectedCategory = useAppSelector((state) => state.Account.currentCategoryId);
     const [showTransactionList, setShowTransactionList] = useState(false);
-
+    const toggleTransactionList = () => {
+        setShowTransactionList(!showTransactionList);
+    };
+    const { currentCategoryColor } =
+    useAppSelector((state) => state.Account);
     const resetCurrentCategory = () => {
         dispatch({
             type: SET_CURRENT_CATEGORY,
@@ -81,6 +84,32 @@ const PieChart = () => {
                 ))}
             </div>
 
+         
+            {selectedCategory !== null &&showTransactionList && (
+                <button
+                    className="transaction-sums__filter"
+                    onClick={toggleTransactionList}
+                    style={{
+                        ...(currentCategoryColor !== null
+                          ? {
+                              color: currentCategoryColor,
+                            }
+                          : {}),
+                        width: '100%',
+                        overflowX: 'auto',
+                        textAlign: 'center',
+                        backgroundColor: 'transparent',
+                      
+                      }}
+                         
+                >
+                    <span style={{ fontSize: '20px', paddingRight: '10px' }}>▲</span>
+                    Hide transaction list
+                    <span style={{ fontSize: '20px', paddingLeft: '10px' }}>▲</span>
+                </button>
+            )}
+
+         
             {selectedCategory !== null && showTransactionList && (
                 <div style={{ width: '100%', overflowX: 'auto' }}>
                     <TransactionList />

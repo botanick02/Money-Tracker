@@ -19,7 +19,7 @@ function App() {
   useEffect(() => {
     const interval = setInterval(() => {
       if (checkTokenExpire()) {
-        dispatch(REFRESH_ACCESS_TOKEN());
+        // dispatch(REFRESH_ACCESS_TOKEN());
       }
     }, 60000); 
     return () => {

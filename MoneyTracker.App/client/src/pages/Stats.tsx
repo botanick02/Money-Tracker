@@ -19,6 +19,10 @@ const Stats = () => {
   const handleFilterChange = (filter: "income" | "expense") => {
     setActiveFilter(filter);
     dispatch(CHANGE_STATS_FILTER(filter));
+    dispatch({
+      type: SET_CURRENT_CATEGORY,
+      payload: { id: null, name: null, color: null },
+    });
   };
   console.log(activeFilter)
   useEffect(() => {
@@ -43,27 +47,7 @@ const Stats = () => {
           Income
           <br />+ {incomes} ₴
         </div>
-         {currentCategoryId !== null && (
-          <div
-            onClick={() => {
-              dispatch({
-                type: SET_CURRENT_CATEGORY,
-                payload: { id: null, name: null, color: null },
-              });
-            }}
-            className={"transaction-sums__filter"}
-            style={
-              currentCategoryColor !== null
-                ? {
-                    borderColor: currentCategoryColor,
-                    color: currentCategoryColor,
-                  }
-                : undefined
-            }
-          >
-            Show all
-          </div>
-        )}
+
         <div
           onClick={() => handleFilterChange("expense")}
           className="transaction-sums__expense"
