@@ -36,6 +36,10 @@ const Transactions = () => {
   }
 
   useEffect(() => {
+    dispatch({
+      type: SET_CURRENT_CATEGORY,
+      payload: { id: null, name: null, color: null },
+    });
     dispatch(FETCH_TRANSACTIONS_INFO());
   }, [transactionType, dispatch])
 
@@ -84,27 +88,7 @@ const Transactions = () => {
           <br />+ {incomes} ₴
         </div>
 
-        {currentCategoryId !== null && (
-          <div
-            onClick={() => {
-              dispatch({
-                type: SET_CURRENT_CATEGORY,
-                payload: { id: null, name: null, color: null },
-              });
-            }}
-            className={"transaction-sums__filter"}
-            style={
-              currentCategoryColor !== null
-                ? {
-                    borderColor: currentCategoryColor,
-                    color: currentCategoryColor,
-                  }
-                : undefined
-            }
-          >
-            Remove {currentCategoryName} filter ❌
-          </div>
-        )}
+       
         <div
           onClick={() => {
             changeTransactionTypeFilter("expense");

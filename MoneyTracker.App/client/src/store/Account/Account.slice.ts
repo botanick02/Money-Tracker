@@ -63,12 +63,24 @@ export const AccountSlice = createSlice({
       state.currentCategoryId = id;
       state.currentCategoryName = name;
       state.currentCategoryColor = color;
-    }
+    },
+    CREATE_ACCOUNT(state, action: PayloadAction<string>) {
+      state.loading = true;
+      state.error = null;
+    },
+    CREATE_ACCOUNT_SUCCESS(state, action: PayloadAction<string>) {
+      state.loading = false;
+      state.error = null;
+    },
+    CREATE_ACCOUNT_ERROR(state, action: PayloadAction<string>) {
+      state.loading = false;
+      state.error = action.payload;
+    },
   },
 });
 
 export const {
-  FETCH_ACCOUNTS, FETCH_ACCOUNTS_ERROR, FETCH_ACCOUNTS_SUCCESS, SET_CURRENT_ACCOUNT_ID,SET_CURRENT_CATEGORY
+  FETCH_ACCOUNTS, FETCH_ACCOUNTS_ERROR, FETCH_ACCOUNTS_SUCCESS, SET_CURRENT_ACCOUNT_ID,SET_CURRENT_CATEGORY,CREATE_ACCOUNT,CREATE_ACCOUNT_SUCCESS,CREATE_ACCOUNT_ERROR
 } = AccountSlice.actions;
 
 export default AccountSlice.reducer;

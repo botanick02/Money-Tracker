@@ -9,25 +9,25 @@ import Layout from "./components/common/Layout";
 import Settings from "./pages/Settings";
 import Stats from "./pages/Stats";
 import Budgets from "./pages/Budgets";
-import CategoryList from "./components/Category/CategoryList";
 import { REFRESH_ACCESS_TOKEN } from "./store/Auth/Auth.slice";
+import CategoryList from "./components/Category/CategoryList";
+import AccountsList from "./components/Accounts/AccountsList";
 
 function App() {
   const isAuth = useAppSelector((state) => state.Auth.isAuth);
-  const accessTokenRefreshing = useAppSelector(
-    (state) => state.Auth.loading
-  );
   const dispatch = useAppDispatch();
-console.log(isAuth)
+
   useEffect(() => {
-    console.log(checkTokenExpire())
-      if (checkTokenExpire()) {
+    const interval = setInterval(() => {
+      if (checkTokenExpire() && window.location.port !== "3000") {
+        dispatch(REFRESH_ACCESS_TOKEN());
        
-        if (!accessTokenRefreshing ) {
-          dispatch(REFRESH_ACCESS_TOKEN());
-        }
       }
-  }, []);
+    }, 60000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [isAuth]);
 
   return (
     <BrowserRouter>
@@ -38,6 +38,7 @@ console.log(isAuth)
             <Route path="/budgets" element={<Budgets/>} />
             <Route path="/stats" element={<Stats/>} />
             <Route path="/settings" element={<Settings/>}/>
+            <Route path="/AccountsList" element={<AccountsList/>}/>
             <Route path="/CategoryList" element={<CategoryList/>}/>
             <Route path="*" element={<Navigate to="/" />} />
           </Route>
