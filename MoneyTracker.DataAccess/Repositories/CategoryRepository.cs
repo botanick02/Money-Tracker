@@ -9,10 +9,11 @@ namespace MoneyTracker.DataAccess.Repositories
     public class CategoryRepository : ICategoryRepository
     {
         private readonly ReadModelExtensions readModelExtensions;
-        private string defaultCategoriesPath = @"../MoneyTracker.DataAccess/Resources/DefaultCategories.json";
+        private string defaultCategoriesPath = Path.Combine("/app/Resources", "DefaultCategories.json");
         public CategoryRepository(ReadModelExtensions readModelExtensions)
         {
             this.readModelExtensions = readModelExtensions;
+            var categories = JsonConvert.DeserializeObject<DefaultCategories>(File.ReadAllText(defaultCategoriesPath));
         }
         public List<Category> GetCategories(Guid userId, DateTime? dateTimeTo = null)
         {
