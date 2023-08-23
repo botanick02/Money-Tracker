@@ -35,20 +35,18 @@ const AccountCreate: React.FC<Props> = ({ openPopupHandle, name }) => {
           <InputWrapper>
             <input
               type="text"
-              placeholder="Name of category"
+              placeholder="Name of account"
               value={accountName} // Use the state variable here
               onChange={handleInputChange}
             />
           </InputWrapper>
 
           <div className="popup__row popup__row__center">
-            <label htmlFor="color-change">Icon Background</label>
+          
           
           </div>
 
-          <div className="icon-area">
-         
-          </div>
+          
         </div>
 
         <div className="popup__row">

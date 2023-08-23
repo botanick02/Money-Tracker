@@ -16,17 +16,18 @@ import AccountsList from "./components/Accounts/AccountsList";
 function App() {
   const isAuth = useAppSelector((state) => state.Auth.isAuth);
   const dispatch = useAppDispatch();
+
   useEffect(() => {
     const interval = setInterval(() => {
-      if (checkTokenExpire()) {
-        // dispatch(REFRESH_ACCESS_TOKEN());
+      if (checkTokenExpire() && window.location.port !== "3000") {
+        dispatch(REFRESH_ACCESS_TOKEN());
+       
       }
-    }, 60000); 
+    }, 60000);
     return () => {
-      clearInterval(interval); 
+      clearInterval(interval);
     };
   }, [isAuth]);
-  
 
   return (
     <BrowserRouter>
