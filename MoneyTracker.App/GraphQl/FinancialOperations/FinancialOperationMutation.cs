@@ -217,7 +217,7 @@ namespace MoneyTracker.App.GraphQl.FinancialOperation
                     }
 
                     return true;
-                });
+                }).Authorize();
 
             Field<bool>("UpdateFinancialOperation")
                     .Argument<UpdateFinancialOperationInputType>("UpdatedFinancialOperaion")
@@ -246,9 +246,9 @@ namespace MoneyTracker.App.GraphQl.FinancialOperation
                             Amount: input.Amount,
                             CategoryId: Guid.Parse(input.CategoryId),
                             CreatedAt: input.CreatedAt,
-                            FromAccountId: Guid.Parse(input.FromAccountId),
-                            ToAccountId: Guid.Parse(input.ToAccountId));
-
+                            FromAccountId: input.FromAccountId != null ? Guid.Parse(input.FromAccountId) : null,
+                            ToAccountId: input.ToAccountId != null ? Guid.Parse(input.ToAccountId) : null
+                            );
                         try
                         {
                             await commandDispatcher.DispatchAsync(command);
@@ -270,7 +270,7 @@ namespace MoneyTracker.App.GraphQl.FinancialOperation
                         }
 
                         return true;
-                    });
+                    }).Authorize();
 
         }
     }

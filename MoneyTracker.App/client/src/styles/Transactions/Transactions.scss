@@ -127,8 +127,9 @@
     }
   }
   &__filter {
-    border: 2px solid $filter-color;
+    border: 2px solid none;
     color: $filter-color;
+    
   }
 }
 

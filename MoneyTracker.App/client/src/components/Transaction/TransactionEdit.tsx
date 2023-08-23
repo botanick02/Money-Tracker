@@ -42,32 +42,33 @@ const TransactionEdit = ({
     },
   });
 
-  const [categoryId, setCategoryId] = useState<Option>(
-    categoryOptions.find((o) => o.value === transaction.category.id)!
-  );
-
   const [account, setAccount] = useState<Option>(
     accountOptions.find((option) => option.value === transaction.accountId) ??
       accountOptions[0]
   );
 
-  const handleCategoryChange = (option: Option) => {
-    setCategoryId(option);
-  };
+  const [fromAccount, setFromAccount] = useState<Option | null>(
+    accountOptions.find(
+      (option) => option.value === transaction.fromAccountId
+    ) ?? null
+  );
 
   const handleAccountChange = (option: Option) => {
     setAccount(option);
   };
 
   const saveOperation = (data: FormFields) => {
+    if (account == fromAccount){
+      return null;
+    }
     onSave({
       operationId: transaction.operationId,
       amount: +data.amount,
       title: data.title,
-      categoryId: categoryId.value,
+      categoryId: transaction.category.id,
       note: data.note,
       createdAt: new Date(data.createdAt).toISOString(),
-      fromAccountId: account.value,
+      fromAccountId: fromAccount?.value,
       toAccountId: account.value,
     });
   };
@@ -101,25 +102,42 @@ const TransactionEdit = ({
             })}
           />
         </InputWrapper>
-        <Dropdown
-          title={"Category"}
-          selectHandler={handleCategoryChange}
-          options={categoryOptions}
-          defaultOptionIndex={
-            categoryOptions.findIndex(
-              (o) => o.value === transaction.category.id
-            ) + 1
-          }
-        />
-        <Dropdown
-          title={"Account"}
-          selectHandler={handleAccountChange}
-          options={accountOptions}
-          defaultOptionIndex={
-            accountOptions.findIndex((o) => o.value === transaction.accountId) +
-            1
-          }
-        />
+        {transaction.category.type === "transfer" ? (
+          <div className={"popup__row"}>
+            <Dropdown
+              title={"From"}
+              selectHandler={(option) => setFromAccount(option)}
+              defaultOptionIndex={
+                accountOptions.findIndex(
+                  (o) => o.value === transaction.fromAccountId
+                ) + 1
+              }
+              options={accountOptions}
+            />
+            <Dropdown
+              title={"To"}
+              selectHandler={(option) => setAccount(option)}
+              defaultOptionIndex={
+                accountOptions.findIndex(
+                  (o) => o.value === transaction.accountId
+                ) + 1
+              } 
+              options={accountOptions}
+            />
+          </div>
+        ) : (
+          <Dropdown
+            title={"Account"}
+            selectHandler={handleAccountChange}
+            options={accountOptions}
+            defaultOptionIndex={
+              accountOptions.findIndex(
+                (o) => o.value === transaction.accountId
+              ) + 1
+            }
+          />
+        )}
+
         <InputWrapper>
           <input type="text" placeholder="Note" {...register("note")} />
         </InputWrapper>

@@ -172,7 +172,7 @@ const TransactionCreate: React.FC<Props> = ({
                     toAccount: transferAccounts.toAccount,
                   })
                 }
-                options={accountOptions}
+                options={accountOptions.filter(o => o.value !== transferAccounts.toAccount.value)}
               />
               <Dropdown
                 title={"To"}
@@ -182,7 +182,7 @@ const TransactionCreate: React.FC<Props> = ({
                     toAccount: option,
                   })
                 }
-                options={accountOptions}
+                options={accountOptions.filter(o => o.value !== transferAccounts.fromAccount.value)}
               />
             </div>
           )}

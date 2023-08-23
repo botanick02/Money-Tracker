@@ -8,31 +8,30 @@ using System.Security.Claims;
 
 namespace MoneyTracker.App.GraphQl.S
 {
-
-
     public class StatisticsQuery : ObjectGraphType
     {
         public StatisticsQuery(StatisticService statisticService)
         {
-            Field<ListGraphType<GetStatisticsDtoType>>("positiveTransactions",
-                arguments: new QueryArguments(new QueryArgument<GetStatisticsForAccountsInputType> { Name = "Input" }),
-                resolve: context =>
+            Field<ListGraphType<GetStatisticsDtoType>>("PositiveTransactions")
+                .Argument<GetStatisticsForAccountsInputType>("Input")
+                .Resolve(context =>
                 {
                     var input = context.GetArgument<GetStatisticsForAccountsInput>("Input");
                     var userId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-                    var statistics = statisticService.GetStatistics(userId, accountId: input.AccountId);
+                    var statistics = statisticService.GetStatistics(userId, accountId: input.AccountId, fromDate: input.FromDate, toDate: input.ToDate);
 
                     return statistics.positiveTransactions;
                 }).Authorize();
 
-            Field<ListGraphType<GetStatisticsDtoType>>("negativeTransactions",
-                arguments: new QueryArguments(new QueryArgument<GetStatisticsForAccountsInputType> { Name = "Input" }),
-                resolve: context =>
+            Field<ListGraphType<GetStatisticsDtoType>>("NegativeTransactions")
+                .Argument<GetStatisticsForAccountsInputType>("Input")
+                .Resolve(context =>
                 {
                     var input = context.GetArgument<GetStatisticsForAccountsInput>("Input");
                     var userId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-                    var statistics = statisticService.GetStatistics(userId, accountId: input.AccountId);
+
+                    var statistics = statisticService.GetStatistics(userId, accountId: input.AccountId, fromDate: input.FromDate, toDate: input.ToDate);
 
                     return statistics.negativeTransactions;
                 }).Authorize();

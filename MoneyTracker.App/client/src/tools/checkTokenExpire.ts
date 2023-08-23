@@ -1,3 +1,4 @@
+
 import { AccessToken } from "../types/GraphQLType";
 
 
@@ -6,8 +7,9 @@ export const checkTokenExpire = (): boolean => {
     if (!token) {
         return true;
     }
+ 
     let dateExp = new Date(timeConverter(parseJwt(token).exp));
-  
+    
     return dateExp.valueOf() < new Date().valueOf();
 };
 
