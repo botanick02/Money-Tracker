@@ -26,14 +26,13 @@ const Settings = () => {
   ];
 
   return (
-    <main>
+    <main className="settings">
       {items.map((item, index) => (
         <Link key={index} to={item.pageUrl}>
           <SettingsItem item={item} />
         </Link>
       ))}
       
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
       <button
           className="button"
           onClick={() => {
@@ -43,7 +42,7 @@ const Settings = () => {
           Time Travel
         </button>
         <button
-          className="button"
+          className="button signout"
           onClick={() => {
             dispatch(SIGN_OUT());
             navigate("/");
@@ -51,7 +50,6 @@ const Settings = () => {
         >
           Sign Out
         </button>
-      </div>
     </main>
   );
 };

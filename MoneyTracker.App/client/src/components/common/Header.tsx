@@ -1,10 +1,14 @@
-import React from "react";
+import { useLocation } from "react-router-dom";
 import AccountSelector from "../AccountSelector";
 
 const Header = () => {
+  const location = useLocation();
+
+  console.log(location.pathname);
+
   return (
     <div className={"header"}>
-      <AccountSelector />
+      {location.pathname != "/settings" && <AccountSelector />}
     </div>
   );
 };
