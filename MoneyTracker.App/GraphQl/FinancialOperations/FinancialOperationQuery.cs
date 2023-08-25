@@ -13,7 +13,7 @@ namespace MoneyTracker.App.GraphQl.FinancialOperation
 {
     public class FinancialOperationQuery : ObjectGraphType
     {
-        public FinancialOperationQuery(TransactionService transactionService, HeaderTimeTravelProviderParser timeTravelParser)
+        public FinancialOperationQuery(IServiceProvider serviceProvider, HeaderTimeTravelProviderParser timeTravelParser)
         {
             Field<GetTransactionsDtoType>("GetAccountsTransactions")
                 .Argument<GetTransactionsForAccountsInputType>("Input")
@@ -24,6 +24,8 @@ namespace MoneyTracker.App.GraphQl.FinancialOperation
                     var userId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
                     var travelDateTime = timeTravelParser.ParseTravelDateTime(context);
+
+                    var transactionService = serviceProvider.GetRequiredService<TransactionService>();
 
                     return transactionService.GetTransactionsData(userId, input?.FromDate, input?.ToDate, input?.AccountId, input?.CategoryId, input?.TransactionType, travelDateTime);
                 }).Authorize();

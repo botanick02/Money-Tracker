@@ -4,11 +4,11 @@ namespace MoneyTracker.Business.Interfaces
 {
     public interface ICategoryRepository
     {
-        public List<Category> GetCategories(Guid userId, DateTime? dateTimeTo = null);
+        public List<Category> GetCategories(Guid userId, DateTime? dateTimeTo = null, IReadModelExtensions? readModelExtensionsScoped = null);
 
-        public Category? GetCategoryById(Guid id);
+        public Category? GetCategoryById(Guid id, IReadModelExtensions? readModelExtensionsScoped = null);
 
-        public Category GetTransferCategory(Guid userId);
+        public Category GetTransferCategory(Guid userId, IReadModelExtensions? readModelExtensionsScoped = null);
 
         public DefaultCategories GetDefaultCategories();
     }
