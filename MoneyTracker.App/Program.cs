@@ -14,7 +14,6 @@ using MoneyTracker.DataAccess.MsSQL;
 using MoneyTracker.Business.ReadStoreModel;
 using MoneyTracker.DataAccess.Repositories;
 using MoneyTracker.App.Helpers;
-using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
