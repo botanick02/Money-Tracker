@@ -17,6 +17,8 @@ const Transactions = () => {
     "expense" | "income" | "transfer"
   >("expense");
 
+  const timeTravelValue = useAppSelector(state => state.TimeTravel.datetime);
+
   const [isCreatePopupOpen, setIsCreatePopupOpen] = useState<boolean>(false);
 
   const incomes = useAppSelector((state) => state.FinancialOperation.incomes);
@@ -87,8 +89,6 @@ const Transactions = () => {
           Incomes
           <br />+ {incomes} ₴
         </div>
-
-       
         <div
           onClick={() => {
             changeTransactionTypeFilter("expense");
@@ -102,7 +102,7 @@ const Transactions = () => {
 
       <TransactionList />
 
-      {!isCreatePopupOpen && (
+      {(!isCreatePopupOpen && !timeTravelValue) && (
         <div
           onClick={() => {
             handleCreatePopupOpen();
