@@ -10,26 +10,31 @@ const Settings = () => {
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
-  const item = {
-    title: "Categories",
-    description: `You can create, edit, delete your categories`,
-    iconUrl: `https://picsum.photos/51`,
-  };
+  const items = [
+    {
+      title: "Categories",
+      description: "You can create, edit, delete your categories",
+      iconUrl: "https://picsum.photos/51",
+      pageUrl: "/CategoryList",
+    },
+    {
+      title: "Accounts",
+      description: "You can create, edit, delete your accounts",
+      iconUrl: "https://picsum.photos/51",
+      pageUrl: "/AccountsList",
+    },
+  ];
+
   return (
-    <main>
+
+    <div className="transaction-list">
       <Link to="/CategoryList">
-        <SettingsItem item={item} />
+        <SettingsItem item={item}/>
       </Link>
-
-      <TimeTravelPicker />
-
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
+      
+      <TimeTravelPicker/>
+      
+      <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
         <button
           className="button"
           onClick={() => {
