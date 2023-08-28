@@ -58,14 +58,12 @@ builder.Services.AddTransient<IAccountRepository, AccountRepository>();
 builder.Services.AddTransient<IAccountRepository, AccountRepository>();
 builder.Services.AddTransient<ICurrencyRepository, CurrencyRepository>();
 
-
 builder.Services.ConfigureCommandHandlers();
 builder.Services.ConfigureEventAppliers();
 
-builder.Services.AddTransient<ReadModelExtensions>();
+builder.Services.AddTransient<IReadModelExtensions, ReadModelExtensions>();
 
 builder.Services.AddSingleton<CurrentReadModel>();
-
 
 builder.Services.AddHttpContextAccessor();
 
@@ -98,7 +96,7 @@ var dbInitializer = app.Services.GetRequiredService<IDBInitializer>();
 dbInitializer.InitializeDatabase();
 
 var currentReadModel = app.Services.GetRequiredService<CurrentReadModel>();
-var readModelExtensions = app.Services.GetRequiredService<ReadModelExtensions>();
+var readModelExtensions = app.Services.GetRequiredService<IReadModelExtensions>();
 currentReadModel.CurrentModel = readModelExtensions.GetReadModel(DateTime.Now);
 
 app.UseAuthentication();

@@ -11,12 +11,14 @@ namespace MoneyTracker.Business.Services
         private readonly IAccountRepository accountRepository;
         private readonly ICategoryRepository categoryRepository;
         private readonly IMapper mapper;
-        public TransactionService(ITransactionRepository transactionRepository, IAccountRepository accountRepository, ICategoryRepository categoryRepository, IMapper mapper)
+        private readonly IReadModelExtensions readModelExtensions;
+        public TransactionService(ITransactionRepository transactionRepository, IAccountRepository accountRepository, ICategoryRepository categoryRepository, IMapper mapper, IReadModelExtensions readModelExtensions)
         {
             this.transactionRepository = transactionRepository;
             this.accountRepository = accountRepository;
             this.categoryRepository = categoryRepository;
             this.mapper = mapper;
+            this.readModelExtensions = readModelExtensions;
         }
 
         public GetTransactionsDataDto GetTransactionsData(Guid userId, DateTime? fromDate = null, DateTime? toDate = null, Guid? accountId = null, Guid? categoryId = null, string? transactionType = null, DateTime? timeTravelDateTime = null)
@@ -25,12 +27,12 @@ namespace MoneyTracker.Business.Services
 
             var transactions = accountId == null
                 ? GetPersonalAccountTransactions(userId, timeTravelDateTime)
-                : transactionRepository!.GetAccountTransactions((Guid)accountId, timeTravelDateTime);
+                : transactionRepository!.GetAccountTransactions((Guid)accountId, timeTravelDateTime, readModelExtensions);
 
             transactions = FilterTransactionsByCatAndDate(transactions, categoryId, fromDate, toDate);
             transactions.Sort((t1, t2) => t1.CreatedAt.CompareTo(t2.CreatedAt));
 
-            var categories = categoryRepository.GetCategories(userId, timeTravelDateTime);
+            var categories = categoryRepository.GetCategories(userId, timeTravelDateTime, readModelExtensions);
 
             foreach (var transaction in transactions)
             {
@@ -42,12 +44,12 @@ namespace MoneyTracker.Business.Services
                 {
                     if (transaction.Amount > 0)
                     {
-                        transactionDto.FromAccountId = transactionRepository.GetTransactionsByOperationId(transaction.OperationId, timeTravelDateTime).FirstOrDefault(t => t.Amount < 0)!.AccountId;
+                        transactionDto.FromAccountId = transactionRepository.GetTransactionsByOperationId(transaction.OperationId, timeTravelDateTime, readModelExtensions).FirstOrDefault(t => t.Amount < 0)!.AccountId;
                     }
                     else
                     {
                         transactionDto.FromAccountId = transactionDto.AccountId;
-                        transactionDto.AccountId = transactionRepository.GetTransactionsByOperationId(transaction.OperationId, timeTravelDateTime).FirstOrDefault(t => t.Amount > 0)!.AccountId;
+                        transactionDto.AccountId = transactionRepository.GetTransactionsByOperationId(transaction.OperationId, timeTravelDateTime, readModelExtensions).FirstOrDefault(t => t.Amount > 0)!.AccountId;
                     }
                 }
                 res.Transactions.Add(transactionDto);
@@ -64,8 +66,8 @@ namespace MoneyTracker.Business.Services
 
         private List<Transaction> GetPersonalAccountTransactions(Guid userId, DateTime? dateTime = null)
         {
-            var userPersonalAccounts = accountRepository!.GetUserAccounts(userId, Entities.AccountType.Personal, dateTime);
-            return userPersonalAccounts.SelectMany(account => transactionRepository!.GetAccountTransactions(account.Id, dateTime)).ToList();
+            var userPersonalAccounts = accountRepository!.GetUserAccounts(userId, Entities.AccountType.Personal, dateTime, readModelExtensions);
+            return userPersonalAccounts.SelectMany(account => transactionRepository!.GetAccountTransactions(account.Id, dateTime, readModelExtensions)).ToList();
         }
 
         private List<Transaction> FilterTransactionsByCatAndDate(List<Transaction> transactions, Guid? categoryId, DateTime? fromDate, DateTime? toDate)

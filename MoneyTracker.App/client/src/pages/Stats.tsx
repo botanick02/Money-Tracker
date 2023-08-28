@@ -34,10 +34,8 @@ const Stats = () => {
     }
   };
   return (
-    
     <main>
-         <TimeScopePanel onRangeChange={onRangeChange} />
-
+      <TimeScopePanel onRangeChange={onRangeChange} />
       <div className="transaction-sums">
         <div
           onClick={() => handleFilterChange("income")}
