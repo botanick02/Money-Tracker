@@ -24,10 +24,13 @@ const BudgetItem: React.FC<Props> = ({budget, setBudgetToEdit}) => {
         handleRowClick()
       }}>
         <div className={"row-item__category-icon"}>
-          <SvgFromPath path={budget.category.iconUrl} styles={{background: budget.category.color}}/>
+          {
+            !!budget.categories &&
+            <SvgFromPath path={budget.categories[0].iconUrl} styles={{background: budget.categories[0].color}}/>
+          }
         </div>
         <div>
-          <div className={"row-item__title"}>{budget.title?.length ? budget.title : budget.category.name}</div>
+          <div className={"row-item__title"}>{budget.title?.length ? budget.title : budget.categories[0].name}</div>
           <div className={"row-item__sub-title"}>
             Budget: {budget.limit}$ {isExtended ? "▲" : '▼'}
           </div>
