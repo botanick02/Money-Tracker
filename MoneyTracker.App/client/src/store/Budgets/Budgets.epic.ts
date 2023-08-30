@@ -1,5 +1,5 @@
 import {combineEpics, Epic, ofType} from "redux-observable";
-import {from, map, mergeMap, Observable, of} from "rxjs";
+import {from, map, mergeMap, Observable} from "rxjs";
 import {
   createBudgetAction,
   deleteBudgetAction,

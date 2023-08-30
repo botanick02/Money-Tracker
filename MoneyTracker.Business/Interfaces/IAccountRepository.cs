@@ -4,8 +4,8 @@ namespace MoneyTracker.Business.Interfaces
 {
     public interface IAccountRepository
     {
-        List<Account> GetUserAccounts(Guid userId, AccountType type, DateTime? dateTimeTo = null);
+        List<Account> GetUserAccounts(Guid userId, AccountType type, DateTime? dateTimeTo = null, IReadModelExtensions? readModelExtensionsScoped = null);
 
-        Account? GetUserAccountById(Guid accountId);
+        Account? GetUserAccountById(Guid accountId, IReadModelExtensions? readModelExtensionsScoped = null);
     }
 }

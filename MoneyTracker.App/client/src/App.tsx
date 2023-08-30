@@ -1,33 +1,25 @@
 import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "./hooks/useAppDispatch";
+import {useAppSelector } from "./hooks/useAppDispatch";
 import SignInForm from "./pages/SignInForm";
-import { checkTokenExpire } from "./tools/checkTokenExpire";
+
 import Registration from "./pages/Registration";
 import Transactions from "./pages/Transactions";
 import Layout from "./components/common/Layout";
 import Settings from "./pages/Settings";
 import Stats from "./pages/Stats";
 import Budgets from "./pages/Budgets";
+
 import CategoryList from "./components/Category/CategoryList";
-import { REFRESH_ACCESS_TOKEN } from "./store/Auth/Auth.slice";
+import AccountsList from "./components/Accounts/AccountsList";
 
 function App() {
   const isAuth = useAppSelector((state) => state.Auth.isAuth);
-  const accessTokenRefreshing = useAppSelector(
-    (state) => state.Auth.loading
-  );
-  const dispatch = useAppDispatch();
-console.log(isAuth)
+
+
   useEffect(() => {
-    console.log(checkTokenExpire())
-      if (checkTokenExpire()) {
-       
-        if (!accessTokenRefreshing ) {
-          dispatch(REFRESH_ACCESS_TOKEN());
-        }
-      }
-  }, []);
+
+  }, [isAuth]);
 
   return (
     <BrowserRouter>
@@ -38,6 +30,7 @@ console.log(isAuth)
             <Route path="/budgets" element={<Budgets/>} />
             <Route path="/stats" element={<Stats/>} />
             <Route path="/settings" element={<Settings/>}/>
+            <Route path="/AccountsList" element={<AccountsList/>}/>
             <Route path="/CategoryList" element={<CategoryList/>}/>
             <Route path="*" element={<Navigate to="/" />} />
           </Route>

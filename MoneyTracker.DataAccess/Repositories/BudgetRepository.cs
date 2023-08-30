@@ -6,16 +6,17 @@ namespace MoneyTracker.DataAccess.Repositories
 {
     public class BudgetRepository : IBudgetRepository
     {
-        private readonly ReadModelExtensions readModelExtensions;
+        private readonly IReadModelExtensions readModelExtensions;
 
-        public BudgetRepository(ReadModelExtensions readModelExtensions)
+        public BudgetRepository(IReadModelExtensions readModelExtensions)
         {
             this.readModelExtensions = readModelExtensions;
         }
-
-        public IEnumerable<Budget> GetBudgets(Guid userId, DateTime? dateTimeTo = null)
+        public IEnumerable<Budget> GetBudgets(Guid userId, DateTime? dateTimeTo = null, IReadModelExtensions? readModelExtensionsScoped = null)
         {
-            var readModel = readModelExtensions.GetReadModel(dateTimeTo);
+            var modelExtensions = readModelExtensionsScoped ?? readModelExtensions;
+
+            var readModel = modelExtensions.GetReadModel(dateTimeTo);
             return readModel.Budgets.Where(c => c.UserId == userId).ToList();
         }
     }

@@ -4,6 +4,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+	<DockerfileFastModeStage>base</DockerfileFastModeStage>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,10 +13,12 @@
     <PackageReference Include="GraphQL.Server.Ui.Altair" Version="7.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="7.0.7" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="7.0.5" />
+    <PackageReference Include="Microsoft.NET.Build.Containers" Version="7.0.400" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="client\" />
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>
