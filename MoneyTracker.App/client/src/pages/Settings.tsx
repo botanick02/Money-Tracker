@@ -1,14 +1,13 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import SettingsItem from "../elements/SettingsItem";
-import {useAppDispatch} from "../hooks/useAppDispatch";
-import {useNavigate} from "react-router";
-import {SIGN_OUT} from "../store/Auth/Auth.slice";
-import TimeTravelPicker from "../elements/TimeTravelPicker";
-
+import { useAppDispatch } from "../hooks/useAppDispatch";
+import { useNavigate } from "react-router";
+import { SIGN_OUT } from "../store/Auth/Auth.slice";
+import { SHOW_TIME_TRAVEL_POPUP } from "../store/TimeTravel/TimeTravel.slice";
 
 const Settings = () => {
   const navigate = useNavigate();
+
 
   const dispatch = useAppDispatch();
   const items = [
@@ -27,18 +26,23 @@ const Settings = () => {
   ];
 
   return (
-    <div className="transaction-list">
+    <main className="settings">
       {items.map((item, index) => (
         <Link key={index} to={item.pageUrl}>
           <SettingsItem item={item} />
         </Link>
       ))}
       
-      <TimeTravelPicker/>
-
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-        <button
+      <button
           className="button"
+          onClick={() => {
+            dispatch(SHOW_TIME_TRAVEL_POPUP(true));
+          }}
+        >
+          Time Travel
+        </button>
+        <button
+          className="button signout"
           onClick={() => {
             dispatch(SIGN_OUT());
             navigate("/");
@@ -46,8 +50,7 @@ const Settings = () => {
         >
           Sign Out
         </button>
-      </div>
-    </div>
+    </main>
   );
 };
 

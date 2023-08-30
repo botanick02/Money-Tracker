@@ -55,4 +55,31 @@ main {
   }
 }
 
+.time-travel-alert{
+  height: 30px;
+  background-color: $secondary-color;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+$small: 300px;
+$medium: 900px;
+$large: 1300px;
+
+.contaner {
+  margin: 0 auto;
+  @media screen and (max-width: $small) {
+    max-width:100%
+  }
+  @media screen and (min-width: $medium) {
+  
+  }
+  @media screen and (min-width: $large) {
+    min-width: 800px;
+
+  }
+}
+
 @import "AccountSelector";

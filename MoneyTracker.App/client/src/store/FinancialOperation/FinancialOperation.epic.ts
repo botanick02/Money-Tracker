@@ -28,6 +28,7 @@ import {
   UpdateOperation,
 } from "../../api/queries/FinancialOperations";
 import { FETCH_ACCOUNTS } from "../Account/Account.slice";
+import { SIGN_OUT_SUCCESS } from "../Auth/Auth.slice";
 
 export const TransactionItemsEpic: Epic<any, any, any> = (action$, state$) => {
   return action$.pipe(
@@ -46,7 +47,11 @@ export const TransactionItemsEpic: Epic<any, any, any> = (action$, state$) => {
       ).pipe(
         mergeMap((data: any) => {
           if (data.errors) {
-            // store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message));
+            if (data.errors[0].message === "REFRESH_ERROR") {
+              localStorage.clear();
+              return [SIGN_OUT_SUCCESS()];
+            }
+            console.log(data)
             return [FETCH_TRANSACTIONS_INFO_ERROR(data.errors[0].message)];
           } else {
             const transactions: Transaction[] =
@@ -76,6 +81,10 @@ export const AddDebitOperationEpic: Epic<any, any, any> = (action$, state$) => {
       from(request(AddDebit, { debitOperation: action.payload })).pipe(
         mergeMap((data: any) => {
           if (data.errors) {
+            if (data.errors[0].message === "REFRESH_ERROR") {
+              localStorage.clear();
+              return [SIGN_OUT_SUCCESS()];
+            }
             // store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message));
             return [ADD_FINANCIAL_OPERATION_ERROR(data.errors[0].message)];
           } else {
@@ -103,6 +112,10 @@ export const AddCreditOperationEpic: Epic<any, any, any> = (
       from(request(AddCredit, { creditOperation: action.payload })).pipe(
         mergeMap((data: any) => {
           if (data.errors) {
+            if (data.errors[0].message === "REFRESH_ERROR") {
+              localStorage.clear();
+              return [SIGN_OUT_SUCCESS()];
+            }
             // store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message));
             return [ADD_FINANCIAL_OPERATION_ERROR(data.errors[0].message)];
           } else {
@@ -130,6 +143,10 @@ export const AddTransferOperationEpic: Epic<any, any, any> = (
       from(request(AddTransfer, { transferOperation: action.payload })).pipe(
         mergeMap((data: any) => {
           if (data.errors) {
+            if (data.errors[0].message === "REFRESH_ERROR") {
+              localStorage.clear();
+              return [SIGN_OUT_SUCCESS()];
+            }
             // store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message));
             return [ADD_FINANCIAL_OPERATION_ERROR(data.errors[0].message)];
           } else {
@@ -159,6 +176,10 @@ export const CancelFinancialOperationEpic: Epic<any, any, any> = (
       ).pipe(
         mergeMap((data: any) => {
           if (data.errors) {
+            if (data.errors[0].message === "REFRESH_ERROR") {
+              localStorage.clear();
+              return [SIGN_OUT_SUCCESS()];
+            }
             // store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message));
             return [CANCEL_FINANCIAL_OPERATION_ERROR(data.errors[0].message)];
           } else {
@@ -188,6 +209,10 @@ export const UpdateFinancialOperationEpic: Epic<any, any, any> = (
       ).pipe(
         mergeMap((data: any) => {
           if (data.errors) {
+            if (data.errors[0].message === "REFRESH_ERROR") {
+              localStorage.clear();
+              return [SIGN_OUT_SUCCESS()];
+            }
             // store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message));
             return [UPDATE_FINANCIAL_OPERATION_ERROR(data.errors[0].message)];
           } else {

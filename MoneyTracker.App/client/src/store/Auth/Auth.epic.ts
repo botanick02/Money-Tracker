@@ -14,7 +14,6 @@ import {
   SIGN_OUT_ERROR,
   SIGN_OUT_SUCCESS,
   REFRESH_ACCESS_TOKEN_ERROR,
-  TOKEN_EXPIRE,
 } from "./Auth.slice";
 import { request } from "../../api/core";
 import {

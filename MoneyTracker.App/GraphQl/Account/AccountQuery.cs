@@ -9,7 +9,7 @@ namespace MoneyTracker.App.GraphQl.Account
 {
     public class AccountQuery : ObjectGraphType
     {
-        public AccountQuery(AccountService accountService, HeaderTimeTravelProviderParser timeTravelParser)
+        public AccountQuery(IServiceProvider serviceProvider, HeaderTimeTravelProviderParser timeTravelParser)
         {
             Field<GetAccountsDtoType>("GetUserAccounts")
                 .Resolve(context =>
@@ -17,6 +17,8 @@ namespace MoneyTracker.App.GraphQl.Account
                     var userId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
                     var travelDateTime = timeTravelParser.ParseTravelDateTime(context);
+
+                    var accountService = serviceProvider.GetRequiredService<AccountService>();
 
                     return accountService.GetUserPersonalAccounts(userId, travelDateTime);
                 }).Authorize();

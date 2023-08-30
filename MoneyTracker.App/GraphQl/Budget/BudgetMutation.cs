@@ -3,6 +3,7 @@ using GraphQL.Types;
 using MoneyTracker.App.GraphQl.Budget.Types;
 using MoneyTracker.Business.Commands;
 using MoneyTracker.Business.Commands.Budget;
+using System.Security.Claims;
 
 namespace MoneyTracker.App.GraphQl.Budget
 {
@@ -16,6 +17,8 @@ namespace MoneyTracker.App.GraphQl.Budget
                 .ResolveAsync(async context =>
                 {
                     var budget = context.GetArgument<Business.Entities.Budget>("Budget");
+                    budget.UserId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
 
                     var command = new CreateBudgetCommand(budget);
 
@@ -59,6 +62,8 @@ namespace MoneyTracker.App.GraphQl.Budget
                 .ResolveAsync(async context =>
                 {
                     var budget = context.GetArgument<Business.Entities.Budget>("Budget");
+                    budget.UserId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
 
                     var command = new EditBudgetCommand(budget);
 

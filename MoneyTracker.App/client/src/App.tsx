@@ -1,32 +1,24 @@
 import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "./hooks/useAppDispatch";
+import {useAppSelector } from "./hooks/useAppDispatch";
 import SignInForm from "./pages/SignInForm";
-import { checkTokenExpire } from "./tools/checkTokenExpire";
+
 import Registration from "./pages/Registration";
 import Transactions from "./pages/Transactions";
 import Layout from "./components/common/Layout";
 import Settings from "./pages/Settings";
 import Stats from "./pages/Stats";
 import Budgets from "./pages/Budgets";
-import { REFRESH_ACCESS_TOKEN } from "./store/Auth/Auth.slice";
+
 import CategoryList from "./components/Category/CategoryList";
 import AccountsList from "./components/Accounts/AccountsList";
 
 function App() {
   const isAuth = useAppSelector((state) => state.Auth.isAuth);
-  const dispatch = useAppDispatch();
+
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (checkTokenExpire() && window.location.port !== "3000") {
-        dispatch(REFRESH_ACCESS_TOKEN());
-       
-      }
-    }, 60000);
-    return () => {
-      clearInterval(interval);
-    };
+
   }, [isAuth]);
 
   return (

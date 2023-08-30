@@ -75,6 +75,7 @@ export const AccountSlice = createSlice({
     CREATE_ACCOUNT_ERROR(state, action: PayloadAction<string>) {
       state.loading = false;
       state.error = action.payload;
+    
     },
   },
 });

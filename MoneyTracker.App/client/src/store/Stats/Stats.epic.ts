@@ -9,6 +9,7 @@ import {
   FetchStatsVariables,
 } from "./Stats.slice";
 import { GetStats } from "../../api/queries/Stats";
+import { SIGN_OUT_SUCCESS } from "../Auth/Auth.slice";
 
 
 
@@ -25,6 +26,10 @@ export const GetStatsEpics: Epic<any, any, any> = (action$, state$) => {
       })).pipe(
         mergeMap((data: any) => {
           if (data.errors) {
+            if (data.errors[0].message === "REFRESH_ERROR") {
+              localStorage.clear();
+              return [SIGN_OUT_SUCCESS()];
+            }
             return [FETCH_STATS_ERROR(data.errors[0].message)];
           } else {
             const { negativeTransactions, positiveTransactions } = data.data.statistics;
