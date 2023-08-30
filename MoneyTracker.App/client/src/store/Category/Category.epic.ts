@@ -10,6 +10,7 @@ import {
   EDIT_CATEGORY_SUCCESS, createCategory, deleteCategory, editCategory,
 } from "./Category.slice";
 import {CreateCategory, DeleteCategory, EditCategory, GetCategories} from "../../api/queries/Categories";
+import { SIGN_OUT_SUCCESS } from "../Auth/Auth.slice";
 
 export const GetCategoriesEpic: Epic = (action$: Observable<ReturnType<typeof FETCH_CATEGORIES>>) => {
   return action$.pipe(
@@ -18,6 +19,9 @@ export const GetCategoriesEpic: Epic = (action$: Observable<ReturnType<typeof FE
       from(request(GetCategories)).pipe(
         mergeMap(((data: any) => {
             if (data.errors) {
+              if (data.errors[0].message === "REFRESH_ERROR") {
+                localStorage.clear();
+                return [SIGN_OUT_SUCCESS()]}
               // store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message));
               return [FETCH_CATEGORIES_ERROR(data.errors[0].message)];
             }
@@ -41,6 +45,9 @@ export const EditCategoryEpic: Epic = (action$: Observable<ReturnType<typeof edi
     mergeMap((action) => from(request(EditCategory,{category: action.payload})).pipe(
       mergeMap((data: any) => {
         if (data.errors) {
+          if (data.errors[0].message === "REFRESH_ERROR") {
+            localStorage.clear();
+            return [SIGN_OUT_SUCCESS()]}
           // store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message));
           return [EDIT_CATEGORY_ERROR(data.errors[0].message)];
         } else {
