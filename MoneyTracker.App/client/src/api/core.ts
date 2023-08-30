@@ -2,22 +2,40 @@ import { store } from "../store/store";
 import { RefreshAccessToken } from "./queries/Auth";
 
 const baseURL = "https://localhost:7299/graphql";
-
 // const baseURL = "https://money-tracker.livelymeadow-ee48f402.australiaeast.azurecontainerapps.io/graphql"
+
+let consecutiveErrors = 0; 
 
 export const request = async (query?: string, variables?: any) => {
   if (!query) return;
+
   const result = await runFetch(query, variables);
 
   if (!isTokenError(result.errors)) {
+   
+    consecutiveErrors = 0;
     return result;
   }
+
+  
+  consecutiveErrors++;
+
+  if (consecutiveErrors >= 1) {
+
+    return {
+        data: null,
+        errors: [{ message: "REFRESH_ERROR", extensions: { code: "REFRESH_ERROR" } }],
+      };
+  }
+
   const token = await refreshToken();
+
   console.log(token);
   localStorage.setItem("accessToken", token);
 
   return await runFetch(query, variables);
 };
+
 const isTokenError = (errors: any) => {
   return (
     Array.isArray(errors) &&
@@ -25,6 +43,7 @@ const isTokenError = (errors: any) => {
     errors[0].extensions.code === "ACCESS_DENIED"
   );
 };
+
 const runFetch = async (query?: string, variables?: any) => {
   var state = store.getState();
   var params = {
@@ -41,6 +60,7 @@ const runFetch = async (query?: string, variables?: any) => {
   const response = await fetch(baseURL, params);
   return await response.json();
 };
+
 const refreshToken = async () => {
   const response = await fetch(baseURL, {
     method: "POST",
@@ -48,10 +68,19 @@ const refreshToken = async () => {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ query:RefreshAccessToken }),
+    body: JSON.stringify({ query: RefreshAccessToken }),
   });
   const result = await response.json();
-  console.log( result.data.auth.refreshToken.accessToken, "token");
-  return result.data.auth.refreshToken.accessToken
+
+  if (result.data.auth.refreshToken?.accessToken) {
+    console.log(result.data.auth.refreshToken.accessToken, "token");
+    return result.data.auth.refreshToken.accessToken;
+  } else {
+    localStorage.removeItem('accessToken');
+    return "";
+  }
 };
-export const requestWithAuth = async (query?: string, variables?: any) => {};
+
+export const requestWithAuth = async (query?: string, variables?: any) => {
+  // Этот метод можно доработать для работы с авторизацией, если необходимо
+};
