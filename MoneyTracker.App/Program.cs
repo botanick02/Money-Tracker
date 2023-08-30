@@ -23,7 +23,7 @@ builder.Services.AddCors(options =>
     {
         builder.AllowAnyHeader()
                .WithMethods("POST", "OPTIONS")
-               .WithOrigins("https://money-tracker.livelymeadow-ee48f402.australiaeast.azurecontainerapps.io")
+               .WithOrigins("http://localhost:3000")
                .AllowCredentials();
     });
 });
@@ -57,14 +57,12 @@ builder.Services.AddTransient<IAccountRepository, AccountRepository>();
 builder.Services.AddTransient<IAccountRepository, AccountRepository>();
 builder.Services.AddTransient<ICurrencyRepository, CurrencyRepository>();
 
-
 builder.Services.ConfigureCommandHandlers();
 builder.Services.ConfigureEventAppliers();
 
-builder.Services.AddTransient<ReadModelExtensions>();
+builder.Services.AddTransient<IReadModelExtensions, ReadModelExtensions>();
 
 builder.Services.AddSingleton<CurrentReadModel>();
-
 
 builder.Services.AddHttpContextAccessor();
 
@@ -72,8 +70,8 @@ builder.Services.AddAuthentication("CustomTokenScheme")
         .AddScheme<AuthenticationSchemeOptions, CustomTokenAuthenticationHandler>("CustomTokenScheme", options => { })
         .AddGoogle(googleOptions =>
         {
-            googleOptions.ClientId = "1018492247415-kte528se113fqqkacaaq9tk0um1c1s7a.apps.googleusercontent.com";
-            googleOptions.ClientSecret = "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";
+            googleOptions.ClientId = "503578281552-2tkt0e280t9rguhv8m1fs0q7q5tv2kkk.apps.googleusercontent.com";
+            googleOptions.ClientSecret = "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";
         });
 
 builder.Services.AddAuthorization();
@@ -87,17 +85,17 @@ builder.Services.AddGraphQL(b => b
     .AddErrorInfoProvider(options => options.ExposeExceptionStackTrace = true)
     );
 
-//builder.Services.AddSpaStaticFiles(configuration =>
-//{
-//    configuration.RootPath = "client/public";
-//});
+builder.Services.AddSpaStaticFiles(configuration =>
+{
+    configuration.RootPath = "client/public";
+});
 var app = builder.Build();
 
 var dbInitializer = app.Services.GetRequiredService<IDBInitializer>();
 dbInitializer.InitializeDatabase();
 
 var currentReadModel = app.Services.GetRequiredService<CurrentReadModel>();
-var readModelExtensions = app.Services.GetRequiredService<ReadModelExtensions>();
+var readModelExtensions = app.Services.GetRequiredService<IReadModelExtensions>();
 currentReadModel.CurrentModel = readModelExtensions.GetReadModel(DateTime.Now);
 
 app.UseAuthentication();
@@ -107,24 +105,20 @@ app.UseCors("DefaultPolicy");
 app.UseGraphQLAltair();
 app.UseGraphQL("/graphql");
 
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
-}
-else
+if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
 
-app.UseStaticFiles();
-
 app.UseSpa(spa =>
 {
-    spa.Options.SourcePath = "wwwroot";
+    spa.Options.SourcePath = "client";
+    if (app.Environment.IsDevelopment())
+    {
+        spa.UseReactDevelopmentServer(npmScript: "start");
+    }
 });
-
 
 
 app.Run();

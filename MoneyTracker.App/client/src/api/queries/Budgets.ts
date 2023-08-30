@@ -3,7 +3,7 @@ export const GetBudgets = `
         budget {
           getBudgets {
             id,
-            category{
+            categories{
               id
               name
               type

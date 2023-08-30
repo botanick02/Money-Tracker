@@ -12,20 +12,22 @@ namespace MoneyTracker.Business.Services
         private readonly ITransactionRepository transactionRepository;
         private readonly ICategoryRepository categoryRepository;
         private readonly IAccountRepository accountRepository;
+        private readonly IReadModelExtensions readModelExtensions;
 
-        public StatisticService(ITransactionRepository transactionRepository, ICategoryRepository categoryRepository, IAccountRepository accountRepository)
+        public StatisticService(ITransactionRepository transactionRepository, ICategoryRepository categoryRepository, IAccountRepository accountRepository, IReadModelExtensions readModelExtensions)
         {
             this.transactionRepository = transactionRepository;
             this.categoryRepository = categoryRepository;
             this.accountRepository = accountRepository;
+            this.readModelExtensions = readModelExtensions;
         }
 
-        public (List<GetStatiscicsDto> positiveTransactions, List<GetStatiscicsDto> negativeTransactions) GetStatistics(Guid userId, DateTime? fromDate = null, DateTime? toDate = null, Guid? accountId = null)
+        public (List<GetStatiscicsDto> positiveTransactions, List<GetStatiscicsDto> negativeTransactions) GetStatistics(Guid userId, DateTime? fromDate = null, DateTime? toDate = null, Guid? accountId = null, DateTime? timeTravelDateTime = null)
         {
-            var transactions = transactionRepository.GetUserTransactions(userId);
-            var categories = categoryRepository.GetCategories(userId, toDate ?? DateTime.Now);
+            var transactions = transactionRepository.GetUserTransactions(userId, timeTravelDateTime, readModelExtensions);
+            var categories = categoryRepository.GetCategories(userId, timeTravelDateTime, readModelExtensions);
 
-            var accounts = accountRepository.GetUserAccounts(userId, AccountType.Personal);
+            var accounts = accountRepository.GetUserAccounts(userId, AccountType.Personal, timeTravelDateTime, readModelExtensions);
 
             var personalTransactions = transactions.Where(t => accounts.Any(a => a.Id == t.AccountId));
             if (accountId.HasValue)

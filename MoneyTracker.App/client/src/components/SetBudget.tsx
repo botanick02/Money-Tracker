@@ -1,11 +1,10 @@
 import React, {FC, useEffect, useState} from 'react';
-import InputWrapper from "../elements/InputWrapper";
 import {Budget, BudgetToCreate, BudgetToEdit} from "../types/Budget";
 import Dropdown, {Option} from "../elements/Dropdown";
 import {useAppDispatch, useAppSelector} from "../hooks/useAppDispatch";
 import {createBudgetAction, deleteBudgetAction, editBudgetAction} from "../store/Budgets/Budgets.slice";
 import {FETCH_CATEGORIES} from "../store/Category/Category.slice";
-import {ReactComponent as DeleteIcon} from "../assets/icons/Delete-icon.svg";
+import InputWithTitle from "../elements/InputWithTitle";
 
 interface Props {
   budget?: Budget
@@ -13,18 +12,21 @@ interface Props {
 }
 
 function pickBudgetForWrite(budget: Budget): BudgetToEdit {
-  const {category, spent, ...budgetWrite} = budget;
-  return {...budgetWrite, categoryId: category.id};
+  const {categories, spent, ...budgetWrite} = budget;
+  return {...budgetWrite, categoryId: categories.map(x => x.id)};
 }
 
-const emptyCreateBudget: BudgetToCreate = {limit: 0, title: "", categoryId: ""}
+const emptyCreateBudget: BudgetToCreate = {
+  limit: 0,
+  title: "",
+  categoryId: []
+}
+
 
 const SetBudget: FC<Props> = ({budget, openPopupHandle}) => {
-  const [editableBudget, setBudget] = useState<BudgetToEdit | BudgetToCreate>(budget
-    ? pickBudgetForWrite(budget)
-    : emptyCreateBudget)
-
+  const [editableBudget, setBudget] = useState<BudgetToEdit | BudgetToCreate>(emptyCreateBudget)
   const categoryItems = useAppSelector((state) => state.Category.categories);
+  const [pickedCategories, setPickedCategories] = useState<string[]>([""])
   const categoryOptions: Option[] = categoryItems.map((category) => ({
     label: category.name,
     value: category.id,
@@ -32,15 +34,10 @@ const SetBudget: FC<Props> = ({budget, openPopupHandle}) => {
 
   const dispatch = useAppDispatch()
 
-  const handleDelete = () => {
-    openPopupHandle()
-    if (budget?.id)
-      dispatch(deleteBudgetAction(budget.id))
-  }
-
   const handleLimitInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBudget({...editableBudget, limit: e.target.value.length ? parseInt(e.target.value) : 0})
   }
+
   const handleTitleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBudget({...editableBudget, title: e.target.value})
   }
@@ -51,50 +48,81 @@ const SetBudget: FC<Props> = ({budget, openPopupHandle}) => {
   }
 
   const handleSafe = () => {
+    const budgetToSafe: BudgetToEdit | BudgetToCreate = {
+      ...editableBudget,
+      categoryId: pickedCategories.filter(x => x.length > 0)
+    }
+
     if (!!budget)
-      dispatch(editBudgetAction(editableBudget as BudgetToEdit))
+      dispatch(editBudgetAction(budgetToSafe as BudgetToEdit))
     else
-      dispatch(createBudgetAction(editableBudget as BudgetToCreate))
+      dispatch(createBudgetAction(budgetToSafe as BudgetToCreate))
     openPopupHandle()
   }
 
-  const handleCategoryChange = (option: Option) => {
-    setBudget({...editableBudget, categoryId: option.value});
+  const handleCategoryChange = (index: number, option: Option) => {
+    setPickedCategories(prevState => prevState.map((elem, i) => i === index ? option.value : elem))
   };
+  const handleAddCategory = () => {
+    setPickedCategories(prevState => [...prevState, ""])
+  }
+  const handleRemoveCategory = (index: number) => {
+    setPickedCategories(prevState => prevState.filter((_, i) => i !== index))
+  }
 
   useEffect(() => {
     dispatch(FETCH_CATEGORIES());
   }, [])
 
+  useEffect(() => {
+    if (!budget)
+      return
+    setBudget(pickBudgetForWrite(budget))
+    setPickedCategories(budget?.categories.map(item => item.id))
+  }, [budget])
+
+
   return (
     <div className={'popup-bg'}>
       <div className={"popup"}>
-        <div style={{background: budget?.category.color}} className={"popup__header"}>{budget?.category.name}</div>
+        <div style={{background: budget?.categories[0].color}}
+             className={"popup__header"}>{budget?.title}</div>
         <div className={"popup__fields"}>
+          <InputWithTitle
+            type={"text"}
+            placeholder={"Title"}
+            onChange={handleTitleInput}
+            value={editableBudget.title!}/>
+
+          <InputWithTitle
+            type={"number"}
+            placeholder={"Budget"}
+            onChange={handleLimitInput}
+            value={editableBudget.limit ? editableBudget.limit : ""}/>
+
           {
-            !!budget?.id &&
-            <div onClick={handleDelete} className={"row-item__amount delete-category"}>
-              <DeleteIcon/>
-            </div>
+            pickedCategories.map((item, index) =>
+              <div key={index} className={"popup__row"}>
+                <Dropdown
+                  title={"Category"}
+                  selectHandler={(option) => {
+                    handleCategoryChange(index, option)
+                  }}
+                  options={categoryOptions}
+                  defaultOptionIndex={
+                    (() => {
+                      const i = categoryOptions.findIndex((x) => x.value === item)
+                      return i >= 0 ? i + 1 : undefined
+                    })()
+                  }
+                />
+                {index !== 0 && <div onClick={() => handleRemoveCategory(index)}>—</div>}
+              </div>
+            )
           }
-          Budget
-          <InputWrapper>
-            <input onChange={handleLimitInput} value={editableBudget.limit} type="text"
-                   placeholder="Budget"/>
-          </InputWrapper>
 
-          Title
-          <InputWrapper>
-            <input onChange={handleTitleInput} value={editableBudget.title ?? ""} type="text"
-                   placeholder="Title"/>
-          </InputWrapper>
+          <button onClick={handleAddCategory} className={'button category-add'}>Add Category</button>
 
-          Category
-          <Dropdown
-            title={"Category"}
-            selectHandler={handleCategoryChange}
-            options={categoryOptions}
-          />
         </div>
 
         <div className={"popup__row"}>

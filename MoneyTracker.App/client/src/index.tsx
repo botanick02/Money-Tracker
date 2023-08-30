@@ -12,7 +12,7 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <Provider store={store}>
-    <GoogleOAuthProvider clientId="1018492247415-kte528se113fqqkacaaq9tk0um1c1s7a.apps.googleusercontent.com">
+    <GoogleOAuthProvider clientId="503578281552-2tkt0e280t9rguhv8m1fs0q7q5tv2kkk.apps.googleusercontent.com">
       <App />
     </GoogleOAuthProvider>
   </Provider>
