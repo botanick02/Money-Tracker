@@ -20,7 +20,7 @@ export const request = async (query?: string, variables?: any) => {
   
   consecutiveErrors++;
 
-  if (consecutiveErrors >= 3) {
+  if (consecutiveErrors >= 1) {
 
     return {
         data: null,
