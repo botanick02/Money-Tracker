@@ -12,13 +12,12 @@ namespace MoneyTracker.DataAccess.Repositories
         {
             this.readModelExtensions = readModelExtensions;
         }
-
-        public IEnumerable<Budget> GetBudgets(DateTime? dateTimeTo = null, IReadModelExtensions? readModelExtensionsScoped = null)
+        public IEnumerable<Budget> GetBudgets(Guid userId, DateTime? dateTimeTo = null, IReadModelExtensions? readModelExtensionsScoped = null)
         {
             var modelExtensions = readModelExtensionsScoped ?? readModelExtensions;
 
             var readModel = modelExtensions.GetReadModel(dateTimeTo);
-            return readModel.Budgets.ToList();
+            return readModel.Budgets.Where(c => c.UserId == userId).ToList();
         }
     }
 }

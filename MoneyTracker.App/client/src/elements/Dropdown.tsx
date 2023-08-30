@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, {FC, useEffect, useState} from 'react';
 
 export interface Option {
   label: string;
@@ -8,16 +8,17 @@ export interface Option {
 
 interface SelectPropsType {
   selectHandler(option: Option): void;
+
   options: Option[];
   title?: string;
   defaultOptionIndex?: number;
 }
 
-const Dropdown: FC<SelectPropsType> = ({ selectHandler, options, title, defaultOptionIndex }) => {
+const Dropdown: FC<SelectPropsType> = ({selectHandler, options, title, defaultOptionIndex}) => {
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
-  const [selectedOptionId, setSelectedOptionId] = useState(defaultOptionIndex ?? 0);
+  const [selectedOptionId, setSelectedOptionId] = useState( 0);
 
-  options = title ? [{ label: title, value: null }, ...options] : options;
+  options = title ? [{label: title, value: null}, ...options] : options;
 
   const setSelectedThenCloseDropdown = (index: number) => {
     setSelectedOptionId(index);
@@ -39,6 +40,11 @@ const Dropdown: FC<SelectPropsType> = ({ selectHandler, options, title, defaultO
     window.addEventListener('click', mouseListener);
   }, []);
 
+  useEffect(() => {
+    if (defaultOptionIndex)
+      setSelectedOptionId(defaultOptionIndex)
+  }, [defaultOptionIndex])
+
   return (
     <div className={'select-wrapper'}>
       <button
@@ -52,7 +58,7 @@ const Dropdown: FC<SelectPropsType> = ({ selectHandler, options, title, defaultO
         {options[selectedOptionId].icon ? (
           <span>
             <div className={'dropdown-icon'}>
-              <img src={options[selectedOptionId].icon} alt="https://picsum.photos/52" />
+              <img src={options[selectedOptionId].icon} alt="https://picsum.photos/52"/>
             </div>
             {options[selectedOptionId].label}
           </span>
@@ -81,7 +87,7 @@ const Dropdown: FC<SelectPropsType> = ({ selectHandler, options, title, defaultO
               {option.icon ? (
                 <span>
                   <div className={'dropdown-icon'}>
-                    <img src={option.icon} alt="https://picsum.photos/52" />
+                    <img src={option.icon} alt="https://picsum.photos/52"/>
                   </div>
                   {option.label}
                 </span>
