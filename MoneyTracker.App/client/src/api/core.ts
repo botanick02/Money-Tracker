@@ -20,7 +20,7 @@ export const request = async (query?: string, variables?: any) => {
   
   consecutiveErrors++;
 
-  if (consecutiveErrors >= 1) {
+  if (consecutiveErrors >= 2) {
 
     return {
         data: null,
@@ -82,5 +82,5 @@ const refreshToken = async () => {
 };
 
 export const requestWithAuth = async (query?: string, variables?: any) => {
-  // Этот метод можно доработать для работы с авторизацией, если необходимо
+ 
 };
