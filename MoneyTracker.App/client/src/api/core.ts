@@ -1,8 +1,8 @@
 import { store } from "../store/store";
 import { RefreshAccessToken } from "./queries/Auth";
 
-const baseURL = "https://localhost:7299/graphql";
-// const baseURL = "https://money-tracker.livelymeadow-ee48f402.australiaeast.azurecontainerapps.io/graphql"
+// const baseURL = "https://localhost:7299/graphql";
+const baseURL = "https://money-tracker.livelymeadow-ee48f402.australiaeast.azurecontainerapps.io/graphql"
 
 let consecutiveErrors = 0; 
 
