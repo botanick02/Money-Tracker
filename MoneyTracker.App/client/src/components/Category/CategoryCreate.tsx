@@ -12,7 +12,7 @@ import { Category, CategoryToCreate } from "../../types/Category";
 
 interface Props {
   openPopupHandle(): void;
-  transactionDefaultType?: "income" | "expense" | "transfer";
+  categoryDefaultType?: "income" | "expense";
   categoryToEdit?: Category;
 }
 
@@ -20,7 +20,7 @@ const defaultBackground = "#02dbff";
 
 const CategoryCreate: React.FC<Props> = ({
   openPopupHandle,
-  transactionDefaultType,
+  categoryDefaultType: transactionDefaultType,
   categoryToEdit,
 }) => {
   const [category, setCategory] = useState<CategoryToCreate | Category>(
@@ -64,7 +64,6 @@ const CategoryCreate: React.FC<Props> = ({
     openPopupHandle();
   };
 
-  // console.log(category)
   return (
     <div className="popup-bg category-create">
       <div className="popup">
