@@ -2,8 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
 import CategorySetsItemItem from "../../elements/CategoryItem";
 import CategoryCreate from "./CategoryCreate";
-import { FETCH_CATEGORIES } from "../../store/Category/Category.slice";
+import {
+  FETCH_CATEGORIES,
+  deleteCategory,
+} from "../../store/Category/Category.slice";
 import { Category } from "../../types/Category";
+import DeletePopup from "../DeletePopup";
 
 const CategoryList = () => {
   const editSuccess = useAppSelector((state) => state.Category.editSuccess);
@@ -18,6 +22,15 @@ const CategoryList = () => {
     .filter((c) => c.type !== "transfer")
     .filter((c) => c.isActive == true)
     .filter((c) => c.type === categoryTypeFilter);
+
+  const [catOnDeletionId, setCatOnDeletionId] = useState<string | null>(null);
+
+  const confirmDeletion = () => {
+    if (catOnDeletionId) {
+      dispatch(deleteCategory(catOnDeletionId));
+    }
+    setCatOnDeletionId(null);
+  };
 
   const handlePopupOpen = () => {
     document.body.classList.toggle("no-scroll");
@@ -44,6 +57,12 @@ const CategoryList = () => {
 
   return (
     <main className={"category-settings-list"}>
+      {catOnDeletionId && (
+        <DeletePopup
+          onDeleteApprove={confirmDeletion}
+          closePopupHandle={() => setCatOnDeletionId(null)}
+        />
+      )}
       <div className={"transaction-sums"}>
         <div
           onClick={() => {
@@ -77,6 +96,7 @@ const CategoryList = () => {
         <CategorySetsItemItem
           key={item.id}
           category={item}
+          onDeleteClick={setCatOnDeletionId}
           onClick={() => {
             handleCategoryItemClick(item);
           }}

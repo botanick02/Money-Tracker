@@ -9,25 +9,16 @@ import DeletePopup from "../components/DeletePopup";
 interface CategoryItemProps {
   category: Category;
   onClick: () => void;
+  onDeleteClick: (catId: string) => void;
 }
 
-const CategoryItem: FC<CategoryItemProps> = ({ category, onClick }) => {
-  const dispatch = useAppDispatch();
-
-  const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
-
-  const confirmDeletion = () => {
-      dispatch(deleteCategory(category.id));
-  };
-
+const CategoryItem: FC<CategoryItemProps> = ({
+  category,
+  onClick,
+  onDeleteClick,
+}) => {
   return (
     <div className="row-item" onClick={onClick}>
-      {isDeletePopupOpen && (
-        <DeletePopup
-          onDeleteApprove={confirmDeletion}
-          closePopupHandle={() => setIsDeletePopupOpen(false)}
-        />
-      )}
       <div
         className={`row-item__indicator row-item__indicator__${category.type.toLowerCase()}`}
       />
@@ -46,7 +37,7 @@ const CategoryItem: FC<CategoryItemProps> = ({ category, onClick }) => {
       <div
         onClick={(event) => {
           event.stopPropagation();
-          setIsDeletePopupOpen(true);
+          onDeleteClick(category.id);
         }}
         className={"row-item__amount delete-category"}
       >
