@@ -8,7 +8,11 @@ import {
 } from "../../store/Category/Category.slice";
 import categoryIcons from "./categoryIconsPath.json";
 import SvgFromPath from "../../elements/SvgFromPath";
-import { Category, CategoryToCreate } from "../../types/Category";
+import {
+  Category,
+  CategoryToCreate,
+  CategoryToUpdate,
+} from "../../types/Category";
 
 interface Props {
   openPopupHandle(): void;
@@ -20,7 +24,7 @@ const defaultBackground = "#02dbff";
 
 const CategoryCreate: React.FC<Props> = ({
   openPopupHandle,
-  categoryDefaultType: transactionDefaultType,
+  categoryDefaultType,
   categoryToEdit,
 }) => {
   const [category, setCategory] = useState<CategoryToCreate | Category>(
@@ -28,7 +32,7 @@ const CategoryCreate: React.FC<Props> = ({
       color: defaultBackground,
       iconUrl: "",
       name: "",
-      type: transactionDefaultType ?? "expense",
+      type: categoryDefaultType ?? "expense",
     }
   );
   const dispatch = useAppDispatch();
@@ -51,8 +55,14 @@ const CategoryCreate: React.FC<Props> = ({
 
   const handleSave = () => {
     if (!!categoryToEdit) {
-      console.log(category);
-      dispatch(editCategory(category as Category));
+      const catToUpdate: CategoryToUpdate = {
+        id: categoryToEdit.id,
+        name: category.name,
+        color: category.color,
+        iconUrl: category.iconUrl,
+        type: category.type
+      }
+      dispatch(editCategory(catToUpdate));
     } else {
       dispatch(createCategory(category));
     }
