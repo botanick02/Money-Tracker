@@ -1,0 +1,11 @@
+.category-settings-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  width: 100%; 
+  padding-bottom: 80px;
+
+  .row-item{
+    margin-top: 15px;
+  }
+}
