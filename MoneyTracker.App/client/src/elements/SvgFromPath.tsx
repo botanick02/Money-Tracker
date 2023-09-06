@@ -2,7 +2,7 @@ import React, {CSSProperties, useEffect, useState} from 'react';
 
 interface Props {
   path: string
-  styles: CSSProperties
+  styles?: CSSProperties
   isActive?: boolean
 }
 
@@ -13,9 +13,7 @@ const SvgFromPath: React.FC<Props> = ({path, styles, isActive}) => {
   const divRef = React.useRef<HTMLDivElement | null>(null)
 
   const relativeLuminance = (r: number, g: number, b: number) => {
-    const res = (0.2126 * r) + (0.7152 * g) + (0.0722 * b);
-    console.log(res)
-    return res
+    return (0.2126 * r) + (0.7152 * g) + (0.0722 * b)
   }
 
   useEffect(() => {

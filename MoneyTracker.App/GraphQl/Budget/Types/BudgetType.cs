@@ -11,7 +11,7 @@ namespace MoneyTracker.App.GraphQl.Budget.Types
             Field(x => x.Id);
             Field(x => x.Limit);
             Field(x => x.Title);
-            Field(x => x.Category, type: typeof(CategoryType), nullable: false);
+            Field(x => x.Categories, type: typeof(ListGraphType<CategoryType>), nullable: false);
             Field(x => x.Spent);
         }
     }

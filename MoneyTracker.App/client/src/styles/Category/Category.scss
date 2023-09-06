@@ -1,29 +1,28 @@
 @import "src/styles/Variables";
 
-.category-sums{
+.category-sums {
   display: flex;
   justify-content: space-between;
   padding: 0 8px;
   margin-top: 20px;
 
-  >div{
+  > div {
     width: 116px;
     height: 27px;
     border-radius: 10px;
     text-align: center;
     padding: 5px;
     cursor: pointer;
-
   }
-  &__income{
+  &__income {
     background: $primary-color;
   }
-  &__expense{
+  &__expense {
     background: $secondary-color;
   }
 }
 
-.new-category{
+.new-category {
   position: fixed;
   border-radius: 50%;
   height: 50px;
@@ -35,8 +34,8 @@
   bottom: $layout-panel_height + 15px;
 }
 
-.category-create{
-  .popup__header{
+.category-create {
+  .popup__header {
     $border-radius: 20px;
     $padding: 31px;
     justify-content: space-between;
@@ -45,7 +44,7 @@
       width: 100%;
       text-align: center;
       line-height: 34px;
-      opacity: .4;
+      opacity: 0.4;
       cursor: pointer;
 
       &.current-type {
@@ -65,64 +64,62 @@
   }
 }
 
-.icon-area{
+.icon-area {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   gap: 10px;
   max-height: 10em;
   overflow-y: auto;
-  .svg-icon{
+  .svg-icon {
     padding: 5px;
     width: 3em;
     height: 3em;
   }
-  .active-icon{
+  .active-icon {
     border: 2px solid white;
   }
 }
 
-.delete-category{
+.delete-category {
   width: 25px;
   height: 25px;
   cursor: pointer;
   position: relative;
-  z-index: 2;
-  svg{
+  svg {
     height: 100%;
     width: 100%;
-    path{
+    path {
       fill: white;
     }
   }
 }
 
-
-.svg-icon{
+.svg-icon {
   padding: 5px;
   width: 100%;
   height: 100%;
-  svg{
+  svg {
     width: 100%;
     height: 100%;
   }
 }
 
-.svg-fill-white{
+.svg-fill-white {
   border-color: white;
-  svg{
+  svg {
     path {
       fill: white !important;
     }
   }
 }
-.svg-fill-black{
+.svg-fill-black {
   border-color: black;
-  svg{
+  svg {
     path {
       fill: black !important;
     }
   }
 }
 
-@import "CategoryList";
+@import "CategoryStatsList";

@@ -8,3 +8,7 @@ export interface Category extends CategoryToCreate{
   id: string;
   isActive: boolean;
 }
+
+export interface CategoryToUpdate extends CategoryToCreate{
+  id: string;
+}

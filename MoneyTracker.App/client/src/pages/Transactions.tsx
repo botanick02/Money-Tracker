@@ -59,7 +59,7 @@ const Transactions = () => {
 
   useEffect(() => {
     dispatch(FETCH_TRANSACTIONS_INFO());
-  }, [dispatch, currentAccountId, dateRange, currentCategoryId]);
+  }, [dispatch, currentAccountId, dateRange, currentCategoryId, timeTravelValue]);
 
   useEffect(() => {
     dispatch(FETCH_CATEGORIES());

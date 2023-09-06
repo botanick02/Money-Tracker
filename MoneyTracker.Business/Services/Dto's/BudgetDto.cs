@@ -10,16 +10,17 @@ namespace MoneyTracker.Business.Services.Dto_s
     public class BudgetDto
     {
         public Guid Id { get; set; }
+        public Guid UserId { get; set; }
         public decimal Limit { get; set; }
         public string? Title { get; set; }
-        public Category Category { get; set; }
+        public IEnumerable<Category> Categories { get; set; }
         public decimal Spent { get; set; }
 
-        public BudgetDto(Budget budget, Category category, decimal spent)
+        public BudgetDto(Budget budget, IEnumerable<Category> category, decimal spent)
         {
             Id = budget.Id;
             Limit = budget.Limit;
-            Category = category;
+            Categories = category;
             Spent = spent;
             Title = budget.Title;
         }
