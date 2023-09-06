@@ -78,5 +78,42 @@
       justify-content: center;
       align-items: center;
     }
+    a{
+      color: $primary-color;
+      text-decoration: underline;
+    }
+    .budgets-category-list{
+      width: 150px;
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
+      &__item{
+        width: 100%;
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        gap: .5em;
+      }
+    }
+    .category-icon{
+      width: 25px;
+      height: 25px;
+    }
+
+    .budgets-category-list-label{
+      min-height: 64px;
+      height: 100%;
+      position: relative;
+    }
+    .delete-icon{
+      width: 35px;
+      height: 35px;
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      path{
+        fill: white;
+      }
+    }
   }
 }

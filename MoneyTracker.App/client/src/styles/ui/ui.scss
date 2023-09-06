@@ -24,3 +24,13 @@
 .no-scroll{
   overflow: hidden;
 }
+
+.amount{
+  &__expense{color: $secondary-color}
+  &__income{color: $primary-color}
+}
+
+.category-icon{
+  width: 50px;
+  height: 100%;
+}
