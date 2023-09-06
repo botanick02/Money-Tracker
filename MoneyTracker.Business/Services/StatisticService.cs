@@ -22,18 +22,41 @@ namespace MoneyTracker.Business.Services
             this.readModelExtensions = readModelExtensions;
         }
 
+
+        private IEnumerable<Transaction> FilterTransactionsByDate(IEnumerable<Transaction> transactions, DateTime? fromDate, DateTime? toDate)
+        {
+            if (fromDate != null)
+            {
+                transactions = transactions.Where(t => t.CreatedAt > fromDate);
+            }
+
+            if (toDate != null)
+            {
+                transactions = transactions.Where(t => t.CreatedAt < toDate);
+            }
+
+            return transactions;
+        }
+
+
         public (List<GetStatiscicsDto> positiveTransactions, List<GetStatiscicsDto> negativeTransactions) GetStatistics(Guid userId, DateTime? fromDate = null, DateTime? toDate = null, Guid? accountId = null, DateTime? timeTravelDateTime = null)
+
         {
             var transactions = transactionRepository.GetUserTransactions(userId, timeTravelDateTime, readModelExtensions);
             var categories = categoryRepository.GetCategories(userId, timeTravelDateTime, readModelExtensions);
 
+
             var accounts = accountRepository.GetUserAccounts(userId, AccountType.Personal, timeTravelDateTime, readModelExtensions);
 
+
             var personalTransactions = transactions.Where(t => accounts.Any(a => a.Id == t.AccountId));
+
             if (accountId.HasValue)
             {
                 personalTransactions = personalTransactions.Where(t => t.AccountId == accountId.Value);
             }
+
+            personalTransactions = FilterTransactionsByDate(personalTransactions, fromDate, toDate);
 
             var negativeTransactions = personalTransactions.Where(t => t.Amount < 0);
             var positiveTransactions = personalTransactions.Where(t => t.Amount >= 0);

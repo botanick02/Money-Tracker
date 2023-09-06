@@ -8,7 +8,7 @@ interface StatsTransactionItemProps {
 }
 
 const StatsTransactionItem: FC<StatsTransactionItemProps> = ({ id, name, currency, balance }) => {
-  const amountClassName = balance >= 0 ? 'row-item__amount row-item__amount__income' : 'row-item__amount row-item__amount__expense';
+  
 
   return (
 
@@ -22,7 +22,7 @@ const StatsTransactionItem: FC<StatsTransactionItemProps> = ({ id, name, currenc
   <div>
     <div className="row-item__title">{name}</div>
   </div>
-  <div className={amountClassName}>{balance}</div>
+  <div className="row-item__amount">{balance}</div>
 </div>
 
   );
