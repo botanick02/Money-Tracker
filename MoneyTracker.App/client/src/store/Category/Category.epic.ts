@@ -48,7 +48,7 @@ export const EditCategoryEpic: Epic = (action$: Observable<ReturnType<typeof edi
           if (data.errors[0].message === "REFRESH_ERROR") {
             localStorage.clear();
             return [SIGN_OUT_SUCCESS()]}
-          // store.dispatch(SHOW_ERROR_MESSAGE(data.errors[0].message));
+        
           return [EDIT_CATEGORY_ERROR(data.errors[0].message)];
         } else {
           return [EDIT_CATEGORY_SUCCESS({editSuccess: true})];
