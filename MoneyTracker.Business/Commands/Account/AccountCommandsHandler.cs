@@ -30,5 +30,6 @@ namespace MoneyTracker.Business.Commands.Account
                 return true;
             }
         }
+
     }
 }

@@ -4,7 +4,7 @@ import { RefreshAccessToken } from "./queries/Auth";
 const baseURL = "https://localhost:7299/graphql";
 // const baseURL = "https://money-tracker.livelymeadow-ee48f402.australiaeast.azurecontainerapps.io/graphql"
 
-let consecutiveErrors = 0; 
+
 
 export const request = async (query?: string, variables?: any) => {
   if (!query) return;
@@ -12,28 +12,31 @@ export const request = async (query?: string, variables?: any) => {
   const result = await runFetch(query, variables);
 
   if (!isTokenError(result.errors)) {
-   
-    consecutiveErrors = 0;
+    
     return result;
   }
 
-  
-  consecutiveErrors++;
+  // consecutiveErrors++;
 
-  if (consecutiveErrors >= 1) {
-
-    return {
-        data: null,
-        errors: [{ message: "REFRESH_ERROR", extensions: { code: "REFRESH_ERROR" } }],
-      };
-  }
+  // if (consecutiveErrors >= 2) {
+  //   return {
+  //     data: null,
+  //     errors: [{ message: "REFRESH_ERROR", extensions: { code: "REFRESH_ERROR" } }],
+  //   };
+  // }
 
   const token = await refreshToken();
 
-  console.log(token);
-  localStorage.setItem("accessToken", token);
+  if (token) {
+    localStorage.setItem("accessToken", token);
 
-  return await runFetch(query, variables);
+    return await runFetch(query, variables);
+  } else {
+    return {
+      data: null,
+      errors: [{ message: "REFRESH_ERROR", extensions: { code: "REFRESH_ERROR" } }],
+    };
+  }
 };
 
 const isTokenError = (errors: any) => {
@@ -82,5 +85,26 @@ const refreshToken = async () => {
 };
 
 export const requestWithAuth = async (query?: string, variables?: any) => {
-  // Этот метод можно доработать для работы с авторизацией, если необходимо
+  if (!query) return;
+
+  const result = await runFetch(query, variables);
+
+  if (!isTokenError(result.errors)) {
+
+    return result;
+  }
+
+
+  const token = await refreshToken();
+
+  if (token) {
+    localStorage.setItem("accessToken", token);
+
+    return await runFetch(query, variables);
+  } else {
+    return {
+      data: null,
+      errors: [{ message: "REFRESH_ERROR", extensions: { code: "REFRESH_ERROR" } }],
+    };
+  }
 };
