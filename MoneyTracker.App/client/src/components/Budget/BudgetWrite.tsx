@@ -25,7 +25,10 @@ const emptyCreateBudget: BudgetToCreate = {
 
 const BudgetWrite: FC<Props> = ({budget, openPopupHandle}) => {
   const [editableBudget, setBudget] = useState<BudgetToEdit | BudgetToCreate>(emptyCreateBudget)
-  const categoryItems = useAppSelector((state) => state.Category.categories);
+  const {categories} = useAppSelector((state) => state.Category);
+  const categoryItems = categories.filter(x => x.type === 'expense')
+
+
   const [pickedCategories, setPickedCategories] = useState<string[]>([""])
   const categoryOptions: Option[] = categoryItems.map((category) => ({
     label: category.name,
