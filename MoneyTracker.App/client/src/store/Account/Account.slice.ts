@@ -77,11 +77,26 @@ export const AccountSlice = createSlice({
       state.error = action.payload;
     
     },
+    
+    DELETE_ACCOUNT(state, action: PayloadAction<{ accountID: string }>) {
+      console.log(action.payload)
+      state.loading = true;
+      state.error = null;
+    },
+    DELETE_ACCOUNT_SUCCESS(state, action: PayloadAction<string>) {
+      state.loading = false;
+      state.error = null;
+    },
+    DELETE_ACCOUNT_ERROR(state, action: PayloadAction<string>) {
+      state.loading = false;
+      state.error = action.payload;
+    
+    },
   },
 });
 
 export const {
-  FETCH_ACCOUNTS, FETCH_ACCOUNTS_ERROR, FETCH_ACCOUNTS_SUCCESS, SET_CURRENT_ACCOUNT_ID,SET_CURRENT_CATEGORY,CREATE_ACCOUNT,CREATE_ACCOUNT_SUCCESS,CREATE_ACCOUNT_ERROR
+  FETCH_ACCOUNTS, FETCH_ACCOUNTS_ERROR, FETCH_ACCOUNTS_SUCCESS, SET_CURRENT_ACCOUNT_ID,SET_CURRENT_CATEGORY,CREATE_ACCOUNT,CREATE_ACCOUNT_SUCCESS,CREATE_ACCOUNT_ERROR,DELETE_ACCOUNT,DELETE_ACCOUNT_SUCCESS,DELETE_ACCOUNT_ERROR
 } = AccountSlice.actions;
 
 export default AccountSlice.reducer;

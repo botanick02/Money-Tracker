@@ -35,7 +35,7 @@ export const AuthSlice = createSlice({
       state.isAuth = false;
       state.tokenExpire= false;
     },
-    SIGN_IN_GOOGLE(state, action: PayloadAction<{ token: string }>) {
+    SIGN_IN_GOOGLE(state, action: PayloadAction<{ accountID: string }>) {
       state.loading = true;
       state.error = null;
       state.isAuth = false;
