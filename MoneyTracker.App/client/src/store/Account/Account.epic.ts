@@ -9,7 +9,8 @@ import {
   DELETE_ACCOUNT,
   FETCH_ACCOUNTS_SUCCESS,
   DELETE_ACCOUNT_ERROR,
-  DELETE_ACCOUNT_SUCCESS
+  DELETE_ACCOUNT_SUCCESS,
+  SET_CURRENT_ACCOUNT_ID
 } from "./Account.slice";
 import { request } from "../../api/core";
 import { CreateAccount, GetAccounts, deleteAccount } from "../../api/queries/Accounts";
@@ -75,10 +76,11 @@ export const deleteAccountEpic: Epic<any, any, any> = (action$, state$) => {
           if (data.errors) {
             return of(DELETE_ACCOUNT_ERROR(data.errors[0].message));
           } else {
-           
+            
             return of(
               DELETE_ACCOUNT_SUCCESS(data),
-              { type: FETCH_ACCOUNTS } 
+              { type: FETCH_ACCOUNTS } ,
+              SET_CURRENT_ACCOUNT_ID("total")
             );
           }
         }),
