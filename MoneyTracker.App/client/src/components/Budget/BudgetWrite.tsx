@@ -75,7 +75,7 @@ const BudgetWrite: FC<Props> = ({budget, openPopupHandle}) => {
 
   useEffect(() => {
     dispatch(FETCH_CATEGORIES());
-  }, [])
+  }, [dispatch])
 
   useEffect(() => {
     if (!budget)

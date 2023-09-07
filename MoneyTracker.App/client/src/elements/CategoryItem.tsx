@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import { FC } from "react";
 import { Category } from "../types/Category";
 import SvgFromPath from "./SvgFromPath";
 import { useAppDispatch } from "../hooks/useAppDispatch";

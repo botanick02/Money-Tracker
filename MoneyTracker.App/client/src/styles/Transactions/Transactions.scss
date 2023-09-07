@@ -134,16 +134,6 @@
   }
 }
 
-.new-transaction {
-  position: fixed;
-  border-radius: 50%;
-  height: 50px;
-  width: 50px;
-  font-size: 35px;
-  font-weight: 300;
-  padding: 14px;
-  right: 15px;
-  bottom: $layout-panel_height + 15px;
-}
+
 
 @import "TransactionList";

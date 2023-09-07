@@ -109,8 +109,6 @@ const Transactions = () => {
           }}
           className={"new-transaction button"}
         >
-          {" "}
-          +{" "}
         </div>
       )}
     </main>
