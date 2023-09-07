@@ -10,9 +10,13 @@ query getPersonalAccounts{
             symbol
           }
           balance
+          isActive
         }
         total
+        
+        
       }
+      
     }
   }
   `

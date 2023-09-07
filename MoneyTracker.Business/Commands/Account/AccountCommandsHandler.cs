@@ -23,7 +23,8 @@ namespace MoneyTracker.Business.Commands.Account
                     AccountId: Guid.NewGuid(),
                     UserId: command.UserId,
                     Name: command.Name,
-                    Currency: currencyRepository.GetCurrencyByCode("UAH")
+                    Currency: currencyRepository.GetCurrencyByCode("UAH"),
+                    IsActive:true
                 );
 
                 await eventStore.AppendEventAsync(@event);
@@ -46,16 +47,11 @@ namespace MoneyTracker.Business.Commands.Account
 
             public async Task<bool> HandleAsync(DeactivatePersonalAccountCommand command)
             {
-                // Ensure that command.UserId is a string
-                string userIdString = command.UserId.ToString();
-
-                // Convert the string representation of AccountId and UserId to Guid
                 Guid accountId = Guid.Parse(command.AccountId);
-                Guid userId = Guid.Parse(userIdString);
+               
 
-                var @event = new PersonalAccountDeactivatedEvent(accountId, userId);
-
-                await eventStore.AppendEventAsync(@event);
+                var personalAccountDeactivatedEvent = new PersonalAccountDeactivatedEvent(accountId);
+                await eventStore.AppendEventAsync(personalAccountDeactivatedEvent);
 
                 return true;
             }
@@ -63,5 +59,6 @@ namespace MoneyTracker.Business.Commands.Account
 
 
 
+
     }
-}
+    }

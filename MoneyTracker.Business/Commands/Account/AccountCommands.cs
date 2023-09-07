@@ -7,5 +7,5 @@
 
 
 
-    public record DeactivatePersonalAccountCommand(Guid UserId,string AccountId);
+    public record DeactivatePersonalAccountCommand(string AccountId);
 }

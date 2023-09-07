@@ -3,6 +3,7 @@ using GraphQL.Types;
 using MoneyTracker.App.GraphQl.Category.Types.Inputs;
 using MoneyTracker.Business.Commands;
 using MoneyTracker.Business.Commands.Account;
+using MoneyTracker.Business.Commands.Category;
 using MoneyTracker.Business.Entities;
 using System.Security.Claims;
 
@@ -55,9 +56,9 @@ namespace MoneyTracker.App.GraphQl.Account
          var userId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
          var command = new DeactivatePersonalAccountCommand
          (
-             UserId: userId,
              AccountId: accountID
          );
+
          await commandDispatcher.DispatchAsync(command);
          return true;
      }).Authorize();

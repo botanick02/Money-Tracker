@@ -55,7 +55,7 @@ namespace MoneyTracker.Business.Events.Account
                 UserId = @event.UserId,
                 Currency = @event.Currency,
                 Name = @event.Name,
-                //IsActive = @event.IsActive,
+                IsActive = @event.IsActive,
                 Type = Entities.AccountType.Personal
             };
 
@@ -66,22 +66,20 @@ namespace MoneyTracker.Business.Events.Account
     }
     public class PersonalAccountDeactivatedEventApplier : IEventApplier<PersonalAccountDeactivatedEvent>
     {
-        public async Task<ReadModel> ApplyAsync(ReadModel currentModel, PersonalAccountDeactivatedEvent @event)
+        public async Task<ReadModel> ApplyAsync(ReadModel currentmodel, PersonalAccountDeactivatedEvent @event)
         {
-            
-            var updatedModel = currentModel;
+            var updatedModel = currentmodel;
 
-            var accountToRemove = updatedModel.Accounts.FirstOrDefault(account => account.Id == @event.AccountId);
-
-            if (accountToRemove != null)
+            var accountToUpdate = updatedModel.Accounts.FirstOrDefault(account => account.Id == @event.AccountId);
+            if (accountToUpdate != null)
             {
-                updatedModel.Accounts = updatedModel.Accounts.Where(account => account.Id != @event.AccountId).ToList();
-                //updatedModel.IsActive = false;
+                accountToUpdate.IsActive = false;
             }
 
             return updatedModel;
         }
     }
+
     public class UpdatePersonalAccountCommandApplier : IEventApplier<UpdatePersonalAccountCommand>
     {
         public async Task<ReadModel> ApplyAsync(ReadModel currentModel, UpdatePersonalAccountCommand @event)
@@ -95,7 +93,7 @@ namespace MoneyTracker.Business.Events.Account
             {
                 accountToUpdate.Name = @event.Name;
                 accountToUpdate.Currency = @event.Currency;
-                //accountToUpdate.IsActive = @event.IsActive;
+              
             }
 
             return updatedModel;
