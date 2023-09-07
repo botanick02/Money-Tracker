@@ -1,38 +1,36 @@
-import React, {useEffect, useState} from 'react';
+import { useEffect, useState } from "react";
 import BudgetItem from "../elements/BudgetItem";
-import {useAppDispatch, useAppSelector} from "../hooks/useAppDispatch";
-import {fetchBudgetAction} from "../store/Budgets/Budgets.slice";
-import {Budget} from "../types/Budget";
-import TimeScopePanel from '../components/TimeScopePanel';
+import { useAppDispatch, useAppSelector } from "../hooks/useAppDispatch";
+import { fetchBudgetAction } from "../store/Budgets/Budgets.slice";
+import { Budget } from "../types/Budget";
+import TimeScopePanel from "../components/TimeScopePanel";
 import BudgetPopup from "../components/Budget/BudgetPopup";
 
-
 const Budgets = () => {
-  const {budgetList} = useAppSelector(state => state.Budgets)
-  const [budgetToEdit, setBudgetToEdit] = useState<Budget | undefined>()
-  const dispatch = useAppDispatch()
+  const { budgetList } = useAppSelector((state) => state.Budgets);
+  const [budgetToEdit, setBudgetToEdit] = useState<Budget | undefined>();
+  const dispatch = useAppDispatch();
   const [isCreatePopupOpen, setIsCreatePopupOpen] = useState<boolean>(false);
-  const [mode, setMode] = useState<'details' | 'write'>('details')
+  const [mode, setMode] = useState<"details" | "write">("details");
 
   const handlePopupOpen = () => {
     document.body.classList.toggle("no-scroll");
 
     setIsCreatePopupOpen((prevState) => {
-      if (prevState)
-        setBudgetToEdit(undefined)
-      return !prevState
+      if (prevState) setBudgetToEdit(undefined);
+      return !prevState;
     });
-    setMode("details")
+    setMode("details");
   };
 
   const handleBudgetClick = (item: Budget) => {
-    setBudgetToEdit(item)
-    handlePopupOpen()
-  }
+    setBudgetToEdit(item);
+    handlePopupOpen();
+  };
 
   useEffect(() => {
-    dispatch(fetchBudgetAction(""))
-  }, [])
+    dispatch(fetchBudgetAction(""));
+  }, []);
 
   return (
     <main className={"budgets"}>
@@ -45,12 +43,15 @@ const Budgets = () => {
         />
       )}
 
-      <TimeScopePanel onRangeChange={() => {}}/>
+      <TimeScopePanel onRangeChange={() => {}} />
 
-
-      {
-        budgetList.map(item => <BudgetItem budgetClick={handleBudgetClick} key={item.id} budget={item}/>)
-      }
+      {budgetList.map((item) => (
+        <BudgetItem
+          budgetClick={handleBudgetClick}
+          key={item.id}
+          budget={item}
+        />
+      ))}
 
       {!isCreatePopupOpen && (
         <div
@@ -58,10 +59,7 @@ const Budgets = () => {
             handlePopupOpen();
           }}
           className={"new-transaction button"}
-        >
-          {" "}
-          +{" "}
-        </div>
+        ></div>
       )}
     </main>
   );

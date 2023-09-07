@@ -1,4 +1,5 @@
-import React, { FC } from 'react';
+import React, { FC } from "react";
+import Amount from "./Amount";
 
 interface StatsTransactionItemProps {
   id: string;
@@ -7,24 +8,33 @@ interface StatsTransactionItemProps {
   balance: number;
 }
 
-const StatsTransactionItem: FC<StatsTransactionItemProps> = ({ id, name, currency, balance }) => {
-  
-
+const StatsTransactionItem: FC<StatsTransactionItemProps> = ({
+  id,
+  name,
+  currency,
+  balance,
+}) => {
   return (
-
- 
-  
-<div className="row-item">
-  <div className="row-item__indicator row-item__indicator__currency" />
-  <div className="row-item__category-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-    {currency}
-  </div>
-  <div>
-    <div className="row-item__title">{name}</div>
-  </div>
-  <div className="row-item__amount">{balance}</div>
-</div>
-
+    <div className="row-item">
+      <div className="row-item__indicator row-item__indicator__currency" />
+      <div
+        className="row-item__category-icon"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100%",
+        }}
+      >
+        {currency}
+      </div>
+      <div>
+        <div className="row-item__title">{name}</div>
+      </div>
+      <div className="row-item__amount">
+        <Amount sum={balance} />
+      </div>
+    </div>
   );
 };
 
