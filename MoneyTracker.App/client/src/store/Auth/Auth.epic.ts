@@ -24,6 +24,7 @@ import {
   Register,
 } from "../../api/queries/Auth";
 import { store } from "../store";
+import { SET_DATETIME } from "../TimeTravel/TimeTravel.slice";
 
 export const SignInEpic: Epic<any, any, any> = (action$) => {
   return action$.pipe(
@@ -112,6 +113,7 @@ export const SignOutEpic: Epic<any, any, any> = (action$: any) => {
         map((data: any) => {
           if (data.data.auth.logOut === true) {
             localStorage.clear();
+            store.dispatch(SET_DATETIME(null));
             return SIGN_OUT_SUCCESS();
           } else {
             // store.dispatch(SHOW_ERROR_MESSAGE("Sign out error!"));

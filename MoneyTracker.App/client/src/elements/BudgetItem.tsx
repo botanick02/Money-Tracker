@@ -1,27 +1,21 @@
 import React from 'react';
 import {Budget} from "../types/Budget";
-import {Link} from "react-router-dom";
-import {ReactComponent as EditIcon} from "../assets/icons/Edit-icon.svg";
 import SvgFromPath from "./SvgFromPath";
+import Amount from "./Amount";
 
 interface Props {
   budget: Budget
-  setBudgetToEdit(item: Budget): void
+
+  budgetClick(item: Budget): void
 }
 
-const BudgetItem: React.FC<Props> = ({budget, setBudgetToEdit}) => {
+const BudgetItem: React.FC<Props> = ({budget, budgetClick}) => {
   const limitSpent = budget.limit + budget.spent
-  const [isExtended, setIsExtended] = React.useState<boolean>(false)
-
-  const handleRowClick = () => {
-    if (budget.limit > 0)
-      setIsExtended(!isExtended)
-  }
 
   return (
-    <div>
+    <>
       <div className={`row-item`} onClick={() => {
-        handleRowClick()
+        budgetClick(budget)
       }}>
         <div className={"row-item__category-icon"}>
           {
@@ -32,26 +26,14 @@ const BudgetItem: React.FC<Props> = ({budget, setBudgetToEdit}) => {
         <div>
           <div className={"row-item__title"}>{budget.title?.length ? budget.title : budget.categories[0].name}</div>
           <div className={"row-item__sub-title"}>
-            Budget: {budget.limit}$ {isExtended ? "▲" : '▼'}
+            Budget: {budget.limit}$
           </div>
         </div>
         <div
-          className={`row-item__amount row-item__amount__${limitSpent > 0 ? "income" : "expense"}`}>{limitSpent} $
+          className={'row-item__amount'}><Amount sum={limitSpent}/>
         </div>
       </div>
-      {
-        isExtended &&
-        <div className={"budgets__row-extended"}>
-          <div>
-            <div onClick={() => {
-              setBudgetToEdit(budget)
-            }}><EditIcon className={"edit-icon"}/></div>
-            <div>Spent: {budget.spent}$</div>
-            <Link to={"/home"}>View Transactions</Link>
-          </div>
-        </div>
-      }
-    </div>
+    </>
 
   );
 };

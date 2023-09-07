@@ -7,6 +7,7 @@ using System.Xml.Linq;
 
 namespace MoneyTracker.Business.Entities
 {
+
     public class Budget
     {
         public Guid Id { get; set; } = Guid.NewGuid();
@@ -14,6 +15,7 @@ namespace MoneyTracker.Business.Entities
         public decimal Limit { get; set; } = 0;
         public string? Title { get; set; }
         public IEnumerable<Guid> CategoryId { get; set; }
+
 
         public Budget(IEnumerable<Guid> CategiryId) {
             this.CategoryId = CategiryId;

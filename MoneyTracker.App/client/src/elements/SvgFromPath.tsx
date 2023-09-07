@@ -2,7 +2,7 @@ import React, {CSSProperties, useEffect, useState} from 'react';
 
 interface Props {
   path: string
-  styles: CSSProperties
+  styles?: CSSProperties
   isActive?: boolean
 }
 
