@@ -24,3 +24,11 @@ query getPersonalAccounts{
     }
   }
 `;
+ 
+
+export const deleteAccount = `mutation DeleteAccount($accountID: String!) {
+  account {
+    deleteAccount(accountID: $accountID)
+  }
+}
+`;

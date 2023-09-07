@@ -6,11 +6,13 @@ import {
   CREATE_ACCOUNT_ERROR,
   CREATE_ACCOUNT_SUCCESS,
   FETCH_ACCOUNTS,
-  FETCH_ACCOUNTS_ERROR,
+  DELETE_ACCOUNT,
   FETCH_ACCOUNTS_SUCCESS,
+  DELETE_ACCOUNT_ERROR,
+  DELETE_ACCOUNT_SUCCESS
 } from "./Account.slice";
 import { request } from "../../api/core";
-import { CreateAccount, GetAccounts } from "../../api/queries/Accounts";
+import { CreateAccount, GetAccounts, deleteAccount } from "../../api/queries/Accounts";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { REFRESH_ACCESS_TOKEN, SIGN_IN_ERROR } from "../Auth/Auth.slice";
 
@@ -62,4 +64,28 @@ export const createAccountEpic: Epic<any, any, any> = (action$, state$) => {
   );
 };
 
-export const AccountEpics = combineEpics(fetchAccountsEpic, createAccountEpic);
+
+export const deleteAccountEpic: Epic<any, any, any> = (action$, state$) => {
+  return action$.pipe(
+    ofType(DELETE_ACCOUNT),
+    mergeMap((action) =>
+    from(request(deleteAccount, {  accountID: action.payload.accountID } ))
+    .pipe(
+        mergeMap((data) => {
+          if (data.errors) {
+            return of(DELETE_ACCOUNT_ERROR(data.errors[0].message));
+          } else {
+           
+            return of(
+              DELETE_ACCOUNT_SUCCESS(data),
+              { type: FETCH_ACCOUNTS } 
+            );
+          }
+        }),
+        catchError((error) => of(CREATE_ACCOUNT_ERROR("An error occurred")))
+      )
+    )
+  );
+};
+
+export const AccountEpics = combineEpics(fetchAccountsEpic, createAccountEpic,deleteAccountEpic);

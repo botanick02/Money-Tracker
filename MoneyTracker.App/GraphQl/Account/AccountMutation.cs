@@ -33,7 +33,7 @@ namespace MoneyTracker.App.GraphQl.Account
     .ResolveAsync(async context =>
     {
         var accountName = context.GetArgument<string>("accountName");
-        var accountID = context.GetArgument<string>("accountId");
+        var accountID = context.GetArgument<string>("accountID");
         var userId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
         var command = new UpdatePersonalAccountCommand
         (
