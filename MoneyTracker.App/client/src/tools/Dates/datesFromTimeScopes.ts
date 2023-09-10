@@ -1,4 +1,3 @@
-import { getCurrentISOMonthValue } from "./currentIsoDates";
 
 export function getMondayDateOfWeek(week: number, year: number) {
   let date = new Date(Date.UTC(year, 0, 1 + (week - 1) * 7));

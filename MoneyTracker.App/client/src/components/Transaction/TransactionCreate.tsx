@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import InputWrapper from "../../elements/InputWrapper";
 import Dropdown, { Option } from "../../elements/Dropdown";
 import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
@@ -7,7 +7,6 @@ import {
   ADD_DEBIT_OPERATION,
   ADD_TRANSFER_OPERATION,
 } from "../../store/FinancialOperation/FinancialOperation.slice";
-import { FETCH_CATEGORIES } from "../../store/Category/Category.slice";
 import { useForm } from "react-hook-form";
 import { getCurrentISODateTimeValue } from "../../tools/Dates/currentIsoDates";
 
@@ -31,7 +30,6 @@ const TransactionCreate: React.FC<Props> = ({
 
   const {
     register,
-    formState: { errors },
     handleSubmit,
   } = useForm<FormFields>({
     defaultValues: {
@@ -40,7 +38,7 @@ const TransactionCreate: React.FC<Props> = ({
   });
 
   const dispatch = useAppDispatch();
-  const categoryItems = useAppSelector((state) => state.Category.categories).filter(t => t.isActive == true);
+  const categoryItems = useAppSelector((state) => state.Category.categories).filter(t => t.isActive === true);
   const accounts = useAppSelector((state) => state.Account.accounts);
 
   const accountOptions: Option[] = [];

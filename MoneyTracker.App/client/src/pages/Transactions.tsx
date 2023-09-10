@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import TimeScopePanel from "../components/TimeScopePanel";
+import { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/useAppDispatch";
 import {
   FETCH_TRANSACTIONS_INFO,
@@ -7,36 +6,19 @@ import {
   SET_TRANSACTION_TYPE,
 } from "../store/FinancialOperation/FinancialOperation.slice";
 import TransactionCreate from "../components/Transaction/TransactionCreate";
-import TransactionList from "../components/Transaction/TransactionList";
+import TimeScopePanel from "../components/TimeScopePanel";
 import { FETCH_CATEGORIES } from "../store/Category/Category.slice";
+import TransactionList from "../components/Transaction/TransactionList";
 
 const Transactions = () => {
   const dispatch = useAppDispatch();
-  const [defaultTransaction, setDefaultTransaction] = useState<
-    "expense" | "income" | "transfer"
-  >("expense");
 
   const timeTravelValue = useAppSelector((state) => state.TimeTravel.datetime);
-
-  const [isCreatePopupOpen, setIsCreatePopupOpen] = useState<boolean>(false);
-
   const incomes = useAppSelector((state) => state.FinancialOperation.incomes);
   const expenses = useAppSelector((state) => state.FinancialOperation.expenses);
-
   const transactionType = useAppSelector(
     (state) => state.FinancialOperation.transactionType
   );
-
-  const [dateRangeIsSet, setDateRangeIsSet] = useState(false);
-
-  const changeTransactionTypeFilter = (type: "expense" | "income") => {
-    if (transactionType !== type) {
-      dispatch(SET_TRANSACTION_TYPE(type));
-    } else {
-      dispatch(SET_TRANSACTION_TYPE(null));
-    }
-  };
-
   const currentAccountId = useAppSelector(
     (state) => state.Account.currentAccountId
   );
@@ -44,9 +26,27 @@ const Transactions = () => {
     (state) => state.FinancialOperation.dateRange
   );
 
+  const [isCreatePopupOpen, setIsCreatePopupOpen] = useState<boolean>(false);
+  const [dateRangeIsSet, setDateRangeIsSet] = useState(false);
+
   const handleCreatePopupOpen = () => {
     document.body.classList.toggle("no-scroll");
     setIsCreatePopupOpen((prevState) => !prevState);
+  };
+
+  const onRangeChange = (startDate: string | null, endDate: string | null) => {
+    if ((startDate && endDate) || (!startDate && !endDate)) {
+      setDateRangeIsSet(true);
+      dispatch(SET_DATE_RANGE({ fromDate: startDate, toDate: endDate }));
+    }
+  };
+
+  const changeTransactionTypeFilter = (type: "expense" | "income") => {
+    if (transactionType !== type) {
+      dispatch(SET_TRANSACTION_TYPE(type));
+    } else {
+      dispatch(SET_TRANSACTION_TYPE(null));
+    }
   };
 
   useEffect(() => {
@@ -61,19 +61,12 @@ const Transactions = () => {
     dateRange,
     timeTravelValue,
     transactionType,
-    dateRangeIsSet
+    dateRangeIsSet,
   ]);
 
   useEffect(() => {
     dispatch(FETCH_CATEGORIES());
   }, [dispatch]);
-
-  const onRangeChange = (startDate: string | null, endDate: string | null) => {
-    if ((startDate && endDate) || (!startDate && !endDate)) {
-      setDateRangeIsSet(true);
-      dispatch(SET_DATE_RANGE({ fromDate: startDate, toDate: endDate }));
-    }
-  };
 
   return (
     <main className={"transactions"}>
@@ -81,13 +74,14 @@ const Transactions = () => {
         <TransactionCreate closePopupHandle={handleCreatePopupOpen} />
       )}
       <TimeScopePanel onRangeChange={onRangeChange} />
+
       <div className={"transaction-sums"}>
         <div
           onClick={() => {
             changeTransactionTypeFilter("income");
           }}
           className={`transaction-sums__income ${
-            transactionType == "income" && "active"
+            transactionType === "income" && "active"
           }`}
         >
           Incomes
@@ -98,7 +92,7 @@ const Transactions = () => {
             changeTransactionTypeFilter("expense");
           }}
           className={`transaction-sums__expense ${
-            transactionType == "expense" && "active"
+            transactionType === "expense" && "active"
           }`}
         >
           Expenses
