@@ -23,7 +23,7 @@ builder.Services.AddCors(options =>
     {
         builder.AllowAnyHeader()
                .WithMethods("POST", "OPTIONS")
-               .WithOrigins("https://money-tracker.livelymeadow-ee48f402.australiaeast.azurecontainerapps.io")
+               .WithOrigins("https://money-tracker.railway.internal")
                .AllowCredentials();
     });
 });
