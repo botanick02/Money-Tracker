@@ -26,7 +26,7 @@ RUN dotnet restore "MoneyTracker.App/MoneyTracker.App.csproj"
 COPY . .
 WORKDIR "/src/MoneyTracker.App/client" 
 
-RUN npm i
+RUN npm i --force
 RUN npm run build
 
 WORKDIR "/src/MoneyTracker.App"
