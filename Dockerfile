@@ -23,14 +23,12 @@ COPY ["MoneyTracker.App/MoneyTracker.App.csproj", "MoneyTracker.App/"]
 COPY ["MoneyTracker.DataAccess/MoneyTracker.DataAccess.csproj", "MoneyTracker.DataAccess/"]
 RUN dotnet restore "MoneyTracker.App/MoneyTracker.App.csproj"
 COPY . .
-WORKDIR "/src/MoneyTracker.App/client"  # Change to the client directory
+WORKDIR "/src/MoneyTracker.App/client"
 
-# Add the npm build step here
 RUN npm i --force
 RUN npm run build
 
-WORKDIR "/src/MoneyTracker.App"  # Change back to the main app directory
-
+WORKDIR "/src/MoneyTracker.App"
 RUN dotnet build "MoneyTracker.App.csproj" -c Release -o /app/build
 
 FROM build AS publish
