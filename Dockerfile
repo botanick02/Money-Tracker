@@ -5,8 +5,7 @@
 # escape=`
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
-EXPOSE 80
-EXPOSE 443
+EXPOSE $PORT  # Expose the port defined by Railway
 RUN apt-get update
 RUN apt-get install -y curl
 RUN apt-get install -y libpng-dev libjpeg-dev curl libxi6 build-essential libgl1-mesa-glx
@@ -24,12 +23,13 @@ COPY ["MoneyTracker.App/MoneyTracker.App.csproj", "MoneyTracker.App/"]
 COPY ["MoneyTracker.DataAccess/MoneyTracker.DataAccess.csproj", "MoneyTracker.DataAccess/"]
 RUN dotnet restore "MoneyTracker.App/MoneyTracker.App.csproj"
 COPY . .
-WORKDIR "/src/MoneyTracker.App/client" 
+WORKDIR "/src/MoneyTracker.App/client"  # Change to the client directory
 
-RUN npm i --force
+# Add the npm build step here
+RUN npm install --force
 RUN npm run build
 
-WORKDIR "/src/MoneyTracker.App"
+WORKDIR "/src/MoneyTracker.App"  # Change back to the main app directory
 
 RUN dotnet build "MoneyTracker.App.csproj" -c Release -o /app/build
 
@@ -41,4 +41,6 @@ WORKDIR /app
 COPY --from=publish /app/publish .
 # COPY JSON files from the Resources directory of MoneyTracker.DataAccess
 COPY ["MoneyTracker.DataAccess/Resources/", "/app/Resources/"]
-ENTRYPOINT ["dotnet", "MoneyTracker.App.dll"]
+
+# Modify the ENTRYPOINT to use the PORT environment variable
+CMD ["dotnet", "MoneyTracker.App.dll"]
