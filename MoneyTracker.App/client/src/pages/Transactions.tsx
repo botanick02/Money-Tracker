@@ -22,14 +22,12 @@ const Transactions = () => {
 
   const incomes = useAppSelector((state) => state.FinancialOperation.incomes);
   const expenses = useAppSelector((state) => state.FinancialOperation.expenses);
-  const { currentCategoryId, currentCategoryName, currentCategoryColor } =
-    useAppSelector((state) => state.Account);
 
   const transactionType = useAppSelector(
     (state) => state.FinancialOperation.transactionType
   );
 
-  var dateRangeSet = false;
+  const [dateRangeIsSet, setDateRangeIsSet] = useState(false);
 
   const changeTransactionTypeFilter = (type: "expense" | "income") => {
     if (transactionType !== type) {
@@ -52,7 +50,8 @@ const Transactions = () => {
   };
 
   useEffect(() => {
-    if (dateRangeSet) {
+    console.log(dateRangeIsSet);
+    if (dateRangeIsSet) {
       dispatch(FETCH_TRANSACTIONS_INFO());
       console.log("Update");
     }
@@ -60,9 +59,9 @@ const Transactions = () => {
     dispatch,
     currentAccountId,
     dateRange,
-    currentCategoryId,
     timeTravelValue,
-    transactionType
+    transactionType,
+    dateRangeIsSet
   ]);
 
   useEffect(() => {
@@ -71,9 +70,9 @@ const Transactions = () => {
 
   const onRangeChange = (startDate: string | null, endDate: string | null) => {
     if ((startDate && endDate) || (!startDate && !endDate)) {
+      setDateRangeIsSet(true);
       dispatch(SET_DATE_RANGE({ fromDate: startDate, toDate: endDate }));
     }
-    dateRangeSet = true;
   };
 
   return (
