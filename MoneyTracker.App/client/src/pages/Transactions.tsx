@@ -9,7 +9,6 @@ import {
 import TransactionCreate from "../components/Transaction/TransactionCreate";
 import TransactionList from "../components/Transaction/TransactionList";
 import { FETCH_CATEGORIES } from "../store/Category/Category.slice";
-import { SET_CURRENT_CATEGORY } from "../store/Account/Account.slice";
 
 const Transactions = () => {
   const dispatch = useAppDispatch();
@@ -17,7 +16,7 @@ const Transactions = () => {
     "expense" | "income" | "transfer"
   >("expense");
 
-  const timeTravelValue = useAppSelector(state => state.TimeTravel.datetime);
+  const timeTravelValue = useAppSelector((state) => state.TimeTravel.datetime);
 
   const [isCreatePopupOpen, setIsCreatePopupOpen] = useState<boolean>(false);
 
@@ -26,24 +25,19 @@ const Transactions = () => {
   const { currentCategoryId, currentCategoryName, currentCategoryColor } =
     useAppSelector((state) => state.Account);
 
-  const transactionType = useAppSelector((state) => state.FinancialOperation.transactionType);
+  const transactionType = useAppSelector(
+    (state) => state.FinancialOperation.transactionType
+  );
+
+  var dateRangeSet = false;
 
   const changeTransactionTypeFilter = (type: "expense" | "income") => {
-    if (transactionType !== type){
+    if (transactionType !== type) {
       dispatch(SET_TRANSACTION_TYPE(type));
-    }
-    else{
+    } else {
       dispatch(SET_TRANSACTION_TYPE(null));
     }
-  }
-
-  useEffect(() => {
-    dispatch({
-      type: SET_CURRENT_CATEGORY,
-      payload: { id: null, name: null, color: null },
-    });
-    dispatch(FETCH_TRANSACTIONS_INFO());
-  }, [transactionType, dispatch])
+  };
 
   const currentAccountId = useAppSelector(
     (state) => state.Account.currentAccountId
@@ -58,8 +52,18 @@ const Transactions = () => {
   };
 
   useEffect(() => {
-    dispatch(FETCH_TRANSACTIONS_INFO());
-  }, [dispatch, currentAccountId, dateRange, currentCategoryId, timeTravelValue]);
+    if (dateRangeSet) {
+      dispatch(FETCH_TRANSACTIONS_INFO());
+      console.log("Update");
+    }
+  }, [
+    dispatch,
+    currentAccountId,
+    dateRange,
+    currentCategoryId,
+    timeTravelValue,
+    transactionType
+  ]);
 
   useEffect(() => {
     dispatch(FETCH_CATEGORIES());
@@ -69,14 +73,13 @@ const Transactions = () => {
     if ((startDate && endDate) || (!startDate && !endDate)) {
       dispatch(SET_DATE_RANGE({ fromDate: startDate, toDate: endDate }));
     }
+    dateRangeSet = true;
   };
 
   return (
     <main className={"transactions"}>
       {isCreatePopupOpen && (
-        <TransactionCreate
-          closePopupHandle={handleCreatePopupOpen}
-        />
+        <TransactionCreate closePopupHandle={handleCreatePopupOpen} />
       )}
       <TimeScopePanel onRangeChange={onRangeChange} />
       <div className={"transaction-sums"}>
@@ -84,7 +87,9 @@ const Transactions = () => {
           onClick={() => {
             changeTransactionTypeFilter("income");
           }}
-          className={`transaction-sums__income ${transactionType == "income" && "active"}`}
+          className={`transaction-sums__income ${
+            transactionType == "income" && "active"
+          }`}
         >
           Incomes
           <br />+ {incomes} ₴
@@ -93,7 +98,9 @@ const Transactions = () => {
           onClick={() => {
             changeTransactionTypeFilter("expense");
           }}
-          className={`transaction-sums__expense ${transactionType == "expense" && "active"}`}
+          className={`transaction-sums__expense ${
+            transactionType == "expense" && "active"
+          }`}
         >
           Expenses
           <br />- {-expenses} ₴
@@ -102,14 +109,13 @@ const Transactions = () => {
 
       <TransactionList />
 
-      {(!isCreatePopupOpen && !timeTravelValue) && (
+      {!isCreatePopupOpen && !timeTravelValue && (
         <div
           onClick={() => {
             handleCreatePopupOpen();
           }}
           className={"new-transaction button"}
-        >
-        </div>
+        ></div>
       )}
     </main>
   );
