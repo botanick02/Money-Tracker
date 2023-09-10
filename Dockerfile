@@ -5,7 +5,7 @@
 # escape=`
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
-EXPOSE $PORT  # Expose the port defined by Railway
+EXPOSE $PORT
 RUN apt-get update
 RUN apt-get install -y curl
 RUN apt-get install -y libpng-dev libjpeg-dev curl libxi6 build-essential libgl1-mesa-glx
