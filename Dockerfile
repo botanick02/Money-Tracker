@@ -26,7 +26,7 @@ COPY . .
 WORKDIR "/src/MoneyTracker.App/client"  # Change to the client directory
 
 # Add the npm build step here
-RUN npm install --force
+RUN npm i --force
 RUN npm run build
 
 WORKDIR "/src/MoneyTracker.App"  # Change back to the main app directory
