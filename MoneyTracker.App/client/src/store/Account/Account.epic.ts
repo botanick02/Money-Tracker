@@ -14,8 +14,8 @@ import {
 } from "./Account.slice";
 import { request } from "../../api/core";
 import { CreateAccount, GetAccounts, deleteAccount } from "../../api/queries/Accounts";
-import { useAppDispatch } from "../../hooks/useAppDispatch";
-import { REFRESH_ACCESS_TOKEN, SIGN_IN_ERROR } from "../Auth/Auth.slice";
+
+import { REFRESH_ACCESS_TOKEN,  } from "../Auth/Auth.slice";
 
 export const fetchAccountsEpic: Epic<any, any, any> = (action$, state$) => {
   return action$.pipe(

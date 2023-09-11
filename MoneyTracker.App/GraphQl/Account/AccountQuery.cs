@@ -23,7 +23,7 @@ namespace MoneyTracker.App.GraphQl.Account
                     var userAccounts = accountService.GetUserPersonalAccounts(userId, travelDateTime);
 
                    
-                    userAccounts.Accounts = userAccounts.Accounts.Where(account => account.IsActive).ToList();
+                    userAccounts.Accounts = userAccounts.Accounts.ToList();
 
                     return userAccounts;
                 }).Authorize();
