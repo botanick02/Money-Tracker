@@ -23,7 +23,7 @@ builder.Services.AddCors(options =>
     {
         builder.AllowAnyHeader()
                .WithMethods("POST", "OPTIONS")
-               .WithOrigins("https://money-tracker.railway.internal")
+               .WithOrigins("money-tracker.railway.internal")
                .AllowCredentials();
     });
 });

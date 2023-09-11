@@ -2,7 +2,7 @@ import { store } from "../store/store";
 import { RefreshAccessToken } from "./queries/Auth";
 
 // const baseURL = "https://localhost:7299/graphql";
-const baseURL = "https://money-tracker.railway.internal/graphql"
+const baseURL = "money-tracker.railway.internal/graphql"
 
 
 export const request = async (query?: string, variables?: any) => {
