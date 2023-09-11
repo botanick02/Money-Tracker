@@ -23,7 +23,7 @@ builder.Services.AddCors(options =>
     {
         builder.AllowAnyHeader()
                .WithMethods("POST", "OPTIONS")
-               .WithOrigins("money-tracker.railway.internal")
+               .WithOrigins("https://money-tracker-production-7a87.up.railway.app")
                .AllowCredentials();
     });
 });
@@ -101,7 +101,6 @@ app.UseAuthorization();
 app.UseCors("DefaultPolicy");
 app.UseGraphQLAltair();
 app.UseGraphQL("/graphql");
- 
 
 if (app.Environment.IsDevelopment())
 {
