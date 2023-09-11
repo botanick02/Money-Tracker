@@ -1,5 +1,4 @@
-import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
-import { FC, ReactElement, useEffect, useRef } from "react";
+import { FC, ReactElement } from "react";
 
 const SettingsItem: FC<{
   item: {
@@ -8,8 +7,6 @@ const SettingsItem: FC<{
     icon: ReactElement<any, any>;
   };
 }> = ({ item }) => {
-  const url = new URL("../assets/icons/time-travel.svg", import.meta.url).href;
-
   return (
     <div className={"row-item"}>
       <div className={"row-item__category-icon"}>{item.icon}</div>

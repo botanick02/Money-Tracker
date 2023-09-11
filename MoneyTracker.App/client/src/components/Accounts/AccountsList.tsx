@@ -20,7 +20,6 @@ const AccountsList = () => {
     dispatch(FETCH_ACCOUNTS());
   }, [dispatch]);
 
- 
   const accountsToRender = accounts.slice(0, accounts.length - 1);
 
   return (
@@ -40,9 +39,10 @@ const AccountsList = () => {
         ))}
 
         {!isCreatePopupOpen && (
-          <div onClick={handlePopupOpen} className="new-transaction button">
-            +
-          </div>
+          <div
+            onClick={handlePopupOpen}
+            className="new-transaction button"
+          ></div>
         )}
       </div>
     </main>

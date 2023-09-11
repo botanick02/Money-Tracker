@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import СhartByCategory from "../components/СhartByCategory";
 import { useAppDispatch, useAppSelector } from "../hooks/useAppDispatch";
 import { CHANGE_STATS_FILTER, FETCH_STATS } from "../store/Stats/Stats.slice";
@@ -13,8 +13,7 @@ const Stats = () => {
   const expenses = useAppSelector((state) => state.FinancialOperation.expenses);
   const fromDate = useAppSelector((state) => state.FinancialOperation.dateRange.fromDate);
   const toDate = useAppSelector((state) =>  state.FinancialOperation.dateRange.toDate);
-  const { currentCategoryId, currentCategoryName, currentCategoryColor } =
-    useAppSelector((state) => state.Account);
+  useAppSelector((state) => state.Account);
   const dispatch = useAppDispatch();
   const handleFilterChange = (filter: "income" | "expense") => {
     setActiveFilter(filter);

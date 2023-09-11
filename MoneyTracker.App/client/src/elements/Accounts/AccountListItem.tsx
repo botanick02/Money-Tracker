@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import { Account } from "../../types/Account";
+import Amount from "../Amount";
 
 const AccountListItem: FC<{
   account: Account;
@@ -9,8 +10,7 @@ const AccountListItem: FC<{
     <div className={"account-item"} onClick={() => onSelected(account.id)}>
       <div className={"account-item__name"}>{account.name}</div>
       <div className={"account-item__balance"}>
-        {account.balance}
-        {account.currency.symbol}
+        <Amount sum={account.balance}/>
       </div>
     </div>
   );

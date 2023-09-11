@@ -103,9 +103,7 @@ const CategoryList = () => {
         />
       ))}
       {!isCreatePopupOpen && (
-        <div onClick={handlePopupOpen} className="new-transaction button">
-          +
-        </div>
+        <div onClick={handlePopupOpen} className="new-transaction button"></div>
       )}
     </main>
   );

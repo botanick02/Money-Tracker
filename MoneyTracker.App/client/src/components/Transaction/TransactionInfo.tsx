@@ -7,7 +7,6 @@ import {
   UPDATE_FINANCIAL_OPERATION,
   UpdateFinancialOperation,
 } from "../../store/FinancialOperation/FinancialOperation.slice";
-import { getISODateTimeValue } from "../../tools/Dates/currentIsoDates";
 import TransactionView from "./TransactionView";
 import TransactionEdit from "./TransactionEdit";
 

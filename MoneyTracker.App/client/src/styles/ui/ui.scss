@@ -24,3 +24,42 @@
 .no-scroll{
   overflow: hidden;
 }
+
+.amount{
+  &__expense{color: $secondary-color}
+  &__income{color: $primary-color}
+}
+
+.category-icon{
+  width: 50px;
+  height: 100%;
+}
+
+.new-transaction {
+  position: fixed;
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+  right: 15px;
+  bottom: $layout-panel_height + 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+
+  &::after, &::before {
+    position: absolute;
+    background: white;
+    content: "";
+  }
+
+  &::before {
+    height: 3px;
+    width: 40%;
+  }
+
+  &::after {
+    height: 40%;
+    width: 3px;
+  }
+}

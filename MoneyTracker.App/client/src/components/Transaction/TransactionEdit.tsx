@@ -24,7 +24,6 @@ interface TransactionEditProps {
 
 const TransactionEdit = ({
   transaction,
-  categoryOptions,
   accountOptions,
   onSave,
   onCancel,
@@ -58,7 +57,7 @@ const TransactionEdit = ({
   };
 
   const saveOperation = (data: FormFields) => {
-    if (account == fromAccount){
+    if (account === fromAccount) {
       return null;
     }
     onSave({
@@ -121,7 +120,7 @@ const TransactionEdit = ({
                 accountOptions.findIndex(
                   (o) => o.value === transaction.accountId
                 ) + 1
-              } 
+              }
               options={accountOptions}
             />
           </div>

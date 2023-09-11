@@ -1,6 +1,7 @@
 import React from 'react';
 import { Transaction } from '../types/Transaction';
 import { useAppSelector } from '../hooks/useAppDispatch';
+import Amount from './Amount';
 
 interface TransactionItemProps {
   transaction: Transaction;
@@ -22,7 +23,7 @@ const TransactionItem = ({transaction, onMoreInfoCLick}: TransactionItemProps) =
         <div className={"row-item__title"}>{transaction.category.name}</div>
         <div className={"row-item__sub-title"}>{transaction.title}</div>
       </div>
-      <div className={`row-item__amount row-item__amount__${type}`}>{transaction.amount} $</div>
+      <div className={`row-item__amount row-item__amount__${type}`}><Amount sum={transaction.amount}/></div>
     </div>
   );
 };

@@ -1,38 +1,37 @@
 @import "Variables";
 @import "ui/ui";
 
-
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-body{
-  font-family: 'Inter', sans-serif;
+body {
+  font-family: "Inter", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
-  line-height: 17px;;
+  line-height: 17px;
   background: $background-color;
   color: $primary-light-color;
 }
 
-img{
+img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-ul, ol{
+ul,
+ol {
   list-style-type: none;
 }
 
-a{
+a {
   color: inherit;
   text-decoration: none;
 }
-
 
 @import "Layout";
 @import "TimeScopePanel";

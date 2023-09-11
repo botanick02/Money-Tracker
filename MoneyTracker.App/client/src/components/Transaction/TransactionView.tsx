@@ -34,7 +34,7 @@ const TransactionView = ({
         <div className={"popup__info__item"}>
           Created: {new Date(transaction.createdAt).toLocaleString()}
         </div>
-        {transaction.category.type == "transfer" ? (
+        {transaction.category.type === "transfer" ? (
           <>
             <div className={"popup__info__item"}>
               From account:{" "}

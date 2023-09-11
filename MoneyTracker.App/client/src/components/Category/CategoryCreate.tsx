@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import InputWrapper from "../../elements/InputWrapper";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import {
   createCategory,
-  EDIT_CATEGORY,
   editCategory,
 } from "../../store/Category/Category.slice";
 import categoryIcons from "./categoryIconsPath.json";
