@@ -20,7 +20,8 @@ const AccountsList = () => {
     dispatch(FETCH_ACCOUNTS());
   }, [dispatch]);
 
-  const accountsToRender = accounts.slice(0, accounts.length - 1);
+
+  const activeAccounts = accounts.filter((account) => account.isActive);
 
   return (
     <main>
@@ -28,7 +29,7 @@ const AccountsList = () => {
         {isCreatePopupOpen && (
           <AccountCreate openPopupHandle={handlePopupOpen} name="" />
         )}
-        {accountsToRender.map((item) => (
+        {activeAccounts.map((item) => (
           <StatsTransactionItem
             key={item.id}
             id={item.id}
@@ -39,10 +40,9 @@ const AccountsList = () => {
         ))}
 
         {!isCreatePopupOpen && (
-          <div
-            onClick={handlePopupOpen}
-            className="new-transaction button"
-          ></div>
+          <div onClick={handlePopupOpen} className="new-transaction button">
+            +
+          </div>
         )}
       </div>
     </main>
