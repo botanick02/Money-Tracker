@@ -101,7 +101,7 @@ app.UseAuthorization();
 app.UseCors("DefaultPolicy");
 app.UseGraphQLAltair();
 app.UseGraphQL("/graphql");
-
+ 
 
 if (app.Environment.IsDevelopment())
 {
