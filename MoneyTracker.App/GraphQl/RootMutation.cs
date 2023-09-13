@@ -3,6 +3,7 @@ using MoneyTracker.App.GraphQl.Account;
 using MoneyTracker.App.GraphQl.Auth;
 using MoneyTracker.App.GraphQl.Budget;
 using MoneyTracker.App.GraphQl.Category;
+using MoneyTracker.App.GraphQl.DataImport;
 using MoneyTracker.App.GraphQl.FinancialOperation;
 
 namespace MoneyTracker.App.GraphQl
@@ -23,6 +24,9 @@ namespace MoneyTracker.App.GraphQl
             Field<BudgetMutation>("Budget").Resolve(_ => new { });
             
             Field<AccountMutation>("Account")
+                    .Resolve(_ => new { });
+
+            Field<DataImportMutation>("DataImportMutation")
                     .Resolve(_ => new { });
         }
     }

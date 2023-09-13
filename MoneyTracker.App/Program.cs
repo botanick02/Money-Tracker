@@ -76,7 +76,10 @@ builder.Services.AddAuthentication("CustomTokenScheme")
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddGraphQL(b => b
+builder.Services.AddGraphQLUpload();
+
+builder.Services
+    .AddGraphQL(b => b
     .AddSchema<MoneyTrackerSchema>()
     .AddGraphTypes(typeof(MoneyTrackerSchema).Assembly)
     .AddAutoClrMappings()
@@ -100,10 +103,10 @@ currentReadModel.CurrentModel = readModelExtensions.GetReadModel(DateTime.Now);
 
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.UseCors("DefaultPolicy");
+app.UseGraphQLUpload<MoneyTrackerSchema>("/graphql");
+app.UseGraphQL<MoneyTrackerSchema>("/graphql");
 app.UseGraphQLAltair();
-app.UseGraphQL("/graphql");
 
 if (!app.Environment.IsDevelopment())
 {
