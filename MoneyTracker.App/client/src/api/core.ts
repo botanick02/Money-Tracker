@@ -1,3 +1,4 @@
+
 import { store } from "../store/store";
 import { RefreshAccessToken } from "./queries/Auth";
 
@@ -15,16 +16,7 @@ export const request = async (query?: string, variables?: any) => {
     return result;
   }
 
-  // consecutiveErrors++;
-
-  // if (consecutiveErrors >= 2) {
-  //   return {
-  //     data: null,
-  //     errors: [{ message: "REFRESH_ERROR", extensions: { code: "REFRESH_ERROR" } }],
-  //   };
-  // }
-
-  
+ 
   const token = await refreshToken();
 
   if (token) {

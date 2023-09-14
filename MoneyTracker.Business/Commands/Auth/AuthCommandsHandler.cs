@@ -90,7 +90,7 @@ namespace MoneyTracker.Business.Commands.Auth
         {
             events.Add(new CreditAccountCreatedEvent(Guid.NewGuid(), userId, currency));
             events.Add(new DebitAccountCreatedEvent(Guid.NewGuid(), userId, currency));
-            events.Add(new PersonalAccountCreatedEvent(Guid.NewGuid(), userId, "Cash", currency));
+            events.Add(new PersonalAccountCreatedEvent(Guid.NewGuid(), userId, "Cash", currency,true));
         }
 
         public static void AddDefaultCategories(Guid userId, List<Event> events, ICategoryRepository categoryRepository)

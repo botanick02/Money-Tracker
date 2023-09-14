@@ -15,6 +15,7 @@ namespace MoneyTracker.Business.Commands.Account
                 this.eventStore = eventStore;
                 this.currencyRepository = currencyRepository;
             }
+
             public async Task<bool> HandleAsync(CreatePersonalAccountCommand command)
             {
                 var @event = new PersonalAccountCreatedEvent
@@ -22,7 +23,8 @@ namespace MoneyTracker.Business.Commands.Account
                     AccountId: Guid.NewGuid(),
                     UserId: command.UserId,
                     Name: command.Name,
-                    Currency: currencyRepository.GetCurrencyByCode("UAH")
+                    Currency: command.Currency,
+                    IsActive:true
                 );
 
                 await eventStore.AppendEventAsync(@event);
@@ -31,5 +33,57 @@ namespace MoneyTracker.Business.Commands.Account
             }
         }
 
+        public class UpdatePersonalAccountCommandHandler : ICommandHandler<UpdatePersonalAccountCommand>
+        {
+            private readonly IEventStore eventStore;
+            private readonly ICurrencyRepository currencyRepository;
+
+            public UpdatePersonalAccountCommandHandler(IEventStore eventStore, ICurrencyRepository currencyRepository)
+            {
+                this.eventStore = eventStore;
+                this.currencyRepository = currencyRepository;
+            }
+
+            public async Task<bool> HandleAsync(UpdatePersonalAccountCommand command)
+            {
+                var @event = new UpdatePersonalAccountEvent
+                (
+                    AccountId: Guid.Parse(command.AccountId),
+                    Name: command.Name
+                   
+
+                );
+
+                await eventStore.AppendEventAsync(@event);
+
+                return true;
+            }
+        }
+
+
+        public class DeactivatePersonalAccountCommandHandler : ICommandHandler<DeactivatePersonalAccountCommand>
+        {
+            private readonly IEventStore eventStore;
+
+            public DeactivatePersonalAccountCommandHandler(IEventStore eventStore)
+            {
+                this.eventStore = eventStore;
+            }
+
+            public async Task<bool> HandleAsync(DeactivatePersonalAccountCommand command)
+            {
+                Guid accountId = Guid.Parse(command.AccountId);
+               
+
+                var personalAccountDeactivatedEvent = new PersonalAccountDeactivatedEvent(accountId);
+                await eventStore.AppendEventAsync(personalAccountDeactivatedEvent);
+
+                return true;
+            }
+        }
+
+
+
+
     }
-}
+    }

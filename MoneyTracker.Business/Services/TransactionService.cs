@@ -45,13 +45,16 @@ namespace MoneyTracker.Business.Services
                     if (transaction.Amount > 0)
                     {
                         transactionDto.FromAccountId = transactionRepository.GetTransactionsByOperationId(transaction.OperationId, timeTravelDateTime, readModelExtensions).FirstOrDefault(t => t.Amount < 0)!.AccountId;
+                        transactionDto.AccountName  = transactionDto.AccountName;
                     }
                     else
                     {
                         transactionDto.FromAccountId = transactionDto.AccountId;
+                        transactionDto.AccountName = transactionDto.AccountName;
                         transactionDto.AccountId = transactionRepository.GetTransactionsByOperationId(transaction.OperationId, timeTravelDateTime, readModelExtensions).FirstOrDefault(t => t.Amount > 0)!.AccountId;
                     }
                 }
+
                 res.Transactions.Add(transactionDto);
 
                 transactionDto.Category = category;
