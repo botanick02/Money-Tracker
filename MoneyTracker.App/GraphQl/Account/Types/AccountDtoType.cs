@@ -10,6 +10,7 @@ namespace MoneyTracker.App.GraphQl.Account.Types
             Field(a => a.Accounts);
 
             Field(a => a.Total);
+          
         }
     }
 }

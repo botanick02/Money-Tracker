@@ -10,17 +10,29 @@ query getPersonalAccounts{
             symbol
           }
           balance
+          isActive
         }
         total
+        
+        
       }
+      
     }
   }
   `
 
   export const CreateAccount = `
-  mutation createAccount($accountName: String!) {
+  mutation createAccount($addAccount: CreateAccountInputType!) {
     account {
-      createAccount(accountName: $accountName)
+      createAccount(addAccount: $addAccount)
     }
   }
+`;
+ 
+
+export const deleteAccount = `mutation DeleteAccount($accountID: String!) {
+  account {
+    deleteAccount(accountID: $accountID)
+  }
+}
 `;

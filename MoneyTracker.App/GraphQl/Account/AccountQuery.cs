@@ -20,8 +20,14 @@ namespace MoneyTracker.App.GraphQl.Account
 
                     var accountService = serviceProvider.GetRequiredService<AccountService>();
 
-                    return accountService.GetUserPersonalAccounts(userId, travelDateTime);
+                    var userAccounts = accountService.GetUserPersonalAccounts(userId, travelDateTime);
+
+                   
+                    userAccounts.Accounts = userAccounts.Accounts.ToList();
+
+                    return userAccounts;
                 }).Authorize();
         }
     }
+
 }
