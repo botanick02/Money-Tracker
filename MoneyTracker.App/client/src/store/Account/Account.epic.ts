@@ -43,11 +43,15 @@ export const fetchAccountsEpic: Epic<any, any, any> = (action$, state$) => {
   );
 };
 
-export const createAccountEpic: Epic<any, any, any> = (action$, state$) => {
+export const CreateAccountEpic: Epic<any, any, any> = (action$, state$) => {
   return action$.pipe(
     ofType(CREATE_ACCOUNT),
     mergeMap((action) =>
-      from(request(CreateAccount, { accountName: action.payload })).pipe(
+    
+      from(request(CreateAccount, {
+        
+        addAccount: action.payload
+      })).pipe(
         mergeMap((data) => {
           if (data.errors) {
             return of(CREATE_ACCOUNT_ERROR(data.errors[0].message));
@@ -55,15 +59,18 @@ export const createAccountEpic: Epic<any, any, any> = (action$, state$) => {
             const newAccount = data.data.createAccount;
             return of(
               CREATE_ACCOUNT_SUCCESS(newAccount),
-              { type: FETCH_ACCOUNTS } // Dispatching FETCH_ACCOUNTS action here
+              FETCH_ACCOUNTS()
             );
           }
         }),
-        catchError((error) => of(CREATE_ACCOUNT_ERROR("An error occurred")))
+        catchError((error) => of(CREATE_ACCOUNT_ERROR("error")))
       )
     )
   );
 };
+
+
+
 
 
 export const deleteAccountEpic: Epic<any, any, any> = (action$, state$) => {
@@ -90,4 +97,4 @@ export const deleteAccountEpic: Epic<any, any, any> = (action$, state$) => {
   );
 };
 
-export const AccountEpics = combineEpics(fetchAccountsEpic, createAccountEpic,deleteAccountEpic);
+export const AccountEpics = combineEpics(fetchAccountsEpic, CreateAccountEpic,deleteAccountEpic);

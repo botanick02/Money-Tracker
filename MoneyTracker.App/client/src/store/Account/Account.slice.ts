@@ -64,9 +64,11 @@ export const AccountSlice = createSlice({
       state.currentCategoryName = name;
       state.currentCategoryColor = color;
     },
-    CREATE_ACCOUNT(state, action: PayloadAction<string>) {
+    CREATE_ACCOUNT(state, action: PayloadAction<{ accountName: string; currencyCode: string }>) {
       state.loading = true;
       state.error = null;
+      console.log("Currency Code:", action.payload.currencyCode);
+
     },
     CREATE_ACCOUNT_SUCCESS(state, action: PayloadAction<string>) {
       state.loading = false;

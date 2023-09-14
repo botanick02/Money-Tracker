@@ -22,9 +22,9 @@ query getPersonalAccounts{
   `
 
   export const CreateAccount = `
-  mutation createAccount($accountName: String!) {
+  mutation createAccount($addAccount: CreateAccountInputType!) {
     account {
-      createAccount(accountName: $accountName)
+      createAccount(addAccount: $addAccount)
     }
   }
 `;

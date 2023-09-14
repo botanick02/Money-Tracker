@@ -39,7 +39,7 @@ namespace MoneyTracker.Business.Events
             services.AddTransient<IEventApplier<DebitAccountCreatedEvent>, DebitAccountCreatedEventApplier>();
             services.AddTransient<IEventApplier<PersonalAccountCreatedEvent>, PersonalAccountCreatedEventApplier>();
             services.AddTransient<IEventApplier<PersonalAccountDeactivatedEvent>, PersonalAccountDeactivatedEventApplier>();
-            services.AddTransient<IEventApplier<UpdatePersonalAccountCommand>, UpdatePersonalAccountCommandApplier>();
+            services.AddTransient<IEventApplier<UpdatePersonalAccountEvent>, UpdatePersonalAccountEventApplier>();
 
         }
     }

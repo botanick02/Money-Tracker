@@ -73,32 +73,33 @@ namespace MoneyTracker.Business.Events.Account
             var accountToUpdate = updatedModel.Accounts.FirstOrDefault(account => account.Id == @event.AccountId);
             if (accountToUpdate != null)
             {
-                accountToUpdate.IsActive = false;
+                accountToUpdate.IsActive = !accountToUpdate.IsActive;
             }
 
             return updatedModel;
         }
     }
 
-    public class UpdatePersonalAccountCommandApplier : IEventApplier<UpdatePersonalAccountCommand>
+    public class UpdatePersonalAccountEventApplier : IEventApplier<UpdatePersonalAccountEvent>
     {
-        public async Task<ReadModel> ApplyAsync(ReadModel currentModel, UpdatePersonalAccountCommand @event)
+        public async Task<ReadModel> ApplyAsync(ReadModel currentModel, UpdatePersonalAccountEvent @event)
         {
-           
+
             var updatedModel = currentModel;
 
             var accountToUpdate = updatedModel.Accounts.FirstOrDefault(account => account.Id == @event.AccountId);
 
             if (accountToUpdate != null)
             {
-                accountToUpdate.Name = @event.Name;
-                accountToUpdate.Currency = @event.Currency;
               
-            }
+                accountToUpdate.Name = @event.Name;
 
+            }
+           
             return updatedModel;
         }
     }
-}
+    }
+
 
 

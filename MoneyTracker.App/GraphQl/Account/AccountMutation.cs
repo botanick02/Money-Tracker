@@ -1,69 +1,90 @@
 ﻿using GraphQL;
+using GraphQL.DataLoader;
 using GraphQL.Types;
 using MoneyTracker.App.GraphQl.Category.Types.Inputs;
+using MoneyTracker.App.GraphQl.FinancialOperation.Types.Inputs;
 using MoneyTracker.Business.Commands;
 using MoneyTracker.Business.Commands.Account;
 using MoneyTracker.Business.Commands.Category;
 using MoneyTracker.Business.Entities;
+using MoneyTracker.Business.Events.Account;
+using MoneyTracker.Business.Interfaces;
+using MoneyTracker.DataAccess.Repositories;
 using System.Security.Claims;
 
 namespace MoneyTracker.App.GraphQl.Account
 {
     public class AccountMutation : ObjectGraphType
     {
-        public AccountMutation(CommandDispatcher commandDispatcher)
+        private readonly ICurrencyRepository currencyRepository;
+
+        public AccountMutation(CommandDispatcher commandDispatcher, ICurrencyRepository currencyRepository)
         {
+            this.currencyRepository = currencyRepository;
+
             Field<bool>("CreateAccount")
-                .Argument<StringGraphType>("AccountName")
+
+                .Argument<CreateAccountInputType>("AddAccount")
+
                 .ResolveAsync(async context =>
                 {
+                    var account = context.GetArgument<CreateAccountInput>("AddAccount");
                     var userId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-                    var name = context.GetArgument<string>("AccountName");
+                    var name = account.accountName;
+                    var currencyCode = account.currencyCode;
+                    var currency = currencyRepository.GetCurrencyByCode(currencyCode);
+                    
                     var command = new CreatePersonalAccountCommand
                     (
                         Name: name,
-                        UserId: userId
+                        UserId: userId,
+                        Currency: currency
                     );
                     await commandDispatcher.DispatchAsync(command);
                     return true;
                 }).Authorize();
 
             Field<bool>("EditAccount")
-    .Argument<NonNullGraphType<StringGraphType>>("accountId", "The ID of the account to edit")
-    .Argument<NonNullGraphType<StringGraphType>>("accountName", "The new name of the account")
-    .ResolveAsync(async context =>
-    {
-        var accountName = context.GetArgument<string>("accountName");
-        var accountID = context.GetArgument<string>("accountID");
-        var userId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-        var command = new UpdatePersonalAccountCommand
-        (
-            UserId: userId,
-            Name: accountName,
-            AccountId: accountID
-        );
-        await commandDispatcher.DispatchAsync(command);
-        return true;
-    }).Authorize();
+                .Argument<NonNullGraphType<StringGraphType>>("accountId", "The ID of the account to edit")
+                .Argument<NonNullGraphType<StringGraphType>>("accountName", "The new name of the account")
+                .ResolveAsync(async context =>
+                {
+                    var accountName = context.GetArgument<string>("accountName");
+                    var accountID = context.GetArgument<string>("accountId");
+                    var userId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
 
+                   
+                        var command = new UpdatePersonalAccountCommand
+
+                        (
+                            AccountId: accountID,
+                            Name: accountName,
+                            UserId: userId
+                        )
+                        {
+
+                        };
+                        await commandDispatcher.DispatchAsync(command);
+                        return true;
+                    
+                    
+                }).Authorize();
 
             Field<bool>("DeleteAccount")
-     .Argument<NonNullGraphType<StringGraphType>>("AccountID", "The ID of the account to delete")
-     .ResolveAsync(async context =>
-     {
-         var accountID = context.GetArgument<string>("AccountID");
-         var userId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-         var command = new DeactivatePersonalAccountCommand
-         (
-             AccountId: accountID
-         );
+                .Argument<NonNullGraphType<StringGraphType>>("AccountID", "The ID of the account to delete")
+                .ResolveAsync(async context =>
+                {
+                    var accountID = context.GetArgument<string>("AccountID");
+                    var userId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+                    var command = new DeactivatePersonalAccountCommand
+                    (
+                        AccountId: accountID
+                    );
 
-         await commandDispatcher.DispatchAsync(command);
-         return true;
-     }).Authorize();
-
-
+                    await commandDispatcher.DispatchAsync(command);
+                    return true;
+                }).Authorize();
         }
     }
 }

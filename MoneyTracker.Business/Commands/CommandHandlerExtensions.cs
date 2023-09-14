@@ -34,6 +34,10 @@ namespace MoneyTracker.Business.Commands
             services.AddTransient<ICommandHandler<UpdateFinancialOperationCommand>, UpdateFinancialOperationCommandHandler>();
             services.AddTransient<ICommandHandler<CreatePersonalAccountCommand>, CreatePersonalAccountCommandHandler>();
             services.AddTransient<ICommandHandler<DeactivatePersonalAccountCommand>, DeactivatePersonalAccountCommandHandler>();
+            services.AddTransient<ICommandHandler<UpdatePersonalAccountCommand>, UpdatePersonalAccountCommandHandler>();
+
+
+            
         }
     }
 }

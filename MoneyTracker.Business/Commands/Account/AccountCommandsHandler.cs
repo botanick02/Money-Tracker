@@ -23,7 +23,7 @@ namespace MoneyTracker.Business.Commands.Account
                     AccountId: Guid.NewGuid(),
                     UserId: command.UserId,
                     Name: command.Name,
-                    Currency: currencyRepository.GetCurrencyByCode("UAH"),
+                    Currency: command.Currency,
                     IsActive:true
                 );
 
@@ -33,7 +33,32 @@ namespace MoneyTracker.Business.Commands.Account
             }
         }
 
+        public class UpdatePersonalAccountCommandHandler : ICommandHandler<UpdatePersonalAccountCommand>
+        {
+            private readonly IEventStore eventStore;
+            private readonly ICurrencyRepository currencyRepository;
 
+            public UpdatePersonalAccountCommandHandler(IEventStore eventStore, ICurrencyRepository currencyRepository)
+            {
+                this.eventStore = eventStore;
+                this.currencyRepository = currencyRepository;
+            }
+
+            public async Task<bool> HandleAsync(UpdatePersonalAccountCommand command)
+            {
+                var @event = new UpdatePersonalAccountEvent
+                (
+                    AccountId: Guid.Parse(command.AccountId),
+                    Name: command.Name
+                   
+
+                );
+
+                await eventStore.AppendEventAsync(@event);
+
+                return true;
+            }
+        }
 
 
         public class DeactivatePersonalAccountCommandHandler : ICommandHandler<DeactivatePersonalAccountCommand>

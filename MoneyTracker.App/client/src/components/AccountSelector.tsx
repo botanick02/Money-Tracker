@@ -43,7 +43,7 @@ const AccountSelector = () => {
           <div className={"account-selector__list"}>
             {accounts
               .filter((a) => a.id !== currentAccountId)
-              .filter((account) => account.isActive)
+              .filter((account) => account.isActive || account.name == "Total")
               .map((account) => (
                 <AccountListItem
                   account={account}

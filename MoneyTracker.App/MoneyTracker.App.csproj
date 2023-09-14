@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="client\src\components\Accounts\Currencies.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Google.Apis.Auth" Version="1.60.0" />
     <PackageReference Include="GraphQL.Server.All" Version="7.4.0" />
     <PackageReference Include="GraphQL.Server.Ui.Altair" Version="7.4.0" />
@@ -17,8 +21,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="client\" />
     <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="client\src\components\Accounts\Currencies.json" />
   </ItemGroup>
 
   <ItemGroup>
