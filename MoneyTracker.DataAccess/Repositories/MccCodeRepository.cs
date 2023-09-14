@@ -6,12 +6,12 @@ namespace MoneyTracker.DataAccess.Repositories
 {
     public class MccCodeRepository : IMccCodeRepository
     {
-        private readonly IEnumerable<Currency> mccCodes;
+        private readonly IEnumerable<MccCode> mccCodes;
 
         public MccCodeRepository()
         {
             var path = @"../MoneyTracker.DataAccess/Resources/MccCodes.json";
-            var readMccCodes = JsonConvert.DeserializeObject<List<Currency>>(File.ReadAllText(path));
+            var readMccCodes = JsonConvert.DeserializeObject<List<MccCode>>(File.ReadAllText(path));
             if (readMccCodes == null)
             {
                 throw new FileNotFoundException("MccCodes were failed to receive");
@@ -19,14 +19,14 @@ namespace MoneyTracker.DataAccess.Repositories
             mccCodes = readMccCodes;
         }
 
-        public Currency GetMccNameById(string code)
+        public string GetMccNameById(string code)
         {
             if (!mccCodes.Any(c => c.Code == code))
             {
                 throw new ArgumentOutOfRangeException(nameof(code), "Invalid MCC code");
             }
 
-            return mccCodes.FirstOrDefault(c => c.Code == code)!;
+            return mccCodes.FirstOrDefault(c => c.Code == code)!.Name;
         }
     }
 }

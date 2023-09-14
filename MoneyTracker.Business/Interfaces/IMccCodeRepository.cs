@@ -4,6 +4,6 @@ namespace MoneyTracker.Business.Interfaces
 {
     public interface IMccCodeRepository
     {
-        public Currency GetMccNameById(string code);
+        public string GetMccNameById(string code);
     }
 }
