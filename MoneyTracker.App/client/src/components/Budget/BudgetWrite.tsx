@@ -4,7 +4,7 @@ import Dropdown, {Option} from "../../elements/Dropdown";
 import {useAppDispatch, useAppSelector} from "../../hooks/useAppDispatch";
 import {createBudgetAction, editBudgetAction} from "../../store/Budgets/Budgets.slice";
 import {FETCH_CATEGORIES} from "../../store/Category/Category.slice";
-import InputWithTitle from "../../elements/InputWithTitle";
+import InputWrapper from "../../elements/InputWrapper";
 
 interface Props {
   budget?: Budget
@@ -90,17 +90,14 @@ const BudgetWrite: FC<Props> = ({budget, openPopupHandle}) => {
       <div style={{background: budget?.categories[0].color}}
            className={"popup__header"}>{budget?.title}</div>
       <div className={"popup__fields"}>
-        <InputWithTitle
-          type={"text"}
-          placeholder={"Title"}
-          onChange={handleTitleInput}
-          value={editableBudget.title!}/>
+        <InputWrapper value={editableBudget.title!}>
+          <input type="text" placeholder={"Title"} onChange={handleTitleInput} value={editableBudget.title!}/>
+        </InputWrapper>
 
-        <InputWithTitle
-          type={"number"}
-          placeholder={"Budget"}
-          onChange={handleLimitInput}
-          value={editableBudget.limit ? editableBudget.limit : ""}/>
+
+        <InputWrapper value={editableBudget.limit ? editableBudget.limit : ""}>
+          <input type="number" placeholder={"Budget"} onChange={handleLimitInput} value={editableBudget.limit ? editableBudget.limit : ""}/>
+        </InputWrapper>
 
         {
           pickedCategories.map((item, index) =>

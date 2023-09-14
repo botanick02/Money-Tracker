@@ -4,27 +4,6 @@
   width: 100%;
   padding: 3.5px 16px;
   background: $primary-light-color;
-  display: flex;
-  justify-content: left;
-  align-items: center;
-  border-radius: 13px;
-  gap: 1em;
-  font-size: 16px;
-  input{
-    font-size: inherit;
-    background: none;
-    min-height: 32px;
-    width: 100%;
-    flex-grow: 1;
-    outline: none;
-    border: none;
-  }
-}
-
-.input-field-labeled{
-  width: 100%;
-  padding: 3.5px 16px;
-  background: $primary-light-color;
   border-radius: 13px;
   font-size: 16px;
   position: relative;
@@ -37,6 +16,14 @@
       display: block;
     }
   }
+  span{
+    position: absolute;
+    font-size: .7em;
+    bottom: -1.7em;
+    left: 16px;
+    color: red;
+  }
+
   input{
     font-size: inherit;
     background: none;
@@ -46,4 +33,13 @@
     outline: none;
     border: none;
   }
+}
+
+.input-field-labeled{
+  width: 100%;
+  padding: 3.5px 16px;
+  background: $primary-light-color;
+  border-radius: 13px;
+  font-size: 16px;
+  position: relative;
 }
