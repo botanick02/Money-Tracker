@@ -15,7 +15,7 @@ import {
 
 interface Props {
   openPopupHandle(): void;
-  categoryDefaultType?: "income" | "expense";
+  categoryDefaultType?: "INCOME" | "EXPENSE";
   categoryToEdit?: Category;
 }
 
@@ -31,12 +31,12 @@ const CategoryCreate: React.FC<Props> = ({
       color: defaultBackground,
       iconUrl: "",
       name: "",
-      type: categoryDefaultType ?? "expense",
+      type: categoryDefaultType ?? "EXPENSE",
     }
   );
   const dispatch = useAppDispatch();
 
-  const handleTypeChange = (type: "income" | "expense") => {
+  const handleTypeChange = (type: "INCOME" | "EXPENSE") => {
     setCategory({ ...category, type });
   };
 
@@ -79,17 +79,17 @@ const CategoryCreate: React.FC<Props> = ({
         <ul className="popup__header">
           <li
             onClick={() => {
-              handleTypeChange("income");
+              handleTypeChange("INCOME");
             }}
-            className={category.type === "income" ? "current-type" : ""}
+            className={category.type === "INCOME" ? "current-type" : ""}
           >
             Income
           </li>
           <li
             onClick={() => {
-              handleTypeChange("expense");
+              handleTypeChange("EXPENSE");
             }}
-            className={category.type === "expense" ? "current-type" : ""}
+            className={category.type === "EXPENSE" ? "current-type" : ""}
           >
             Expense
           </li>

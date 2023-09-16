@@ -1,12 +1,13 @@
 export interface CategoryToCreate {
   name: string;
   iconUrl: string;
-  type: "income" | "expense" | "transfer";
+  type: "INCOME" | "EXPENSE" | "DOUBLE_SIDED";
   color: string;
 }
 export interface Category extends CategoryToCreate{
   id: string;
   isActive: boolean;
+  isService: boolean;
 }
 
 export interface CategoryToUpdate extends CategoryToCreate{

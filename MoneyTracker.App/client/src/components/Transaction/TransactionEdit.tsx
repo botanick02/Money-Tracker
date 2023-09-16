@@ -101,7 +101,7 @@ const TransactionEdit = ({
             })}
           />
         </InputWrapper>
-        {transaction.category.type === "transfer" ? (
+        {transaction.category.type === "DOUBLE_SIDED" ? (
           <div className={"popup__row"}>
             <Dropdown
               title={"From"}

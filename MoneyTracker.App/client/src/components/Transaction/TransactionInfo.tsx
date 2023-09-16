@@ -29,7 +29,7 @@ const TransactionInfo = ({
     (a) => a.id !== "total"
   );
 
-  const type = transaction.amount > 0 ? "income" : "expense";
+  const type = transaction.amount > 0 ? "INCOME" : "EXPENSE";
 
   const categoryOptions = categoryItems
     .filter((c) => c.type === type)

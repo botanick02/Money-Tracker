@@ -8,6 +8,7 @@ query getCategories{
         color
         iconUrl
         isActive
+        isService
       }
     }
   }

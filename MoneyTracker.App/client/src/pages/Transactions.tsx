@@ -41,7 +41,7 @@ const Transactions = () => {
     }
   };
 
-  const changeTransactionTypeFilter = (type: "expense" | "income") => {
+  const changeTransactionTypeFilter = (type: "EXPENSE" | "INCOME") => {
     if (transactionType !== type) {
       dispatch(SET_TRANSACTION_TYPE(type));
     } else {
@@ -78,10 +78,10 @@ const Transactions = () => {
       <div className={"transaction-sums"}>
         <div
           onClick={() => {
-            changeTransactionTypeFilter("income");
+            changeTransactionTypeFilter("INCOME");
           }}
           className={`transaction-sums__income ${
-            transactionType === "income" && "active"
+            transactionType === "INCOME" && "active"
           }`}
         >
           Incomes
@@ -89,10 +89,10 @@ const Transactions = () => {
         </div>
         <div
           onClick={() => {
-            changeTransactionTypeFilter("expense");
+            changeTransactionTypeFilter("EXPENSE");
           }}
           className={`transaction-sums__expense ${
-            transactionType === "expense" && "active"
+            transactionType === "EXPENSE" && "active"
           }`}
         >
           Expenses

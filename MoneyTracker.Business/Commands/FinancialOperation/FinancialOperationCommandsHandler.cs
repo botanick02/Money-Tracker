@@ -23,7 +23,7 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
         {
             var category = categoryRepository.GetCategoryById(command.CategoryId);
 
-            if (category == null || category.Type != "income")
+            if (category == null || category.Type != TransactionTypes.Income)
             {
                 throw new ArgumentException("CategoryId: CategoryId is invalid");
             }
@@ -94,7 +94,7 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
 
             var category = categoryRepository.GetCategoryById(command.CategoryId);
 
-            if (category == null || category.Type != "expense")
+            if (category == null || category.Type != TransactionTypes.Expense)
             {
                 throw new ArgumentException("CategoryId: CategoryId is invalid");
             }
@@ -174,7 +174,7 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
 
             var currentTime = DateTime.UtcNow;
 
-            var transferCategoryId = categoryRepository.GetTransferCategory(command.UserId).Id;
+            var transferCategoryId = categoryRepository.GetServiceCategory(ServiceCategories.Transfer).Id;
 
             eventsToAppend.Add(new DebitTransactionAddedEvent
             (
@@ -297,7 +297,7 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
                 var categories = categoryRepository.GetCategories(transaction.UserId);
                 var category = categories.FirstOrDefault(c => c.Id == transaction.CategoryId);
 
-                bool isTransfer = category!.Type == "transfer";
+                bool isTransfer = category!.Name == ServiceCategories.Transfer.ToString();
                 bool isPositiveAmount = transaction.Amount > 0;
                 bool isNegativeAmount = transaction.Amount < 0;
 

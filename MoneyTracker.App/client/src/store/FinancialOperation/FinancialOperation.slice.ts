@@ -55,7 +55,7 @@ export interface CreateTransactionState {
   incomes: number;
   expenses: number;
   dateRange: { fromDate: string | null; toDate: string | null };
-  transactionType: "expense" | "income" | null;
+  transactionType: "EXPENSE" | "INCOME" | null;
 }
 
 const initialState: CreateTransactionState = {
@@ -157,7 +157,7 @@ export const FinancialOperationSlice = createSlice({
     ) {
       state.dateRange = action.payload;
     },
-    SET_TRANSACTION_TYPE(state, action: PayloadAction<"expense" | "income" | null>) {
+    SET_TRANSACTION_TYPE(state, action: PayloadAction<"EXPENSE" | "INCOME" | null>) {
       state.transactionType = action.payload;
     },
   },
