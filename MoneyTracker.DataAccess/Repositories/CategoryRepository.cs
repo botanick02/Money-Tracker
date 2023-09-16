@@ -19,7 +19,10 @@ namespace MoneyTracker.DataAccess.Repositories
             var modelExtensions = readModelExtensionsScoped ?? readModelExtensions;
 
             var readModel = modelExtensions.GetReadModel(dateTimeTo);
-            return readModel.Categories.Where(c => c.UserId == userId).ToList();
+            var categories = new List<Category>();
+            categories.AddRange(readModel.Categories.Where(c => c.UserId == userId).ToList());
+            categories.AddRange(readModel.Categories.Where(c => c.IsService == true));
+            return categories;
         }
 
         public Category? GetCategoryById(Guid id, IReadModelExtensions? readModelExtensionsScoped = null)
@@ -40,12 +43,10 @@ namespace MoneyTracker.DataAccess.Repositories
             return categories;
         }
 
-        public Category GetTransferCategory(Guid userId, IReadModelExtensions? readModelExtensionsScoped = null)
+        public Category GetServiceCategory(ServiceCategories name)
         {
-            var modelExtensions = readModelExtensionsScoped ?? readModelExtensions;
-
-            var readModel = modelExtensions.GetReadModel();
-            return readModel.Categories.Where(c => c.UserId == userId).FirstOrDefault(c => c.Type == "transfer");
+            var readModel = readModelExtensions.GetReadModel();
+            return readModel.Categories.FirstOrDefault(c => c.Name == name.ToString());
         }
     }
 }

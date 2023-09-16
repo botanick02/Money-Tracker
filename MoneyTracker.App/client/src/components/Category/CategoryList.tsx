@@ -15,11 +15,11 @@ const CategoryList = () => {
   const [categoryToEdit, setCategoryToEdit] = useState<undefined | Category>();
   const [isCreatePopupOpen, setIsCreatePopupOpen] = useState<boolean>(false);
   const [categoryTypeFilter, setCategoryTypeFilter] = useState<
-    "expense" | "income"
-  >("expense");
+    "EXPENSE" | "INCOME"
+  >("EXPENSE");
 
   var categories = useAppSelector((state) => state.Category.categories)
-    .filter((c) => c.type !== "transfer")
+    .filter((c) => c.isService == false)
     .filter((c) => c.isActive == true)
     .filter((c) => c.type === categoryTypeFilter);
 
@@ -51,7 +51,7 @@ const CategoryList = () => {
     dispatch(FETCH_CATEGORIES());
   }, [editSuccess, dispatch]);
 
-  const changeCategoryFilter = (type: "expense" | "income") => {
+  const changeCategoryFilter = (type: "EXPENSE" | "INCOME") => {
     setCategoryTypeFilter(type);
   };
 
@@ -66,20 +66,20 @@ const CategoryList = () => {
       <div className={"transaction-sums"}>
         <div
           onClick={() => {
-            changeCategoryFilter("income");
+            changeCategoryFilter("INCOME");
           }}
           className={`transaction-sums__income ${
-            categoryTypeFilter == "income" && "active"
+            categoryTypeFilter == "INCOME" && "active"
           }`}
         >
           Income
         </div>
         <div
           onClick={() => {
-            changeCategoryFilter("expense");
+            changeCategoryFilter("EXPENSE");
           }}
           className={`transaction-sums__expense ${
-            categoryTypeFilter == "expense" && "active"
+            categoryTypeFilter == "EXPENSE" && "active"
           }`}
         >
           Expense

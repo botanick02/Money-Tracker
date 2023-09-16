@@ -40,7 +40,7 @@ const TransactionList = () => {
   );
 
   if (currentAccountId === "total") {
-    transactions = transactions.filter((t) => t.category.type !== "transfer");
+    transactions = transactions.filter((t) => t.category.type !== "DOUBLE_SIDED");
   }
 
   return (
