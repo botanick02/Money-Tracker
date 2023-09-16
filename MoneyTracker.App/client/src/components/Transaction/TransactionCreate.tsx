@@ -41,9 +41,7 @@ const TransactionCreate: React.FC<Props> = ({
 
   const dispatch = useAppDispatch();
   const categoryItems = useAppSelector((state) => state.Category.categories).filter(t => t.isActive == true);
-  const accounts = useAppSelector((state) =>
-  state.Account.accounts.filter((account) => account.isActive)
-);
+  const accounts = useAppSelector((state) => state.Account.accounts);
 
   const accountOptions: Option[] = [];
   accounts

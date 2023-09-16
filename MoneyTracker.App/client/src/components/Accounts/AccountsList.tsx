@@ -3,13 +3,14 @@ import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
 import AccountCreate from "./AccountCreate";
 import { FETCH_ACCOUNTS } from "../../store/Account/Account.slice";
 import StatsTransactionItem from "../../elements/StatsTransactionItem";
+import TransactionCreate from "../Transaction/TransactionCreate";
 
 const AccountsList = () => {
   const accounts = useAppSelector((state) => state.Account.accounts);
   const inactiveAccounts = accounts.filter((account) => !account.isActive && account.name !== "Total");
   const [isCreatePopupOpen, setIsCreatePopupOpen] = useState<boolean>(false);
   const [showInactiveAccountsList, setShowInactiveAccounts] = useState(false);
-
+  const [myData, setMyData] = useState();
   const handlePopupOpen = () => {
     document.body.classList.toggle("no-scroll");
     setIsCreatePopupOpen((prevState) => !prevState);
@@ -25,7 +26,13 @@ const AccountsList = () => {
   const activeAccounts = accounts.filter((account) => account.isActive);
 
   return (
+    
     <main>
+       {!isCreatePopupOpen && (
+        <div onClick={handlePopupOpen} className="new-transaction button">
+          +
+        </div>
+      )}
     <div className="transaction-list">
       {isCreatePopupOpen && (
         <AccountCreate openPopupHandle={handlePopupOpen} name="" />
@@ -42,11 +49,7 @@ const AccountsList = () => {
         />
       ))}
 
-      {!isCreatePopupOpen && (
-        <div onClick={handlePopupOpen} className="new-transaction button">
-          +
-        </div>
-      )}
+     
 
       <button
         onClick={() => setShowInactiveAccounts(!showInactiveAccountsList)}
@@ -66,6 +69,7 @@ const AccountsList = () => {
           {showInactiveAccountsList ? '▼' : '▲'}
         </span>
       </button>
+     
 
       {showInactiveAccountsList && (
       
