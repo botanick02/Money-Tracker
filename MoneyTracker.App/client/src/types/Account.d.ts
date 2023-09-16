@@ -7,3 +7,5 @@ export interface Account{
     currency: Currency;
     isActive?:boolean;
 }
+
+
