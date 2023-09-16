@@ -15,8 +15,9 @@ namespace MoneyTracker.DataAccess.MsSQL
     {
         private readonly string connectionString;
         private readonly IEventStore eventStore;
+        private readonly ICategoryRepository categoryRepository;
 
-        public MsSQLDBInitializer(IConfiguration configuration, IEventStore eventStore)
+        public MsSQLDBInitializer(IConfiguration configuration, IEventStore eventStore, ICategoryRepository categoryRepository)
         {
             string? connectionString = configuration.GetConnectionString("MsSQL");
             if (string.IsNullOrEmpty(connectionString))
@@ -25,6 +26,7 @@ namespace MoneyTracker.DataAccess.MsSQL
             }
             this.connectionString = connectionString;
             this.eventStore = eventStore;
+            this.categoryRepository = categoryRepository;
         }
 
         public void InitializeDatabase()
@@ -50,7 +52,13 @@ namespace MoneyTracker.DataAccess.MsSQL
                 if (tableExists != 1)
                 {
                     conn.Execute(createTableQuery);
-                    var events = new List<Event>
+                    
+                }
+            }
+
+            if (categoryRepository.GetServiceCategory(ServiceCategories.Transfer) == null)
+            {
+                var events = new List<Event>
                     {
                     new ServiceCategoryCreatedEvent(Guid.NewGuid(), "Transfer", TransactionTypes.DoubleSided, "./media/icons/transfer.svg", "#d9d9d9"),
                     new ServiceCategoryCreatedEvent(Guid.NewGuid(), "Gone", TransactionTypes.DoubleSided, "./media/icons/exit.svg", "#d9d9d9"),
@@ -58,8 +66,7 @@ namespace MoneyTracker.DataAccess.MsSQL
                 };
 
 
-                    eventStore.AppendEventsAsync(events);
-                }
+                eventStore.AppendEventsAsync(events);
             }
         }
     }
