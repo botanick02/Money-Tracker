@@ -70,6 +70,26 @@ namespace MoneyTracker.Business.Events.Categories
         }
     }
 
+    public class ServiceCategoryCreatedEventApplier : IEventApplier<ServiceCategoryCreatedEvent>
+    {
+        public async Task<ReadModel> ApplyAsync(ReadModel currentmodel, ServiceCategoryCreatedEvent @event)
+        {
+            var updatedModel = currentmodel;
+            updatedModel.Categories = updatedModel.Categories.Append(
+                new Category
+                {
+                    Id = @event.CategoryId,
+                    Name = @event.Name,
+                    Color = @event.Color,
+                    IconUrl = @event.IconUrl,
+                    Type = @event.Type, 
+                    IsService = true
+                });
+
+            return updatedModel;
+        }
+    }
+
     public class CategoryDeactivatedEventApplier : IEventApplier<CategoryDeactivatedEvent>
     {
         public async Task<ReadModel> ApplyAsync(ReadModel currentmodel, CategoryDeactivatedEvent @event)
