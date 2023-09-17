@@ -1,4 +1,5 @@
-﻿using MoneyTracker.Business.Entities;
+﻿using GraphQL;
+using MoneyTracker.Business.Entities;
 using System.ComponentModel.DataAnnotations;
 
 namespace MoneyTracker.App.Helpers
@@ -40,6 +41,8 @@ namespace MoneyTracker.App.Helpers
             }
             if (value is string stringValue)
             {
+                stringValue = stringValue.ToLowerInvariant();
+                stringValue = char.ToUpperInvariant(stringValue[0]) + stringValue.Substring(1);
                 return Enum.TryParse<TransactionTypes>(stringValue, out _);
             }
 
