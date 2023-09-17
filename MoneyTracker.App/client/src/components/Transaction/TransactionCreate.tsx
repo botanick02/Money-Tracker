@@ -26,7 +26,7 @@ const TransactionCreate: React.FC<Props> = ({
 }) => {
   const transactionType = useAppSelector(state => state.FinancialOperation.transactionType);
 
-  const [type, setType] = useState<"expense" | "income" | "transfer">(transactionType ?? "expense");
+  const [type, setType] = useState<"EXPENSE" | "INCOME" | "TRANSFER">(transactionType ?? "EXPENSE");
 
   const {
     register,
@@ -38,8 +38,10 @@ const TransactionCreate: React.FC<Props> = ({
   });
 
   const dispatch = useAppDispatch();
-  const categoryItems = useAppSelector((state) => state.Category.categories).filter(t => t.isActive === true);
-  const accounts = useAppSelector((state) => state.Account.accounts);
+  const categoryItems = useAppSelector((state) => state.Category.categories).filter(t => t.isActive == true);
+  const accounts = useAppSelector((state) =>
+  state.Account.accounts.filter((account) => account.isActive)
+);
 
   const accountOptions: Option[] = [];
   accounts
@@ -84,7 +86,7 @@ const TransactionCreate: React.FC<Props> = ({
 
   const addFinancialOperation = (data: FormFields) => {
     switch (type) {
-      case "income": {
+      case "INCOME": {
         dispatch(
           ADD_DEBIT_OPERATION({
             amount: +data.amount,
@@ -96,7 +98,7 @@ const TransactionCreate: React.FC<Props> = ({
         );
         break;
       }
-      case "expense": {
+      case "EXPENSE": {
         dispatch(
           ADD_CREDIT_OPERATION({
             amount: +data.amount,
@@ -108,7 +110,7 @@ const TransactionCreate: React.FC<Props> = ({
         );
         break;
       }
-      case "transfer": {
+      case "TRANSFER": {
         dispatch(
           ADD_TRANSFER_OPERATION({
             amount: +data.amount,
@@ -130,31 +132,31 @@ const TransactionCreate: React.FC<Props> = ({
         <ul className={"popup__header"}>
           <li
             onClick={() => {
-              setType("income");
+              setType("INCOME");
             }}
-            className={type === "income" ? "current-type" : ""}
+            className={type === "INCOME" ? "current-type" : ""}
           >
             Income
           </li>
           <li
             onClick={() => {
-              setType("expense");
+              setType("EXPENSE");
             }}
-            className={type === "expense" ? "current-type" : ""}
+            className={type === "EXPENSE" ? "current-type" : ""}
           >
             Expense
           </li>
           <li
             onClick={() => {
-              setType("transfer");
+              setType("TRANSFER");
             }}
-            className={type === "transfer" ? "current-type" : ""}
+            className={type === "TRANSFER" ? "current-type" : ""}
           >
             Transfer
           </li>
         </ul>
         <div className={"popup__fields"}>
-          {type !== "transfer" ? (
+          {type !== "TRANSFER" ? (
             <Dropdown
               title={"Account"}
               selectHandler={setAccount}
@@ -193,7 +195,7 @@ const TransactionCreate: React.FC<Props> = ({
               })}
             />
           </InputWrapper>
-          {type !== "transfer" ? (
+          {type !== "TRANSFER" ? (
             <Dropdown
               title={"Category"}
               selectHandler={handleCategoryChange}

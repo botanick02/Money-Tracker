@@ -1,4 +1,5 @@
 ﻿using MoneyTracker.Business.ReadStoreModel;
+using System.Xml.Linq;
 
 namespace MoneyTracker.Business.Events.Account
 {
@@ -13,7 +14,7 @@ namespace MoneyTracker.Business.Events.Account
                 Id = @event.AccountId,
                 UserId = @event.UserId,
                 Currency = @event.Currency,
-                Type = Entities.AccountType.Debit 
+                Type = Entities.AccountType.Debit
             };
 
             updatedModel.Accounts = updatedModel.Accounts.Append(newDebitAccount);
@@ -54,6 +55,7 @@ namespace MoneyTracker.Business.Events.Account
                 UserId = @event.UserId,
                 Currency = @event.Currency,
                 Name = @event.Name,
+                IsActive = @event.IsActive,
                 Type = Entities.AccountType.Personal
             };
 
@@ -62,4 +64,42 @@ namespace MoneyTracker.Business.Events.Account
             return updatedModel;
         }
     }
-}
+    public class PersonalAccountDeactivatedEventApplier : IEventApplier<PersonalAccountDeactivatedEvent>
+    {
+        public async Task<ReadModel> ApplyAsync(ReadModel currentmodel, PersonalAccountDeactivatedEvent @event)
+        {
+            var updatedModel = currentmodel;
+
+            var accountToUpdate = updatedModel.Accounts.FirstOrDefault(account => account.Id == @event.AccountId);
+            if (accountToUpdate != null)
+            {
+                accountToUpdate.IsActive = !accountToUpdate.IsActive;
+            }
+
+            return updatedModel;
+        }
+    }
+
+    public class UpdatePersonalAccountEventApplier : IEventApplier<UpdatePersonalAccountEvent>
+    {
+        public async Task<ReadModel> ApplyAsync(ReadModel currentModel, UpdatePersonalAccountEvent @event)
+        {
+
+            var updatedModel = currentModel;
+
+            var accountToUpdate = updatedModel.Accounts.FirstOrDefault(account => account.Id == @event.AccountId);
+
+            if (accountToUpdate != null)
+            {
+              
+                accountToUpdate.Name = @event.Name;
+
+            }
+           
+            return updatedModel;
+        }
+    }
+    }
+
+
+

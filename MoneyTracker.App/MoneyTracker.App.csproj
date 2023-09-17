@@ -18,8 +18,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="client\" />
     <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="client\src\components\Accounts\Currencies.json" />
   </ItemGroup>
 
   <ItemGroup>

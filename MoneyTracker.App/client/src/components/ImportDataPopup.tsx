@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAppDispatch } from "../hooks/useAppDispatch";
 import {request} from "../api/core";
+import React from "react";
 
 interface ImportDataPopupProps {
   closePopupHandle: () => void;
@@ -20,8 +21,6 @@ const ImportDataPopup = ({ closePopupHandle }: ImportDataPopupProps) => {
     if (selectedFile) {
       const formData = new FormData();
       
-      // Generate a boundary string
-  
       formData.append('operations', JSON.stringify({
         query: `
           mutation ($file: Upload!) {

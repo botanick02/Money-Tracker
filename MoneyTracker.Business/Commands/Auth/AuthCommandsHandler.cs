@@ -90,7 +90,7 @@ namespace MoneyTracker.Business.Commands.Auth
         {
             events.Add(new CreditAccountCreatedEvent(Guid.NewGuid(), userId, currency));
             events.Add(new DebitAccountCreatedEvent(Guid.NewGuid(), userId, currency));
-            events.Add(new PersonalAccountCreatedEvent(Guid.NewGuid(), userId, "Cash", currency));
+            events.Add(new PersonalAccountCreatedEvent(Guid.NewGuid(), userId, "Cash", currency,true));
         }
 
         public static void AddDefaultCategories(Guid userId, List<Event> events, ICategoryRepository categoryRepository)
@@ -99,15 +99,15 @@ namespace MoneyTracker.Business.Commands.Auth
 
             foreach (var category in defaultCategories.IncomeCategories)
             {
-                events.Add(new CategoryCreatedEvent(Guid.NewGuid(), userId, category.Name, "income", category.IconUrl, category.Color));
+                events.Add(new CategoryCreatedEvent(Guid.NewGuid(), userId, category.Name, TransactionTypes.Income, category.IconUrl, category.Color));
             }
 
             foreach (var category in defaultCategories.ExpenseCategories)
             {
-                events.Add(new CategoryCreatedEvent(Guid.NewGuid(), userId, category.Name, "expense", category.IconUrl, category.Color));
+                events.Add(new CategoryCreatedEvent(Guid.NewGuid(), userId, category.Name, TransactionTypes.Expense, category.IconUrl, category.Color));
             }
 
-            events.Add(new CategoryCreatedEvent(Guid.NewGuid(), userId, "Transfer", "transfer", "./media/icons/transfer.svg", "#d9d9d9"));
+           
         }
 
         public class SetUserRefreshTokenCommandHandler : ICommandHandler<SetUserRefreshTokenCommand>

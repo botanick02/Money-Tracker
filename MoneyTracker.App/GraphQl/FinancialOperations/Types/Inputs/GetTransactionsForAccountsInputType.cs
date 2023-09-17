@@ -5,9 +5,8 @@ namespace MoneyTracker.App.GraphQl.FinancialOperations.Types.Inputs
 {
     public class GetTransactionsForAccountsInput
     {
-        [GuidValidationAttribute(ErrorMessage = "FromAccountId is invalid")]
-
-        public Guid? AccountId { get; set; }
+        [GuidValidationAttribute(ErrorMessage = "AccountId is invalid")]
+        public string? AccountId { get; set; }
 
         public DateTime? FromDate { get; set; }
 
@@ -15,6 +14,7 @@ namespace MoneyTracker.App.GraphQl.FinancialOperations.Types.Inputs
 
         public Guid? CategoryId { get; set; }
 
+        [CategoryTypeValidation(ErrorMessage = "Transaction type is invalid")]
         public string? TransactionType { get; set; }
     }
     public class GetTransactionsForAccountsInputType : InputObjectGraphType<GetTransactionsForAccountsInput>

@@ -21,9 +21,11 @@ namespace MoneyTracker.Business.Services
             this.readModelExtensions = readModelExtensions;
         }
 
-        public GetTransactionsDataDto GetTransactionsData(Guid userId, DateTime? fromDate = null, DateTime? toDate = null, Guid? accountId = null, Guid? categoryId = null, string? transactionType = null, DateTime? timeTravelDateTime = null)
+        public GetTransactionsDataDto GetTransactionsData(Guid userId, DateTime? fromDate = null, DateTime? toDate = null, Guid? accountId = null, Guid? categoryId = null, TransactionTypes? transactionType = null, DateTime? timeTravelDateTime = null)
         {
             var res = new GetTransactionsDataDto();
+
+
 
             var transactions = accountId == null
                 ? GetPersonalAccountTransactions(userId, timeTravelDateTime)
@@ -40,18 +42,21 @@ namespace MoneyTracker.Business.Services
 
                 TransactionDto transactionDto = mapper.Map<TransactionDto>(transaction);
 
-                if (category!.Type == "transfer")
+                if (category!.Name == ServiceCategories.Transfer.ToString())
                 {
                     if (transaction.Amount > 0)
                     {
                         transactionDto.FromAccountId = transactionRepository.GetTransactionsByOperationId(transaction.OperationId, timeTravelDateTime, readModelExtensions).FirstOrDefault(t => t.Amount < 0)!.AccountId;
+                        transactionDto.AccountName  = transactionDto.AccountName;
                     }
                     else
                     {
                         transactionDto.FromAccountId = transactionDto.AccountId;
+                        transactionDto.AccountName = transactionDto.AccountName;
                         transactionDto.AccountId = transactionRepository.GetTransactionsByOperationId(transaction.OperationId, timeTravelDateTime, readModelExtensions).FirstOrDefault(t => t.Amount > 0)!.AccountId;
                     }
                 }
+
                 res.Transactions.Add(transactionDto);
 
                 transactionDto.Category = category;
@@ -66,8 +71,9 @@ namespace MoneyTracker.Business.Services
 
         private List<Transaction> GetPersonalAccountTransactions(Guid userId, DateTime? dateTime = null)
         {
+            var transferCatId = categoryRepository.GetServiceCategory(ServiceCategories.Transfer).Id;
             var userPersonalAccounts = accountRepository!.GetUserAccounts(userId, Entities.AccountType.Personal, dateTime, readModelExtensions);
-            return userPersonalAccounts.SelectMany(account => transactionRepository!.GetAccountTransactions(account.Id, dateTime, readModelExtensions)).ToList();
+            return userPersonalAccounts.SelectMany(account => transactionRepository!.GetAccountTransactions(account.Id, dateTime, readModelExtensions).Where(t => t.CategoryId != transferCatId)).ToList();
         }
 
         private List<Transaction> FilterTransactionsByCatAndDate(List<Transaction> transactions, Guid? categoryId, DateTime? fromDate, DateTime? toDate)
@@ -92,16 +98,16 @@ namespace MoneyTracker.Business.Services
             return filteredTransactions;
         }
 
-        private List<TransactionDto> FilterTransactionsByType(List<TransactionDto> transactions, string? transactionType)
+        private List<TransactionDto> FilterTransactionsByType(List<TransactionDto> transactions, TransactionTypes? type)
         {
             var filteredTransactions = transactions;
 
-            if (transactionType != null)
+            if (type != null)
             {
-                filteredTransactions = transactionType switch
+                filteredTransactions = type switch
                 {
-                    "expense" => filteredTransactions.Where(t => t.Amount < 0).ToList(),
-                    "income" => filteredTransactions.Where(t => t.Amount > 0).ToList(),
+                    TransactionTypes.Expense => filteredTransactions.Where(t => t.Amount < 0).ToList(),
+                    TransactionTypes.Income => filteredTransactions.Where(t => t.Amount > 0).ToList(),
                     _ => filteredTransactions
                 };
             }
@@ -111,15 +117,15 @@ namespace MoneyTracker.Business.Services
 
         private void CalculateExpensesAndIncomes(GetTransactionsDataDto res, Guid? accountId)
         {
-            var expenseTransactions = res.Transactions.Where(t => t.Category.Type == "expense");
-            var incomeTransactions = res.Transactions.Where(t => t.Category.Type == "income");
+            var expenseTransactions = res.Transactions.Where(t => t.Category.Type == TransactionTypes.Expense);
+            var incomeTransactions = res.Transactions.Where(t => t.Category.Type == TransactionTypes.Income);
 
             res.Expenses = expenseTransactions.Sum(t => t.Amount);
             res.Incomes = incomeTransactions.Sum(t => t.Amount);
 
             if (accountId != null)
             {
-                var transferTransactions = res.Transactions.Where(t => t.Category.Type == "transfer");
+                var transferTransactions = res.Transactions.Where(t => t.Category.Name == ServiceCategories.Transfer.ToString());
                 res.Expenses += transferTransactions.Where(t => t.Amount < 0).Sum(t => t.Amount);
                 res.Incomes += transferTransactions.Where(t => t.Amount > 0).Sum(t => t.Amount);
             }
