@@ -33,6 +33,8 @@ namespace MoneyTracker.DataAccess.MsSQL
         {
             const string checkTableQuery = "SELECT 1 FROM sys.tables WHERE name = 'Events'";
 
+            const string checkServiceCatQuery = "SELECT COUNT(*) FROM Events WHERE Type LIKE '%ServiceCategoryCreated%'";
+
             const string createTableQuery = @"
                 CREATE TABLE Events
                 (
@@ -52,21 +54,20 @@ namespace MoneyTracker.DataAccess.MsSQL
                 if (tableExists != 1)
                 {
                     conn.Execute(createTableQuery);
-                    
                 }
-            }
 
-            if (categoryRepository.GetServiceCategory(ServiceCategories.Transfer) == null)
-            {
-                var events = new List<Event>
+                int serviceCreationEvents = conn.ExecuteScalar<int>(checkServiceCatQuery);
+
+                if (serviceCreationEvents < 1)
+                {
+                    var events = new List<Event>
                     {
                     new ServiceCategoryCreatedEvent(Guid.NewGuid(), "Transfer", TransactionTypes.DoubleSided, "./media/icons/transfer.svg", "#d9d9d9"),
                     new ServiceCategoryCreatedEvent(Guid.NewGuid(), "Gone", TransactionTypes.DoubleSided, "./media/icons/exit.svg", "#d9d9d9"),
                     new ServiceCategoryCreatedEvent(Guid.NewGuid(), "Comission", TransactionTypes.DoubleSided, "./media/icons/transfer.svg", "#d9d9d9")
                 };
-
-
-                eventStore.AppendEventsAsync(events);
+                    eventStore.AppendEventsAsync(events);
+                }
             }
         }
     }
