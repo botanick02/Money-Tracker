@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using MoneyTracker.Business.Events;
 using MoneyTracker.Business.Interfaces;
 using OfficeOpenXml;
 using System.Diagnostics;
@@ -8,10 +9,12 @@ namespace MoneyTracker.Business.Services
     public class ImportDataService
     {
         private readonly IMccCodeRepository mccCodeRepository;
+        private readonly IEventStore eventStore;
 
-        public ImportDataService(IMccCodeRepository mccCodeRepository)
+        public ImportDataService(IMccCodeRepository mccCodeRepository, IEventStore eventStore)
         {
             this.mccCodeRepository = mccCodeRepository;
+            this.eventStore = eventStore;
         }
 
         public bool ImportTransactions(IFormFile file)
@@ -43,7 +46,8 @@ namespace MoneyTracker.Business.Services
                             return false;
                         }
 
-                        // Process transactions from the Excel file.
+                        var transactionCreationCommands = new List<Event>();
+
                         for (int row = startRow; row <= worksheet.Dimension.Rows; row++)
                         {
                             var dateAndTime = worksheet.Cells[row, 1].Text;
@@ -57,7 +61,8 @@ namespace MoneyTracker.Business.Services
                             var cashbackAmount = worksheet.Cells[row, 9].Text;
                             var balance = worksheet.Cells[row, 10].Text;
 
-                            Debug.WriteLine(dateAndTime + " " + description + " " + mccCodeRepository.GetMccNameById(mcc) + " " + operationAmount);
+
+                            Debug.WriteLine(mccCodeRepository.GetMccDescById(mcc));
                         }
 
                         // At this point, you have processed all transactions.
