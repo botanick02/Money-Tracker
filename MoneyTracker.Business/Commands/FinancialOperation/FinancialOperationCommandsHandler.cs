@@ -50,7 +50,7 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
                 AccountId: command.ToAccountId,
                 Title: command.Title,
                 Note: command.Note,
-                Amount : command.Amount
+                Amount: command.Amount
             ));
 
             eventsToAppend.Add(new CreditTransactionAddedEvent
@@ -174,7 +174,7 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
 
             var currentTime = DateTime.UtcNow;
 
-            var transferCategoryId = categoryRepository.GetServiceCategory(ServiceCategories.Transfer).Id;
+            var transferCategoryId = categoryRepository.GetServiceCategory(ServiceCategories.MoneyTransfer).Id;
 
             eventsToAppend.Add(new DebitTransactionAddedEvent
             (
@@ -297,7 +297,7 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
                 var categories = categoryRepository.GetCategories(transaction.UserId);
                 var category = categories.FirstOrDefault(c => c.Id == transaction.CategoryId);
 
-                bool isTransfer = category!.Name == ServiceCategories.Transfer.ToString();
+                bool isTransfer = category!.Name == ServiceCategories.MoneyTransfer.ToString();
                 bool isPositiveAmount = transaction.Amount > 0;
                 bool isNegativeAmount = transaction.Amount < 0;
 

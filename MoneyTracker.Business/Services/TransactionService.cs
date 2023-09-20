@@ -42,7 +42,7 @@ namespace MoneyTracker.Business.Services
 
                 TransactionDto transactionDto = mapper.Map<TransactionDto>(transaction);
 
-                if (category!.Name == ServiceCategories.Transfer.ToString())
+                if (category!.Name == ServiceCategories.MoneyTransfer.ToString())
                 {
                     if (transaction.Amount > 0)
                     {
@@ -71,7 +71,7 @@ namespace MoneyTracker.Business.Services
 
         private List<Transaction> GetPersonalAccountTransactions(Guid userId, DateTime? dateTime = null)
         {
-            var transferCatId = categoryRepository.GetServiceCategory(ServiceCategories.Transfer).Id;
+            var transferCatId = categoryRepository.GetServiceCategory(ServiceCategories.MoneyTransfer).Id;
             var userPersonalAccounts = accountRepository!.GetUserAccounts(userId, Entities.AccountType.Personal, dateTime, readModelExtensions);
             return userPersonalAccounts.SelectMany(account => transactionRepository!.GetAccountTransactions(account.Id, dateTime, readModelExtensions).Where(t => t.CategoryId != transferCatId)).ToList();
         }
@@ -125,7 +125,7 @@ namespace MoneyTracker.Business.Services
 
             if (accountId != null)
             {
-                var transferTransactions = res.Transactions.Where(t => t.Category.Name == ServiceCategories.Transfer.ToString());
+                var transferTransactions = res.Transactions.Where(t => t.Category.Name == ServiceCategories.MoneyTransfer.ToString());
                 res.Expenses += transferTransactions.Where(t => t.Amount < 0).Sum(t => t.Amount);
                 res.Incomes += transferTransactions.Where(t => t.Amount > 0).Sum(t => t.Amount);
             }

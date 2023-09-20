@@ -19,14 +19,14 @@ namespace MoneyTracker.DataAccess.Repositories
             mccCodes = readMccCodes;
         }
 
-        public string GetMccDescById(string id)
+        public MccCode GetMccById(string id)
         {
-            if (!mccCodes.Any(c => c.Id == id))
+            if (!mccCodes.Any(c => c.Mcc == id))
             {
                 throw new ArgumentOutOfRangeException(nameof(id), "Invalid MCC code");
             }
 
-            return mccCodes.FirstOrDefault(c => c.Id == id)!.Description;
+            return mccCodes.FirstOrDefault(c => c.Mcc == id)!;
         }
     }
 }

@@ -1,8 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
+using MoneyTracker.Business.Entities;
 using MoneyTracker.Business.Events;
+using MoneyTracker.Business.Events.Categories;
+using MoneyTracker.Business.Events.FinancialOperation;
 using MoneyTracker.Business.Interfaces;
 using OfficeOpenXml;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace MoneyTracker.Business.Services
 {
@@ -10,14 +14,18 @@ namespace MoneyTracker.Business.Services
     {
         private readonly IMccCodeRepository mccCodeRepository;
         private readonly IEventStore eventStore;
+        private readonly ICategoryRepository categoryRepository;
+        private readonly IAccountRepository accountRepository;
 
-        public ImportDataService(IMccCodeRepository mccCodeRepository, IEventStore eventStore)
+        public ImportDataService(IMccCodeRepository mccCodeRepository, IEventStore eventStore, ICategoryRepository categoryRepository, IAccountRepository accountRepository)
         {
             this.mccCodeRepository = mccCodeRepository;
             this.eventStore = eventStore;
+            this.categoryRepository = categoryRepository;
+            this.accountRepository = accountRepository;
         }
 
-        public bool ImportTransactions(IFormFile file)
+        public bool ImportTransactions(IFormFile file, Guid userId)
         {
             try
             {
@@ -46,7 +54,13 @@ namespace MoneyTracker.Business.Services
                             return false;
                         }
 
-                        var transactionCreationCommands = new List<Event>();
+                        var usersDebitAccount = accountRepository.GetUserAccounts(userId, Entities.AccountType.Debit).FirstOrDefault()!.Id;
+                        var usersCreditAccount = accountRepository.GetUserAccounts(userId, Entities.AccountType.Credit).FirstOrDefault()!.Id;
+                        var userAccount = accountRepository.GetUserAccounts(userId, AccountType.Personal).FirstOrDefault(a => a.Name == "Cash")!.Id;
+
+                        var importEvents = new List<Event>();
+                        var newCategories = new List<CategoryMinId>();
+
 
                         for (int row = startRow; row <= worksheet.Dimension.Rows; row++)
                         {
@@ -61,12 +75,71 @@ namespace MoneyTracker.Business.Services
                             var cashbackAmount = worksheet.Cells[row, 9].Text;
                             var balance = worksheet.Cells[row, 10].Text;
 
+                            var mccName = mccCodeRepository.GetMccById(mcc).ShortDescription;
 
-                            Debug.WriteLine(mccCodeRepository.GetMccDescById(mcc));
+                            var category = categoryRepository.GetCategoryByName(userId, mccName);
+
+                            var transType = decimal.Parse(cardCurrencyAmount) > 0 ? TransactionTypes.Income : TransactionTypes.Expense;
+
+                            var transactionId = Guid.NewGuid();
+
+                            var amount = decimal.Abs(decimal.Parse(cardCurrencyAmount));
+
+                            string format = "dd.MM.yyyy HH:mm:ss";
+
+                            var dateTime = DateTime.ParseExact(dateAndTime, format, CultureInfo.InvariantCulture, DateTimeStyles.None);
+
+                            var catId = Guid.NewGuid();
+
+
+                            if (category == null)
+                            {
+                                var newCat = newCategories.FirstOrDefault(c => c.Name == mccName);
+
+                                if (newCat != null)
+                                {
+                                    catId = newCat.Id;
+                                }
+                                else
+                                {
+                                    importEvents.Add(new CategoryCreatedEvent(catId, userId, mccName, transType, "./media/icons/import.svg", "#d9d9d9"));
+                                    newCategories.Add(new CategoryMinId() { Name = mccName, Id = catId });
+                                }
+                            }
+                            else
+                            {
+                                catId = category.Id;
+                            }
+
+                            importEvents.AddRange(new List<Event>
+                            {
+                                new DebitTransactionAddedEvent
+                            (
+                                OperationId: transactionId,
+                                UserId: userId,
+                                CategoryId: catId,
+                                CreatedAt: dateTime,
+                                AccountId: transType == TransactionTypes.Income ? userAccount : usersCreditAccount,
+                                Title: description,
+                                Note: null,
+                                Amount: amount
+                            ),
+                                new CreditTransactionAddedEvent
+                            (
+                                OperationId: transactionId,
+                                UserId: userId,
+                                CategoryId: catId,
+                                CreatedAt: dateTime,
+                                AccountId: transType == TransactionTypes.Expense ? userAccount : usersDebitAccount,
+                                Title: description,
+                                Note: null,
+                                Amount: amount
+                            )
+                            });
                         }
 
-                        // At this point, you have processed all transactions.
-                        // You can return true or perform any necessary actions.
+                        eventStore.AppendEventsAsync(importEvents);
+
                         return true;
                     }
                 }
@@ -78,5 +151,11 @@ namespace MoneyTracker.Business.Services
                 return false;
             }
         }
+    }
+    public class CategoryMinId
+    {
+        public string Name { get; set; }
+
+        public Guid Id { get; set; }
     }
 }

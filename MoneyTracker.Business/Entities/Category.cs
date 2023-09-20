@@ -28,7 +28,7 @@
 
     public enum ServiceCategories
     {
-        Transfer,
+        MoneyTransfer,
         Gone,
         Comission
     }

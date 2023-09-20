@@ -1,7 +1,9 @@
-﻿namespace MoneyTracker.Business.Interfaces
+﻿using MoneyTracker.Business.Entities;
+
+namespace MoneyTracker.Business.Interfaces
 {
     public interface IMccCodeRepository
     {
-        public string GetMccDescById(string id);
+        public MccCode GetMccById(string id);
     }
 }

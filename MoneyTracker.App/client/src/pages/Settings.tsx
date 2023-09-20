@@ -40,9 +40,9 @@ const Settings = () => {
   const [isImportPopupOpen, setIsImportPopupOpen] = useState<boolean>(false);
 
 
-  const handleCreatePopupOpen = () => {
+  const handleCreatePopupToggle = () => {
     document.body.classList.toggle("no-scroll");
-    setIsImportPopupOpen(false);
+    setIsImportPopupOpen((prevState) => !prevState);
   };
 
   const items: MenuItem[] = [
@@ -72,7 +72,7 @@ const Settings = () => {
       description: "Import transactions data from your bank",
       icon: <ImportSvg className={"settings-item__icon"} fill={"#FFF"} />,
       pageUrl: null,
-      onClick: () => {setIsImportPopupOpen(true)},
+      onClick: () => {handleCreatePopupToggle()},
     },
     {
       title: "Sign Out",
@@ -90,7 +90,7 @@ const Settings = () => {
   return (
     <main className="settings">
       {isImportPopupOpen && (
-        <ImportDataPopup closePopupHandle={handleCreatePopupOpen} />
+        <ImportDataPopup closePopupHandle={handleCreatePopupToggle} />
       )}
       {items.map((item, index) =>
         item.pageUrl ? (
