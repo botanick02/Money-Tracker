@@ -33,3 +33,4 @@ namespace MoneyTracker.App.GraphQl.FinancialOperations.Types.Inputs
         }
     }
 }
+

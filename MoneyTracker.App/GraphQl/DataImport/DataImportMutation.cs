@@ -12,12 +12,14 @@ namespace MoneyTracker.App.GraphQl.DataImport
         public DataImportMutation(ImportDataService importService)
         {
             Field<bool>("ImportMonobankXls")
+               .Argument<StringGraphType>("AccountId")
                .Argument<UploadGraphType>("File")
                .ResolveAsync(async context =>
                {
                    var userId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
                    var file = context.GetArgument<IFormFile>("File");
-                   importService.ImportTransactions(file, userId);
+                   var accountId = Guid.Parse(context.GetArgument<string>("AccountId"));
+                   importService.ImportTransactions(file, userId, accountId); 
                    return true;
                }).Authorize();
         }

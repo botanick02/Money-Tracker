@@ -25,13 +25,15 @@ main.settings {
     }
   }
 
-  button {
-    max-width: 200px;
-    margin-top: 20px;
-
-    &.signout {
-      margin: auto 0 30px;
-      background-color: $secondary-color;
+  .popup-row{
+    button {
+      max-width: 200px;
+      margin-top: 20px;
+  
+      &.signout {
+        margin: auto 0 30px;
+        background-color: $secondary-color;
+      }
     }
   }
 }

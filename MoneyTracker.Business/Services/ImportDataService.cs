@@ -25,7 +25,7 @@ namespace MoneyTracker.Business.Services
             this.accountRepository = accountRepository;
         }
 
-        public bool ImportTransactions(IFormFile file, Guid userId)
+        public bool ImportTransactions(IFormFile file, Guid userId, Guid userAccountId)
         {
             try
             {
@@ -34,9 +34,8 @@ namespace MoneyTracker.Business.Services
                     file.CopyTo(stream);
                     using (var package = new ExcelPackage(stream))
                     {
-                        var worksheet = package.Workbook.Worksheets[0]; // Assuming the transactions are in the first worksheet.
+                        var worksheet = package.Workbook.Worksheets[0];
 
-                        // Find the starting row of transactions (assuming the format is consistent).
                         int startRow = 0;
                         for (int row = 1; row <= worksheet.Dimension.Rows; row++)
                         {
@@ -50,13 +49,11 @@ namespace MoneyTracker.Business.Services
 
                         if (startRow == 0)
                         {
-                            // Transactions not found in the file.
                             return false;
                         }
 
                         var usersDebitAccount = accountRepository.GetUserAccounts(userId, Entities.AccountType.Debit).FirstOrDefault()!.Id;
                         var usersCreditAccount = accountRepository.GetUserAccounts(userId, Entities.AccountType.Credit).FirstOrDefault()!.Id;
-                        var userAccount = accountRepository.GetUserAccounts(userId, AccountType.Personal).FirstOrDefault(a => a.Name == "Cash")!.Id;
 
                         var importEvents = new List<Event>();
                         var newCategories = new List<CategoryMinId>();
@@ -119,7 +116,7 @@ namespace MoneyTracker.Business.Services
                                 UserId: userId,
                                 CategoryId: catId,
                                 CreatedAt: dateTime,
-                                AccountId: transType == TransactionTypes.Income ? userAccount : usersCreditAccount,
+                                AccountId: transType == TransactionTypes.Income ? userAccountId : usersCreditAccount,
                                 Title: description,
                                 Note: null,
                                 Amount: amount
@@ -130,7 +127,7 @@ namespace MoneyTracker.Business.Services
                                 UserId: userId,
                                 CategoryId: catId,
                                 CreatedAt: dateTime,
-                                AccountId: transType == TransactionTypes.Expense ? userAccount : usersDebitAccount,
+                                AccountId: transType == TransactionTypes.Expense ? userAccountId : usersDebitAccount,
                                 Title: description,
                                 Note: null,
                                 Amount: amount
