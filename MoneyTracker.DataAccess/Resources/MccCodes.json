@@ -3892,7 +3892,9 @@
   {
     "mcc": "4829",
     "shortDescription": "External money transfer",
-    "fullDescription": "Wire Transfer Money Orders / Money Transfer"
+    "fullDescription": "Wire Transfer Money Orders / Money Transfer",
+    "iconUrl": "./media/icons/external-transfer.svg",
+    "color": "#d9d9d9"
   },
   {
     "mcc": "4899",
@@ -4627,7 +4629,9 @@
   {
     "mcc": "6012",
     "shortDescription": "External money transfer",
-    "fullDescription": "Member Financial Institution - Merchandise And Services"
+    "fullDescription": "Member Financial Institution - Merchandise And Services",
+    "iconUrl": "./media/icons/external-transfer.svg",
+    "color": "#d9d9d9"
   },
   {
     "mcc": "6022",
@@ -4707,57 +4711,79 @@
   {
     "mcc": "6531",
     "shortDescription": "External Money transfer",
-    "fullDescription": "Payment for services - money transfers"
+    "fullDescription": "Payment for services - money transfers",
+    "iconUrl": "./media/icons/external-transfer.svg",
+    "color": "#d9d9d9"
   },
   {
     "mcc": "6532",
     "shortDescription": "External Money transfer",
-    "fullDescription": "Payment Transaction - Financial Institution"
+    "fullDescription": "Payment Transaction - Financial Institution",
+    "iconUrl": "./media/icons/external-transfer.svg",
+    "color": "#d9d9d9"
   },
   {
     "mcc": "6533",
     "shortDescription": "External Money transfer",
-    "fullDescription": "Payment operation - seller"
+    "fullDescription": "Payment operation - seller",
+    "iconUrl": "./media/icons/external-transfer.svg",
+    "color": "#d9d9d9"
   },
   {
     "mcc": "6534",
     "shortDescription": "External Money transfer",
-    "fullDescription": "Money Transfer - Financial Institution"
+    "fullDescription": "Money Transfer - Financial Institution",
+    "iconUrl": "./media/icons/external-transfer.svg",
+    "color": "#d9d9d9"
   },
   {
     "mcc": "6535",
     "shortDescription": "External Money transfer",
-    "fullDescription": "Value Purchase - Member Financial Institution"
+    "fullDescription": "Value Purchase - Member Financial Institution",
+    "iconUrl": "./media/icons/external-transfer.svg",
+    "color": "#d9d9d9"
   },
   {
     "mcc": "6536",
     "shortDescription": "External Money transfer",
-    "fullDescription": "MoneySend Intracountry"
+    "fullDescription": "MoneySend Intracountry",
+    "iconUrl": "./media/icons/external-transfer.svg",
+    "color": "#d9d9d9"
   },
   {
     "mcc": "6537",
     "shortDescription": "External Money transfer",
-    "fullDescription": "MoneySend Intercountry"
+    "fullDescription": "MoneySend Intercountry",
+    "iconUrl": "./media/icons/external-transfer.svg",
+    "color": "#d9d9d9"
   },
   {
     "mcc": "6538",
     "shortDescription": "External Money transfer",
-    "fullDescription": "MoneySend Funding"
+    "fullDescription": "MoneySend Funding",
+    "iconUrl": "./media/icons/external-transfer.svg",
+    "color": "#d9d9d9"
   },
   {
     "mcc": "6539",
     "shortDescription": "External Money transfer",
-    "fullDescription": "Funding Transaction (Excluding MoneySend)"
+    "fullDescription": "Funding Transaction (Excluding MoneySend)",
+    "iconUrl": "./media/icons/external-transfer.svg",
+    "color": "#d9d9d9"
   },
   {
     "mcc": "6540",
     "shortDescription": "External Money transfer",
-    "fullDescription": "POI (Point of Interaction) Funding Transactions (Excluding MoneySend)"
+    "fullDescription": "POI (Point of Interaction) Funding Transactions (Excluding MoneySend)",
+    "iconUrl": "./media/icons/external-transfer.svg",
+    "color": "#d9d9d9"
   },
   {
     "mcc": "6611",
     "shortDescription": "External Money transfer",
-    "fullDescription": "Overpayments"
+    "fullDescription": "Overpayments",
+    "iconUrl": "./media/icons/external-transfer.svg",
+    "color": "#d9d9d9"
   },
   {
     "mcc": "6760",

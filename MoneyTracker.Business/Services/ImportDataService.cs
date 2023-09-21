@@ -72,9 +72,9 @@ namespace MoneyTracker.Business.Services
                             var cashbackAmount = worksheet.Cells[row, 9].Text;
                             var balance = worksheet.Cells[row, 10].Text;
 
-                            var mccName = mccCodeRepository.GetMccById(mcc).ShortDescription;
+                            var mccCode = mccCodeRepository.GetMccById(mcc);
 
-                            var category = categoryRepository.GetCategoryByName(userId, mccName);
+                            var category = categoryRepository.GetCategoryByName(userId, mccCode.ShortDescription);
 
                             var transType = decimal.Parse(cardCurrencyAmount) > 0 ? TransactionTypes.Income : TransactionTypes.Expense;
 
@@ -91,7 +91,7 @@ namespace MoneyTracker.Business.Services
 
                             if (category == null)
                             {
-                                var newCat = newCategories.FirstOrDefault(c => c.Name == mccName);
+                                var newCat = newCategories.FirstOrDefault(c => c.Name == mccCode.ShortDescription);
 
                                 if (newCat != null)
                                 {
@@ -99,8 +99,8 @@ namespace MoneyTracker.Business.Services
                                 }
                                 else
                                 {
-                                    importEvents.Add(new CategoryCreatedEvent(catId, userId, mccName, transType, "./media/icons/import.svg", "#d9d9d9"));
-                                    newCategories.Add(new CategoryMinId() { Name = mccName, Id = catId });
+                                    importEvents.Add(new CategoryCreatedEvent(catId, userId, mccCode.ShortDescription, transType, mccCode.IconUrl ?? "./media/icons/import.svg", mccCode.Color ?? "#d9d9d9"));
+                                    newCategories.Add(new CategoryMinId() { Name = mccCode.ShortDescription, Id = catId });
                                 }
                             }
                             else
