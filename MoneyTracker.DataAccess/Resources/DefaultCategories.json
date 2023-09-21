@@ -1,7 +1,7 @@
 {
   "expenseCategories": [
     {
-      "name": "Food",
+      "name": "Cafe & Restaurants",
       "iconUrl": "./media/icons/foodAndDrink.svg",
       "color": "#E57373"
     },

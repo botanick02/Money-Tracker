@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "../hooks/useAppDispatch";
 import { request } from "../api/core";
 import React from "react";
 import Dropdown, { Option } from "../elements/Dropdown";
+import { useNavigate } from "react-router-dom";
 
 interface ImportDataPopupProps {
   closePopupHandle: () => void;
@@ -77,12 +78,19 @@ const ImportDataPopup = ({ closePopupHandle }: ImportDataPopupProps) => {
         });
 
         const result = await response.json();
-        console.log(result);
+        importSuccess();
       } catch (error) {
         console.error("Error uploading file:", error);
       }
     }
   };
+
+  const navigate = useNavigate();
+
+  const importSuccess = () => {
+    closePopupHandle();
+    navigate("/");
+  }
 
   return (
     <div
