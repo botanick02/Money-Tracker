@@ -16,7 +16,7 @@ const TransactionList = () => {
   let transactions = useAppSelector(
     (state) => state.FinancialOperation.transactions
   );
-
+console.log(transactions)
   const currentAccountId = useAppSelector(
     (state) => state.Account.currentAccountId
   );
@@ -40,7 +40,7 @@ const TransactionList = () => {
   );
 
   if (currentAccountId === "total") {
-    transactions = transactions.filter((t) => t.category.type !== "DOUBLE_SIDED");
+    transactions = transactions.filter((t) => t.category.name !== "Transfer");
   }
 
   return (

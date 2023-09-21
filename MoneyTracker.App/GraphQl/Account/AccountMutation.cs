@@ -6,11 +6,14 @@ using MoneyTracker.App.GraphQl.FinancialOperation.Types.Inputs;
 using MoneyTracker.Business.Commands;
 using MoneyTracker.Business.Commands.Account;
 using MoneyTracker.Business.Commands.Category;
+using MoneyTracker.Business.Commands.FinancialOperation;
 using MoneyTracker.Business.Entities;
 using MoneyTracker.Business.Events.Account;
 using MoneyTracker.Business.Interfaces;
 using MoneyTracker.DataAccess.Repositories;
 using System.Security.Claims;
+using System.Security.Principal;
+using System.Transactions;
 
 namespace MoneyTracker.App.GraphQl.Account
 {
@@ -18,7 +21,7 @@ namespace MoneyTracker.App.GraphQl.Account
     {
         private readonly ICurrencyRepository currencyRepository;
 
-        public AccountMutation(CommandDispatcher commandDispatcher, ICurrencyRepository currencyRepository)
+        public AccountMutation(CommandDispatcher commandDispatcher, ICurrencyRepository currencyRepository, ICategoryRepository categoryRepository, ITransactionRepository transactionRepository)
         {
             this.currencyRepository = currencyRepository;
 
@@ -33,7 +36,7 @@ namespace MoneyTracker.App.GraphQl.Account
                     var name = account.accountName;
                     var currencyCode = account.currencyCode;
                     var currency = currencyRepository.GetCurrencyByCode(currencyCode);
-                    
+
                     var command = new CreatePersonalAccountCommand
                     (
                         Name: name,
@@ -54,37 +57,70 @@ namespace MoneyTracker.App.GraphQl.Account
                     var userId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
 
-                   
-                        var command = new UpdatePersonalAccountCommand
 
-                        (
-                            AccountId: accountID,
-                            Name: accountName,
-                            UserId: userId
-                        )
-                        {
+                    var command = new UpdatePersonalAccountCommand
 
-                        };
-                        await commandDispatcher.DispatchAsync(command);
-                        return true;
-                    
-                    
+                    (
+                        AccountId: accountID,
+                        Name: accountName,
+                        UserId: userId
+                    )
+                    {
+
+                    };
+                    await commandDispatcher.DispatchAsync(command);
+                    return true;
+
+
                 }).Authorize();
 
             Field<bool>("DeleteAccount")
-                .Argument<NonNullGraphType<StringGraphType>>("AccountID", "The ID of the account to delete")
-                .ResolveAsync(async context =>
-                {
-                    var accountID = context.GetArgument<string>("AccountID");
-                    var userId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-                    var command = new DeactivatePersonalAccountCommand
-                    (
-                        AccountId: accountID
-                    );
+    .Argument<StringGraphType>("Gone", "A flag indicating if the account should be marked as 'Gone'")
+    .Argument<NonNullGraphType<StringGraphType>>("AccountID", "The ID of the account to delete")
+    .ResolveAsync(async context =>
+    {
+        var accountID = context.GetArgument<string>("AccountID");
+        var goneFlag = context.GetArgument<string>("Gone", defaultValue: null);
 
-                    await commandDispatcher.DispatchAsync(command);
-                    return true;
-                }).Authorize();
+        var userId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+        var category = categoryRepository.GetServiceCategory(ServiceCategories.Gone);
+        var accountTransactions = transactionRepository.GetAccountTransactions(Guid.Parse(accountID));
+
+        decimal accountBalance = accountTransactions.Sum(t => t.Amount);
+
+       
+
+        var command = new AddCreditOperationCommand
+        (
+            UserId: userId,
+            Title: "Gone",
+            CategoryId: Guid.Parse(category.Id.ToString()),
+            FromAccountId: Guid.Parse(accountID),
+            Amount: accountBalance,
+            Note: "Gone",
+            CreatedAt: DateTime.UtcNow
+        );
+        if (accountBalance > 0)
+        {
+
+            await commandDispatcher.DispatchAsync(command);
+        }
+        
+
+        var deactivateCommand = new DeactivatePersonalAccountCommand
+        (
+            AccountId: accountID
+        );
+
+        await commandDispatcher.DispatchAsync(deactivateCommand);
+
+        return true;
+    }).Authorize();
+
+
+
+
         }
     }
 }

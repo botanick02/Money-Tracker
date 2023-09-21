@@ -28,7 +28,7 @@ const TransactionInfo = ({
   const accounts = useAppSelector((state) => state.Account.accounts).filter(
     (a) => a.id !== "total"
   );
-
+console.log(accounts)
   const type = transaction.amount > 0 ? "INCOME" : "EXPENSE";
 
   const categoryOptions = categoryItems

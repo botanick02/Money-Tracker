@@ -1,25 +1,20 @@
 import React, { FC, useState, useEffect } from 'react';
 import { DELETE_ACCOUNT } from '../store/Account/Account.slice';
-import { useAppDispatch } from '../hooks/useAppDispatch';
+import { useAppDispatch, useAppSelector } from '../hooks/useAppDispatch';
 import { ReactComponent as DeleteIcon } from "../assets/icons/Delete-icon.svg";
 import { Currency } from '../types/Currency';
 import DeleteAccountPopup from '../components/DeleteAccountPopup';
+import Currencies from '../components/Accounts/Currencies.json'
 
-async function fetchFlagUrl(currencyCode: string) {
-  try {
-    const response = await fetch(`https://restcountries.com/v3.1/currency/${currencyCode}`);
-    const data = await response.json();
-
-    if (Array.isArray(data) && data.length > 0 && data[0].flags && data[0].flags.svg) {
-      return data[0].flags.svg;
-    } else {
-      return "";
+const getTwoLetterCodeAsync = async (code:string) => {
+  for (const currency of Currencies) {
+    if (currency.code === code) {
+      return `https://flagcdn.com/${currency.two_letter_code.toLocaleLowerCase()}.svg`;
     }
-  } catch (error) {
-    console.error('Flags error:', error);
-    return "";
   }
-}
+
+  return "";
+};
 
 interface StatsTransactionItemProps {
   id: string;
@@ -34,10 +29,14 @@ const StatsTransactionItem: FC<StatsTransactionItemProps> = ({ id, name, currenc
   const [icon, setIcon] = useState("");
   const [accountOnDeletionId, setAccountOnDeletionId] = useState<string | null>(null);
   const [selectedPopupOption, setSelectedPopupOption] = useState<string>("1");
+  const categories = useAppSelector((state) => state.Category.categories).filter((c) => c.isService == true)
+  .filter((c) => c.isActive == true)
+  const categoryGone = categories.find((c) => c.name === "Gone")?.id
+
 
   useEffect(() => {
     const fetchIcon = async () => {
-      const iconUrl = await fetchFlagUrl(currency.code);
+      const iconUrl = await getTwoLetterCodeAsync(currency.code);
       setIcon(iconUrl);
     };
 
@@ -51,8 +50,11 @@ const StatsTransactionItem: FC<StatsTransactionItemProps> = ({ id, name, currenc
   };
 
   const confirmDeletion = () => {
-    console.log(selectedPopupOption);
+   
     if (accountOnDeletionId) {
+        console.log(selectedPopupOption)
+   
+   
       dispatch(DELETE_ACCOUNT({ accountID: id }));
     }
     setAccountOnDeletionId(null);
@@ -66,6 +68,8 @@ const StatsTransactionItem: FC<StatsTransactionItemProps> = ({ id, name, currenc
           closePopupHandle={() => setAccountOnDeletionId(null)}
           selectedOption={selectedPopupOption}
           setSelectedOption={handleSelectedOptionChange}
+          id={id}
+          balance={balance}
         />
       )}
       <div className="row-item__indicator row-item__indicator__currency" />
@@ -82,6 +86,8 @@ const StatsTransactionItem: FC<StatsTransactionItemProps> = ({ id, name, currenc
           confirmDeletion();
           setAccountOnDeletionId(id);
         }} />
+       
+            
       </div>
     </div>
   );

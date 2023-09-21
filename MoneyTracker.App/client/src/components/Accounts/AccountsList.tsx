@@ -3,8 +3,10 @@ import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
 import AccountCreate from "./AccountCreate";
 import { FETCH_ACCOUNTS } from "../../store/Account/Account.slice";
 import StatsTransactionItem from "../../elements/StatsTransactionItem";
-import TransactionCreate from "../Transaction/TransactionCreate";
+import {
+  FETCH_CATEGORIES,
 
+} from "../../store/Category/Category.slice";
 const AccountsList = () => {
   const accounts = useAppSelector((state) => state.Account.accounts);
   const inactiveAccounts = accounts.filter((account) => !account.isActive && account.name !== "Total");
@@ -19,8 +21,8 @@ const AccountsList = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(FETCH_ACCOUNTS());
-  }, [dispatch]);
+    dispatch(FETCH_CATEGORIES());
+  }, []);
 
 
   const activeAccounts = accounts.filter((account) => account.isActive);

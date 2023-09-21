@@ -44,6 +44,7 @@ const TransactionCreate: React.FC<Props> = ({
   const accountOptions: Option[] = [];
   accounts
     .filter((a) => a.id !== "total")
+    .filter((account) => account.isActive)
     .forEach((account) => {
       accountOptions.push({
         label: account.name,
