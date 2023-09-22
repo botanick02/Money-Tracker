@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useState} from 'react';
-import {Budget, BudgetToCreate, BudgetToEdit} from "../../types/Budget";
+import {Budget, BudgetToCreate, BudgetToEdit, TimeScope} from "../../types/Budget";
 import Dropdown, {Option} from "../../elements/Dropdown";
 import {useAppDispatch, useAppSelector} from "../../hooks/useAppDispatch";
 import {createBudgetAction, editBudgetAction} from "../../store/Budgets/Budgets.slice";
@@ -19,8 +19,11 @@ function pickBudgetForWrite(budget: Budget): BudgetToEdit {
 const emptyCreateBudget: BudgetToCreate = {
   limit: 0,
   title: "",
-  categoryId: []
+  categoryId: [],
+  timeScope: 'monthly'
 }
+
+const timeScopes: TimeScope[] = ['yearly', 'monthly', 'weekly', 'daily']
 
 
 const BudgetWrite: FC<Props> = ({budget, openPopupHandle}) => {
@@ -36,6 +39,10 @@ const BudgetWrite: FC<Props> = ({budget, openPopupHandle}) => {
   }));
 
   const dispatch = useAppDispatch()
+
+  const handleScopeChange = (scope: TimeScope) => {
+    setBudget({id: "", ...editableBudget, timeScope: scope})
+  }
 
   const handleLimitInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBudget({...editableBudget, limit: e.target.value.length ? parseInt(e.target.value) : 0})
@@ -78,6 +85,7 @@ const BudgetWrite: FC<Props> = ({budget, openPopupHandle}) => {
   }, [dispatch])
 
   useEffect(() => {
+    console.log(budget)
     if (!budget)
       return
     setBudget(pickBudgetForWrite(budget))
@@ -90,13 +98,23 @@ const BudgetWrite: FC<Props> = ({budget, openPopupHandle}) => {
       <div style={{background: budget?.categories[0].color}}
            className={"popup__header"}>{budget?.title}</div>
       <div className={"popup__fields"}>
+        <div className={'scope-change'}>
+          {
+            timeScopes.map(item => <button
+              key={item}
+              onClick={() => {handleScopeChange(item)}}
+              className={editableBudget.timeScope.toLowerCase() === item ? "active-scope" : ''}>{item}</button>)
+          }
+        </div>
+
         <InputWrapper value={editableBudget.title!}>
           <input type="text" placeholder={"Title"} onChange={handleTitleInput} value={editableBudget.title!}/>
         </InputWrapper>
 
 
         <InputWrapper value={editableBudget.limit ? editableBudget.limit : ""}>
-          <input type="number" placeholder={"Budget"} onChange={handleLimitInput} value={editableBudget.limit ? editableBudget.limit : ""}/>
+          <input type="number" placeholder={"Budget"} onChange={handleLimitInput}
+                 value={editableBudget.limit ? editableBudget.limit : ""}/>
         </InputWrapper>
 
         {

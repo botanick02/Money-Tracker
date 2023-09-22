@@ -12,11 +12,11 @@ interface Props {
 const InputWrapper: FC<Props> = ({className, children, error, value}) => {
   return (
     <div className={`input-field ${className}`}>
-      <label className={value ? 'focused' : ''}>{children?.props.placeholder}</label>
       {children}
       {
-        (!!error && error.length > 0) &&
-        <span>{error}</span>
+        (!!error && error.length > 0)
+          ? <span>{error}</span>
+          : <label className={value ? 'focused' : ''}>{children?.props.placeholder}</label>
       }
     </div>
   );
