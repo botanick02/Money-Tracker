@@ -12,7 +12,8 @@ export const GetBudgets = `
             },
             spent,
             limit,
-            title 
+            title,
+            timeScope
           }
         }
   }
