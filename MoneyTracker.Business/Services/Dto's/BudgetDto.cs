@@ -14,6 +14,7 @@ namespace MoneyTracker.Business.Services.Dto_s
         public decimal Limit { get; set; }
         public string? Title { get; set; }
         public IEnumerable<Category> Categories { get; set; }
+        public TimeScope TimeScope { get; set; }
         public decimal Spent { get; set; }
 
         public BudgetDto(Budget budget, IEnumerable<Category> category, decimal spent)
@@ -23,6 +24,7 @@ namespace MoneyTracker.Business.Services.Dto_s
             Categories = category;
             Spent = spent;
             Title = budget.Title;
+            TimeScope = budget.TimeScope;
         }
 
     }

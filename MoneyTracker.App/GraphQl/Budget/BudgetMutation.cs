@@ -3,6 +3,7 @@ using GraphQL.Types;
 using MoneyTracker.App.GraphQl.Budget.Types;
 using MoneyTracker.Business.Commands;
 using MoneyTracker.Business.Commands.Budget;
+using MoneyTracker.Business.Services.Dto_s;
 using System.Security.Claims;
 
 namespace MoneyTracker.App.GraphQl.Budget
@@ -16,7 +17,8 @@ namespace MoneyTracker.App.GraphQl.Budget
                 .Argument<BudgetInputType>("Budget")
                 .ResolveAsync(async context =>
                 {
-                    var budget = context.GetArgument<Business.Entities.Budget>("Budget");
+                    var budgetInput = context.GetArgument<BudgetInputDto>("Budget");
+                    var budget = budgetInput.ToBudget();
                     budget.UserId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
 
@@ -61,7 +63,8 @@ namespace MoneyTracker.App.GraphQl.Budget
                 .Argument<BudgetInputType>("Budget")
                 .ResolveAsync(async context =>
                 {
-                    var budget = context.GetArgument<Business.Entities.Budget>("Budget");
+                    var budgetInput = context.GetArgument<BudgetInputDto>("Budget");
+                    var budget = budgetInput.ToBudget();
                     budget.UserId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
 

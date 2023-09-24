@@ -1,18 +1,25 @@
-import React, {FC} from 'react';
+import React, {FC, ReactElement} from 'react';
 
-interface Props{
-    type?: "text" | "number" | "password" | "time" | "datetime-local" | "date"
-    placeholder?: string
-    className?: string,
-    children?: React.ReactNode
+type InputElement = ReactElement<HTMLInputElement, 'input'>
+
+interface Props {
+  className?: string,
+  children?: InputElement
+  error?: string
+  value?: string | number
 }
 
-const InputWrapper: FC<Props> = ({className, type= "text", placeholder, children}) => {
-    return (
-        <div className={`input-field ${className}`}>
-            {children}
-        </div>
-    );
+const InputWrapper: FC<Props> = ({className, children, error, value}) => {
+  return (
+    <div className={`input-field ${className}`}>
+      {children}
+      {
+        (!!error && error.length > 0)
+          ? <span>{error}</span>
+          : <label className={value ? 'focused' : ''}>{children?.props.placeholder}</label>
+      }
+    </div>
+  );
 };
 
 export default InputWrapper;

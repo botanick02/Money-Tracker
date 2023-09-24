@@ -1,8 +1,10 @@
 import { Category } from "./Category";
 
+type TimeScope = 'monthly' | 'weekly' | 'daily' | 'yearly'
 interface BudgetBase{
     limit: number
     title: string
+    timeScope: TimeScope
 }
 
 export interface Budget extends BudgetBase{

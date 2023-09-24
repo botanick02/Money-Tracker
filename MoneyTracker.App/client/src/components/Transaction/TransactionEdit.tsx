@@ -78,7 +78,7 @@ const TransactionEdit = ({
       <div className={"popup__fields"}>
         <div className={"popup__fields__amount"}>
           {transaction.amount < 0 && "-"}
-          <InputWrapper>
+          <InputWrapper error={errors.amount ? errors.amount.message : ""}>
             <input
               type="number"
               placeholder="Amount"
@@ -86,7 +86,6 @@ const TransactionEdit = ({
                 required: "Amount is required",
               })}
             />
-            {errors.amount && <span>{errors.amount.message}</span>}
           </InputWrapper>
           ₴
         </div>
