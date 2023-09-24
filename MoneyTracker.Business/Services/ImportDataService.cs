@@ -93,14 +93,14 @@ namespace MoneyTracker.Business.Services
                             {
                                 var newCat = newCategories.FirstOrDefault(c => c.Name == mccCode.ShortDescription);
 
-                                if (newCat != null)
+                                if (newCat != null && transType == newCat.Type)
                                 {
                                     catId = newCat.Id;
                                 }
                                 else
                                 {
                                     importEvents.Add(new CategoryCreatedEvent(catId, userId, mccCode.ShortDescription, transType, mccCode.IconUrl ?? "./media/icons/import.svg", mccCode.Color ?? "#d9d9d9"));
-                                    newCategories.Add(new CategoryMinId() { Name = mccCode.ShortDescription, Id = catId });
+                                    newCategories.Add(new CategoryMinId() { Name = mccCode.ShortDescription, Id = catId, Type = transType });
                                 }
                             }
                             else
@@ -154,5 +154,7 @@ namespace MoneyTracker.Business.Services
         public string Name { get; set; }
 
         public Guid Id { get; set; }
+
+        public TransactionTypes Type { get; set; }
     }
 }
