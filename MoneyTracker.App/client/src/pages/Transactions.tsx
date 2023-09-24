@@ -51,10 +51,8 @@ const Transactions = () => {
   };
 
   useEffect(() => {
-    console.log(dateRangeIsSet);
     if (dateRangeIsSet) {
       dispatch(FETCH_TRANSACTIONS_INFO());
-      console.log("Update");
     }
   }, [
     dispatch,
