@@ -1,4 +1,5 @@
 ﻿using MoneyTracker.App.Helpers;
+using System.ComponentModel.DataAnnotations;
 
 namespace MoneyTracker.App.GraphQl.Category.Types.Inputs
 {

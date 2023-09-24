@@ -35,7 +35,7 @@ namespace MoneyTracker.App.GraphQl.Category
 
                     var userId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-                    var command = new CreateCategoryCommand(userId, input.Name, Enum.Parse<TransactionTypes>(input.Type), input.IconUrl, input.Color);
+                    var command = new CreateCategoryCommand(userId, input.Name, EnumParser.ParseToEnum<TransactionTypes>(input.Type), input.IconUrl, input.Color);
                     await commandDispatcher.DispatchAsync(command);
                     return true;
                 }).Authorize();

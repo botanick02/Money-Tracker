@@ -47,6 +47,7 @@ builder.Services.AddTransient<TransactionService>();
 builder.Services.AddTransient<BudgetService>();
 builder.Services.AddTransient<StatisticService>();
 builder.Services.AddTransient<ImportDataService>();
+builder.Services.AddTransient<CategoryService>();
 
 builder.Services.AddTransient<IEventStore, EventStore>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();

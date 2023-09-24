@@ -25,8 +25,6 @@ namespace MoneyTracker.Business.Services
         {
             var res = new GetTransactionsDataDto();
 
-
-
             var transactions = accountId == null
                 ? GetPersonalAccountTransactions(userId, timeTravelDateTime)
                 : transactionRepository!.GetAccountTransactions((Guid)accountId, timeTravelDateTime, readModelExtensions);
