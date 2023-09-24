@@ -19,7 +19,7 @@ namespace MoneyTracker.App.GraphQl.DataImport
                    var userId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
                    var file = context.GetArgument<IFormFile>("File");
                    var accountId = Guid.Parse(context.GetArgument<string>("AccountId"));
-                   importService.ImportTransactions(file, userId, accountId); 
+                   await importService.ImportTransactions(file, userId, accountId);
                    return true;
                }).Authorize();
         }
