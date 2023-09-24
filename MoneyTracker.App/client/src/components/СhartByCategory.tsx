@@ -3,13 +3,13 @@ import { RadialChart } from 'react-vis';
 import { useAppSelector, useAppDispatch } from '../hooks/useAppDispatch';
 import SetsItem from '../elements/StatsItem';
 import { SET_CURRENT_CATEGORY } from '../store/Account/Account.slice';
-import { FETCH_TRANSACTIONS_INFO } from '../store/FinancialOperation/FinancialOperation.slice';
+import { FETCH_TRANSACTIONS_INFO, TransactionTypes } from '../store/FinancialOperation/FinancialOperation.slice';
 import TransactionList from './Transaction/TransactionList';
 
 const PieChart = () => {
     const dispatch = useAppDispatch();
     const filteredStats = useAppSelector((state) =>
-        state.Stats.filter === 'income' ? state.Stats.positiveStats : state.Stats.negativeStats
+        state.Stats.filter === TransactionTypes.Income ? state.Stats.positiveStats : state.Stats.negativeStats
     );
     const loading = useAppSelector((state) => state.Stats.loading);
 

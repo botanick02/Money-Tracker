@@ -6,11 +6,7 @@ import { TransactionTypes } from "../../store/FinancialOperation/FinancialOperat
 
 const getOnlyDate = (dateString: string) => {
   const date = new Date(dateString);
-  return date.toLocaleDateString("ru-RU", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
+  return date.toLocaleDateString();
 };
 
 const TransactionList = () => {
