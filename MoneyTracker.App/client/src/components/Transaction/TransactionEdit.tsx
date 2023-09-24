@@ -4,6 +4,7 @@ import Dropdown, { Option } from "../../elements/Dropdown";
 import { Transaction } from "../../types/Transaction";
 import { useForm } from "react-hook-form";
 import { getISODateTimeValue } from "../../tools/Dates/currentIsoDates";
+import { TransactionTypes } from "../../store/FinancialOperation/FinancialOperation.slice";
 
 interface FormFields {
   operationId: string;
@@ -100,7 +101,7 @@ const TransactionEdit = ({
             })}
           />
         </InputWrapper>
-        {transaction.category.type === "DOUBLE_SIDED" ? (
+        {transaction.category.type === TransactionTypes.Transfer ? (
           <div className={"popup__row"}>
             <Dropdown
               title={"From"}

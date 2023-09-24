@@ -46,6 +46,8 @@ builder.Services.AddTransient<AccountService>();
 builder.Services.AddTransient<TransactionService>();
 builder.Services.AddTransient<BudgetService>();
 builder.Services.AddTransient<StatisticService>();
+builder.Services.AddTransient<ImportDataService>();
+builder.Services.AddTransient<CategoryService>();
 
 builder.Services.AddTransient<IEventStore, EventStore>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
@@ -56,6 +58,7 @@ builder.Services.AddTransient<IBudgetRepository, BudgetRepository>();
 builder.Services.AddTransient<IAccountRepository, AccountRepository>();
 builder.Services.AddTransient<IAccountRepository, AccountRepository>();
 builder.Services.AddTransient<ICurrencyRepository, CurrencyRepository>();
+builder.Services.AddTransient<IMccCodeRepository, MccCodeRepository>();
 
 builder.Services.ConfigureCommandHandlers();
 builder.Services.ConfigureEventAppliers();
@@ -76,7 +79,10 @@ builder.Services.AddAuthentication("CustomTokenScheme")
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddGraphQL(b => b
+builder.Services.AddGraphQLUpload();
+
+builder.Services
+    .AddGraphQL(b => b
     .AddSchema<MoneyTrackerSchema>()
     .AddGraphTypes(typeof(MoneyTrackerSchema).Assembly)
     .AddAutoClrMappings()
@@ -100,10 +106,10 @@ currentReadModel.CurrentModel = readModelExtensions.GetReadModel(DateTime.Now);
 
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.UseCors("DefaultPolicy");
+app.UseGraphQLUpload<MoneyTrackerSchema>("/graphql");
+app.UseGraphQL<MoneyTrackerSchema>("/graphql");
 app.UseGraphQLAltair();
-app.UseGraphQL("/graphql");
 
 if (!app.Environment.IsDevelopment())
 {

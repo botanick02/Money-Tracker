@@ -40,15 +40,7 @@ namespace MoneyTracker.App.GraphQl.FinancialOperation
 
                     var transactionService = serviceProvider.GetRequiredService<TransactionService>();
 
-                    TransactionTypes? transType = null;
-
-                    if (input?.TransactionType != null)
-                    {
-                        var stringValue = input?.TransactionType;
-                        stringValue = stringValue.ToLowerInvariant();
-                        stringValue = char.ToUpperInvariant(stringValue[0]) + stringValue.Substring(1);
-                        transType = Enum.Parse<TransactionTypes>(stringValue);
-                    }
+                    TransactionTypes? transType = input.TransactionType != null ? EnumParser.ParseToEnum<TransactionTypes>(input!.TransactionType) : null;
 
                     return transactionService.GetTransactionsData(
                         userId: userId,

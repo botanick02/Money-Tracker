@@ -1,7 +1,9 @@
+import {TransactionTypes} from "../store/FinancialOperation/FinancialOperation.slice"
+
 export interface CategoryToCreate {
   name: string;
   iconUrl: string;
-  type: "INCOME" | "EXPENSE" | "DOUBLE_SIDED";
+  type: string;
   color: string;
 }
 export interface Category extends CategoryToCreate{
@@ -13,3 +15,4 @@ export interface Category extends CategoryToCreate{
 export interface CategoryToUpdate extends CategoryToCreate{
   id: string;
 }
+

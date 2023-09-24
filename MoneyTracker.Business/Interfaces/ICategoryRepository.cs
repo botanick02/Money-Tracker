@@ -8,6 +8,8 @@ namespace MoneyTracker.Business.Interfaces
 
         public Category? GetCategoryById(Guid id, IReadModelExtensions? readModelExtensionsScoped = null);
 
+        public Category? GetCategoryByName(Guid userId, string name, IReadModelExtensions? readModelExtensionsScoped = null);
+
         public Category GetServiceCategory(ServiceCategories name);
 
         public DefaultCategories GetDefaultCategories();

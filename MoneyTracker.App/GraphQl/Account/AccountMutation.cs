@@ -33,7 +33,7 @@ namespace MoneyTracker.App.GraphQl.Account
                     var name = account.accountName;
                     var currencyCode = account.currencyCode;
                     var currency = currencyRepository.GetCurrencyByCode(currencyCode);
-                    
+
                     var command = new CreatePersonalAccountCommand
                     (
                         Name: name,
@@ -53,22 +53,20 @@ namespace MoneyTracker.App.GraphQl.Account
                     var accountID = context.GetArgument<string>("accountId");
                     var userId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
+                    var command = new UpdatePersonalAccountCommand
 
-                   
-                        var command = new UpdatePersonalAccountCommand
+                    (
+                        AccountId: accountID,
+                        Name: accountName,
+                        UserId: userId
+                    )
+                    {
 
-                        (
-                            AccountId: accountID,
-                            Name: accountName,
-                            UserId: userId
-                        )
-                        {
+                    };
+                    await commandDispatcher.DispatchAsync(command);
+                    return true;
 
-                        };
-                        await commandDispatcher.DispatchAsync(command);
-                        return true;
-                    
-                    
+
                 }).Authorize();
 
             Field<bool>("DeleteAccount")

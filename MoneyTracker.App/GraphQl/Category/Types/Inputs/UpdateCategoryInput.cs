@@ -6,6 +6,7 @@ namespace MoneyTracker.App.GraphQl.Category.Types.Inputs
     public class UpdateCategoryInput
     {
         [GuidValidationAttribute(ErrorMessage = "OperationId is invalid")]
+        [Required(ErrorMessage = "Id: Id is required")]
         public string Id { get; set; }
 
         [Required(ErrorMessage = "Title: Title is required")]

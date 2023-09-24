@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import { Account } from "../../types/Account";
+import Amount from "../Amount";
 
 const CurrentAccount: FC<{
   account: Account;
@@ -9,7 +10,7 @@ const CurrentAccount: FC<{
     <div className={"account-current"} onClick={onClick}>
       <div className={"account-current__name"}>{account.name} ▼</div>
       <div className={"account-current__balance"}>
-        {account.balance} {account.currency.symbol}
+        <Amount sum={account.balance}/>
       </div>
     </div>
   );

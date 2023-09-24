@@ -12,10 +12,11 @@ import {
   CategoryToCreate,
   CategoryToUpdate,
 } from "../../types/Category";
+import { TransactionTypes } from "../../store/FinancialOperation/FinancialOperation.slice";
 
 interface Props {
   openPopupHandle(): void;
-  categoryDefaultType?: "INCOME" | "EXPENSE";
+  categoryDefaultType?: TransactionTypes
   categoryToEdit?: Category;
 }
 
@@ -31,12 +32,12 @@ const CategoryCreate: React.FC<Props> = ({
       color: defaultBackground,
       iconUrl: "",
       name: "",
-      type: categoryDefaultType ?? "EXPENSE",
+      type: categoryDefaultType?? TransactionTypes.Expense,
     }
   );
   const dispatch = useAppDispatch();
 
-  const handleTypeChange = (type: "INCOME" | "EXPENSE") => {
+  const handleTypeChange = (type: TransactionTypes.Income | TransactionTypes.Expense) => {
     setCategory({ ...category, type });
   };
 
@@ -79,17 +80,17 @@ const CategoryCreate: React.FC<Props> = ({
         <ul className="popup__header">
           <li
             onClick={() => {
-              handleTypeChange("INCOME");
+              handleTypeChange(TransactionTypes.Income);
             }}
-            className={category.type === "INCOME" ? "current-type" : ""}
+            className={category.type === TransactionTypes.Income ? "current-type" : ""}
           >
             Income
           </li>
           <li
             onClick={() => {
-              handleTypeChange("EXPENSE");
+              handleTypeChange(TransactionTypes.Expense);
             }}
-            className={category.type === "EXPENSE" ? "current-type" : ""}
+            className={category.type === TransactionTypes.Expense ? "current-type" : ""}
           >
             Expense
           </li>

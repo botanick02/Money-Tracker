@@ -23,12 +23,12 @@
     {
         Income,
         Expense,
-        DoubleSided
+        Transfer
     }
 
     public enum ServiceCategories
     {
-        Transfer,
+        MoneyTransfer,
         Gone,
         Comission
     }

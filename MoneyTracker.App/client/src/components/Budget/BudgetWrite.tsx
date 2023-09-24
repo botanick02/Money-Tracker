@@ -4,6 +4,7 @@ import Dropdown, {Option} from "../../elements/Dropdown";
 import {useAppDispatch, useAppSelector} from "../../hooks/useAppDispatch";
 import {createBudgetAction, editBudgetAction} from "../../store/Budgets/Budgets.slice";
 import {FETCH_CATEGORIES} from "../../store/Category/Category.slice";
+import { TransactionTypes } from '../../store/FinancialOperation/FinancialOperation.slice';
 import InputWrapper from "../../elements/InputWrapper";
 
 interface Props {
@@ -29,7 +30,7 @@ const timeScopes: TimeScope[] = ['yearly', 'monthly', 'weekly', 'daily']
 const BudgetWrite: FC<Props> = ({budget, openPopupHandle}) => {
   const [editableBudget, setBudget] = useState<BudgetToEdit | BudgetToCreate>(emptyCreateBudget)
   const {categories} = useAppSelector((state) => state.Category);
-  const categoryItems = categories.filter(x => x.type === 'EXPENSE')
+  const categoryItems = categories.filter(x => x.type === TransactionTypes.Expense)
 
 
   const [pickedCategories, setPickedCategories] = useState<string[]>([""])
