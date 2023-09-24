@@ -32,7 +32,7 @@ const CategoryCreate: React.FC<Props> = ({
       color: defaultBackground,
       iconUrl: "",
       name: "",
-      type: categoryDefaultType ?? TransactionTypes.Expense,
+      type: categoryDefaultType?? TransactionTypes.Expense,
     }
   );
   const dispatch = useAppDispatch();

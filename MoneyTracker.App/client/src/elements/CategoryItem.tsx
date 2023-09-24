@@ -15,7 +15,6 @@ const CategoryItem: FC<CategoryItemProps> = ({
   onClick,
   onDeleteClick,
 }) => {
-console.log(category.type);
 
   return (
     <div className="row-item" onClick={onClick}>

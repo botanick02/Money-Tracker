@@ -19,10 +19,9 @@ const CategoryList = () => {
     useState<TransactionTypes>(TransactionTypes.Expense);
 
   var categories = useAppSelector((state) => state.Category.categories)
-    .filter((c) => c.isService == false)
-    .filter((c) => c.isActive == true)
-    .filter((c) => c.type === categoryTypeFilter)
-    ;
+    .filter((c) => c.isService === false)
+    .filter((c) => c.isActive === true)
+    .filter((c) => c.type === categoryTypeFilter);
 
   const [catOnDeletionId, setCatOnDeletionId] = useState<string | null>(null);
 
@@ -57,8 +56,6 @@ const CategoryList = () => {
   ) => {
     setCategoryTypeFilter(type);
   };
-
-  console.log(categoryTypeFilter);
 
   return (
     <main className={"category-settings-list"}>
