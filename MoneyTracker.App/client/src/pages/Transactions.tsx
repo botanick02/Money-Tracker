@@ -4,6 +4,7 @@ import {
   FETCH_TRANSACTIONS_INFO,
   SET_DATE_RANGE,
   SET_TRANSACTION_TYPE,
+  TransactionTypes,
 } from "../store/FinancialOperation/FinancialOperation.slice";
 import TransactionCreate from "../components/Transaction/TransactionCreate";
 import TimeScopePanel from "../components/TimeScopePanel";
@@ -41,7 +42,7 @@ const Transactions = () => {
     }
   };
 
-  const changeTransactionTypeFilter = (type: "EXPENSE" | "INCOME") => {
+  const changeTransactionTypeFilter = (type: TransactionTypes.Expense | TransactionTypes.Income) => {
     if (transactionType !== type) {
       dispatch(SET_TRANSACTION_TYPE(type));
     } else {
@@ -78,10 +79,10 @@ const Transactions = () => {
       <div className={"transaction-sums"}>
         <div
           onClick={() => {
-            changeTransactionTypeFilter("INCOME");
+            changeTransactionTypeFilter(TransactionTypes.Income);
           }}
           className={`transaction-sums__income ${
-            transactionType === "INCOME" && "active"
+            transactionType === TransactionTypes.Income && "active"
           }`}
         >
           Incomes
@@ -89,10 +90,10 @@ const Transactions = () => {
         </div>
         <div
           onClick={() => {
-            changeTransactionTypeFilter("EXPENSE");
+            changeTransactionTypeFilter(TransactionTypes.Expense);
           }}
           className={`transaction-sums__expense ${
-            transactionType === "EXPENSE" && "active"
+            transactionType === TransactionTypes.Expense && "active"
           }`}
         >
           Expenses

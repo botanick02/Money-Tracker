@@ -5,6 +5,7 @@ import {useAppDispatch, useAppSelector} from "../../hooks/useAppDispatch";
 import {createBudgetAction, editBudgetAction} from "../../store/Budgets/Budgets.slice";
 import {FETCH_CATEGORIES} from "../../store/Category/Category.slice";
 import InputWithTitle from "../../elements/InputWithTitle";
+import { TransactionTypes } from '../../store/FinancialOperation/FinancialOperation.slice';
 
 interface Props {
   budget?: Budget
@@ -26,7 +27,7 @@ const emptyCreateBudget: BudgetToCreate = {
 const BudgetWrite: FC<Props> = ({budget, openPopupHandle}) => {
   const [editableBudget, setBudget] = useState<BudgetToEdit | BudgetToCreate>(emptyCreateBudget)
   const {categories} = useAppSelector((state) => state.Category);
-  const categoryItems = categories.filter(x => x.type === 'EXPENSE')
+  const categoryItems = categories.filter(x => x.type === TransactionTypes.Expense)
 
 
   const [pickedCategories, setPickedCategories] = useState<string[]>([""])

@@ -2,6 +2,7 @@ import { ReactComponent as EditIcon } from "../../assets/icons/Edit-icon.svg";
 import { Transaction } from "../../types/Transaction";
 import { Account } from "../../types/Account";
 import { useAppSelector } from "../../hooks/useAppDispatch";
+import { TransactionTypes } from "../../store/FinancialOperation/FinancialOperation.slice";
 
 interface TransactionViewProps {
   transaction: Transaction;
@@ -34,7 +35,7 @@ const TransactionView = ({
         <div className={"popup__info__item"}>
           Created: {new Date(transaction.createdAt).toLocaleString()}
         </div>
-        {transaction.category.type === "DOUBLE_SIDED" ? (
+        {transaction.category.type === TransactionTypes.Transfer ? (
           <>
             <div className={"popup__info__item"}>
               From account:{" "}

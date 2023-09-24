@@ -23,7 +23,7 @@
     {
         Income,
         Expense,
-        DoubleSided
+        Transfer
     }
 
     public enum ServiceCategories
