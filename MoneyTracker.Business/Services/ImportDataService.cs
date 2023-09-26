@@ -12,6 +12,9 @@ namespace MoneyTracker.Business.Services
 {
     public class ImportDataService
     {
+        private const string START_ROW_NAME_EN = "Date and time";
+        private const string START_ROW_NAME_UA = "Дата i час операції";
+
         private readonly IMccCodeRepository mccCodeRepository;
         private readonly IEventStore eventStore;
         private readonly ICategoryRepository categoryRepository;
@@ -103,7 +106,7 @@ namespace MoneyTracker.Business.Services
             for (int row = 1; row <= worksheet.Dimension.Rows; row++)
             {
                 var cellValue = worksheet.Cells[row, 1].Text;
-                if (cellValue.Contains("Date and time"))
+                if (cellValue.Contains(START_ROW_NAME_EN) || cellValue.Contains(START_ROW_NAME_UA))
                 {
                     return row + 1;
                 }
