@@ -1,15 +1,9 @@
 ﻿using GraphQL;
-using GraphQL.DataLoader;
 using GraphQL.Types;
 using MoneyTracker.App.GraphQl.Category.Types.Inputs;
-using MoneyTracker.App.GraphQl.FinancialOperation.Types.Inputs;
 using MoneyTracker.Business.Commands;
 using MoneyTracker.Business.Commands.Account;
-using MoneyTracker.Business.Commands.Category;
-using MoneyTracker.Business.Entities;
-using MoneyTracker.Business.Events.Account;
 using MoneyTracker.Business.Interfaces;
-using MoneyTracker.DataAccess.Repositories;
 using System.Security.Claims;
 
 namespace MoneyTracker.App.GraphQl.Account

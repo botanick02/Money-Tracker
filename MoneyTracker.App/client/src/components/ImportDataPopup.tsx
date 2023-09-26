@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { useAppDispatch, useAppSelector } from "../hooks/useAppDispatch";
-import { request } from "../api/core";
+import { useAppSelector } from "../hooks/useAppDispatch";
 import React from "react";
 import Dropdown, { Option } from "../elements/Dropdown";
 import { useNavigate } from "react-router-dom";
+import InputWrapper from "../elements/InputWrapper";
 
 interface ImportDataPopupProps {
   closePopupHandle: () => void;
@@ -21,6 +21,9 @@ const ImportDataPopup = ({ closePopupHandle }: ImportDataPopupProps) => {
   const currentAccountId = useAppSelector(
     (state) => state.Account.currentAccountId
   );
+
+  const [savingsAccountRequired, setSavingsAccountRequired] = useState(false);
+  const [savingsAccountName, setSavingsAccountName] = useState("");
 
   const accounts = useAppSelector((state) =>
     state.Account.accounts.filter((account) => account.isActive)
@@ -49,15 +52,17 @@ const ImportDataPopup = ({ closePopupHandle }: ImportDataPopupProps) => {
         "operations",
         JSON.stringify({
           query: `
-          mutation ($file: Upload!, $accountId: String!) {
+          mutation ($file: Upload!, $accountId: String!, $savingsAccountName: String, $savingsAccountId: String) {
             dataImportMutation{
-              importMonobankXls(file: $file, accountId: $accountId)
+              importMonobankXls(file: $file, accountId: $accountId, savingsAccountName: $savingsAccountName, savingsAccountId: $savingsAccountId)
             }
           }
         `,
           variables: {
             file: null,
             accountId: account.value,
+            savingsAccountName:
+              savingsAccountName != "" ? savingsAccountName : null,
           },
         })
       );
@@ -78,9 +83,13 @@ const ImportDataPopup = ({ closePopupHandle }: ImportDataPopupProps) => {
         });
 
         const result = await response.json();
-        importSuccess();
+        if (result.errors.length > 0) {
+          setSavingsAccountRequired(true);
+        } else {
+          importSuccess();
+        }
       } catch (error) {
-        console.error("Error uploading file:", error);
+        console.log(error);
       }
     }
   };
@@ -90,7 +99,7 @@ const ImportDataPopup = ({ closePopupHandle }: ImportDataPopupProps) => {
   const importSuccess = () => {
     closePopupHandle();
     navigate("/");
-  }
+  };
 
   return (
     <div
@@ -104,12 +113,26 @@ const ImportDataPopup = ({ closePopupHandle }: ImportDataPopupProps) => {
         <div className={`popup__header title-single`}>Import Data</div>
         <div className={"popup__fields"}>
           <input type="file" onChange={handleFileChange} />
-            <Dropdown
-              title={"Account"}
-              selectHandler={setAccount}
-              options={accountOptions}
-            />
-          
+          <Dropdown
+            title={"Account"}
+            selectHandler={setAccount}
+            options={accountOptions}
+          />
+          {savingsAccountRequired && (
+            <>
+              Usage of the Bonobank savings accounts where identified, please enter the name for the account
+              <InputWrapper>
+                <input
+                  placeholder="Savings account name"
+                  type="text"
+                  value={savingsAccountName}
+                  onChange={(event) =>
+                    setSavingsAccountName(event.target.value)
+                  }
+                />
+              </InputWrapper>
+            </>
+          )}
         </div>
         <div className={"popup__row"}>
           <button className="button" onClick={handleUpload}>

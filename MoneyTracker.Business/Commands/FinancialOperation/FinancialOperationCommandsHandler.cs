@@ -101,7 +101,7 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
 
             var transactionId = Guid.NewGuid();
 
-            var usersCreditAccount = accountRepository.GetUserAccounts(command.UserId, Entities.AccountType.Credit).FirstOrDefault();
+            var usersCreditAccount = accountRepository.GetUserAccounts(command.UserId, AccountType.Credit).FirstOrDefault();
 
             var currentTime = DateTime.UtcNow;
 

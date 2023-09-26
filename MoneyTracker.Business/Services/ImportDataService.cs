@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using MoneyTracker.Business.Entities;
 using MoneyTracker.Business.Events;
+using MoneyTracker.Business.Events.Account;
 using MoneyTracker.Business.Events.Categories;
 using MoneyTracker.Business.Events.FinancialOperation;
 using MoneyTracker.Business.Interfaces;
@@ -14,22 +15,33 @@ namespace MoneyTracker.Business.Services
     {
         private const string START_ROW_NAME_EN = "Date and time";
         private const string START_ROW_NAME_UA = "Дата i час операції";
+        private const string SAVINGS_DESCRIPTION_STRING = "Збереження";
 
         private readonly IMccCodeRepository mccCodeRepository;
         private readonly IEventStore eventStore;
         private readonly ICategoryRepository categoryRepository;
         private readonly IAccountRepository accountRepository;
+        private readonly ICurrencyRepository currencyRepository;
 
-        public ImportDataService(IMccCodeRepository mccCodeRepository, IEventStore eventStore, ICategoryRepository categoryRepository, IAccountRepository accountRepository)
+        public ImportDataService(IMccCodeRepository mccCodeRepository, IEventStore eventStore, ICategoryRepository categoryRepository, IAccountRepository accountRepository, ICurrencyRepository currencyRepository)
         {
             this.mccCodeRepository = mccCodeRepository;
             this.eventStore = eventStore;
             this.categoryRepository = categoryRepository;
             this.accountRepository = accountRepository;
+            this.currencyRepository = currencyRepository;
         }
 
-        public async Task<bool> ImportTransactions(IFormFile file, Guid userId, Guid userAccountId)
+        public async Task<bool> ImportTransactions(IFormFile file, Guid userId, Guid importToAccountId, string? savingsAccountName = null, Guid? savingsAccountId = null)
         {
+            if (savingsAccountId != null)
+            {
+                if (accountRepository.GetUserAccountById((Guid)savingsAccountId) == null)
+                {
+                    throw new ArgumentException(nameof(savingsAccountId), "Account id is invalid");
+                }
+            }
+
             try
             {
                 using (var stream = new MemoryStream())
@@ -54,38 +66,82 @@ namespace MoneyTracker.Business.Services
                         for (int row = startRow; row <= worksheet.Dimension.Rows; row++)
                         {
                             var transactionData = GetTransactionData(worksheet, row);
-                            var mccCode = mccCodeRepository.GetMccById(transactionData.Mcc);
-
-                            var category = categoryRepository.GetCategoryByName(userId, mccCode.ShortDescription);
-
-                            var transType = GetTransactionType(transactionData.CardCurrencyAmount);
-
                             var transactionId = Guid.NewGuid();
+                            Category? category = null;
+                            var dateTime = ParseDateTime(transactionData.DateAndTime);
+                            var operationType = GetTransactionType(transactionData.CardCurrencyAmount);
                             var amount = Math.Abs(transactionData.CardCurrencyAmount);
 
-                            var dateTime = ParseDateTime(transactionData.DateAndTime);
-
-                            Guid catId = Guid.NewGuid();
-
-                            if (category == null)
+                            if (transactionData.Description.Contains(SAVINGS_DESCRIPTION_STRING))
                             {
-                                var newCat = newCategories.FirstOrDefault(c => c.Name == mccCode.ShortDescription);
+                                if  (savingsAccountId == null && savingsAccountName == null)
+                                {
+                                    throw new SavingsAccountNotProvided();
+                                }
 
-                                if (newCat != null && transType == newCat.Type)
+                                if (savingsAccountName != null && savingsAccountId == null)
                                 {
-                                    catId = newCat.Id;
+                                    savingsAccountId = Guid.NewGuid();
+                                    importEvents.Add(
+                                        new PersonalAccountCreatedEvent(AccountId: (Guid)savingsAccountId, UserId: userId, Name: savingsAccountName, IsActive: true, Currency: currencyRepository.GetCurrencyByCode("UAH")));
                                 }
-                                else
-                                {
-                                    AddNewCategoryAndEvent(newCategories, importEvents, mccCode, userId, transType, catId);
-                                }
+
+                                var currentTime = DateTime.UtcNow;
+
+                                var transferCategoryId = categoryRepository.GetServiceCategory(ServiceCategories.MoneyTransfer).Id;
+
+                                importEvents.Add(new DebitTransactionAddedEvent
+                                (
+                                    OperationId: transactionId,
+                                    UserId: userId,
+                                    CategoryId: transferCategoryId,
+                                    CreatedAt: dateTime,
+                                    AccountId: operationType == TransactionTypes.Income ? importToAccountId : (Guid)savingsAccountId,
+                                    Title: transactionData.Description,
+                                    Note: transactionData.Description,
+                                    Amount: amount
+                                ));
+
+                                importEvents.Add(new CreditTransactionAddedEvent
+                                (
+                                    OperationId: transactionId,
+                                    UserId: userId,
+                                    CategoryId: transferCategoryId,
+                                    CreatedAt: currentTime,
+                                    AccountId: operationType == TransactionTypes.Expense ? importToAccountId : (Guid)savingsAccountId,
+                                    Title: transactionData.Description,
+                                    Note: null,
+                                    Amount: amount
+                                ));
                             }
                             else
                             {
-                                catId = category.Id;
-                            }
+                                var mccCode = mccCodeRepository.GetMccById(transactionData.Mcc);
 
-                            AddTransactionEvents(importEvents, userId, catId, dateTime, transType, userAccountId, usersDebitAccount, usersCreditAccount, transactionData, transactionId, amount);
+                                category = categoryRepository.GetCategoryByName(userId, mccCode.ShortDescription);
+
+                                Guid catId = Guid.NewGuid();
+
+                                if (category == null)
+                                {
+                                    var newCat = newCategories.FirstOrDefault(c => c.Name == mccCode.ShortDescription);
+
+                                    if (newCat != null && operationType == newCat.Type)
+                                    {
+                                        catId = newCat.Id;
+                                    }
+                                    else
+                                    {
+                                        AddNewCategoryAndEvent(newCategories, importEvents, mccCode, userId, operationType, catId);
+                                    }
+                                }
+                                else
+                                {
+                                    catId = category.Id;
+                                }
+
+                                AddTransactionEvents(importEvents, userId, catId, dateTime, operationType, importToAccountId, usersDebitAccount, usersCreditAccount, transactionData, transactionId, amount);
+                            }
                         }
 
                         await eventStore.AppendEventsAsync(importEvents);
@@ -97,7 +153,7 @@ namespace MoneyTracker.Business.Services
             catch (Exception ex)
             {
                 HandleImportException(ex);
-                return false;
+                throw;
             }
         }
 
@@ -199,5 +255,11 @@ namespace MoneyTracker.Business.Services
 
             public TransactionTypes Type { get; set; }
         }
+    }
+
+    [Serializable]
+    public class SavingsAccountNotProvided : Exception
+    {
+        public SavingsAccountNotProvided() : base() { }
     }
 }
