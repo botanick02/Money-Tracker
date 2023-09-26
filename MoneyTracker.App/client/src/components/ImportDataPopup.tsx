@@ -4,6 +4,7 @@ import React from "react";
 import Dropdown, { Option } from "../elements/Dropdown";
 import { useNavigate } from "react-router-dom";
 import InputWrapper from "../elements/InputWrapper";
+import { error } from "console";
 
 interface ImportDataPopupProps {
   closePopupHandle: () => void;
@@ -83,8 +84,12 @@ const ImportDataPopup = ({ closePopupHandle }: ImportDataPopupProps) => {
         });
 
         const result = await response.json();
-        if (result.errors.length > 0) {
-          setSavingsAccountRequired(true);
+        if (result.errors != null) {
+          if (
+            result.errors[0].extensions.code == "SAVINGS_ACCOUNT_INFO_REQUIRED"
+          ) {
+            setSavingsAccountRequired(true);
+          } 
         } else {
           importSuccess();
         }
@@ -120,7 +125,8 @@ const ImportDataPopup = ({ closePopupHandle }: ImportDataPopupProps) => {
           />
           {savingsAccountRequired && (
             <>
-              Usage of the Bonobank savings accounts where identified, please enter the name for the account
+              Usage of the Bonobank savings accounts where identified, please
+              enter the name for the account
               <InputWrapper>
                 <input
                   placeholder="Savings account name"
