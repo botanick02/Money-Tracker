@@ -124,9 +124,9 @@ namespace MoneyTracker.Business.Services
 
                                 if (category == null)
                                 {
-                                    var newCat = newCategories.FirstOrDefault(c => c.Name == mccCode.ShortDescription);
+                                    var newCat = newCategories.Where(c => c.Name == mccCode.ShortDescription).FirstOrDefault(c => c.Type == operationType);
 
-                                    if (newCat != null && operationType == newCat.Type)
+                                    if (newCat != null)
                                     {
                                         catId = newCat.Id;
                                     }
