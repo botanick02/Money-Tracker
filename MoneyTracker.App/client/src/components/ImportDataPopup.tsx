@@ -4,7 +4,6 @@ import React from "react";
 import Dropdown, { Option } from "../elements/Dropdown";
 import { useNavigate } from "react-router-dom";
 import InputWrapper from "../elements/InputWrapper";
-import { error } from "console";
 
 interface ImportDataPopupProps {
   closePopupHandle: () => void;
@@ -23,8 +22,8 @@ const ImportDataPopup = ({ closePopupHandle }: ImportDataPopupProps) => {
     (state) => state.Account.currentAccountId
   );
 
-  const [savingsAccountRequired, setSavingsAccountRequired] = useState(false);
-  const [savingsAccountName, setSavingsAccountName] = useState("");
+  
+
 
   const accounts = useAppSelector((state) =>
     state.Account.accounts.filter((account) => account.isActive)
@@ -40,10 +39,29 @@ const ImportDataPopup = ({ closePopupHandle }: ImportDataPopupProps) => {
       });
     });
 
-  const [account, setAccount] = useState<Option>(
+    
+
+    const [savingsAccountRequired, setSavingsAccountRequired] = useState(false);
+    const [savingsAccountName, setSavingsAccountName] = useState("");
+    const [savingsAccount, setSavingsAccount] = useState<Option | null>();
+
+    
+
+  const [importToAccount, setImportToAccount] = useState<Option>(
     accountOptions.find((option) => option.value === currentAccountId) ||
       accountOptions[0]
   );
+
+  const savingsAccountOptions: Option[] = [];
+    accounts
+      .filter((a) => a.id !== "total")
+      .filter(a => a.id !== importToAccount.value)
+      .forEach((account) => {
+        savingsAccountOptions.push({
+          label: account.name,
+          value: account.id,
+        });
+      });
 
   const handleUpload = async () => {
     if (selectedFile) {
@@ -61,9 +79,10 @@ const ImportDataPopup = ({ closePopupHandle }: ImportDataPopupProps) => {
         `,
           variables: {
             file: null,
-            accountId: account.value,
+            accountId: importToAccount.value,
             savingsAccountName:
               savingsAccountName != "" ? savingsAccountName : null,
+            savingsAccountId: savingsAccount?.value
           },
         })
       );
@@ -120,12 +139,12 @@ const ImportDataPopup = ({ closePopupHandle }: ImportDataPopupProps) => {
           <input type="file" onChange={handleFileChange} />
           <Dropdown
             title={"Account"}
-            selectHandler={setAccount}
+            selectHandler={setImportToAccount}
             options={accountOptions}
           />
           {savingsAccountRequired && (
             <>
-              Usage of the Bonobank savings accounts where identified, please
+              Usage of the Monobank savings accounts where identified, please
               enter the name for the account
               <InputWrapper>
                 <input
@@ -137,6 +156,16 @@ const ImportDataPopup = ({ closePopupHandle }: ImportDataPopupProps) => {
                   }
                 />
               </InputWrapper>
+              {accounts.length > 1 && (
+                <>
+                Or choose one of the existing accounts
+                <Dropdown
+                  title={"Account"}
+                  selectHandler={setSavingsAccount}
+                  options={savingsAccountOptions}
+                />
+                </>
+              )}
             </>
           )}
         </div>

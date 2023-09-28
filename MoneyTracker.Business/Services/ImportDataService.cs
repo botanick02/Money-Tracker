@@ -170,7 +170,7 @@ namespace MoneyTracker.Business.Services
             return 0;
         }
 
-        private Guid GetAccountByType(Guid userId, Entities.AccountType accountType)
+        private Guid GetAccountByType(Guid userId, AccountType accountType)
         {
             return accountRepository.GetUserAccounts(userId, accountType).FirstOrDefault()!.Id;
         }
