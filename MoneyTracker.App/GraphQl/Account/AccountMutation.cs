@@ -3,6 +3,8 @@ using GraphQL.Types;
 using MoneyTracker.App.GraphQl.Category.Types.Inputs;
 using MoneyTracker.Business.Commands;
 using MoneyTracker.Business.Commands.Account;
+using MoneyTracker.Business.Commands.FinancialOperation;
+using MoneyTracker.Business.Entities;
 using MoneyTracker.Business.Interfaces;
 using System.Security.Claims;
 using System.Security.Principal;
