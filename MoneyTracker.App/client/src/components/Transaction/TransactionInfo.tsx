@@ -4,6 +4,7 @@ import DeletePopup from "../DeletePopup";
 import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
 import {
   CANCEL_FINANCIAL_OPERATION,
+  TransactionTypes,
   UPDATE_FINANCIAL_OPERATION,
   UpdateFinancialOperation,
 } from "../../store/FinancialOperation/FinancialOperation.slice";
@@ -73,7 +74,7 @@ console.log(accounts)
         />
       )}
       <div className={"popup"} onClick={(event) => event.stopPropagation()}>
-        <div className={`popup__header title-single ${type}`}>
+        <div className={`popup__header title-single ${type === TransactionTypes.Expense ? "expense" : "income"}`}>
           {isEditMode ? "Edit" : transaction.category.name}
         </div>
         {isEditMode ? (

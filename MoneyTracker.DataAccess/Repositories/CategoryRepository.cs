@@ -33,6 +33,14 @@ namespace MoneyTracker.DataAccess.Repositories
             return readModel.Categories.FirstOrDefault(c => c.Id == id);
         }
 
+        public Category? GetCategoryByName(Guid userId, string name, IReadModelExtensions? readModelExtensionsScoped = null)
+        {
+            var modelExtensions = readModelExtensionsScoped ?? readModelExtensions;
+
+            var readModel = modelExtensions.GetReadModel();
+            return readModel.Categories.Where(c => c.UserId == userId).FirstOrDefault(c => c.Name == name);
+        }
+
         public DefaultCategories GetDefaultCategories()
         {
             var categories = JsonConvert.DeserializeObject<DefaultCategories>(File.ReadAllText(defaultCategoriesPath));

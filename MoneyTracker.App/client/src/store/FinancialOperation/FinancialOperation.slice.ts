@@ -1,6 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Transaction } from "../../types/Transaction";
 
+export enum TransactionTypes {
+  Income = "INCOME",
+  Expense = "EXPENSE",
+  Transfer = "TRANSFER"
+}
+
 interface Operation {
   amount: number;
   categoryId: any;
@@ -43,7 +49,7 @@ export interface FetchTransactionsInfoVariables {
   categoryId: string | null;
   fromDate: string | null;
   toDate: string | null;
-  transactionType: "expense" | "income" | null;
+  transactionType: TransactionTypes.Expense | TransactionTypes.Income | null;
 }
 
 export interface CreateTransactionState {
@@ -56,7 +62,7 @@ export interface CreateTransactionState {
   incomes: number;
   expenses: number;
   dateRange: { fromDate: string | null; toDate: string | null };
-  transactionType: "EXPENSE" | "INCOME" | null;
+  transactionType: TransactionTypes.Expense | TransactionTypes.Income | null;
 }
 
 const initialState: CreateTransactionState = {
@@ -161,7 +167,7 @@ export const FinancialOperationSlice = createSlice({
     ) {
       state.dateRange = action.payload;
     },
-    SET_TRANSACTION_TYPE(state, action: PayloadAction<"EXPENSE" | "INCOME" | null>) {
+    SET_TRANSACTION_TYPE(state, action: PayloadAction<TransactionTypes.Expense | TransactionTypes.Income | null>) {
       state.transactionType = action.payload;
     },
   },

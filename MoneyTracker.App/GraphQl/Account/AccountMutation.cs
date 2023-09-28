@@ -56,6 +56,14 @@ namespace MoneyTracker.App.GraphQl.Account
                     var accountID = context.GetArgument<string>("accountId");
                     var userId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
+                    var command = new UpdatePersonalAccountCommand
+
+                    (
+                        AccountId: accountID,
+                        Name: accountName,
+                        UserId: userId
+                    )
+                    {
 
 
                     var command = new UpdatePersonalAccountCommand

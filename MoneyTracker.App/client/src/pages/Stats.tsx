@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "../hooks/useAppDispatch";
 import { CHANGE_STATS_FILTER, FETCH_STATS } from "../store/Stats/Stats.slice";
 import { SET_CURRENT_CATEGORY } from "../store/Account/Account.slice";
 import TimeScopePanel from "../components/TimeScopePanel";
-import { SET_DATE_RANGE } from "../store/FinancialOperation/FinancialOperation.slice";
+import { SET_DATE_RANGE, TransactionTypes } from "../store/FinancialOperation/FinancialOperation.slice";
 
 const Stats = () => {
 
@@ -15,7 +15,7 @@ const Stats = () => {
   const toDate = useAppSelector((state) =>  state.FinancialOperation.dateRange.toDate);
   useAppSelector((state) => state.Account);
   const dispatch = useAppDispatch();
-  const handleFilterChange = (filter: "income" | "expense") => {
+  const handleFilterChange = (filter: TransactionTypes.Income | TransactionTypes.Expense) => {
     setActiveFilter(filter);
     dispatch(CHANGE_STATS_FILTER(filter));
     dispatch({
@@ -37,18 +37,18 @@ const Stats = () => {
       <TimeScopePanel onRangeChange={onRangeChange} />
       <div className="transaction-sums">
         <div
-          onClick={() => handleFilterChange("income")}
+          onClick={() => handleFilterChange(TransactionTypes.Income)}
           className="transaction-sums__income"
-          style={{ opacity: activeFilter === "income" ? 1 : 0.5 }}
+          style={{ opacity: activeFilter === TransactionTypes.Income ? 1 : 0.5 }}
         >
           Income
           <br />+ {incomes} ₴
         </div>
 
         <div
-          onClick={() => handleFilterChange("expense")}
+          onClick={() => handleFilterChange(TransactionTypes.Expense)}
           className="transaction-sums__expense"
-          style={{ opacity: activeFilter === "expense" ? 1 : 0.5 }}
+          style={{ opacity: activeFilter === TransactionTypes.Expense ? 1 : 0.5 }}
         >
           Expense
           <br />- {-expenses} ₴

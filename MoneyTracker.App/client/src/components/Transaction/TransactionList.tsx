@@ -2,14 +2,11 @@ import React, { useState } from "react";
 import TransactionItem from "../../elements/TransactionItem";
 import { useAppSelector } from "../../hooks/useAppDispatch";
 import TransactionInfo from "./TransactionInfo";
+import { TransactionTypes } from "../../store/FinancialOperation/FinancialOperation.slice";
 
 const getOnlyDate = (dateString: string) => {
   const date = new Date(dateString);
-  return date.toLocaleDateString("ru-RU", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
+  return date.toLocaleDateString();
 };
 
 const TransactionList = () => {
@@ -40,7 +37,7 @@ console.log(transactions)
   );
 
   if (currentAccountId === "total") {
-    transactions = transactions.filter((t) => t.category.name !== "Transfer");
+    transactions = transactions.filter((t) => t.category.type !== "DOUBLE_SIDED");
   }
 
   return (

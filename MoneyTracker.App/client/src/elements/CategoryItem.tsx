@@ -1,10 +1,8 @@
 import { FC } from "react";
 import { Category } from "../types/Category";
 import SvgFromPath from "./SvgFromPath";
-import { useAppDispatch } from "../hooks/useAppDispatch";
-import { deleteCategory } from "../store/Category/Category.slice";
 import { ReactComponent as DeleteIcon } from "../assets/icons/Delete-icon.svg";
-import DeletePopup from "../components/DeletePopup";
+import { TransactionTypes } from "../store/FinancialOperation/FinancialOperation.slice";
 
 interface CategoryItemProps {
   category: Category;
@@ -17,10 +15,11 @@ const CategoryItem: FC<CategoryItemProps> = ({
   onClick,
   onDeleteClick,
 }) => {
+
   return (
     <div className="row-item" onClick={onClick}>
       <div
-        className={`row-item__indicator row-item__indicator__${category.type.toLowerCase()}`}
+        className={`row-item__indicator row-item__indicator__${category.type == TransactionTypes.Expense ? "expense" : "income"}`}
       />
       <div
         style={{ background: category.color }}

@@ -11,6 +11,7 @@ namespace MoneyTracker.Business.Utilities
         {
             CreateMap<UserCreateInput, User>().ReverseMap();
             CreateMap<Transaction, TransactionDto>().ReverseMap();
+            CreateMap<Category, CategoryDto>().ReverseMap();
         }
     }
 }

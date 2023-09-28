@@ -2,6 +2,7 @@ import React from 'react';
 import { Transaction } from '../types/Transaction';
 import { useAppSelector } from '../hooks/useAppDispatch';
 import Amount from './Amount';
+import { TransactionTypes } from '../store/FinancialOperation/FinancialOperation.slice';
 
 interface TransactionItemProps {
   transaction: Transaction;
@@ -11,7 +12,7 @@ interface TransactionItemProps {
 const TransactionItem = ({transaction, onMoreInfoCLick}: TransactionItemProps) => {
   const {categories} = useAppSelector((state) => state.Category);
   const category = categories.find((category) => category === transaction.category);
-  const type = transaction.amount > 0 ? 'income' : 'expense';
+  const type = transaction.amount > 0 ? "income" : "expense";
 
   return (
     <div className={"row-item"} onClick={() => onMoreInfoCLick(transaction.id)}>

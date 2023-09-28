@@ -45,7 +45,7 @@ const AccountCreate: React.FC<Props> = ({ openPopupHandle, name,id }) => {
         
         </ul>
         <div className="popup__fields">
-          <InputWrapper>
+          <InputWrapper value={accountName}>
             <input
               type="text"
               placeholder="Name of account"
