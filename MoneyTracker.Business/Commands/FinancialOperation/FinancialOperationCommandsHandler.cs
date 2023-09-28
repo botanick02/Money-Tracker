@@ -94,7 +94,7 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
 
             var category = categoryRepository.GetCategoryById(command.CategoryId);
 
-            if (category == null || (category.Type != TransactionTypes.Expense && category.Type != TransactionTypes.DoubleSided))
+            if (category == null || (category.Type != TransactionTypes.Expense && category.Type != TransactionTypes.Transfer))
             {
                 throw new ArgumentException("CategoryId: CategoryId is invalid");
             }

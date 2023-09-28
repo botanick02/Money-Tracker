@@ -56,14 +56,6 @@ namespace MoneyTracker.App.GraphQl.Account
                     var accountID = context.GetArgument<string>("accountId");
                     var userId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-                    var command = new UpdatePersonalAccountCommand
-
-                    (
-                        AccountId: accountID,
-                        Name: accountName,
-                        UserId: userId
-                    )
-                    {
 
 
                     var command = new UpdatePersonalAccountCommand
@@ -114,7 +106,7 @@ namespace MoneyTracker.App.GraphQl.Account
               AccountId: accountID
           );
 
-        if (accountBalance > 0)
+        if (accountBalance <= 0)
         {
 
              await commandDispatcher.DispatchAsync(command);
