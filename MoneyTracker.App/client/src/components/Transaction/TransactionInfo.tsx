@@ -26,11 +26,11 @@ const TransactionInfo = ({
   const dispatch = useAppDispatch();
 
   const categoryItems = useAppSelector((state) => state.Category.categories);
-  const accounts = useAppSelector((state) => state.Account.accounts).filter(
-    (a) => a.id !== "total"
-  );
-
-  const type = transaction.amount > 0 ? TransactionTypes.Income : TransactionTypes.Expense;
+  const accounts = useAppSelector((state) => state.Account.accounts).filter((account) => account.name !== "Total");
+ 
+ 
+console.log(accounts)
+  const type = transaction.amount > 0 ? "INCOME" : "EXPENSE";
 
   const categoryOptions = categoryItems
     .filter((c) => c.type === type)

@@ -94,10 +94,11 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
 
             var category = categoryRepository.GetCategoryById(command.CategoryId);
 
-            if (category == null || category.Type != TransactionTypes.Expense)
+            if (category == null || (category.Type != TransactionTypes.Expense && category.Type != TransactionTypes.Transfer))
             {
                 throw new ArgumentException("CategoryId: CategoryId is invalid");
             }
+
 
             var transactionId = Guid.NewGuid();
 
@@ -323,4 +324,72 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
             return true;
         }
     }
+    public class AddTransferWithCurrencyOperationCommandHandler : ICommandHandler<AddTransferOperationCommand>
+    {
+        private readonly IEventStore eventStore;
+        private readonly IAccountRepository accountRepository;
+        private readonly ICategoryRepository categoryRepository;
+
+        public AddTransferWithCurrencyOperationCommandHandler(IEventStore eventStore, IAccountRepository accountRepository, ICategoryRepository categoryRepository)
+        {
+            this.eventStore = eventStore;
+            this.accountRepository = accountRepository;
+            this.categoryRepository = categoryRepository;
+        }
+
+        public async Task<bool> HandleAsync(AddTransferOperationCommand command)
+        {
+            if (accountRepository.GetUserAccountById(command.FromAccountId) == null)
+            {
+                throw new ArgumentException("FromAccountId: FromAccountId is invalid");
+            }
+
+            if (accountRepository.GetUserAccountById(command.ToAccountId) == null)
+            {
+                throw new ArgumentException("ToAccountId: ToAccountId is invalid");
+            }
+
+            if (categoryRepository.GetCategoryById(command.CategoryId) == null)
+            {
+                throw new ArgumentException("CategoryId: CategoryId is invalid");
+            }
+
+            var eventsToAppend = new List<Event>();
+
+            var transactionId = Guid.NewGuid();
+
+            var currentTime = DateTime.UtcNow;
+
+            var transferCategoryId = categoryRepository.GetServiceCategory(ServiceCategories.MoneyTransfer).Id;
+
+            eventsToAppend.Add(new DebitTransactionAddedEvent
+            (
+                OperationId: transactionId,
+                UserId: command.UserId,
+                CategoryId: transferCategoryId,
+                CreatedAt: command.CreatedAt ?? currentTime,
+                AccountId: command.ToAccountId,
+                Title: command.Title,
+                Note: command.Note,
+                Amount: command.Amount
+            ));
+
+            eventsToAppend.Add(new CreditTransactionAddedEvent
+            (
+                OperationId: transactionId,
+                UserId: command.UserId,
+                CategoryId: transferCategoryId,
+                CreatedAt: command.CreatedAt ?? currentTime,
+                AccountId: command.FromAccountId,
+                Title: command.Title,
+                Note: command.Note,
+                Amount: command.Amount
+            ));
+
+            await eventStore.AppendEventsAsync(eventsToAppend);
+
+            return true;
+        }
+    }
+
 }

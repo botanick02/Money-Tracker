@@ -5,6 +5,8 @@ using MoneyTracker.Business.Commands;
 using MoneyTracker.Business.Commands.Account;
 using MoneyTracker.Business.Interfaces;
 using System.Security.Claims;
+using System.Security.Principal;
+using System.Transactions;
 
 namespace MoneyTracker.App.GraphQl.Account
 {
@@ -12,7 +14,7 @@ namespace MoneyTracker.App.GraphQl.Account
     {
         private readonly ICurrencyRepository currencyRepository;
 
-        public AccountMutation(CommandDispatcher commandDispatcher, ICurrencyRepository currencyRepository)
+        public AccountMutation(CommandDispatcher commandDispatcher, ICurrencyRepository currencyRepository, ICategoryRepository categoryRepository, ITransactionRepository transactionRepository)
         {
             this.currencyRepository = currencyRepository;
 
@@ -47,6 +49,8 @@ namespace MoneyTracker.App.GraphQl.Account
                     var accountID = context.GetArgument<string>("accountId");
                     var userId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
+
+
                     var command = new UpdatePersonalAccountCommand
 
                     (
@@ -64,19 +68,54 @@ namespace MoneyTracker.App.GraphQl.Account
                 }).Authorize();
 
             Field<bool>("DeleteAccount")
-                .Argument<NonNullGraphType<StringGraphType>>("AccountID", "The ID of the account to delete")
-                .ResolveAsync(async context =>
-                {
-                    var accountID = context.GetArgument<string>("AccountID");
-                    var userId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-                    var command = new DeactivatePersonalAccountCommand
-                    (
-                        AccountId: accountID
-                    );
+    .Argument<StringGraphType>("Gone", "A flag indicating if the account should be marked as 'Gone'")
+    .Argument<NonNullGraphType<StringGraphType>>("AccountID", "The ID of the account to delete")
+    .ResolveAsync(async context =>
+    {
+        var accountID = context.GetArgument<string>("AccountID");
+        var goneFlag = context.GetArgument<string>("Gone", defaultValue: null);
 
-                    await commandDispatcher.DispatchAsync(command);
-                    return true;
-                }).Authorize();
+        var userId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+        var category = categoryRepository.GetServiceCategory(ServiceCategories.Gone);
+        var accountTransactions = transactionRepository.GetAccountTransactions(Guid.Parse(accountID));
+
+        decimal accountBalance = accountTransactions.Sum(t => t.Amount);
+
+
+
+        var command = new AddCreditOperationCommand
+        (
+            UserId: userId,
+            Title: "Gone",
+            CategoryId: category.Id,
+            FromAccountId: Guid.Parse(accountID),
+            Amount: accountBalance,
+            Note: "Gone",
+            CreatedAt: DateTime.UtcNow
+        );
+        var deactivateCommand = new DeactivatePersonalAccountCommand
+          (
+              AccountId: accountID
+          );
+
+        if (accountBalance <= 0)
+        {
+
+             await commandDispatcher.DispatchAsync(command);
+             await commandDispatcher.DispatchAsync(deactivateCommand);
+        }
+        else
+        {
+            await commandDispatcher.DispatchAsync(deactivateCommand);
+        }
+
+        return true;
+    }).Authorize();
+
+
+
+
         }
     }
 }

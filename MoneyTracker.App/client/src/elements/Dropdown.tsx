@@ -4,6 +4,7 @@ export interface Option {
   label: string;
   icon?: string;
   value: any;
+  currency?: string;
 }
 
 interface SelectPropsType {
