@@ -10,4 +10,5 @@ namespace MoneyTracker.Business.Commands.Account
 
 
     public record DeactivatePersonalAccountCommand(string AccountId);
+
 }

@@ -7,10 +7,11 @@ import Dropdown from '../../elements/Dropdown';
 
 interface Props {
   openPopupHandle(): void;
-  name: string;
+  name?: string;
+  id?:string;
 }
 
-const AccountCreate: React.FC<Props> = ({ openPopupHandle, name }) => {
+const AccountCreate: React.FC<Props> = ({ openPopupHandle, name,id }) => {
   const dispatch = useAppDispatch();
   const [accountName, setAccountName] = useState<string>(''); 
   const [selectedCurrency, setSelectedCurrency] = useState('UAH')
@@ -52,12 +53,14 @@ const AccountCreate: React.FC<Props> = ({ openPopupHandle, name }) => {
               onChange={handleInputChange}
             />
           </InputWrapper>
-          <Dropdown
-      title={"Currency"}
-      selectHandler={(option) => setSelectedCurrency(option.value)}
-     
-      options={currencyOptions}
-    />
+          {!id ? (
+  <Dropdown
+    title={"Currency"}
+    selectHandler={(option) => setSelectedCurrency(option.value)}
+    options={currencyOptions}
+  />
+) : null}
+
 
           <div className="popup__row popup__row__center">
           

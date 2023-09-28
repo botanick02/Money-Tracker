@@ -94,10 +94,11 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
 
             var category = categoryRepository.GetCategoryById(command.CategoryId);
 
-            if (category == null || category.Type != TransactionTypes.Expense)
+            if (category == null || (category.Type != TransactionTypes.Expense && category.Type != TransactionTypes.Transfer))
             {
                 throw new ArgumentException("CategoryId: CategoryId is invalid");
             }
+
 
             var transactionId = Guid.NewGuid();
 
