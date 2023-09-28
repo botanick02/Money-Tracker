@@ -89,31 +89,33 @@ namespace MoneyTracker.App.GraphQl.Account
 
         decimal accountBalance = accountTransactions.Sum(t => t.Amount);
 
-       
+
 
         var command = new AddCreditOperationCommand
         (
             UserId: userId,
             Title: "Gone",
-            CategoryId: Guid.Parse(category.Id.ToString()),
+            CategoryId: category.Id,
             FromAccountId: Guid.Parse(accountID),
             Amount: accountBalance,
             Note: "Gone",
             CreatedAt: DateTime.UtcNow
         );
+        var deactivateCommand = new DeactivatePersonalAccountCommand
+          (
+              AccountId: accountID
+          );
+
         if (accountBalance > 0)
         {
 
-            await commandDispatcher.DispatchAsync(command);
+             await commandDispatcher.DispatchAsync(command);
+             await commandDispatcher.DispatchAsync(deactivateCommand);
         }
-        
-
-        var deactivateCommand = new DeactivatePersonalAccountCommand
-        (
-            AccountId: accountID
-        );
-
-        await commandDispatcher.DispatchAsync(deactivateCommand);
+        else
+        {
+            await commandDispatcher.DispatchAsync(deactivateCommand);
+        }
 
         return true;
     }).Authorize();

@@ -29,9 +29,6 @@ const StatsTransactionItem: FC<StatsTransactionItemProps> = ({ id, name, currenc
   const [icon, setIcon] = useState("");
   const [accountOnDeletionId, setAccountOnDeletionId] = useState<string | null>(null);
   const [selectedPopupOption, setSelectedPopupOption] = useState<string>("1");
-  const categories = useAppSelector((state) => state.Category.categories).filter((c) => c.isService == true)
-  .filter((c) => c.isActive == true)
-  const categoryGone = categories.find((c) => c.name === "Gone")?.id
 
 
   useEffect(() => {
