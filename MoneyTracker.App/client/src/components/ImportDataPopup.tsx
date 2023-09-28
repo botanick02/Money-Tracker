@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { useAppDispatch, useAppSelector } from "../hooks/useAppDispatch";
-import { request } from "../api/core";
+import { useAppSelector } from "../hooks/useAppDispatch";
 import React from "react";
 import Dropdown, { Option } from "../elements/Dropdown";
 import { useNavigate } from "react-router-dom";
+import InputWrapper from "../elements/InputWrapper";
 
 interface ImportDataPopupProps {
   closePopupHandle: () => void;
@@ -22,6 +22,9 @@ const ImportDataPopup = ({ closePopupHandle }: ImportDataPopupProps) => {
     (state) => state.Account.currentAccountId
   );
 
+  
+
+
   const accounts = useAppSelector((state) =>
     state.Account.accounts.filter((account) => account.isActive)
   );
@@ -36,10 +39,29 @@ const ImportDataPopup = ({ closePopupHandle }: ImportDataPopupProps) => {
       });
     });
 
-  const [account, setAccount] = useState<Option>(
+    
+
+    const [savingsAccountRequired, setSavingsAccountRequired] = useState(false);
+    const [savingsAccountName, setSavingsAccountName] = useState("");
+    const [savingsAccount, setSavingsAccount] = useState<Option | null>();
+
+    
+
+  const [importToAccount, setImportToAccount] = useState<Option>(
     accountOptions.find((option) => option.value === currentAccountId) ||
       accountOptions[0]
   );
+
+  const savingsAccountOptions: Option[] = [];
+    accounts
+      .filter((a) => a.id !== "total")
+      .filter(a => a.id !== importToAccount.value)
+      .forEach((account) => {
+        savingsAccountOptions.push({
+          label: account.name,
+          value: account.id,
+        });
+      });
 
   const handleUpload = async () => {
     if (selectedFile) {
@@ -49,15 +71,18 @@ const ImportDataPopup = ({ closePopupHandle }: ImportDataPopupProps) => {
         "operations",
         JSON.stringify({
           query: `
-          mutation ($file: Upload!, $accountId: String!) {
+          mutation ($file: Upload!, $accountId: String!, $savingsAccountName: String, $savingsAccountId: String) {
             dataImportMutation{
-              importMonobankXls(file: $file, accountId: $accountId)
+              importMonobankXls(file: $file, accountId: $accountId, savingsAccountName: $savingsAccountName, savingsAccountId: $savingsAccountId)
             }
           }
         `,
           variables: {
             file: null,
-            accountId: account.value,
+            accountId: importToAccount.value,
+            savingsAccountName:
+              savingsAccountName != "" ? savingsAccountName : null,
+            savingsAccountId: savingsAccount?.value
           },
         })
       );
@@ -78,9 +103,17 @@ const ImportDataPopup = ({ closePopupHandle }: ImportDataPopupProps) => {
         });
 
         const result = await response.json();
-        importSuccess();
+        if (result.errors != null) {
+          if (
+            result.errors[0].extensions.code == "SAVINGS_ACCOUNT_INFO_REQUIRED"
+          ) {
+            setSavingsAccountRequired(true);
+          } 
+        } else {
+          importSuccess();
+        }
       } catch (error) {
-        console.error("Error uploading file:", error);
+        console.log(error);
       }
     }
   };
@@ -90,7 +123,7 @@ const ImportDataPopup = ({ closePopupHandle }: ImportDataPopupProps) => {
   const importSuccess = () => {
     closePopupHandle();
     navigate("/");
-  }
+  };
 
   return (
     <div
@@ -104,12 +137,37 @@ const ImportDataPopup = ({ closePopupHandle }: ImportDataPopupProps) => {
         <div className={`popup__header title-single`}>Import Data</div>
         <div className={"popup__fields"}>
           <input type="file" onChange={handleFileChange} />
-            <Dropdown
-              title={"Account"}
-              selectHandler={setAccount}
-              options={accountOptions}
-            />
-          
+          <Dropdown
+            title={"Account"}
+            selectHandler={setImportToAccount}
+            options={accountOptions}
+          />
+          {savingsAccountRequired && (
+            <>
+              Usage of the Monobank savings accounts where identified, please
+              enter the name for the account
+              <InputWrapper>
+                <input
+                  placeholder="Savings account name"
+                  type="text"
+                  value={savingsAccountName}
+                  onChange={(event) =>
+                    setSavingsAccountName(event.target.value)
+                  }
+                />
+              </InputWrapper>
+              {accounts.length > 1 && (
+                <>
+                Or choose one of the existing accounts
+                <Dropdown
+                  title={"Account"}
+                  selectHandler={setSavingsAccount}
+                  options={savingsAccountOptions}
+                />
+                </>
+              )}
+            </>
+          )}
         </div>
         <div className={"popup__row"}>
           <button className="button" onClick={handleUpload}>

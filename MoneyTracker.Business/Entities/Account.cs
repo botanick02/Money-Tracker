@@ -11,6 +11,7 @@
         public AccountType Type { get; set; }
 
         public Currency Currency { get; set; }
+
         public bool IsActive { get; set; }
     }
 
