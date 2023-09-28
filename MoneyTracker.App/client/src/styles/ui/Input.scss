@@ -43,3 +43,8 @@
   font-size: 16px;
   position: relative;
 }
+.input-container {
+  width: 100%;
+  display: flex; 
+  justify-content: space-between;
+}

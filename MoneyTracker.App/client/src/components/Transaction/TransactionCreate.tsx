@@ -22,24 +22,25 @@ interface Props {
   closePopupHandle(): void;
 }
 
-const TransactionCreate: React.FC<Props> = ({
-  closePopupHandle,
-}) => {
-  const transactionType = useAppSelector(state => state.FinancialOperation.transactionType);
+const TransactionCreate: React.FC<Props> = ({ closePopupHandle }) => {
+  const transactionType = useAppSelector(
+    (state) => state.FinancialOperation.transactionType
+  );
 
-  const [type, setType] = useState<TransactionTypes>(transactionType ?? TransactionTypes.Expense);
+  const [type, setType] = useState<TransactionTypes>(
+    transactionType ?? TransactionTypes.Expense
+  );
 
-  const {
-    register,
-    handleSubmit,
-  } = useForm<FormFields>({
+  const { register, handleSubmit } = useForm<FormFields>({
     defaultValues: {
       createdAt: getCurrentISODateTimeValue(),
     },
   });
 
   const dispatch = useAppDispatch();
-  const categoryItems = useAppSelector((state) => state.Category.categories).filter(t => t.isActive == true);
+  const categoryItems = useAppSelector(
+    (state) => state.Category.categories
+  ).filter((t) => t.isActive == true);
   const accounts = useAppSelector((state) => state.Account.accounts);
 
   const accountOptions: Option[] = [];
@@ -50,6 +51,8 @@ const TransactionCreate: React.FC<Props> = ({
       accountOptions.push({
         label: account.name,
         value: account.id,
+        currency:account.currency.code
+       
       });
     });
 
@@ -81,9 +84,10 @@ const TransactionCreate: React.FC<Props> = ({
   };
 
   const handleCancel = () => {
+ 
     closePopupHandle();
   };
-
+ 
   const addFinancialOperation = (data: FormFields) => {
     switch (type) {
       case TransactionTypes.Income: {
@@ -172,7 +176,9 @@ const TransactionCreate: React.FC<Props> = ({
                     toAccount: transferAccounts.toAccount,
                   })
                 }
-                options={accountOptions.filter(o => o.value !== transferAccounts.toAccount.value)}
+                options={accountOptions.filter(
+                  (o) => o.value !== transferAccounts.toAccount.value
+                )}
               />
               <Dropdown
                 title={"To"}
@@ -182,19 +188,47 @@ const TransactionCreate: React.FC<Props> = ({
                     toAccount: option,
                   })
                 }
-                options={accountOptions.filter(o => o.value !== transferAccounts.fromAccount.value)}
+                options={accountOptions.filter(
+                  (o) => o.value !== transferAccounts.fromAccount.value
+                )}
               />
             </div>
           )}
-          <InputWrapper>
-            <input
-              type="number"
-              placeholder="Amount"
-              {...register("amount", {
-                required: "Amount is required",
-              })}
-            />
-          </InputWrapper>
+       {type === TransactionTypes.Transfer &&( transferAccounts.fromAccount.currency !==  transferAccounts.toAccount.currency ) ? (
+  <div className="popup__row">
+    <InputWrapper>
+      <input
+        type="number"
+        placeholder="Amount"
+        {...register("amount", {
+          required: "Amount is required",
+        })}
+      />
+    </InputWrapper>
+    <InputWrapper>
+      <input
+        type="number"
+        placeholder="Amount in other currency "
+        {...register("amount", {
+          required: "Amount is required",
+        })}
+      />
+    </InputWrapper>
+  </div>
+) : (
+  <InputWrapper>
+    <input
+      type="number"
+      placeholder="Amount"
+      {...register("amount", {
+        required: "Amount is required",
+      })}
+    />
+  </InputWrapper>
+)}
+
+
+
           {type !== TransactionTypes.Transfer ? (
             <Dropdown
               title={"Category"}
