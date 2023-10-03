@@ -27,9 +27,9 @@ namespace MoneyTracker.Business.Entities
 
         public Budget() { }
 
-        private Budget(string id, decimal limit, IEnumerable<string> categoryId, string title)
+        private Budget(string? id, decimal limit, IEnumerable<string> categoryId, string title)
         {
-            Id = id.Length > 0 ? Guid.Parse(id) : Guid.NewGuid();
+            Id = id != null ? Guid.Parse(id) : Guid.NewGuid();
             Limit = limit;
             CategoryId = categoryId.Select(Guid.Parse);
             Title = title;

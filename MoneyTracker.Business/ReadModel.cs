@@ -4,15 +4,15 @@ namespace MoneyTracker.Business.ReadStoreModel
 {
     public class ReadModel
     {
-        public IEnumerable<User> Users { get; set; } = Enumerable.Empty<User>();
+        public List<User> Users { get; set; } = new List<User>();
 
-        public IEnumerable<Account> Accounts { get; set; } = Enumerable.Empty<Account>();
+        public List<Account> Accounts { get; set; } = new List<Account>();
 
-        public IEnumerable<Transaction> Transactions { get; set; }  = Enumerable.Empty<Transaction>();
+        public List<Transaction> Transactions { get; set; } = new List<Transaction>();
 
-        public IEnumerable<Category> Categories { get; set; } = Enumerable.Empty<Category>();
-      
-        public IEnumerable<Budget> Budgets { get; set; } = Enumerable.Empty<Budget>();
-      
+        public List<Category> Categories { get; set; } = new List<Category>();
+
+        public List<Budget> Budgets { get; set; } = new List<Budget>();
+
     }
 }

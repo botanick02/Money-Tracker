@@ -16,7 +16,7 @@ namespace MoneyTracker.Business.Events.Budgets
 
             var newBudget = @event.Budget;
 
-            updatedModel.Budgets = updatedModel.Budgets.Append(newBudget);
+            updatedModel.Budgets.Add(newBudget);
 
             return updatedModel;
         }
@@ -27,7 +27,7 @@ namespace MoneyTracker.Business.Events.Budgets
         {
             var updatedModel = currentModel;
 
-            updatedModel.Budgets = updatedModel.Budgets.Where(x => x.Id != Guid.Parse(@event.id));
+            updatedModel.Budgets = updatedModel.Budgets.Where(x => x.Id != Guid.Parse(@event.id)).ToList();
 
             return updatedModel;
         }

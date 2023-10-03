@@ -56,7 +56,7 @@ namespace MoneyTracker.Business.Events.Categories
         public async Task<ReadModel> ApplyAsync(ReadModel currentmodel, CategoryCreatedEvent @event)
         {
             var updatedModel = currentmodel;
-            updatedModel.Categories = updatedModel.Categories.Append(
+            updatedModel.Categories.Add(
                 new Category { 
                     Id = @event.CategoryId,
                     UserId = @event.UserId,
@@ -75,7 +75,7 @@ namespace MoneyTracker.Business.Events.Categories
         public async Task<ReadModel> ApplyAsync(ReadModel currentmodel, ServiceCategoryCreatedEvent @event)
         {
             var updatedModel = currentmodel;
-            updatedModel.Categories = updatedModel.Categories.Append(
+            updatedModel.Categories.Add(
                 new Category
                 {
                     Id = @event.CategoryId,

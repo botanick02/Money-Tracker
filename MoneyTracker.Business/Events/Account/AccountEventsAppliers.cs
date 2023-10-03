@@ -17,7 +17,7 @@ namespace MoneyTracker.Business.Events.Account
                 Type = Entities.AccountType.Debit
             };
 
-            updatedModel.Accounts = updatedModel.Accounts.Append(newDebitAccount);
+            updatedModel.Accounts.Add(newDebitAccount);
 
             return updatedModel;
         }
@@ -37,7 +37,7 @@ namespace MoneyTracker.Business.Events.Account
                 Type = Entities.AccountType.Credit
             };
 
-            updatedModel.Accounts = updatedModel.Accounts.Append(newDebitAccount);
+            updatedModel.Accounts.Add(newDebitAccount);
 
             return updatedModel;
         }
@@ -59,7 +59,7 @@ namespace MoneyTracker.Business.Events.Account
                 Type = Entities.AccountType.Personal
             };
 
-            updatedModel.Accounts = updatedModel.Accounts.Append(newPersonalAccount);
+            updatedModel.Accounts.Add(newPersonalAccount);
 
             return updatedModel;
         }
