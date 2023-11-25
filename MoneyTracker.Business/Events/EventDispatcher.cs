@@ -12,7 +12,7 @@ namespace MoneyTracker.Business.Events
             this.serviceProvider = serviceProvider;
         }
 
-        public async Task<ReadModel> ApplyAsync(ReadModel currentModel, List<Event> events)
+        public async Task<ReadModel> ApplyAsync(ReadModel currentModel, List<BaseEvent> events)
         {
             var updatedModel = currentModel;
             foreach (var @event in events)
@@ -30,9 +30,9 @@ namespace MoneyTracker.Business.Events
             return updatedModel;
         }
 
-        public async Task<ReadModel> ApplyAsync(ReadModel currentModel, Event @event)
+        public async Task<ReadModel> ApplyAsync(ReadModel currentModel, BaseEvent @event)
         {
-            return await ApplyAsync(currentModel, new List<Event> { @event });
+            return await ApplyAsync(currentModel, new List<BaseEvent> { @event });
         }
     }
 }

@@ -6,6 +6,6 @@ namespace MoneyTracker.Business.Interfaces
     public interface IReadModelExtensions
     {
         ReadModel GetReadModel(DateTime? dateTimeTo = null);
-        ReadModel Evolve(ReadModel currentModel, Event @event);
+        ReadModel Evolve(ReadModel currentModel, BaseEvent @event);
     }
 }

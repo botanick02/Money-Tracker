@@ -60,7 +60,7 @@ namespace MoneyTracker.DataAccess.MsSQL
 
                 if (serviceCreationEvents < 1)
                 {
-                    var events = new List<Event>
+                    var events = new List<BaseEvent>
                     {
                     new ServiceCategoryCreatedEvent(Guid.NewGuid(), ServiceCategories.MoneyTransfer.ToString(), TransactionTypes.Transfer, "./media/icons/transfer.svg", "#d9d9d9"),
                     new ServiceCategoryCreatedEvent(Guid.NewGuid(), ServiceCategories.Gone.ToString(), TransactionTypes.Transfer, "./media/icons/exit.svg", "#d9d9d9"),

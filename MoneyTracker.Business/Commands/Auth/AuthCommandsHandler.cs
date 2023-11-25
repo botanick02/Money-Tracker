@@ -32,9 +32,9 @@ namespace MoneyTracker.Business.Commands.Auth
                 return true;
             }
 
-            private List<Event> CreateEventsForUserRegistration(Guid newUserId, RegisterUserCommand command)
+            private List<BaseEvent> CreateEventsForUserRegistration(Guid newUserId, RegisterUserCommand command)
             {
-                var events = new List<Event>
+                var events = new List<BaseEvent>
                 {
                     new UserRegisteredEvent(newUserId, command.Email, command.Name, command.PasswordHash, command.PasswordSalt)
                 };
@@ -70,9 +70,9 @@ namespace MoneyTracker.Business.Commands.Auth
                 return true;
             }
 
-            private List<Event> CreateEventsForGoogleUserRegistration(Guid newUserId, RegisterGoogleUserCommand command)
+            private List<BaseEvent> CreateEventsForGoogleUserRegistration(Guid newUserId, RegisterGoogleUserCommand command)
             {
-                var events = new List<Event>
+                var events = new List<BaseEvent>
                 {
                     new GoogleUserRegisteredEvent(newUserId, command.Email, command.Name)
                 };
@@ -86,14 +86,14 @@ namespace MoneyTracker.Business.Commands.Auth
             }
         }
 
-        public static void AddInitAccountsEvents(Guid userId, Currency currency, List<Event> events)
+        public static void AddInitAccountsEvents(Guid userId, Currency currency, List<BaseEvent> events)
         {
             events.Add(new CreditAccountCreatedEvent(Guid.NewGuid(), userId, currency));
             events.Add(new DebitAccountCreatedEvent(Guid.NewGuid(), userId, currency));
             events.Add(new PersonalAccountCreatedEvent(Guid.NewGuid(), userId, "Cash", currency,true));
         }
 
-        public static void AddDefaultCategories(Guid userId, List<Event> events, ICategoryRepository categoryRepository)
+        public static void AddDefaultCategories(Guid userId, List<BaseEvent> events, ICategoryRepository categoryRepository)
         {
             var defaultCategories = categoryRepository.GetDefaultCategories();
 

@@ -1,6 +1,6 @@
 ﻿namespace MoneyTracker.Business.Events
 {
-    public record Event
+    public record BaseEvent
     {
     }
 }

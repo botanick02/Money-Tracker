@@ -33,7 +33,7 @@ namespace MoneyTracker.DataAccess
             return currentReadModel.CurrentModel;
         }
 
-        public ReadModel Evolve(ReadModel currentModel, Event @event)
+        public ReadModel Evolve(ReadModel currentModel, BaseEvent @event)
         {
             return eventAppliersDispatcher.ApplyAsync(currentModel, @event).Result;
         }

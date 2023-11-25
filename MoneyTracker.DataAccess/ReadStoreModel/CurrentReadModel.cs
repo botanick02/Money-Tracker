@@ -13,7 +13,7 @@ namespace MoneyTracker.Business.ReadStoreModel
             this.eventDispatcher = eventDispatcher;
         }
 
-        public async Task UpdateAsync(List<Event> events)
+        public async Task UpdateAsync(List<BaseEvent> events)
         {
             CurrentModel = await eventDispatcher.ApplyAsync(CurrentModel, events);
         }

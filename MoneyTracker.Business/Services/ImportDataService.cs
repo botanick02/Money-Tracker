@@ -60,7 +60,7 @@ namespace MoneyTracker.Business.Services
                         var usersDebitAccount = GetAccountByType(userId, AccountType.Debit);
                         var usersCreditAccount = GetAccountByType(userId, AccountType.Credit);
 
-                        var importEvents = new List<Event>();
+                        var importEvents = new List<BaseEvent>();
                         var newCategories = new List<CategoryMinId>();
 
                         for (int row = startRow; row <= worksheet.Dimension.Rows; row++)
@@ -198,15 +198,15 @@ namespace MoneyTracker.Business.Services
             return DateTime.ParseExact(dateAndTime, format, CultureInfo.InvariantCulture, DateTimeStyles.None);
         }
 
-        private void AddNewCategoryAndEvent(List<CategoryMinId> newCategories, List<Event> importEvents, MccCode mccCode, Guid userId, TransactionTypes transType, Guid catId)
+        private void AddNewCategoryAndEvent(List<CategoryMinId> newCategories, List<BaseEvent> importEvents, MccCode mccCode, Guid userId, TransactionTypes transType, Guid catId)
         {
             importEvents.Add(new CategoryCreatedEvent(catId, userId, mccCode.ShortDescription, transType, mccCode.IconUrl ?? "./media/icons/import.svg", mccCode.Color ?? "#d9d9d9"));
             newCategories.Add(new CategoryMinId() { Name = mccCode.ShortDescription, Id = catId, Type = transType });
         }
 
-        private void AddTransactionEvents(List<Event> importEvents, Guid userId, Guid catId, DateTime dateTime, TransactionTypes transType, Guid userAccountId, Guid usersDebitAccount, Guid usersCreditAccount, TransactionData transactionData, Guid transactionId, decimal amount)
+        private void AddTransactionEvents(List<BaseEvent> importEvents, Guid userId, Guid catId, DateTime dateTime, TransactionTypes transType, Guid userAccountId, Guid usersDebitAccount, Guid usersCreditAccount, TransactionData transactionData, Guid transactionId, decimal amount)
         {
-            importEvents.AddRange(new List<Event>
+            importEvents.AddRange(new List<BaseEvent>
     {
         new DebitTransactionAddedEvent
         (

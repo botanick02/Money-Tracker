@@ -33,7 +33,7 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
                 throw new ArgumentException("ToAccountId: ToAccountId is invalid");
             }
 
-            var eventsToAppend = new List<Event>();
+            var eventsToAppend = new List<BaseEvent>();
 
             var transactionId = Guid.NewGuid();
 
@@ -106,7 +106,7 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
 
             var currentTime = DateTime.UtcNow;
 
-            var eventsToAppend = new List<Event>
+            var eventsToAppend = new List<BaseEvent>
             {
                 new DebitTransactionAddedEvent
             (
@@ -169,7 +169,7 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
                 throw new ArgumentException("CategoryId: CategoryId is invalid");
             }
 
-            var eventsToAppend = new List<Event>();
+            var eventsToAppend = new List<BaseEvent>();
 
             var transactionId = Guid.NewGuid();
 
@@ -259,7 +259,7 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
         {
             var existingTransactions = transactionRepository.GetTransactionsByOperationId(command.OperationId);
 
-            var eventsToAppend = new List<Event>();
+            var eventsToAppend = new List<BaseEvent>();
 
             var userIncomeAccountId = accountRepository.GetUserAccounts(command.UserId, AccountType.Debit).FirstOrDefault()!.Id;
             var userExpenseAccountId = accountRepository.GetUserAccounts(command.UserId, AccountType.Credit).FirstOrDefault()!.Id;
@@ -354,7 +354,7 @@ namespace MoneyTracker.Business.Commands.FinancialOperation
                 throw new ArgumentException("CategoryId: CategoryId is invalid");
             }
 
-            var eventsToAppend = new List<Event>();
+            var eventsToAppend = new List<BaseEvent>();
 
             var transactionId = Guid.NewGuid();
 
