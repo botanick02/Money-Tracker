@@ -62,4 +62,20 @@ namespace MoneyTracker.Business.Events.Account
             return updatedModel;
         }
     }
+
+    public class PersonalAccountDeactivatedEventApplier : IEventApplier<PersonalAccountDeactivatedEvent>
+    {
+        public async Task<ReadModel> ApplyAsync(ReadModel currentModel, PersonalAccountDeactivatedEvent @event)
+        {
+            var updatedModel = currentModel;
+
+            var accountToUpdate = updatedModel.Accounts.FirstOrDefault(c => c.Id == @event.AccountId);
+            if (accountToUpdate != null)
+            {
+                accountToUpdate.IsActive = false;
+            }
+
+            return updatedModel;
+        }
+    }
 }
