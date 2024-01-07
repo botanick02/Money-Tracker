@@ -10,7 +10,7 @@ namespace MoneyTracker.DataAccess.Repositories
 
         public CurrencyRepository()
         {
-            var path = @"../MoneyTracker.DataAccess/Resources/Currencies.json";
+            var path = @"./Resources/Currencies.json";
             var readCurrencies = JsonConvert.DeserializeObject<List<Currency>>(File.ReadAllText(path));
             if (readCurrencies == null)
             {
