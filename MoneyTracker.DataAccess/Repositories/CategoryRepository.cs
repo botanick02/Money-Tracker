@@ -9,7 +9,7 @@ namespace MoneyTracker.DataAccess.Repositories
     public class CategoryRepository : ICategoryRepository
     {
         private readonly IReadModelExtensions readModelExtensions;
-        private string defaultCategoriesPath = @"./Resources/DefaultCategories.json";
+        private string defaultCategoriesPath = @"../MoneyTracker.DataAccess/Resources/DefaultCategories.json";
         public CategoryRepository(IReadModelExtensions readModelExtensions)
         {
             this.readModelExtensions = readModelExtensions;

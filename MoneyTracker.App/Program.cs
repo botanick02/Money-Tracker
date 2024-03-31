@@ -1,6 +1,5 @@
 using GraphQL;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using MoneyTracker.App.Authentication;
 using MoneyTracker.App.GraphQl;
 using MoneyTracker.Business.Services;
