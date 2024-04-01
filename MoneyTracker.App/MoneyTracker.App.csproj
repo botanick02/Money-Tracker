@@ -1,20 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
 	<DockerfileFastModeStage>base</DockerfileFastModeStage>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Google.Apis.Auth" Version="1.62.0" />
-    <PackageReference Include="GraphQL.Server.All" Version="7.6.0" />
-    <PackageReference Include="GraphQL.Server.Ui.Altair" Version="7.6.0" />
-    <PackageReference Include="GraphQL.Upload.AspNetCore" Version="3.0.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="7.0.11" />
-    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="7.0.11" />
-    <PackageReference Include="Microsoft.NET.Build.Containers" Version="7.0.401" />
+    <PackageReference Include="Google.Apis.Auth" Version="1.67.0" />
+    <PackageReference Include="GraphQL.Server.All" Version="7.7.1" />
+    <PackageReference Include="GraphQL.Server.Ui.Altair" Version="7.7.1" />
+    <PackageReference Include="GraphQL.Upload.AspNetCore" Version="3.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="8.0.3" />
+    <PackageReference Include="Microsoft.NET.Build.Containers" Version="8.0.202" />
   </ItemGroup>
 
   <ItemGroup>
