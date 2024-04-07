@@ -1,7 +1,7 @@
 # Use the official .NET SDK image as the build environment
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
 WORKDIR /app
-
+EXPOSE $PORT
 # Copy the .NET project files and restore dependencies
 COPY ["MoneyTracker.App/MoneyTracker.App.csproj", "MoneyTracker.App/"]
 COPY ["MoneyTracker.DataAccess/MoneyTracker.DataAccess.csproj", "MoneyTracker.DataAccess/"]
