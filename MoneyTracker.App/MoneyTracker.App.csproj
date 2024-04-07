@@ -21,7 +21,6 @@
 
   <ItemGroup>
     <Folder Include="client\" />
-    <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>
