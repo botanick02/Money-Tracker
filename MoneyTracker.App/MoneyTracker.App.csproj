@@ -5,6 +5,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
 	<DockerfileFastModeStage>base</DockerfileFastModeStage>
+	<UserSecretsId>d97c10eb-b835-4b47-b55d-a04c6c3ab414</UserSecretsId>
+	<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,6 +16,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="8.0.3" />
     <PackageReference Include="Microsoft.NET.Build.Containers" Version="8.0.202" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6" />
   </ItemGroup>
 
   <ItemGroup>
