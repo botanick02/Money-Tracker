@@ -20,7 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="client\" />
+    <Folder Include="client\build\" />
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>
