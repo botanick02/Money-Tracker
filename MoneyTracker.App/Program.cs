@@ -81,7 +81,6 @@ builder.Services.AddGraphQL(b => b
     .AddAutoClrMappings()
     .AddSystemTextJson()
     .AddAuthorizationRule()
-    .AddErrorInfoProvider(options => options.ExposeExceptionStackTrace = true)
     );
 
 
