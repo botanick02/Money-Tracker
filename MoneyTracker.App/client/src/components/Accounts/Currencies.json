@@ -1,0 +1,357 @@
+﻿[
+  {
+    "code": "UAH",
+    "symbol": "₴",
+    "two_letter_code": "UA"
+  },
+  {
+    "code": "USD",
+    "symbol": "$",
+    "two_letter_code": "US"
+  },
+  {
+    "code": "EUR",
+    "symbol": "€",
+    "two_letter_code": "EU"
+  },
+  {
+    "code": "GBP",
+    "symbol": "£",
+    "two_letter_code": "GB"
+  },
+  {
+    "code": "JPY",
+    "symbol": "¥",
+    "two_letter_code": "JP"
+  },
+  {
+    "code": "CAD",
+    "symbol": "CA$",
+    "two_letter_code": "CA"
+  },
+  {
+    "code": "AUD",
+    "symbol": "A$",
+    "two_letter_code": "AU"
+  },
+  {
+    "code": "CHF",
+    "symbol": "CHF",
+    "two_letter_code": "CH"
+  },
+  {
+    "code": "CNY",
+    "symbol": "CN¥",
+    "two_letter_code": "CN"
+  },
+  {
+    "code": "SEK",
+    "symbol": "kr",
+    "two_letter_code": "SE"
+  },
+  {
+    "code": "NZD",
+    "symbol": "NZ$",
+    "two_letter_code": "NZ"
+  },
+  {
+    "code": "MXN",
+    "symbol": "MX$",
+    "two_letter_code": "MX"
+  },
+  {
+    "code": "SGD",
+    "symbol": "S$",
+    "two_letter_code": "SG"
+  },
+  {
+    "code": "HKD",
+    "symbol": "HK$",
+    "two_letter_code": "HK"
+  },
+  {
+    "code": "NOK",
+    "symbol": "kr",
+    "two_letter_code": "NO"
+  },
+  {
+    "code": "KRW",
+    "symbol": "₩",
+    "two_letter_code": "KR"
+  },
+  {
+    "code": "TRY",
+    "symbol": "₺",
+    "two_letter_code": "TR"
+  },
+  {
+    "code": "RUB",
+    "symbol": "₽",
+    "two_letter_code": "RU"
+  },
+  {
+    "code": "BRL",
+    "symbol": "R$",
+    "two_letter_code": "BR"
+  },
+  {
+    "code": "INR",
+    "symbol": "₹",
+    "two_letter_code": "IN"
+  },
+  {
+    "code": "ZAR",
+    "symbol": "R",
+    "two_letter_code": "ZA"
+  },
+  {
+    "code": "DKK",
+    "symbol": "kr",
+    "two_letter_code": "DK"
+  },
+  {
+    "code": "PLN",
+    "symbol": "zł",
+    "two_letter_code": "PL"
+  },
+  {
+    "code": "THB",
+    "symbol": "฿",
+    "two_letter_code": "TH"
+  },
+  {
+    "code": "IDR",
+    "symbol": "Rp",
+    "two_letter_code": "ID"
+  },
+  {
+    "code": "ILS",
+    "symbol": "₪",
+    "two_letter_code": "IL"
+  },
+  {
+    "code": "SAR",
+    "symbol": "﷼",
+    "two_letter_code": "SA"
+  },
+  {
+    "code": "AED",
+    "symbol": "د.إ",
+    "two_letter_code": "AE"
+  },
+  {
+    "code": "COP",
+    "symbol": "COL$",
+    "two_letter_code": "CO"
+  },
+  {
+    "code": "CZK",
+    "symbol": "Kč",
+    "two_letter_code": "CZ"
+  },
+  {
+    "code": "MYR",
+    "symbol": "RM",
+    "two_letter_code": "MY"
+  },
+  {
+    "code": "PHP",
+    "symbol": "₱",
+    "two_letter_code": "PH"
+  },
+  {
+    "code": "ARS",
+    "symbol": "AR$",
+    "two_letter_code": "AR"
+  },
+  {
+    "code": "CLP",
+    "symbol": "CLP$",
+    "two_letter_code": "CL"
+  },
+  {
+    "code": "EGP",
+    "symbol": "EGP",
+    "two_letter_code": "EG"
+  },
+  {
+    "code": "HUF",
+    "symbol": "Ft",
+    "two_letter_code": "HU"
+  },
+  {
+    "code": "KWD",
+    "symbol": "د.ك",
+    "two_letter_code": "KW"
+  },
+  {
+    "code": "PEN",
+    "symbol": "S/.",
+    "two_letter_code": "PE"
+  },
+  {
+    "code": "RON",
+    "symbol": "RON",
+    "two_letter_code": "RO"
+  },
+  {
+    "code": "TWD",
+    "symbol": "NT$",
+    "two_letter_code": "TW"
+  },
+  {
+    "code": "VND",
+    "symbol": "₫",
+    "two_letter_code": "VN"
+  },
+  {
+    "code": "BGN",
+    "symbol": "лв",
+    "two_letter_code": "BG"
+  },
+  {
+    "code": "HRK",
+    "symbol": "kn",
+    "two_letter_code": "HR"
+  },
+  {
+    "code": "ISK",
+    "symbol": "kr",
+    "two_letter_code": "IS"
+  },
+  {
+    "code": "NGN",
+    "symbol": "₦",
+    "two_letter_code": "NG"
+  },
+  {
+    "code": "PKR",
+    "symbol": "₨",
+    "two_letter_code": "PK"
+  },
+  {
+    "code": "QAR",
+    "symbol": "﷼",
+    "two_letter_code": "QA"
+  },
+  {
+    "code": "UYU",
+    "symbol": "$U",
+    "two_letter_code": "UY"
+  },
+  {
+    "code": "KZT",
+    "symbol": "₸",
+    "two_letter_code": "KZ"
+  },
+  {
+    "code": "JMD",
+    "symbol": "J$",
+    "two_letter_code": "JM"
+  },
+  {
+    "code": "JOD",
+    "symbol": "JD",
+    "two_letter_code": "JO"
+  },
+  {
+    "code": "KES",
+    "symbol": "KSh",
+    "two_letter_code": "KE"
+  },
+  {
+    "code": "LBP",
+    "symbol": "LBP",
+    "two_letter_code": "LB"
+  },
+  {
+    "code": "LKR",
+    "symbol": "Rs",
+    "two_letter_code": "LK"
+  },
+  {
+    "code": "MAD",
+    "symbol": "MAD",
+    "two_letter_code": "MA"
+  },
+  {
+    "code": "MDL",
+    "symbol": "MDL",
+    "two_letter_code": "MD"
+  },
+  {
+    "code": "MKD",
+    "symbol": "MKD",
+    "two_letter_code": "MK"
+  },
+  {
+    "code": "MUR",
+    "symbol": "MURs",
+    "two_letter_code": "MU"
+  },
+  {
+    "code": "NAD",
+    "symbol": "N$",
+    "two_letter_code": "NA"
+  },
+  {
+    "code": "NIO",
+    "symbol": "C$",
+    "two_letter_code": "NI"
+  },
+  {
+    "code": "PAB",
+    "symbol": "B/.",
+    "two_letter_code": "PA"
+  },
+  {
+    "code": "PYG",
+    "symbol": "₲",
+    "two_letter_code": "PY"
+  },
+  {
+    "code": "SCR",
+    "symbol": "SCR",
+    "two_letter_code": "SC"
+  },
+  {
+    "code": "SVC",
+    "symbol": "$",
+    "two_letter_code": "SV"
+  },
+  {
+    "code": "TND",
+    "symbol": "DT",
+    "two_letter_code": "TN"
+  },
+  {
+    "code": "TZS",
+    "symbol": "TSh",
+    "two_letter_code": "TZ"
+  },
+  {
+    "code": "UGX",
+    "symbol": "USh",
+    "two_letter_code": "UG"
+  },
+  {
+    "code": "UZS",
+    "symbol": "UZS",
+    "two_letter_code": "UZ"
+  },
+  {
+    "code": "VUV",
+    "symbol": "VT",
+    "two_letter_code": "VU"
+  },
+  {
+    "code": "YER",
+    "symbol": "﷼",
+    "two_letter_code": "YE"
+  },
+  {
+    "code": "ZMW",
+    "symbol": "ZK",
+    "two_letter_code": "ZM"
+  }
+]

@@ -32,6 +32,7 @@ namespace MoneyTracker.Business.Services
                     Name = account.Name,
                     Currency = account.Currency,
                     Balance = accountBalance,
+                    IsActive= account.IsActive
                 };
 
                 resultDto.Accounts.Add(accountDto);

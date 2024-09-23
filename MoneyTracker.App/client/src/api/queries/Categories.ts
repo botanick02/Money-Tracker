@@ -8,13 +8,14 @@ query getCategories{
         color
         iconUrl
         isActive
+        isService
       }
     }
   }
   `
 
 export const CreateCategory = `
-  mutation createCategory($category: CreateCategoryInputType!){
+  mutation createCategory($category: CreateCategoryInput!){
     category{
       createCategory(category: $category)
     }
@@ -23,7 +24,7 @@ export const CreateCategory = `
 
 
 export const EditCategory = `
-  mutation createCategory($category: UpdateCategoryInputType!){
+  mutation createCategory($category: UpdateCategoryInput!){
     category{
       editCategory(category: $category)
     }

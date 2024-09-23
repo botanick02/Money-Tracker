@@ -6,7 +6,7 @@ const Header = () => {
 
   return (
     <div className={"header"}>
-      {location.pathname != "/settings" && <AccountSelector />}
+      {location.pathname !== "/settings" && <AccountSelector />}
     </div>
   );
 };

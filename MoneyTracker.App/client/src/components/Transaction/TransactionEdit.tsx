@@ -4,6 +4,7 @@ import Dropdown, { Option } from "../../elements/Dropdown";
 import { Transaction } from "../../types/Transaction";
 import { useForm } from "react-hook-form";
 import { getISODateTimeValue } from "../../tools/Dates/currentIsoDates";
+import { TransactionTypes } from "../../store/FinancialOperation/FinancialOperation.slice";
 
 interface FormFields {
   operationId: string;
@@ -24,7 +25,6 @@ interface TransactionEditProps {
 
 const TransactionEdit = ({
   transaction,
-  categoryOptions,
   accountOptions,
   onSave,
   onCancel,
@@ -58,7 +58,7 @@ const TransactionEdit = ({
   };
 
   const saveOperation = (data: FormFields) => {
-    if (account == fromAccount){
+    if (account === fromAccount) {
       return null;
     }
     onSave({
@@ -78,7 +78,7 @@ const TransactionEdit = ({
       <div className={"popup__fields"}>
         <div className={"popup__fields__amount"}>
           {transaction.amount < 0 && "-"}
-          <InputWrapper>
+          <InputWrapper error={errors.amount ? errors.amount.message : ""}>
             <input
               type="number"
               placeholder="Amount"
@@ -86,7 +86,6 @@ const TransactionEdit = ({
                 required: "Amount is required",
               })}
             />
-            {errors.amount && <span>{errors.amount.message}</span>}
           </InputWrapper>
           ₴
         </div>
@@ -102,7 +101,7 @@ const TransactionEdit = ({
             })}
           />
         </InputWrapper>
-        {transaction.category.type === "transfer" ? (
+        {transaction.category.type === TransactionTypes.Transfer ? (
           <div className={"popup__row"}>
             <Dropdown
               title={"From"}
@@ -121,7 +120,7 @@ const TransactionEdit = ({
                 accountOptions.findIndex(
                   (o) => o.value === transaction.accountId
                 ) + 1
-              } 
+              }
               options={accountOptions}
             />
           </div>

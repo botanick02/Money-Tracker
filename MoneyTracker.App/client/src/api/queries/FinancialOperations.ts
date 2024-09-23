@@ -1,4 +1,4 @@
-export const GetTransactions = `query getTransactions($input: GetTransactionsForAccountsInputType!){
+export const GetTransactions = `query getTransactions($input: GetTransactionsForAccountsInput!){
     financialOperation{
      getAccountsTransactions(input: $input) {
       transactions {
@@ -17,6 +17,7 @@ export const GetTransactions = `query getTransactions($input: GetTransactionsFor
         }
         createdAt
         accountId
+        accountName
         fromAccountId
         categoryId
       }
@@ -26,30 +27,30 @@ export const GetTransactions = `query getTransactions($input: GetTransactionsFor
     }
   }`
 
-export const AddDebit = `mutation addDebit($debitOperation: DebitOperationInputType!){
+export const AddDebit = `mutation addDebit($debitOperation: DebitOperationInput!){
       financialOperation{
         addDebitOperation(debitOperation: $debitOperation)
       }
     }`;
 
-export const AddCredit = `mutation addCredit($creditOperation: CreditOperationInputType!){
+export const AddCredit = `mutation addCredit($creditOperation: CreditOperationInput!){
       financialOperation{
         addCreditOperation(creditOperation: $creditOperation)
       }
     }`;
-export const AddTransfer = `mutation addTransfer($transferOperation: TransferOperationInputType!){
+export const AddTransfer = `mutation addTransfer($transferOperation: TransferOperationInput!){
       financialOperation{
         addTransferOperation(transferOperation: $transferOperation)
       }
     }`;
 
-export const CancelOperation = `mutation cancelOperation($cancelFinOperationInput: CancelFinancialOperationInputType!) {
+export const CancelOperation = `mutation cancelOperation($cancelFinOperationInput: CancelFinancialOperationInput!) {
       financialOperation {
         cancelFinancialOperation(cancelFinOperationInput: $cancelFinOperationInput)
       }
     } `
 
-export const UpdateOperation = `mutation updT($input: UpdateFinancialOperationInputType!){
+export const UpdateOperation = `mutation updT($input: UpdateFinancialOperationInput!){
   financialOperation{
   updateFinancialOperation(
     updatedFinancialOperaion: $input)

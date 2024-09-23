@@ -12,19 +12,19 @@ const NavigationMenu = () => {
 
   return (
     <div className={"nav-menu"}>
-      <Link to="/" className={`nav-menu__item ${currentPage == "/" ? "active" : ""}`}>
+      <Link to="/" className={`nav-menu__item ${currentPage === "/" ? "active" : ""}`}>
         <BudgetsIcon className={"nav-menu__item__icon"}/>
         <span>Transactions</span>
       </Link>
-      <Link to="/budgets" className={`nav-menu__item ${currentPage == "/budgets" ? "active" : ""}`}>
+      <Link to="/budgets" className={`nav-menu__item ${currentPage === "/budgets" ? "active" : ""}`}>
         <TransactionsIcon className={"nav-menu__item__icon"}/>
         <span>Budgets</span>
       </Link>
-      <Link to="/stats" className={`nav-menu__item ${currentPage == "/stats" ? "active" : ""}`}>
+      <Link to="/stats" className={`nav-menu__item ${currentPage === "/stats" ? "active" : ""}`}>
         <StatsIcon className={"nav-menu__item__icon"}/>
         <span>Stats</span>
       </Link>
-      <Link to="/settings" className={`nav-menu__item ${currentPage == "/settings" ? "active" : ""}`}>
+      <Link to="/settings" className={`nav-menu__item ${currentPage === "/settings" ? "active" : ""}`}>
         <SettingsIcon className={"nav-menu__item__icon"}/>
         <span>Settings</span>
       </Link>

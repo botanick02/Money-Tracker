@@ -1,8 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Stats } from "../../types/Stats";
+import { TransactionTypes } from "../FinancialOperation/FinancialOperation.slice";
 
 export interface FetchStatsState {
-  filter: "income" | "expense";
+  filter: TransactionTypes.Income | TransactionTypes.Expense;
   loading: boolean;
   error: null | string;
   positiveStats: Stats[];
@@ -16,15 +17,13 @@ const initialState: FetchStatsState = {
   positiveStats: [],
   negativeStats: [],
   editSuccess: false,
-  filter: "expense",
+  filter: TransactionTypes.Expense,
 };
 export interface FetchStatsVariables {
   accountId: string | null;
   fromDate: string | null;
   toDate: string | null;
 }
-
-
 
 
 export const StatsSlice = createSlice({
@@ -50,13 +49,9 @@ export const StatsSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
-    CHANGE_STATS_FILTER(state, action: PayloadAction<"income" | "expense">) {
+    CHANGE_STATS_FILTER(state, action: PayloadAction<TransactionTypes.Income | TransactionTypes.Expense>) {
       state.filter = action.payload;
-    
     },
-    
-  
-    
   },
 });
 

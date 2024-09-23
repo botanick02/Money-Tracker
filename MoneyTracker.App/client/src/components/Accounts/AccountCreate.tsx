@@ -2,22 +2,35 @@ import React, { useState } from 'react';
 import InputWrapper from '../../elements/InputWrapper';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { CREATE_ACCOUNT } from '../../store/Account/Account.slice';
+import Currencies from './Currencies.json';
+import Dropdown from '../../elements/Dropdown';
 
 interface Props {
   openPopupHandle(): void;
-  name: string;
+  name?: string;
+  id?:string;
 }
 
-const AccountCreate: React.FC<Props> = ({ openPopupHandle, name }) => {
+const AccountCreate: React.FC<Props> = ({ openPopupHandle, name,id }) => {
   const dispatch = useAppDispatch();
   const [accountName, setAccountName] = useState<string>(''); 
-
+  const [selectedCurrency, setSelectedCurrency] = useState('UAH')
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAccountName(event.target.value); 
   };
-
+  const currencyOptions = Currencies.map((currencyCode, index) => ({
+    value: currencyCode.code,
+    label: currencyCode.code, 
+  }));
   const handleSave = () => {
-    dispatch(CREATE_ACCOUNT(accountName)); 
+    console.log(accountName,selectedCurrency)
+    dispatch({
+      type: CREATE_ACCOUNT,
+      payload: {
+        accountName: accountName, 
+        currencyCode: selectedCurrency, 
+      }
+    });
     openPopupHandle();
   };
 
@@ -32,14 +45,22 @@ const AccountCreate: React.FC<Props> = ({ openPopupHandle, name }) => {
         
         </ul>
         <div className="popup__fields">
-          <InputWrapper>
+          <InputWrapper value={accountName}>
             <input
               type="text"
               placeholder="Name of account"
-              value={accountName} // Use the state variable here
+              value={accountName} 
               onChange={handleInputChange}
             />
           </InputWrapper>
+          {!id ? (
+  <Dropdown
+    title={"Currency"}
+    selectHandler={(option) => setSelectedCurrency(option.value)}
+    options={currencyOptions}
+  />
+) : null}
+
 
           <div className="popup__row popup__row__center">
           

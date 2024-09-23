@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import InputWrapper from "../../elements/InputWrapper";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import {
   createCategory,
-  EDIT_CATEGORY,
   editCategory,
 } from "../../store/Category/Category.slice";
 import categoryIcons from "./categoryIconsPath.json";
@@ -13,10 +12,11 @@ import {
   CategoryToCreate,
   CategoryToUpdate,
 } from "../../types/Category";
+import { TransactionTypes } from "../../store/FinancialOperation/FinancialOperation.slice";
 
 interface Props {
   openPopupHandle(): void;
-  categoryDefaultType?: "income" | "expense";
+  categoryDefaultType?: TransactionTypes
   categoryToEdit?: Category;
 }
 
@@ -32,12 +32,12 @@ const CategoryCreate: React.FC<Props> = ({
       color: defaultBackground,
       iconUrl: "",
       name: "",
-      type: categoryDefaultType ?? "expense",
+      type: categoryDefaultType?? TransactionTypes.Expense,
     }
   );
   const dispatch = useAppDispatch();
 
-  const handleTypeChange = (type: "income" | "expense") => {
+  const handleTypeChange = (type: TransactionTypes.Income | TransactionTypes.Expense) => {
     setCategory({ ...category, type });
   };
 
@@ -80,17 +80,17 @@ const CategoryCreate: React.FC<Props> = ({
         <ul className="popup__header">
           <li
             onClick={() => {
-              handleTypeChange("income");
+              handleTypeChange(TransactionTypes.Income);
             }}
-            className={category.type === "income" ? "current-type" : ""}
+            className={category.type === TransactionTypes.Income ? "current-type" : ""}
           >
             Income
           </li>
           <li
             onClick={() => {
-              handleTypeChange("expense");
+              handleTypeChange(TransactionTypes.Expense);
             }}
-            className={category.type === "expense" ? "current-type" : ""}
+            className={category.type === TransactionTypes.Expense ? "current-type" : ""}
           >
             Expense
           </li>

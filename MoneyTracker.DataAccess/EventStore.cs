@@ -15,7 +15,7 @@ namespace MoneyTracker.Infrastructure.EventStore
             this.eventStoreRepository = eventStoreRepository;
         }
 
-        public T AggregateModel<T>(DateTime dateTimeTo, T @default, Func<T, Event, T> evolve)
+        public T AggregateModel<T>(DateTime dateTimeTo, T @default, Func<T, BaseEvent, T> evolve)
         {
             var events = GetEvents(dateTimeTo);
 
@@ -29,11 +29,11 @@ namespace MoneyTracker.Infrastructure.EventStore
             return aggregate;
         }
 
-        public async Task AppendEventAsync(Event @event)
+        public async Task AppendEventAsync(BaseEvent @event)
         {
-            await AppendEventsAsync(new List<Event> { @event });
+            await AppendEventsAsync(new List<BaseEvent> { @event });
         }
-        public async Task AppendEventsAsync(List<Event> events)
+        public async Task AppendEventsAsync(List<BaseEvent> events)
         {
             var storedEvents = events.Select(@event => new StoredEvent
             {
@@ -46,12 +46,12 @@ namespace MoneyTracker.Infrastructure.EventStore
             await currentReadModel.UpdateAsync(events);
         }
 
-        public List<Event> GetEvents(DateTime dateTimeTo)
+        public List<BaseEvent> GetEvents(DateTime dateTimeTo)
         {
             var events = eventStoreRepository.GetEvents(dateTimeTo)
                 .Select(e => JsonConvert.DeserializeObject(e.Data, Type.GetType(e.Type)))
-                .Where(obj => obj is Event)
-                .Cast<Event>()
+                .Where(obj => obj is BaseEvent)
+                .Cast<BaseEvent>()
                 .ToList();
 
             return events;

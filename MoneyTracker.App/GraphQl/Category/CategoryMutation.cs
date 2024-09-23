@@ -1,8 +1,11 @@
 ﻿using GraphQL;
 using GraphQL.Types;
 using MoneyTracker.App.GraphQl.Category.Types.Inputs;
+using MoneyTracker.App.Helpers;
 using MoneyTracker.Business.Commands;
 using MoneyTracker.Business.Commands.Category;
+using MoneyTracker.Business.Entities;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 
 namespace MoneyTracker.App.GraphQl.Category
@@ -15,10 +18,24 @@ namespace MoneyTracker.App.GraphQl.Category
                 .Argument<CreateCategoryInputType>("Category")
                 .ResolveAsync(async context =>
                 {
-                    var category = context.GetArgument<CreateCategoryInput>("Category");
+                    var input = context.GetArgument<CreateCategoryInput>("Category");
+
+                    bool isValid = ModelValidationHelper.ValidateModel(input, out List<ValidationResult> results);
+
+                    if (!isValid)
+                    {
+                        foreach (var result in results)
+                        {
+                            var exception = new ExecutionError($"{result.MemberNames.First()}: {result.ErrorMessage!}");
+                            exception.Code = "VALIDATION_ERROR";
+                            context.Errors.Add(exception);
+                        }
+                        return false;
+                    }
+
                     var userId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-                    var command = new CreateCategoryCommand(userId, category.Name, category.Type, category.IconUrl, category.Color);
+                    var command = new CreateCategoryCommand(userId, input.Name, EnumParser.ParseToEnum<TransactionTypes>(input.Type), input.IconUrl, input.Color);
                     await commandDispatcher.DispatchAsync(command);
                     return true;
                 }).Authorize();

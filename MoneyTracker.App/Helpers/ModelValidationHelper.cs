@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using GraphQL;
+using MoneyTracker.Business.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace MoneyTracker.App.Helpers
 {
@@ -23,6 +25,25 @@ namespace MoneyTracker.App.Helpers
             if (value is string stringValue)
             {
                 return Guid.TryParse(stringValue, out _);
+            }
+
+            return false;
+        }
+    }
+
+    public class CategoryTypeValidationAttribute : ValidationAttribute
+    {
+        public override bool IsValid(object? value)
+        {
+            if (value == null)
+            {
+                return true;
+            }
+            if (value is string stringValue)
+            {
+                stringValue = stringValue.ToLowerInvariant();
+                stringValue = char.ToUpperInvariant(stringValue[0]) + stringValue.Substring(1);
+                return Enum.TryParse<TransactionTypes>(stringValue, out _);
             }
 
             return false;

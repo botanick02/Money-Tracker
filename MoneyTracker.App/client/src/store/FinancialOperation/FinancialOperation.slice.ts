@@ -1,6 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Transaction } from "../../types/Transaction";
 
+export enum TransactionTypes {
+  Income = "INCOME",
+  Expense = "EXPENSE",
+  Transfer = "TRANSFER"
+}
+
 interface Operation {
   amount: number;
   categoryId: any;
@@ -43,11 +49,12 @@ export interface FetchTransactionsInfoVariables {
   categoryId: string | null;
   fromDate: string | null;
   toDate: string | null;
-  transactionType: "expense" | "income" | null;
+  transactionType: TransactionTypes.Expense | TransactionTypes.Income | null;
 }
 
 export interface CreateTransactionState {
   loading: boolean;
+  success: boolean;
   cancelLoading: boolean;
   error: string | null;
   transactions: Transaction[];
@@ -55,7 +62,7 @@ export interface CreateTransactionState {
   incomes: number;
   expenses: number;
   dateRange: { fromDate: string | null; toDate: string | null };
-  transactionType: "expense" | "income" | null;
+  transactionType: TransactionTypes.Expense | TransactionTypes.Income | null;
 }
 
 const initialState: CreateTransactionState = {
@@ -68,6 +75,7 @@ const initialState: CreateTransactionState = {
   error: null,
   dateRange: { fromDate: null, toDate: null },
   transactionType: null,
+  success: false
 };
 
 export const FinancialOperationSlice = createSlice({
@@ -92,6 +100,7 @@ export const FinancialOperationSlice = createSlice({
     },
     FETCH_TRANSACTIONS_INFO_ERROR(state, action: PayloadAction<string>) {
       state.loading = false;
+      state.success=false;
       state.error = action.payload;
       state.transactions = [];
     },
@@ -104,6 +113,7 @@ export const FinancialOperationSlice = createSlice({
       state.error = null;
     },
     ADD_TRANSFER_OPERATION(state, action: PayloadAction<TransferOperation>) {
+      state.success= true;
       state.loading = true;
       state.error = null;
     },
@@ -157,7 +167,7 @@ export const FinancialOperationSlice = createSlice({
     ) {
       state.dateRange = action.payload;
     },
-    SET_TRANSACTION_TYPE(state, action: PayloadAction<"expense" | "income" | null>) {
+    SET_TRANSACTION_TYPE(state, action: PayloadAction<TransactionTypes.Expense | TransactionTypes.Income | null>) {
       state.transactionType = action.payload;
     },
   },

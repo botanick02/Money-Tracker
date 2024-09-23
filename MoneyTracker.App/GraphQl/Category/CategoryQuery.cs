@@ -1,16 +1,15 @@
 ﻿using GraphQL;
 using GraphQL.Types;
 using MoneyTracker.App.GraphQl.Category.Types;
-using MoneyTracker.Business.Interfaces;
-using System;
+using MoneyTracker.Business.Services;
 using System.Security.Claims;
 
 namespace MoneyTracker.App.GraphQl.Category
 {
     public class CategoryQuery : ObjectGraphType
     {
-        public CategoryQuery(ICategoryRepository categoryRepository) {
-            Field<ListGraphType<CategoryType>>("GetCategories")
+        public CategoryQuery(IServiceProvider serviceProvider) {
+            Field<ListGraphType<CategorykType>>("GetCategories")
                 .Argument<DateTimeGraphType>("DateTimeTo")
                 .Resolve(context =>
                 {
@@ -18,7 +17,9 @@ namespace MoneyTracker.App.GraphQl.Category
 
                     var userId = Guid.Parse(context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-                    return categoryRepository.GetCategories(userId, dateTimeTo);
+                    var categoryService = serviceProvider.GetRequiredService<CategoryService>();
+
+                    return categoryService.GetCategories(userId, dateTimeTo);
                 }).Authorize();
         }
     }

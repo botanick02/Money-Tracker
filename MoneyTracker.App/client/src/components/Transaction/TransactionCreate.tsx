@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import InputWrapper from "../../elements/InputWrapper";
 import Dropdown, { Option } from "../../elements/Dropdown";
 import { useAppDispatch, useAppSelector } from "../../hooks/useAppDispatch";
@@ -6,8 +6,8 @@ import {
   ADD_CREDIT_OPERATION,
   ADD_DEBIT_OPERATION,
   ADD_TRANSFER_OPERATION,
+  TransactionTypes,
 } from "../../store/FinancialOperation/FinancialOperation.slice";
-import { FETCH_CATEGORIES } from "../../store/Category/Category.slice";
 import { useForm } from "react-hook-form";
 import { getCurrentISODateTimeValue } from "../../tools/Dates/currentIsoDates";
 
@@ -22,34 +22,37 @@ interface Props {
   closePopupHandle(): void;
 }
 
-const TransactionCreate: React.FC<Props> = ({
-  closePopupHandle,
-}) => {
-  const transactionType = useAppSelector(state => state.FinancialOperation.transactionType);
+const TransactionCreate: React.FC<Props> = ({ closePopupHandle }) => {
+  const transactionType = useAppSelector(
+    (state) => state.FinancialOperation.transactionType
+  );
 
-  const [type, setType] = useState<"expense" | "income" | "transfer">(transactionType ?? "expense");
+  const [type, setType] = useState<TransactionTypes>(
+    transactionType ?? TransactionTypes.Expense
+  );
 
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-  } = useForm<FormFields>({
+  const { register, handleSubmit } = useForm<FormFields>({
     defaultValues: {
       createdAt: getCurrentISODateTimeValue(),
     },
   });
 
   const dispatch = useAppDispatch();
-  const categoryItems = useAppSelector((state) => state.Category.categories).filter(t => t.isActive == true);
+  const categoryItems = useAppSelector(
+    (state) => state.Category.categories
+  ).filter((t) => t.isActive == true);
   const accounts = useAppSelector((state) => state.Account.accounts);
 
   const accountOptions: Option[] = [];
   accounts
     .filter((a) => a.id !== "total")
+    .filter((account) => account.isActive)
     .forEach((account) => {
       accountOptions.push({
         label: account.name,
         value: account.id,
+        currency:account.currency.code
+       
       });
     });
 
@@ -81,12 +84,13 @@ const TransactionCreate: React.FC<Props> = ({
   };
 
   const handleCancel = () => {
+ 
     closePopupHandle();
   };
-
+ 
   const addFinancialOperation = (data: FormFields) => {
     switch (type) {
-      case "income": {
+      case TransactionTypes.Income: {
         dispatch(
           ADD_DEBIT_OPERATION({
             amount: +data.amount,
@@ -98,7 +102,7 @@ const TransactionCreate: React.FC<Props> = ({
         );
         break;
       }
-      case "expense": {
+      case TransactionTypes.Expense: {
         dispatch(
           ADD_CREDIT_OPERATION({
             amount: +data.amount,
@@ -110,7 +114,7 @@ const TransactionCreate: React.FC<Props> = ({
         );
         break;
       }
-      case "transfer": {
+      case TransactionTypes.Transfer: {
         dispatch(
           ADD_TRANSFER_OPERATION({
             amount: +data.amount,
@@ -132,31 +136,31 @@ const TransactionCreate: React.FC<Props> = ({
         <ul className={"popup__header"}>
           <li
             onClick={() => {
-              setType("income");
+              setType(TransactionTypes.Income);
             }}
-            className={type === "income" ? "current-type" : ""}
+            className={type === TransactionTypes.Income ? "current-type" : ""}
           >
             Income
           </li>
           <li
             onClick={() => {
-              setType("expense");
+              setType(TransactionTypes.Expense);
             }}
-            className={type === "expense" ? "current-type" : ""}
+            className={type === TransactionTypes.Expense ? "current-type" : ""}
           >
             Expense
           </li>
           <li
             onClick={() => {
-              setType("transfer");
+              setType(TransactionTypes.Transfer);
             }}
-            className={type === "transfer" ? "current-type" : ""}
+            className={type === TransactionTypes.Transfer ? "current-type" : ""}
           >
             Transfer
           </li>
         </ul>
         <div className={"popup__fields"}>
-          {type !== "transfer" ? (
+          {type !== TransactionTypes.Transfer ? (
             <Dropdown
               title={"Account"}
               selectHandler={setAccount}
@@ -172,7 +176,9 @@ const TransactionCreate: React.FC<Props> = ({
                     toAccount: transferAccounts.toAccount,
                   })
                 }
-                options={accountOptions.filter(o => o.value !== transferAccounts.toAccount.value)}
+                options={accountOptions.filter(
+                  (o) => o.value !== transferAccounts.toAccount.value
+                )}
               />
               <Dropdown
                 title={"To"}
@@ -182,20 +188,48 @@ const TransactionCreate: React.FC<Props> = ({
                     toAccount: option,
                   })
                 }
-                options={accountOptions.filter(o => o.value !== transferAccounts.fromAccount.value)}
+                options={accountOptions.filter(
+                  (o) => o.value !== transferAccounts.fromAccount.value
+                )}
               />
             </div>
           )}
-          <InputWrapper>
-            <input
-              type="number"
-              placeholder="Amount"
-              {...register("amount", {
-                required: "Amount is required",
-              })}
-            />
-          </InputWrapper>
-          {type !== "transfer" ? (
+       {type === TransactionTypes.Transfer &&( transferAccounts.fromAccount.currency !==  transferAccounts.toAccount.currency ) ? (
+  <div className="popup__row">
+    <InputWrapper>
+      <input
+        type="number"
+        placeholder="Amount"
+        {...register("amount", {
+          required: "Amount is required",
+        })}
+      />
+    </InputWrapper>
+    <InputWrapper>
+      <input
+        type="number"
+        placeholder="Amount in other currency "
+        {...register("amount", {
+          required: "Amount is required",
+        })}
+      />
+    </InputWrapper>
+  </div>
+) : (
+  <InputWrapper>
+    <input
+      type="number"
+      placeholder="Amount"
+      {...register("amount", {
+        required: "Amount is required",
+      })}
+    />
+  </InputWrapper>
+)}
+
+
+
+          {type !== TransactionTypes.Transfer ? (
             <Dropdown
               title={"Category"}
               selectHandler={handleCategoryChange}

@@ -12,14 +12,15 @@ export const GetBudgets = `
             },
             spent,
             limit,
-            title 
+            title,
+            timeScope
           }
         }
   }
 `
 
 export const EditBudget = `
-    mutation editBudget($budget: BudgetInputType!){
+    mutation editBudget($budget: BudgetInput!){
         budget {
           editBudget(budget: $budget)
         }
@@ -27,7 +28,7 @@ export const EditBudget = `
 `
 
 export const CreateBudget = `
-    mutation editBudget($budget: BudgetInputType!){
+    mutation editBudget($budget: BudgetInput!){
         budget {
           createBudget(budget: $budget)
         }

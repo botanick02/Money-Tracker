@@ -49,7 +49,7 @@ namespace MoneyTracker.Business.Commands.Category
                 throw new ArgumentException($"CategoryId: {command.CategoryId} does not exist");
             }
 
-            var eventsToAppend = new List<Event>();
+            var eventsToAppend = new List<BaseEvent>();
 
             if (existingCategory.Name != command.Name)
             {

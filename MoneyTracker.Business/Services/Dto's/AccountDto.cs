@@ -11,5 +11,7 @@ namespace MoneyTracker.Business.Services.Dto_s
         public Currency Currency { get; set; }
 
         public decimal Balance { get; set; }
+
+        public bool IsActive { get; set; }
     }
 }

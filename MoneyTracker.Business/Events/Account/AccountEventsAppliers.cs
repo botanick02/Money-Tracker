@@ -1,4 +1,5 @@
 ﻿using MoneyTracker.Business.ReadStoreModel;
+using System.Xml.Linq;
 
 namespace MoneyTracker.Business.Events.Account
 {
@@ -13,10 +14,10 @@ namespace MoneyTracker.Business.Events.Account
                 Id = @event.AccountId,
                 UserId = @event.UserId,
                 Currency = @event.Currency,
-                Type = Entities.AccountType.Debit 
+                Type = Entities.AccountType.Debit
             };
 
-            updatedModel.Accounts = updatedModel.Accounts.Append(newDebitAccount);
+            updatedModel.Accounts.Add(newDebitAccount);
 
             return updatedModel;
         }
@@ -36,7 +37,7 @@ namespace MoneyTracker.Business.Events.Account
                 Type = Entities.AccountType.Credit
             };
 
-            updatedModel.Accounts = updatedModel.Accounts.Append(newDebitAccount);
+            updatedModel.Accounts.Add(newDebitAccount);
 
             return updatedModel;
         }
@@ -54,10 +55,11 @@ namespace MoneyTracker.Business.Events.Account
                 UserId = @event.UserId,
                 Currency = @event.Currency,
                 Name = @event.Name,
+                IsActive = @event.IsActive,
                 Type = Entities.AccountType.Personal
             };
 
-            updatedModel.Accounts = updatedModel.Accounts.Append(newPersonalAccount);
+            updatedModel.Accounts.Add(newPersonalAccount);
 
             return updatedModel;
         }
@@ -65,17 +67,38 @@ namespace MoneyTracker.Business.Events.Account
 
     public class PersonalAccountDeactivatedEventApplier : IEventApplier<PersonalAccountDeactivatedEvent>
     {
-        public async Task<ReadModel> ApplyAsync(ReadModel currentModel, PersonalAccountDeactivatedEvent @event)
+        public async Task<ReadModel> ApplyAsync(ReadModel currentmodel, PersonalAccountDeactivatedEvent @event)
         {
-            var updatedModel = currentModel;
+            var updatedModel = currentmodel;
 
-            var accountToUpdate = updatedModel.Accounts.FirstOrDefault(c => c.Id == @event.AccountId);
+            var accountToUpdate = updatedModel.Accounts.FirstOrDefault(account => account.Id == @event.AccountId);
             if (accountToUpdate != null)
             {
-                accountToUpdate.IsActive = false;
+                accountToUpdate.IsActive = !accountToUpdate.IsActive;
             }
 
             return updatedModel;
         }
     }
-}
+
+    public class UpdatePersonalAccountEventApplier : IEventApplier<UpdatePersonalAccountEvent>
+    {
+        public async Task<ReadModel> ApplyAsync(ReadModel currentModel, UpdatePersonalAccountEvent @event)
+        {
+
+            var updatedModel = currentModel;
+
+            var accountToUpdate = updatedModel.Accounts.FirstOrDefault(account => account.Id == @event.AccountId);
+
+            if (accountToUpdate != null)
+            {
+              
+                accountToUpdate.Name = @event.Name;
+
+            }
+           
+            return updatedModel;
+        }
+    }
+    }
+

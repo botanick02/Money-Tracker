@@ -4,16 +4,32 @@
     {
         public Guid Id { get; set; } = Guid.NewGuid();
 
-        public Guid UserId { get; set; }
+        public Guid? UserId { get; set; }
 
         public string Name { get; set; }
 
-        public string Type { get; set; }
+        public TransactionTypes Type { get; set; }
 
         public string IconUrl { get; set; }
 
         public string Color { get; set; }
 
+        public bool IsService { get; set; } = false;
+
         public bool IsActive { get; set; } = true;
+    }
+
+    public enum TransactionTypes
+    {
+        Income,
+        Expense,
+        Transfer
+    }
+
+    public enum ServiceCategories
+    {
+        MoneyTransfer,
+        Gone,
+        Comission
     }
 }

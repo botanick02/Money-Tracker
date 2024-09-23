@@ -6,13 +6,16 @@ import {
   CREATE_ACCOUNT_ERROR,
   CREATE_ACCOUNT_SUCCESS,
   FETCH_ACCOUNTS,
-  FETCH_ACCOUNTS_ERROR,
+  DELETE_ACCOUNT,
   FETCH_ACCOUNTS_SUCCESS,
+  DELETE_ACCOUNT_ERROR,
+  DELETE_ACCOUNT_SUCCESS,
+  SET_CURRENT_ACCOUNT_ID
 } from "./Account.slice";
 import { request } from "../../api/core";
-import { CreateAccount, GetAccounts } from "../../api/queries/Accounts";
-import { useAppDispatch } from "../../hooks/useAppDispatch";
-import { REFRESH_ACCESS_TOKEN, SIGN_IN_ERROR } from "../Auth/Auth.slice";
+import { CreateAccount, GetAccounts, deleteAccount } from "../../api/queries/Accounts";
+
+import { REFRESH_ACCESS_TOKEN,  } from "../Auth/Auth.slice";
 
 export const fetchAccountsEpic: Epic<any, any, any> = (action$, state$) => {
   return action$.pipe(
@@ -40,11 +43,15 @@ export const fetchAccountsEpic: Epic<any, any, any> = (action$, state$) => {
   );
 };
 
-export const createAccountEpic: Epic<any, any, any> = (action$, state$) => {
+export const CreateAccountEpic: Epic<any, any, any> = (action$, state$) => {
   return action$.pipe(
     ofType(CREATE_ACCOUNT),
     mergeMap((action) =>
-      from(request(CreateAccount, { accountName: action.payload })).pipe(
+    
+      from(request(CreateAccount, {
+        
+        addAccount: action.payload
+      })).pipe(
         mergeMap((data) => {
           if (data.errors) {
             return of(CREATE_ACCOUNT_ERROR(data.errors[0].message));
@@ -52,7 +59,35 @@ export const createAccountEpic: Epic<any, any, any> = (action$, state$) => {
             const newAccount = data.data.createAccount;
             return of(
               CREATE_ACCOUNT_SUCCESS(newAccount),
-              { type: FETCH_ACCOUNTS } // Dispatching FETCH_ACCOUNTS action here
+              FETCH_ACCOUNTS()
+            );
+          }
+        }),
+        catchError((error) => of(CREATE_ACCOUNT_ERROR("error")))
+      )
+    )
+  );
+};
+
+
+
+
+
+export const deleteAccountEpic: Epic<any, any, any> = (action$, state$) => {
+  return action$.pipe(
+    ofType(DELETE_ACCOUNT),
+    mergeMap((action) =>
+    from(request(deleteAccount, {  accountID: action.payload.accountID } ))
+    .pipe(
+        mergeMap((data) => {
+          if (data.errors) {
+            return of(DELETE_ACCOUNT_ERROR(data.errors[0].message));
+          } else {
+            
+            return of(
+              DELETE_ACCOUNT_SUCCESS(data),
+              { type: FETCH_ACCOUNTS } ,
+              SET_CURRENT_ACCOUNT_ID("total")
             );
           }
         }),
@@ -62,4 +97,4 @@ export const createAccountEpic: Epic<any, any, any> = (action$, state$) => {
   );
 };
 
-export const AccountEpics = combineEpics(fetchAccountsEpic, createAccountEpic);
+export const AccountEpics = combineEpics(fetchAccountsEpic, CreateAccountEpic,deleteAccountEpic);

@@ -25,5 +25,7 @@ namespace MoneyTracker.Business.Services.Dto_s
         public Guid? AccountId { get; set; }
 
         public Guid? FromAccountId { get; set; }
+
+        public string? AccountName { get; set; }
     }
 }

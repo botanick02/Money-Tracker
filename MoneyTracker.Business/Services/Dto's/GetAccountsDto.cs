@@ -5,5 +5,6 @@
         public List<AccountDto> Accounts { get; set; } = new List<AccountDto>();
 
         public decimal Total { get; set; }
+      
     }
 }

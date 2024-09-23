@@ -1,5 +1,5 @@
 export const GetStats = `
-query getStatistics($input: GetStatisticsForAccountsInputType!) {
+query getStatistics($input: GetStatisticsForAccountsInput!) {
   statistics {
     negativeTransactions(input: $input) {
       categoryName

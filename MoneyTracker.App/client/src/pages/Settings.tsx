@@ -9,7 +9,8 @@ import { ReactComponent as OptionsListSvg } from "../assets/icons/options-list.s
 import { ReactComponent as TimeTravelSvg } from "../assets/icons/time-travel.svg";
 import { ReactComponent as ImportSvg } from "../assets/icons/import.svg";
 import { ReactComponent as SignOutSvg } from "../assets/icons/exit.svg";
-import { ReactElement } from "react";
+import { ReactElement, useState } from "react";
+import ImportDataPopup from "../components/ImportDataPopup";
 
 interface MenuItemWithPageUrl {
   title: string;
@@ -35,6 +36,14 @@ const Settings = () => {
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
+
+  const [isImportPopupOpen, setIsImportPopupOpen] = useState<boolean>(false);
+
+
+  const handleCreatePopupToggle = () => {
+    document.body.classList.toggle("no-scroll");
+    setIsImportPopupOpen((prevState) => !prevState);
+  };
 
   const items: MenuItem[] = [
     {
@@ -63,7 +72,7 @@ const Settings = () => {
       description: "Import transactions data from your bank",
       icon: <ImportSvg className={"settings-item__icon"} fill={"#FFF"} />,
       pageUrl: null,
-      onClick: () => {},
+      onClick: () => {handleCreatePopupToggle()},
     },
     {
       title: "Sign Out",
@@ -80,6 +89,9 @@ const Settings = () => {
 
   return (
     <main className="settings">
+      {isImportPopupOpen && (
+        <ImportDataPopup closePopupHandle={handleCreatePopupToggle} />
+      )}
       {items.map((item, index) =>
         item.pageUrl ? (
           <Link className={"settings-item"} key={index} to={item.pageUrl}>

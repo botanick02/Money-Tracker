@@ -2,6 +2,7 @@ import { ReactComponent as EditIcon } from "../../assets/icons/Edit-icon.svg";
 import { Transaction } from "../../types/Transaction";
 import { Account } from "../../types/Account";
 import { useAppSelector } from "../../hooks/useAppDispatch";
+import { TransactionTypes } from "../../store/FinancialOperation/FinancialOperation.slice";
 
 interface TransactionViewProps {
   transaction: Transaction;
@@ -18,7 +19,7 @@ const TransactionView = ({
   onDeleteClick,
   onClosePopupClick,
 }: TransactionViewProps) => {
-  const type = transaction.amount > 0 ? "income" : "expense";
+  const type = transaction.amount > 0 ? "INCOME" : "EXPENSE";
 
   const timeTravelValue = useAppSelector((state) => state.TimeTravel.datetime);
 
@@ -34,7 +35,7 @@ const TransactionView = ({
         <div className={"popup__info__item"}>
           Created: {new Date(transaction.createdAt).toLocaleString()}
         </div>
-        {transaction.category.type == "transfer" ? (
+        {transaction.category.type === TransactionTypes.Transfer ? (
           <>
             <div className={"popup__info__item"}>
               From account:{" "}

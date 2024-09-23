@@ -5,4 +5,7 @@ export interface Account{
     name: string;
     balance: number;
     currency: Currency;
+    isActive?:boolean;
 }
+
+
