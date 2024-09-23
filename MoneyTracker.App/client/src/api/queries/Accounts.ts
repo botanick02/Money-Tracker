@@ -22,7 +22,7 @@ query getPersonalAccounts{
   `
 
   export const CreateAccount = `
-  mutation createAccount($addAccount: CreateAccountInputType!) {
+  mutation createAccount($addAccount: CreateAccountInput!) {
     account {
       createAccount(addAccount: $addAccount)
     }

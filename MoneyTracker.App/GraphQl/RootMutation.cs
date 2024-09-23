@@ -17,7 +17,7 @@ namespace MoneyTracker.App.GraphQl
 
             Field<CategoryMutation>("Category")
                     .Resolve(_ => new { });
-            
+
             Field<FinancialOperationMutation>("FinancialOperation")
                     .Resolve(_ => new { });
 

@@ -1,5 +1,5 @@
 export const Login = `
-mutation login($loginCredentials: LoginInputType!){
+mutation login($loginCredentials: LoginInput!){
     auth{
     login(loginCredentials: $loginCredentials){
       accessToken
@@ -9,7 +9,7 @@ mutation login($loginCredentials: LoginInputType!){
 `;
 
 export const GoogleLogin = `
-mutation login($loginCredentials: GoogleLoginInputType!){
+mutation login($loginCredentials: GoogleLoginInput!){
     auth{
       googleLogin(loginCredentials: $loginCredentials){
       accessToken
@@ -35,7 +35,7 @@ mutation logOut {
   `
 
 export const Register = `
-mutation register($createUser: UserCreateInputType!){
+mutation register($createUser: UserCreateInput!){
     auth{
     createUser(
         createUser: $createUser

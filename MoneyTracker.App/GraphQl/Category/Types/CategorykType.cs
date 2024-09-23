@@ -3,9 +3,9 @@ using MoneyTracker.Business.Services.Dto_s;
 
 namespace MoneyTracker.App.GraphQl.Category.Types
 {
-    public class CategoryType : ObjectGraphType<CategoryDto>
+    public class CategorykType : ObjectGraphType<CategoryDto>
     {
-        public CategoryType()
+        public CategorykType()
         {
             Field(c => c.Id);
 

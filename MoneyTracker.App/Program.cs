@@ -88,6 +88,7 @@ builder.Services
     .AddAutoClrMappings()
     .AddSystemTextJson()
     .AddAuthorizationRule()
+    .AddErrorInfoProvider(options => options.ExposeExceptionDetails = true)
     );
 
 builder.Services.AddSpaStaticFiles(configuration =>

@@ -9,7 +9,7 @@ namespace MoneyTracker.App.GraphQl.Category
     public class CategoryQuery : ObjectGraphType
     {
         public CategoryQuery(IServiceProvider serviceProvider) {
-            Field<ListGraphType<CategoryType>>("GetCategories")
+            Field<ListGraphType<CategorykType>>("GetCategories")
                 .Argument<DateTimeGraphType>("DateTimeTo")
                 .Resolve(context =>
                 {
