@@ -12,7 +12,7 @@
 
         public Currency Currency { get; set; }
 
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
     }
 
     public enum AccountType

@@ -64,6 +64,7 @@ namespace MoneyTracker.Business.Events.Account
             return updatedModel;
         }
     }
+
     public class PersonalAccountDeactivatedEventApplier : IEventApplier<PersonalAccountDeactivatedEvent>
     {
         public async Task<ReadModel> ApplyAsync(ReadModel currentmodel, PersonalAccountDeactivatedEvent @event)
@@ -100,6 +101,4 @@ namespace MoneyTracker.Business.Events.Account
         }
     }
     }
-
-
 
