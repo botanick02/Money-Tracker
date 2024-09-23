@@ -8,13 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Google.Apis.Auth" Version="1.67.0" />
-    <PackageReference Include="GraphQL.Server.All" Version="7.7.1" />
-    <PackageReference Include="GraphQL.Server.Ui.Altair" Version="7.7.1" />
+    <PackageReference Include="Google.Apis.Auth" Version="1.68.0" />
+    <PackageReference Include="GraphQL.Server.All" Version="8.0.2" />
+    <PackageReference Include="GraphQL.Server.Ui.Altair" Version="8.0.2" />
     <PackageReference Include="GraphQL.Upload.AspNetCore" Version="3.0.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.3" />
-    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="8.0.3" />
-    <PackageReference Include="Microsoft.NET.Build.Containers" Version="8.0.202" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="8.0.8" />
+    <PackageReference Include="Microsoft.NET.Build.Containers" Version="8.0.401" />
   </ItemGroup>
 
   <ItemGroup>
