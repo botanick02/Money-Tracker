@@ -87,6 +87,8 @@ builder.Services
     .AddAutoClrMappings()
     .AddSystemTextJson()
     .AddAuthorizationRule()
+    .AddErrorInfoProvider()
+    .AddErrorInfoProvider(options => options.ExposeExceptionDetails = true)
     );
 
 
