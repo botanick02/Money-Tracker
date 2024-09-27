@@ -10,7 +10,7 @@ namespace MoneyTracker.DataAccess.Repositories
 
         public MccCodeRepository()
         {
-            var path = @"../MoneyTracker.DataAccess/Resources/MccCodes.json";
+            var path = @"./Resources/MccCodes.json";
             var readMccCodes = JsonConvert.DeserializeObject<List<MccCode>>(File.ReadAllText(path));
             if (readMccCodes == null)
             {
